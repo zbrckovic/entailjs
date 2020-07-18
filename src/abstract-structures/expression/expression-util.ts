@@ -6,6 +6,8 @@ import { Expression } from './expression'
 /**
  * Reduce `expressions` to a single expression using binary connective. Reduction is performed from
  * left to right.
+ *
+ * From A, B, C we will get ((A, B), C), not (A, (B, C)).
  */
 export const connectWithBinarySym = (expressions: Expression[], sym: Sym) => {
     if (expressions.length < 2) throw new NotEnoughExpressionsError()

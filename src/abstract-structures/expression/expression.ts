@@ -3,9 +3,21 @@ import { Sym } from 'abstract-structures/sym'
 import { Kind } from 'abstract-structures/sym/kind'
 import { List, Range, Record, Set } from 'immutable'
 
+/**
+ * Abstract tree-like structure which is used to represents formulas and terms.
+ */
 export class Expression extends Record<{
+    /** Main symbol */
     sym: Sym
+
+    /**
+     * Bound symbol
+     *
+     * In first-order logic this will always be nullary term (individual variable), but here we are
+     * at a higher level of abstraction and don't make this assumption.
+     */
     boundSym?: Sym
+
     children: List<Expression>
 }>({
     sym: undefined!,

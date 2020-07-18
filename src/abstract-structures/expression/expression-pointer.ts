@@ -29,8 +29,8 @@ export class ExpressionPointer extends Record<{
     /**
      * Return a path to the ancestor subexpression which binds `sym` at the target position.
      *
-     * In other words, find the closest ancestor subexpression to the target which has `sym` as its
-     * `boundSym`. If `sym` is not specified, `mainSym` at target is assumed.
+     * In other words, find the closest target's ancestor which has `sym` as its `boundSym`. If
+     * `sym` is not specified, `mainSym` at target is assumed.
      */
     findBindingOccurrence(sym?: Sym): Position | undefined {
         if (this.isRoot) return undefined
@@ -63,7 +63,13 @@ export class ExpressionPointer extends Record<{
         return this.expression.getSubexpressionsOnPath(this.position)
     }
 
-    /** Find all symbols which are bound by ancestors. */
+    /**
+     * Find all symbols which are bound by ancestors.
+     *
+     * It doesn't necessarily search for symbols which actually appear in the target. It
+     * searches for all symbols `S` which would be bound by some ancestor if we replaced the target
+     * with some formula containing `S` as free symbol.
+     */
     getBoundSyms(): Set<Sym> {
         if (this.isRoot) return Set()
         const parent = this.parent

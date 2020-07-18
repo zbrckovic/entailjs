@@ -1,0 +1,1 @@
+export { Deduction } from './deduction'

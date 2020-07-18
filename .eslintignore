@@ -1,0 +1,6 @@
+dist
+node_modules
+.eslintrc.js
+jest.config.js
+webpack.config.js
+grammar.js

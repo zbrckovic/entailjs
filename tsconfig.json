@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./src",
+        "outDir": "dist",
+        "rootDir": "./src",
+        "sourceMap": true,
+        "strict": true,
+        "module": "CommonJS",
+        "target": "ES6",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "declaration": true
+    },
+    "include": [
+        "./src/**/*.ts",
+        "./src/**/*.js"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

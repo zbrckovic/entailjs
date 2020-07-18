@@ -2,6 +2,12 @@ import { Sym } from 'abstract-structures/sym'
 import { BaseError } from 'error'
 import { Map, Record, Set } from 'immutable'
 
+/**
+ * Graph of dependencies between free terms of a deduction.
+ *
+ * This graph is maintained as a part of deduction. It's updated on each application of UG and
+ * EI rule.
+ */
 export class TermDependencyGraph extends Record<{
     /** Direct dependencies. */
     dependencies: Map<Sym, Set<Sym>>

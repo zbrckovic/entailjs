@@ -13,11 +13,11 @@ import { TermDependencies } from '../term-dependency-graph/term-dependencies'
  * - Deduction to which the rule will be applied we will call 'target deduction'.
  * - In the following lines we sometimes refer to formulas by numbers. Number in such contexts is
  *   the index of the target deduction's step which introduced the formula in question (as a result
- *   of the premise rule).
+ *   of the premise rule or theorem rule).
  *
  * All rules (except theorem) are reduced to this object. It contains all data necessary to
  * construct the next step of the target deduction. This object can be considered as some sort of a
- * common denominator for all regular rules.
+ * common denominator of all regular rules.
  *
  * Note: static factory methods don't validate data!
  */
@@ -30,12 +30,6 @@ export class RegularRuleApplicationSpec extends Record<{
     /** Resulting formula which will be introduced in the next target deduction's step. */
     conclusion: Expression
 
-    /**
-     * Assumptions to include in the resulting step (together with the inherited set of
-     * assumptions).
-     **/
-    assumptionToAdd?: number
-
     /** Assumptions to remove from the inherited set of assumptions. **/
     assumptionToRemove?: number
 
@@ -46,7 +40,6 @@ export class RegularRuleApplicationSpec extends Record<{
     premises: OrderedSet(),
     conclusion: new Expression(),
     termDependencies: undefined,
-    assumptionToAdd: undefined,
     assumptionToRemove: undefined
 }, 'RegularRuleApplicationSpec') {
     static premise(premise: Expression) {

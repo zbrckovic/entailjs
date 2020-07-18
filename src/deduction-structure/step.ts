@@ -13,7 +13,7 @@ export class Step extends Record<{
      * Justification for the introduction of `formula` in this step:
      * - Which rule was used?
      * - How was the rule applied?
-     * - What was the change to the term dependency graph?
+     * - What change must be made to the term dependency graph?
      */
     ruleApplicationSummary: RuleApplicationSummary
 }>({

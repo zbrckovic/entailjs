@@ -4,7 +4,7 @@ import { Category } from 'abstract-structures/sym/category'
 import { List, Map } from 'immutable'
 
 /**
- * Traverse `formula` and replace each non-truth-functional subformula with generated
+ * Traverse `formula` and replace each non-truth-functional subformula with a generated
  * truth-functional symbol using successive negative ids (to avoid collision with existing symbols).
  * This is a mid-step before doing truth-functional operations on any formula.
  */

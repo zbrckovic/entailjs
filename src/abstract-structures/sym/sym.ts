@@ -9,6 +9,13 @@ import { Kind } from './kind'
  * Word `symbol` has been avoided because it's the name of the builtin type in ES6.
  */
 export class Sym extends Record<{
+    /**
+     * Non-negative integer.
+     *
+     * Some algorithms need to temporarily generate new symbols which are not yet used. In such
+     * cases we use negative ids. For this reason it is very important to never introduce a symbol
+     * with negative id.
+     */
     id: number
     kind: Kind
     argumentKind: Kind

@@ -6,5 +6,5 @@ export class TheoremRuleApplicationSummary extends Record<{
     theoremId: string
 }>({
     rule: Rule.Theorem,
-    theoremId: '',
+    theoremId: ''
 }, 'TheoremRuleApplicationSummary') {}

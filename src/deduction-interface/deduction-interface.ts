@@ -6,13 +6,14 @@ import { RulesInterface } from './rules-interface'
  * Interface which can be used to perform deduction by repeatedly applying available rules.
  *
  * Validity of deduction is ensured on each step. Validity of the resulting deduction is guaranteed
- * if initial deduction (if any) provided at the start was valid.
+ * if initial deduction (if any) provided at the start os valid.
  */
 export class DeductionInterface {
     static start(deduction = new Deduction()) { return new DeductionInterface(deduction) }
 
     constructor(readonly deduction: Deduction) {}
 
+    /** Select steps (formulas) to use as premises in the next rule. */
     selectSteps(...ordinals: number[]) {
         const indexes = this.createIndexes(...ordinals)
         return RulesInterface(this.deduction, ...indexes)

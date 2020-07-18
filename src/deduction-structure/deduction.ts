@@ -26,6 +26,11 @@ export class Deduction extends Record<{
 }, 'Deduction') {
     get size() { return this.steps.size }
 
+    /**
+     * Derive new deduction by applying rule.
+     *
+     * @param ruleApplicationSpec - Specification of the rule to apply.
+     */
     applyRule(ruleApplicationSpec: RuleApplicationSpec) {
         return ruleApplicationSpec.rule === Rule.Theorem
             ? this.applyTheoremRule(ruleApplicationSpec)
@@ -49,13 +54,11 @@ export class Deduction extends Record<{
             premises,
             conclusion,
             termDependencies,
-            assumptionToAdd,
             assumptionToRemove
         }: RegularRuleApplicationSpec
     ) {
         const assumptions = this.calculateAssumptions(
             premises,
-            assumptionToAdd,
             assumptionToRemove
         )
 
@@ -78,6 +81,12 @@ export class Deduction extends Record<{
         return this.addStep(step).setGraph(graph)
     }
 
+    /**
+     * Get step by its ordinal number.
+     *
+     * From regular user's perspective steps are referenced by positive integers starting from 1.
+     * Internally we use list indexes which start from 0.
+     */
     getStepByOrdinal(ordinal: number) {
         return this.getStep(ordinal - 1)
     }
@@ -95,11 +104,13 @@ export class Deduction extends Record<{
     }
 
     /**
-     * Calculate which assumptions must be added according to specified rule premises.
+     * Calculate which assumptions must be added according to the specified rule premises.
+     *
+     * Assumptions are inherited from all premises. In addition to that if premise was introduced
+     * by `Premise` or `Theorem` rule, its index is also added as an assumption.
      */
     private calculateAssumptions(
         premises: OrderedSet<number>,
-        toAdd?: number,
         toRemove?: number
     ) {
         let assumptions = premises
@@ -115,7 +126,6 @@ export class Deduction extends Record<{
             .toSet()
 
         if (toRemove !== undefined) assumptions = assumptions.remove(toRemove)
-        if (toAdd !== undefined) assumptions = assumptions.add(toAdd)
 
         return assumptions
     }

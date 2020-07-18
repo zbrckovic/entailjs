@@ -6,7 +6,7 @@ export class RegularRuleApplicationSummary extends Record<{
     rule: Exclude<Rule, Rule.Theorem>
     premises: OrderedSet<number>
 
-    /** term dependencies introduced in this rule */
+    /** Term dependencies introduced in this rule. */
     termDependencies?: TermDependencies
 }>({
     rule: Rule.Premise,

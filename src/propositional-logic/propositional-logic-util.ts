@@ -1,7 +1,7 @@
 import { Expression } from 'abstract-structures/expression'
 import { Sym } from 'abstract-structures/sym'
 import { Category } from 'abstract-structures/sym/category'
-import { TheoremCoreError } from 'error'
+import { BaseError } from 'error'
 import { Map, Set } from 'immutable'
 import { primitiveTruthFunctions } from './primitive-truth-functions'
 
@@ -85,7 +85,7 @@ const getTruthTable = (sym: Sym) => {
     return truthFunction
 }
 
-export abstract class EvaluationError extends TheoremCoreError {}
+export abstract class EvaluationError extends BaseError {}
 
 export class NotTruthFunctionalError extends EvaluationError {}
 

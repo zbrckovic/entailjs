@@ -3,7 +3,7 @@ import { Sym } from 'abstract-structures/sym'
 import { DeductionInterface } from 'deduction-interface'
 import { Deduction } from 'deduction-structure'
 import { getRule, Rule } from 'deduction-structure/rule'
-import { TheoremCoreError } from 'error'
+import { BaseError } from 'error'
 import { Map, Set } from 'immutable'
 import { AstDeduction, Step as AstStep } from 'parsers/peg/ast-deduction'
 import { SymPresentation } from 'presentation/sym-presentation'
@@ -167,7 +167,7 @@ export class AstProcessor {
     getSym(text: string) { return this.formulaAstProcessor.getSym(text) }
 }
 
-export abstract class AstProcessorError extends TheoremCoreError {}
+export abstract class AstProcessorError extends BaseError {}
 
 export class InvalidStepOrdinalError extends AstProcessorError {
     constructor(

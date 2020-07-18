@@ -1,5 +1,5 @@
 import { Sym } from 'abstract-structures/sym'
-import { TheoremCoreError } from 'error'
+import { BaseError } from 'error'
 import { Map, Record, Set } from 'immutable'
 
 export class TermDependencyGraph extends Record<{
@@ -130,7 +130,7 @@ export class TermDependencyGraph extends Record<{
     }
 }
 
-export abstract class TermDependencyGraphError extends TheoremCoreError {}
+export abstract class TermDependencyGraphError extends BaseError {}
 
 export class TermAlreadyUsedError extends TermDependencyGraphError {
     constructor(readonly term: Sym) {

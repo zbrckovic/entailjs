@@ -2,7 +2,7 @@ import { Expression } from 'abstract-structures/expression'
 import { Category } from 'abstract-structures/sym/category'
 import { Kind } from 'abstract-structures/sym/kind'
 import { Sym } from 'abstract-structures/sym/sym'
-import { TheoremCoreError } from 'error'
+import { BaseError } from 'error'
 import { List, Map } from 'immutable'
 import { AstFormula, isBracketed } from 'parsers/peg/ast-formula'
 import { SymPresentation } from 'presentation/sym-presentation'
@@ -128,7 +128,7 @@ export class AstProcessor {
     getSym(text: string) { return this.textToSymMap.get(text) }
 }
 
-export abstract class AstProcessorError extends TheoremCoreError {}
+export abstract class AstProcessorError extends BaseError {}
 
 export class InvalidBoundSymbolCategoryError extends AstProcessorError {
     constructor(readonly sym: Sym) {

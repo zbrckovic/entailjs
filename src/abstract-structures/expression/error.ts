@@ -1,4 +1,4 @@
-import { TheoremCoreError } from 'error'
+import { BaseError } from 'error'
 
-export abstract class ExpressionError extends TheoremCoreError {
+export abstract class ExpressionError extends BaseError {
 }

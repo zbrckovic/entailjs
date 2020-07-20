@@ -10,7 +10,7 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         filename: 'index.js',
         libraryTarget: 'umd',
-        library: 'entailjs'
+        library: 'entail-core'
     },
     module: {
         rules: [

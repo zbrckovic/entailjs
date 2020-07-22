@@ -29,6 +29,9 @@
   "bugs": {
     "url": "https://github.com/zbrckovic/entail-core/issues"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "homepage": "https://github.com/zbrckovic/entail-core#readme",
   "devDependencies": {
     "@types/jest": "^25.2.3",

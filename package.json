@@ -1,5 +1,5 @@
 {
-  "name": "entail-core",
+  "name": "@zbrckovic/entail-core",
   "version": "0.0.0",
   "description": "Construct first-order logic proofs in the system of natural deduction.",
   "main": "dist/index.js",

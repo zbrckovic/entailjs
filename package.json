@@ -16,7 +16,7 @@
     "lint": "npx eslint ./src --ext .js,.ts",
     "generate-grammars": "pegjs --allowed-start-rules \"StartFormula, StartDeduction\" src/parsers/peg/grammar.pegjs",
     "prebuild": "npm run generate-grammars",
-    "build": "tsc"
+    "build": "babel src --out-dir dist"
   },
   "repository": {
     "type": "git",
@@ -40,16 +40,18 @@
   },
   "homepage": "https://github.com/zbrckovic/entail-core#readme",
   "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
     "@types/jest": "^25.2.3",
     "@typescript-eslint/eslint-plugin": "^3.0.2",
     "@typescript-eslint/parser": "^3.0.2",
     "eslint": "^7.1.0",
     "jest": "^26.0.1",
-    "pegjs": "^0.10.0",
-    "ts-jest": "^26.1.0",
-    "typescript": "^3.9.3"
+    "pegjs": "^0.10.0"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.10.4",
     "immutable": "^4.0.0-rc.12"
   }
 }

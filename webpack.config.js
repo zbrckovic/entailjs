@@ -3,14 +3,14 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const path = require('path')
 
 module.exports = {
-    entry: path.resolve(__dirname, './src/index.ts'),
+    entry: './src/index.ts',
     mode: 'production',
     devtool: 'source-map',
     output: {
-        path: path.resolve(__dirname, './dist'),
-        filename: 'index.js',
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'entail-core.js',
+        library: 'entailCore',
         libraryTarget: 'umd',
-        library: 'entail-core'
     },
     module: {
         rules: [

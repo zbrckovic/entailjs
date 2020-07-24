@@ -64,4 +64,4 @@ export const primitivePresentationCtx: PresentationCtx = Map<Sym, SymPresentatio
             unicode: SyntacticInfo.prefix('∃')
         })
     ]
-])
+] as readonly [Sym, SymPresentation][])

@@ -1,6 +1,7 @@
 module.exports = {
+  rootDir: 'src',
   testEnvironment: 'node',
-  modulePaths: ['<rootDir>/src'],
+  modulePaths: ['<rootDir>/'],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     './src/parsers/peg/grammar.js'

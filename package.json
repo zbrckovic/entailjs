@@ -15,7 +15,7 @@
     "lint": "eslint ./src --ext .js,.ts",
     "generate-grammars": "pegjs --allowed-start-rules \"StartFormula, StartDeduction\" src/parsers/peg/grammar.pegjs",
     "prebuild": "npm run generate-grammars",
-    "build": "babel src --out-dir lib --extensions \".ts,.tsx\""
+    "build": "babel src --out-dir lib --extensions \".ts,.js\""
   },
   "repository": {
     "type": "git",

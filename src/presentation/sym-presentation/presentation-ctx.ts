@@ -8,10 +8,10 @@ export type PresentationCtx = Map<Sym, SymPresentation>
 export const createTextToSymMap = (presentationCtx: PresentationCtx) => Map(
     presentationCtx
         .entrySeq()
-        .map(([sym, {ascii: {text}}]) => [text, sym])
+        .map(([sym, { ascii: { text } }]) => [text, sym])
 )
 
 export const getMaxSymId = (textToSymMap: Map<string, Sym>) => textToSymMap
     .valueSeq()
-    .map(({id}) => id)
+    .map(({ id }) => id)
     .max() ?? 0

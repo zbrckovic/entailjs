@@ -15,7 +15,8 @@
     "lint": "eslint ./src --ext .js,.ts",
     "generate-grammars": "pegjs --allowed-start-rules \"StartFormula, StartDeduction\" src/parsers/peg/grammar.pegjs",
     "prebuild": "npm run generate-grammars",
-    "build": "babel src --out-dir lib --extensions \".ts,.js\""
+    "clean": "rimraf -rf lib",
+    "build": "npm run clean && babel src --out-dir lib --extensions \".ts,.js\""
   },
   "repository": {
     "type": "git",
@@ -47,15 +48,11 @@
     "@typescript-eslint/eslint-plugin": "^3.0.2",
     "@typescript-eslint/parser": "^3.0.2",
     "babel-jest": "^26.1.0",
-    "babel-loader": "^8.1.0",
-    "clean-webpack-plugin": "^3.0.0",
     "eslint": "^7.1.0",
     "jest": "^26.0.1",
     "pegjs": "^0.10.0",
     "rimraf": "^3.0.2",
-    "typescript": "^3.9.7",
-    "webpack": "^4.44.0",
-    "webpack-cli": "^3.3.12"
+    "typescript": "^3.9.7"
   },
   "dependencies": {
     "@babel/polyfill": "^7.10.4",

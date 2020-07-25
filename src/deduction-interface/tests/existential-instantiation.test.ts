@@ -23,7 +23,7 @@ test('vacuous', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
             })
         )
     })
@@ -55,7 +55,7 @@ test('simple', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
             })
         )
     })
@@ -90,7 +90,7 @@ test('with dependency terms', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
             })
         )
     })
@@ -125,7 +125,7 @@ test(`throws ${TermNotProvidedForNonVacuousQuantificationError.name}`, () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
             })
         )
     })
@@ -146,7 +146,7 @@ test(`throws ${InstanceTermBecomesIllegallyBoundError.name}`, () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
             })
         )
     })

@@ -46,9 +46,9 @@ export abstract class GeneralizationRuleInterface extends QuantificationRuleInte
 
         try {
             const firstBoundOccurrencePosition = formula.findBoundOccurrences().first(undefined)
-            if (firstBoundOccurrencePosition === undefined) return {newTerm}
+            if (firstBoundOccurrencePosition === undefined) return { newTerm }
             const oldTerm = this.premise.getSubexpression(firstBoundOccurrencePosition.shift()).sym
-            return {oldTerm, newTerm}
+            return { oldTerm, newTerm }
         } catch (e) {
             if (e instanceof NoChildAtIndexError) {
                 throw new InvalidSubstitutionResultError()

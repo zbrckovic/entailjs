@@ -19,7 +19,7 @@ test('premise', () => {
 
     const expected = new Step({
         formula: premise,
-        ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+        ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
     })
 
     expect(actual.equals(expected)).toBe(true)

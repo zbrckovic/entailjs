@@ -19,7 +19,7 @@ test('deduction', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
             }),
             new Step({
                 assumptions: Set.of(0),

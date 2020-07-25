@@ -18,7 +18,7 @@ test('tautological implication', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
             })
         )
     })

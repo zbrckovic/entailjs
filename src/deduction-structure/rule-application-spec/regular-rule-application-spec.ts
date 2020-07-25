@@ -75,7 +75,7 @@ export class RegularRuleApplicationSpec extends Record<{
     }
 
     static universalInstantiation(
-        {boundSym, children}: Expression,
+        { boundSym, children }: Expression,
         premiseIndex: number,
         newTerm?: Sym
     ) {
@@ -115,14 +115,14 @@ export class RegularRuleApplicationSpec extends Record<{
                     .remove(oldTerm)
                     .reduce(
                         (acc, dependencyTerm) => acc.addDependency(dependencyTerm),
-                        new TermDependencies({dependent: oldTerm})
+                        new TermDependencies({ dependent: oldTerm })
                     )
                 : undefined
         })
     }
 
     static existentialInstantiation(
-        {boundSym, children}: Expression,
+        { boundSym, children }: Expression,
         premiseIndex: number,
         newTerm?: Sym
     ) {
@@ -142,7 +142,7 @@ export class RegularRuleApplicationSpec extends Record<{
                     .remove(newTerm)
                     .reduce(
                         (acc, dependencyTerm) => acc.addDependency(dependencyTerm),
-                        new TermDependencies({dependent: newTerm})
+                        new TermDependencies({ dependent: newTerm })
                     )
                 : undefined
         })

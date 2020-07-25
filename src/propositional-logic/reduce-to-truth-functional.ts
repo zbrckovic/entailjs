@@ -15,7 +15,7 @@ const reduceToTruthFunctionalWithSubstitutions = (
     formula: Expression,
     substitutions: Substitutions = Map()
 ): readonly [Expression, Substitutions] => {
-    const {sym, children} = formula
+    const { sym, children } = formula
 
     if (sym.getCategory() === Category.FF && !sym.binds) {
         const [newChildren, newAssignments] = children
@@ -27,18 +27,18 @@ const reduceToTruthFunctionalWithSubstitutions = (
                 return [currentChildren.push(newChild), newAssignments]
             }, [List(), substitutions])
 
-        return [new Expression({sym, children: newChildren}), newAssignments]
+        return [new Expression({ sym, children: newChildren }), newAssignments]
     }
 
     let assignmentsToReturn = substitutions
 
     let substitutedSym = substitutions.get(formula)
     if (substitutedSym === undefined) {
-        substitutedSym = Sym.ff({id: -assignmentsToReturn.size})
+        substitutedSym = Sym.ff({ id: -assignmentsToReturn.size })
         assignmentsToReturn = assignmentsToReturn.set(formula, substitutedSym)
     }
 
-    return [new Expression({sym: substitutedSym}), assignmentsToReturn]
+    return [new Expression({ sym: substitutedSym }), assignmentsToReturn]
 }
 
 type Substitutions = Map<Expression, Sym>

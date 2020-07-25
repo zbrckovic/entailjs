@@ -89,9 +89,9 @@ export class AstProcessor {
     ): Sym {
         const argumentKind = AstProcessor.determineArgumentKind(kind, text)
         const id = this.maxSymId + 1
-        const sym = new Sym({id, kind, argumentKind, arity, binds})
+        const sym = new Sym({ id, kind, argumentKind, arity, binds })
         const symPresentation = new SymPresentation({
-            ascii: new SyntacticInfo({text, placement})
+            ascii: new SyntacticInfo({ text, placement })
         })
 
         this._textToSymMap = this._textToSymMap.set(text, sym)

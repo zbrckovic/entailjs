@@ -19,7 +19,7 @@ test('vacuous', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
             })
         )
     })
@@ -51,7 +51,7 @@ test('simple', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
             })
         )
     })
@@ -69,7 +69,7 @@ test('simple', () => {
         ruleApplicationSummary: new RegularRuleApplicationSummary({
             rule: Rule.UniversalGeneralization,
             premises: OrderedSet.of(0),
-            termDependencies: new TermDependencies({dependent: parser.getSym('a')})
+            termDependencies: new TermDependencies({ dependent: parser.getSym('a') })
         })
     })
 
@@ -84,7 +84,7 @@ test('with dependency terms', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
+                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
             })
         )
     })

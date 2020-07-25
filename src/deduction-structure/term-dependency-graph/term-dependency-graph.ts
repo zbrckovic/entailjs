@@ -11,7 +11,7 @@ import { BaseError } from '../../error'
 export class TermDependencyGraph extends Record<{
     /** Direct dependencies. */
     dependencies: Map<Sym, Set<Sym>>
-}>({dependencies: Map()}, 'TermDependencyGraph') {
+}>({ dependencies: Map() }, 'TermDependencyGraph') {
     /**
      * Add direct dependency and normalize graph (remove redundant direct dependencies which now
      * became transitive).

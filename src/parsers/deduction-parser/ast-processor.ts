@@ -24,7 +24,7 @@ export class AstProcessor {
         this.formulaAstProcessor = new FormulaAstProcessor(presentationCtx)
     }
 
-    process({steps}: AstDeduction) {
+    process({ steps }: AstDeduction) {
         let deductionInterface = DeductionInterface.start()
 
         deductionInterface = steps.reduce(

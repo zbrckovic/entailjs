@@ -29,7 +29,7 @@ export class Sym extends Record<{
     binds: false
 }, 'Sym') {
     static fromCategory(c: Category, props: Partial<Sym> = {}): Sym {
-        return new Sym({...props, ...Sym.getKindsFromCategory(c)})
+        return new Sym({ ...props, ...Sym.getKindsFromCategory(c) })
     }
 
     static ff(props: Partial<Sym> = {}) { return Sym.fromCategory(Category.FF, props)}
@@ -52,13 +52,13 @@ export class Sym extends Record<{
     static getKindsFromCategory(category: Category) {
         switch (category) {
             case Category.FF:
-                return {kind: Kind.Formula, argumentKind: Kind.Formula}
+                return { kind: Kind.Formula, argumentKind: Kind.Formula }
             case Category.FT:
-                return {kind: Kind.Formula, argumentKind: Kind.Term}
+                return { kind: Kind.Formula, argumentKind: Kind.Term }
             case Category.TF:
-                return {kind: Kind.Term, argumentKind: Kind.Formula}
+                return { kind: Kind.Term, argumentKind: Kind.Formula }
             case Category.TT:
-                return {kind: Kind.Term, argumentKind: Kind.Term}
+                return { kind: Kind.Term, argumentKind: Kind.Term }
         }
     }
 
@@ -87,5 +87,5 @@ export class Sym extends Record<{
         return `${this.id}-${this.getCategory()}${this.binds ? 'b' : ''}${this.arity}`
     }
 
-    order({id}: Sym) { return this.id - id }
+    order({ id }: Sym) { return this.id - id }
 }

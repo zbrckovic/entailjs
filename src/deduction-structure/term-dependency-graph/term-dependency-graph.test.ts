@@ -6,11 +6,11 @@ import {
     TermDependencyGraph
 } from './term-dependency-graph'
 
-const term0 = Sym.tt({id: 0})
-const term1 = Sym.tt({id: 1})
-const term2 = Sym.tt({id: 2})
-const term3 = Sym.tt({id: 3})
-const term4 = Sym.tt({id: 4})
+const term0 = Sym.tt({ id: 0 })
+const term1 = Sym.tt({ id: 1 })
+const term2 = Sym.tt({ id: 2 })
+const term3 = Sym.tt({ id: 3 })
+const term4 = Sym.tt({ id: 4 })
 
 describe('#addDirectDependency()', () => {
     test(`throws ${TermAlreadyUsedError.name}`, () => {

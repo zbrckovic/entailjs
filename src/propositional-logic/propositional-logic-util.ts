@@ -8,7 +8,7 @@ import { primitiveTruthFunctions } from './primitive-truth-functions'
 export type Interpretation = Map<Sym, boolean>
 
 export const evaluate = (
-    {sym, children}: Expression,
+    { sym, children }: Expression,
     interpretation: Interpretation = Map()
 ): boolean => {
     if (sym.getCategory() !== Category.FF) throw new NotTruthFunctionalError()
@@ -34,7 +34,7 @@ export const findInterpretations = (formula: Expression, value: boolean) =>
  * Find interpretations which are extensions of `interpretation`.
  */
 const findInterpretationsLimitedByBaseInterpretation = (
-    {sym, children}: Expression,
+    { sym, children }: Expression,
     value: boolean,
     interpretation: Interpretation = Map()
 ): Set<Interpretation> => {

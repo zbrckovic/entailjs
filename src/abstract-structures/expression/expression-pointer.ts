@@ -38,7 +38,7 @@ export class ExpressionPointer extends Record<{
         sym = sym ?? this.target.sym
 
         const parentPointer = this.parent
-        const {boundSym} = parentPointer.target
+        const { boundSym } = parentPointer.target
 
         return boundSym?.equals(sym)
             ? parentPointer.position

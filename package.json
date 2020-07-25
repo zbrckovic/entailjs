@@ -15,7 +15,8 @@
     "lint": "eslint ./src --ext .js,.ts",
     "generate-grammars": "pegjs --allowed-start-rules \"StartFormula, StartDeduction\" src/parsers/peg/grammar.pegjs",
     "prebuild": "npm run generate-grammars",
-    "build": "babel src --extensions \".js\",\".ts\" --out-dir dist"
+    "clean": "rimraf dist",
+    "build": "npm run clean && babel src --extensions \".js\",\".ts\" --out-dir dist"
   },
   "repository": {
     "type": "git",
@@ -51,6 +52,7 @@
     "eslint": "^7.1.0",
     "jest": "^26.0.1",
     "pegjs": "^0.10.0",
+    "rimraf": "^3.0.2",
     "typescript": "^3.9.7"
   },
   "dependencies": {

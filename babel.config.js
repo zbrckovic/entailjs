@@ -1,35 +1,31 @@
 module.exports = api => {
   const isTest = api.env('test')
 
-  if (isTest) {
-    return {
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            useBuiltIns: 'entry',
-            corejs: 3,
-          }
-        ],
-        '@babel/preset-typescript'
-      ]
-    }
-  }
+  const presetEnv = isTest
+    ? [
+      '@babel/preset-env',
+      {
+        useBuiltIns: 'entry',
+        corejs: 3
+      }
+    ]
+    : [
+      '@babel/preset-env',
+      {
+        useBuiltIns: 'entry',
+        corejs: 3,
+        targets: {
+          esmodules: true
+        },
+        modules: false
+      }
+    ]
 
   return {
     presets: [
-      [
-        '@babel/preset-env',
-        {
-          useBuiltIns: 'entry',
-          targets: {
-            esmodules: true
-          },
-          corejs: 3,
-          modules: false
-        }
-      ],
+      presetEnv,
       '@babel/preset-typescript'
-    ]
+    ],
+    ignore: ['**/*.d.ts']
   }
 }

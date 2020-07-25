@@ -9,14 +9,14 @@
     "README.md"
   ],
   "scripts": {
-    "test-clear-cache": "jest --clearCache",
+    "test:clear-cache": "jest --clearCache",
+    "test:coverage": "jest --coverage",
     "test": "jest",
-    "test-with-coverage": "jest --coverage",
     "lint": "eslint ./src --ext .js,.ts",
-    "generate-grammars": "pegjs --allowed-start-rules \"StartFormula, StartDeduction\" src/parsers/peg/grammar.pegjs",
-    "prebuild": "npm run generate-grammars",
-    "clean": "rimraf -rf lib",
-    "build": "npm run clean && babel src --out-dir lib --extensions \".ts,.js\""
+    "build:clean": "rimraf -rf lib",
+    "build:generate-grammars": "pegjs --allowed-start-rules \"StartFormula, StartDeduction\" src/parsers/peg/grammar.pegjs",
+    "build:compile": "babel src --out-dir lib --extensions \".ts,.js\"",
+    "build": "npm run build:clean && npm run build:generate-grammars && npm run build:compile"
   },
   "repository": {
     "type": "git",

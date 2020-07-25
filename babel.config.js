@@ -4,8 +4,11 @@ module.exports = {
       '@babel/preset-env',
       {
         useBuiltIns: 'entry',
-        targets: '> 0.25%, not dead',
-        corejs: 3
+        targets: {
+          esmodules: true
+        },
+        corejs: 3,
+        modules: false
       }
     ],
     '@babel/preset-typescript'

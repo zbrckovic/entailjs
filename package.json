@@ -2,7 +2,7 @@
   "name": "@zbrckovic/entail-core",
   "version": "0.0.9",
   "description": "Construct first-order logic proofs in the system of natural deduction.",
-  "main": "lib/theoremCore.js",
+  "main": "lib/index.js",
   "files": [
     "dist",
     "LICENSE",
@@ -15,7 +15,7 @@
     "lint": "eslint ./src --ext .js,.ts",
     "generate-grammars": "pegjs --allowed-start-rules \"StartFormula, StartDeduction\" src/parsers/peg/grammar.pegjs",
     "prebuild": "npm run generate-grammars",
-    "build": "webpack"
+    "build": "babel src --out-dir lib --extensions \".ts,.tsx\""
   },
   "repository": {
     "type": "git",

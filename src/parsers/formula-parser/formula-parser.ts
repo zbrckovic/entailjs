@@ -1,7 +1,7 @@
-import { Sym } from 'abstract-structures/sym'
-import { parseFormula } from 'parsers/peg'
-import { SymPresentation } from 'presentation/sym-presentation'
-import { PresentationCtx } from 'presentation/sym-presentation/presentation-ctx'
+import { Sym } from '../../abstract-structures/sym'
+import { SymPresentation } from '../../presentation/sym-presentation'
+import { PresentationCtx } from '../../presentation/sym-presentation/presentation-ctx'
+import { parseFormula } from '../peg'
 import { AstProcessor } from './ast-processor'
 
 export class FormulaParser {

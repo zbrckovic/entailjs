@@ -1,4 +1,4 @@
-import { RuleAbbreviation } from 'deduction-structure/rule'
+import { RuleAbbreviation } from '../../deduction-structure/rule'
 import { AstFormula } from './ast-formula'
 
 export interface AstDeduction {

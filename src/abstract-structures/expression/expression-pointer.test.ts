@@ -1,6 +1,6 @@
 import { fromJS, is, List, Set } from 'immutable'
-import { FormulaParser } from 'parsers/formula-parser'
-import { primitivePresentationCtx } from 'presentation/sym-presentation/primitive-presentation-ctx'
+import { FormulaParser } from '../../parsers/formula-parser'
+import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
 import { CantGetParentOfRootError, ExpressionPointer } from './expression-pointer'
 
 let parser: FormulaParser
@@ -8,14 +8,14 @@ beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
 
 test(`#getParentPointer() throws ${CantGetParentOfRootError.name} for root.`, () => {
     const expression = parser.parse('p')
-    const pointer = new ExpressionPointer({ expression })
+    const pointer = new ExpressionPointer({expression})
     expect(() => { pointer.parent }).toThrow(CantGetParentOfRootError)
 })
 
 test('#getParentPointer({ p -> q, [1] }) for is { p -> q, [] }', () => {
     const expression = parser.parse('p -> q')
-    const pointer = new ExpressionPointer({ expression, position: List.of(1) })
-    const expectedParentPointer = new ExpressionPointer({ expression })
+    const pointer = new ExpressionPointer({expression, position: List.of(1)})
+    const expectedParentPointer = new ExpressionPointer({expression})
     const parentPointer = pointer.parent
 
     expect(parentPointer.equals(expectedParentPointer)).toBe(true)
@@ -34,7 +34,7 @@ test.each([
     (formulaStr, positionArray, symbolText, expectedDefinitionPositionArray) => {
         const expression = parser.parse(formulaStr)
         const position = List(positionArray)
-        const pointer = new ExpressionPointer({ expression, position })
+        const pointer = new ExpressionPointer({expression, position})
         const sym = parser.getSym(symbolText)
         const expectedDefinitionPosition = (
             expectedDefinitionPositionArray === undefined
@@ -54,7 +54,7 @@ test.each([
     (formulaStr, positionArray, symbolText, expectedOccurrencesArray) => {
         const expression = parser.parse(formulaStr)
         const position = List(positionArray)
-        const pointer = new ExpressionPointer({ expression, position })
+        const pointer = new ExpressionPointer({expression, position})
         const sym = parser.getSym(symbolText)
         const expectedFreeOccurrences = fromJS(expectedOccurrencesArray)
         const freeOccurrences = pointer.findFreeOccurrences(sym!)
@@ -71,7 +71,7 @@ test.each([
     (formulaStr, positionArray, expectedBoundOccurrencesArray) => {
         const expression = parser.parse(formulaStr)
         const position = List(positionArray)
-        const pointer = new ExpressionPointer({ expression, position })
+        const pointer = new ExpressionPointer({expression, position})
         const expectedBoundOccurrences = fromJS(expectedBoundOccurrencesArray)
         const boundOccurrences = pointer.findBoundOccurrences()
 
@@ -96,7 +96,7 @@ test.each([
     (formulaStr, positionArray, expectedContextStr) => {
         const expression = parser.parse(formulaStr)
         const position = List(positionArray)
-        const pointer = new ExpressionPointer({ expression, position })
+        const pointer = new ExpressionPointer({expression, position})
         const expectedContext = Set(expectedContextStr.map(symStr => parser.getSym(symStr)))
         const context = pointer.getBoundSyms()
 

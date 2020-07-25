@@ -1,5 +1,5 @@
-import { Placement } from 'presentation/sym-presentation/placement'
 import { parseFormula } from '.'
+import { Placement } from '../../presentation/sym-presentation/placement'
 import { AstFormula } from './ast-formula'
 
 test.each<[string, AstFormula]>([
@@ -127,7 +127,7 @@ test.each<[string, AstFormula]>([
             ]
         }
     ]
-])("parse('%s') is '%j'", (text: string, expected: AstFormula) => {
+])('parse(\'%s\') is \'%j\'', (text: string, expected: AstFormula) => {
     const actual = parseFormula(text)
     expect(actual).toEqual(expected)
 })

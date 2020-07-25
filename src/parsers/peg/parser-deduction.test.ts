@@ -1,6 +1,6 @@
-import { RuleAbbreviation } from 'deduction-structure/rule'
-import { Placement } from 'presentation/sym-presentation/placement'
 import { parseDeduction } from '.'
+import { RuleAbbreviation } from '../../deduction-structure/rule'
+import { Placement } from '../../presentation/sym-presentation/placement'
 import { AstDeduction } from './ast-deduction'
 
 test('parse()', () => {

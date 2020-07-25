@@ -1,5 +1,5 @@
-import { Rule } from 'deduction-structure/rule'
 import { OrderedSet, Record } from 'immutable'
+import { Rule } from '../rule'
 import { TermDependencies } from '../term-dependency-graph/term-dependencies'
 
 export class RegularRuleApplicationSummary extends Record<{

@@ -1,11 +1,11 @@
-import { DeductionInterface } from 'deduction-interface/deduction-interface'
+import { Rule } from '../deduction-structure/rule'
+import { DeductionParser } from '../parsers/deduction-parser/deduction-parser'
+import { primitivePresentationCtx } from '../presentation/sym-presentation/primitive-presentation-ctx'
+import { DeductionInterface } from './deduction-interface'
 import {
     TermAlreadyUsedError,
     TermsCyclicDependenciesError
-} from 'deduction-interface/rules-interface/quantification/quantification-rule-interface'
-import { Rule } from 'deduction-structure/rule'
-import { DeductionParser } from 'parsers/deduction-parser/deduction-parser'
-import { primitivePresentationCtx } from 'presentation/sym-presentation/primitive-presentation-ctx'
+} from './rules-interface/quantification/quantification-rule-interface'
 
 let parser: DeductionParser
 beforeEach(() => { parser = new DeductionParser(primitivePresentationCtx) })

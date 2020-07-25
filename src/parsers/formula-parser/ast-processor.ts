@@ -1,18 +1,18 @@
-import { Expression } from 'abstract-structures/expression'
-import { Category } from 'abstract-structures/sym/category'
-import { Kind } from 'abstract-structures/sym/kind'
-import { Sym } from 'abstract-structures/sym/sym'
-import { BaseError } from 'error'
 import { List, Map } from 'immutable'
-import { AstFormula, isBracketed } from 'parsers/peg/ast-formula'
-import { SymPresentation } from 'presentation/sym-presentation'
-import { Placement } from 'presentation/sym-presentation/placement'
+import { Expression } from '../../abstract-structures/expression'
+import { Sym } from '../../abstract-structures/sym'
+import { Category } from '../../abstract-structures/sym/category'
+import { Kind } from '../../abstract-structures/sym/kind'
+import { BaseError } from '../../error'
+import { SymPresentation } from '../../presentation/sym-presentation'
+import { Placement } from '../../presentation/sym-presentation/placement'
 import {
     createTextToSymMap,
     getMaxSymId,
     PresentationCtx
-} from 'presentation/sym-presentation/presentation-ctx'
-import { SyntacticInfo } from 'presentation/sym-presentation/syntactic-info'
+} from '../../presentation/sym-presentation/presentation-ctx'
+import { SyntacticInfo } from '../../presentation/sym-presentation/syntactic-info'
+import { AstFormula, isBracketed } from '../peg/ast-formula'
 
 export class AstProcessor {
     private _presentationCtx: PresentationCtx
@@ -89,9 +89,9 @@ export class AstProcessor {
     ): Sym {
         const argumentKind = AstProcessor.determineArgumentKind(kind, text)
         const id = this.maxSymId + 1
-        const sym = new Sym({ id, kind, argumentKind, arity, binds })
+        const sym = new Sym({id, kind, argumentKind, arity, binds})
         const symPresentation = new SymPresentation({
-            ascii: new SyntacticInfo({ text, placement })
+            ascii: new SyntacticInfo({text, placement})
         })
 
         this._textToSymMap = this._textToSymMap.set(text, sym)

@@ -1,13 +1,14 @@
-import { Deduction } from 'deduction-structure'
-import { Rule } from 'deduction-structure/rule'
-import { RegularRuleApplicationSummary } from 'deduction-structure/rule-application-summary'
-import { Step } from 'deduction-structure/step'
-import { TermDependencyGraph } from 'deduction-structure/term-dependency-graph'
-import { TermDependencies } from 'deduction-structure/term-dependency-graph/term-dependencies'
 import { is, List, Map, OrderedSet, Set } from 'immutable'
-import { DeductionParser } from 'parsers/deduction-parser/deduction-parser'
-import { FormulaParser } from 'parsers/formula-parser'
-import { primitivePresentationCtx } from 'presentation/sym-presentation/primitive-presentation-ctx'
+import { Sym } from '../../abstract-structures/sym'
+import { Deduction } from '../../deduction-structure'
+import { Rule } from '../../deduction-structure/rule'
+import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
+import { Step } from '../../deduction-structure/step'
+import { TermDependencyGraph } from '../../deduction-structure/term-dependency-graph'
+import { TermDependencies } from '../../deduction-structure/term-dependency-graph/term-dependencies'
+import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
+import { FormulaParser } from '../formula-parser'
+import { DeductionParser } from './deduction-parser'
 
 let parser: DeductionParser
 beforeEach(() => { parser = new DeductionParser(primitivePresentationCtx) })
@@ -85,7 +86,7 @@ test('parse()', () => {
             dependencies: Map([
                 [formulaParser.getSym('a')!, Set()],
                 [formulaParser.getSym('b')!, Set()]
-            ])
+            ] as readonly [Sym, Set<Sym>][])
         })
     })
 

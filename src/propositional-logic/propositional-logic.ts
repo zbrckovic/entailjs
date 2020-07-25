@@ -1,7 +1,7 @@
-import { Expression } from 'abstract-structures/expression'
-import { createImplicationWithAntecedentsAsConjunction } from 'formula-construction-util'
-import { implication } from 'primitive-syms'
 import { List } from 'immutable'
+import { Expression } from '../abstract-structures/expression'
+import { createImplicationWithAntecedentsAsConjunction } from '../formula-construction-util'
+import { implication } from '../primitive-syms'
 import * as util from './propositional-logic-util'
 import { reduceToTruthFunctional } from './reduce-to-truth-functional'
 

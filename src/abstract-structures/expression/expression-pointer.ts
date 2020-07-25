@@ -1,6 +1,6 @@
-import { ExpressionError } from 'abstract-structures/expression/error'
-import { Sym } from 'abstract-structures/sym'
 import { List, Record, Set } from 'immutable'
+import { Sym } from '../sym'
+import { ExpressionError } from './error'
 import { Expression, Position } from './expression'
 
 /**
@@ -38,7 +38,7 @@ export class ExpressionPointer extends Record<{
         sym = sym ?? this.target.sym
 
         const parentPointer = this.parent
-        const { boundSym } = parentPointer.target
+        const {boundSym} = parentPointer.target
 
         return boundSym?.equals(sym)
             ? parentPointer.position

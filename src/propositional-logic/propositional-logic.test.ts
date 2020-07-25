@@ -1,5 +1,5 @@
-import { FormulaParser } from 'parsers/formula-parser'
-import { primitivePresentationCtx } from 'presentation/sym-presentation/primitive-presentation-ctx'
+import { FormulaParser } from '../parsers/formula-parser'
+import { primitivePresentationCtx } from '../presentation/sym-presentation/primitive-presentation-ctx'
 import { isLogicalConsequence, isTautology } from './propositional-logic'
 
 let parser: FormulaParser

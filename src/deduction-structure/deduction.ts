@@ -38,13 +38,13 @@ export class Deduction extends Record<{
     }
 
     private applyTheoremRule(
-        { theorem: formula, theoremId }: TheoremRuleApplicationSpec
+        {theorem: formula, theoremId}: TheoremRuleApplicationSpec
     ) {
         const ruleApplicationSummary = new TheoremRuleApplicationSummary({
             rule: Rule.Theorem,
             theoremId
         })
-        const step = new Step({ formula, ruleApplicationSummary })
+        const step = new Step({formula, ruleApplicationSummary})
         return this.addStep(step)
     }
 
@@ -117,7 +117,7 @@ export class Deduction extends Record<{
             .toIndexedSeq()
             .map(premise => this.getStep(premise))
             .flatMap(
-                ({ assumptions, ruleApplicationSummary: { rule } }: Step, i: number) => {
+                ({assumptions, ruleApplicationSummary: {rule}}: Step, i: number) => {
                     if (rule === Rule.Premise || rule === Rule.Theorem) {
                         assumptions = assumptions.add(i)
                     }
@@ -131,8 +131,8 @@ export class Deduction extends Record<{
     }
 
     /** Calculate new graph according to changes required by the rule. */
-    private updateGraph({ dependent, dependencies }: TermDependencies) {
-        return this.termDependencyGraph.addDependencies(dependent, ...dependencies)
+    private updateGraph({dependent, dependencies}: TermDependencies) {
+        return this.termDependencyGraph.addDependencies(dependent, ...dependencies.toArray())
     }
 
     addStep(step: Step) {

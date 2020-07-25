@@ -1,5 +1,5 @@
-import { Rule } from 'deduction-structure/rule'
 import { Record } from 'immutable'
+import { Rule } from '../rule'
 
 export class TheoremRuleApplicationSummary extends Record<{
     rule: Rule.Theorem

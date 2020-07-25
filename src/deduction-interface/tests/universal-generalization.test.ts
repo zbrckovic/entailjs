@@ -1,12 +1,12 @@
-import { DeductionInterface } from 'deduction-interface/deduction-interface'
-import { Deduction } from 'deduction-structure'
-import { Rule } from 'deduction-structure/rule'
-import { RegularRuleApplicationSummary } from 'deduction-structure/rule-application-summary'
-import { Step } from 'deduction-structure/step'
-import { TermDependencies } from 'deduction-structure/term-dependency-graph/term-dependencies'
 import { List, OrderedSet, Set } from 'immutable'
-import { FormulaParser } from 'parsers/formula-parser'
-import { primitivePresentationCtx } from 'presentation/sym-presentation/primitive-presentation-ctx'
+import { Deduction } from '../../deduction-structure'
+import { Rule } from '../../deduction-structure/rule'
+import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
+import { Step } from '../../deduction-structure/step'
+import { TermDependencies } from '../../deduction-structure/term-dependency-graph/term-dependencies'
+import { FormulaParser } from '../../parsers/formula-parser'
+import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
+import { DeductionInterface } from '../deduction-interface'
 
 let parser: FormulaParser
 beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
@@ -19,7 +19,7 @@ test('vacuous', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
+                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
             })
         )
     })
@@ -51,7 +51,7 @@ test('simple', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
+                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
             })
         )
     })
@@ -69,7 +69,7 @@ test('simple', () => {
         ruleApplicationSummary: new RegularRuleApplicationSummary({
             rule: Rule.UniversalGeneralization,
             premises: OrderedSet.of(0),
-            termDependencies: new TermDependencies({ dependent: parser.getSym('a') })
+            termDependencies: new TermDependencies({dependent: parser.getSym('a')})
         })
     })
 
@@ -84,7 +84,7 @@ test('with dependency terms', () => {
         steps: List.of(
             new Step({
                 formula: formula0,
-                ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
+                ruleApplicationSummary: new RegularRuleApplicationSummary({rule: Rule.Premise})
             })
         )
     })

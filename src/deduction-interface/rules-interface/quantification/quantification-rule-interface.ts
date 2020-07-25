@@ -1,6 +1,6 @@
-import { Sym } from 'abstract-structures/sym'
-import { DeductionInterfaceError } from 'deduction-interface/error'
-import { Deduction } from 'deduction-structure'
+import { Sym } from '../../../abstract-structures/sym'
+import { Deduction } from '../../../deduction-structure'
+import { DeductionInterfaceError } from '../../error'
 
 export abstract class QuantificationRuleInterface {
     constructor(

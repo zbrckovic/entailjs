@@ -1,7 +1,7 @@
-import { ExpressionDoesntBindError } from 'abstract-structures/expression/expression'
 import { fromJS, List, Set } from 'immutable'
-import { FormulaParser } from 'parsers/formula-parser'
-import { primitivePresentationCtx } from 'presentation/sym-presentation/primitive-presentation-ctx'
+import { FormulaParser } from '../../parsers/formula-parser'
+import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
+import { ExpressionDoesntBindError } from './expression'
 
 let parser: FormulaParser
 beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
@@ -172,7 +172,7 @@ test.each([
     ['F(x, y)', 'x', []],
     ['A[x] F(x, y)', 'x', []],
     ['A[x] F(x, y)', 'y', ['x']],
-    ['A[x] F(z, x) & E[y] F(z, y)' , 'z', ['x', 'y']],
+    ['A[x] F(z, x) & E[y] F(z, y)', 'z', ['x', 'y']]
 ])('#findBoundSymsAtFreeOccurrencesOfSym(%s) is %j', (formulaText, symText, symsTexts) => {
     const formula = parser.parse(formulaText)
     const sym = parser.getSym(symText)!

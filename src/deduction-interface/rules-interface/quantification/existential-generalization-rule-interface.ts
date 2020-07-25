@@ -1,6 +1,6 @@
-import { Sym } from 'abstract-structures/sym'
-import { DeductionInterface } from 'deduction-interface/deduction-interface'
-import { RegularRuleApplicationSpec } from 'deduction-structure/rule-application-spec'
+import { Sym } from '../../../abstract-structures/sym'
+import { RegularRuleApplicationSpec } from '../../../deduction-structure/rule-application-spec'
+import { DeductionInterface } from '../../deduction-interface'
 import { GeneralizationRuleInterface } from './generalization-rule-interface'
 
 export class ExistentialGeneralizationRuleInterface extends GeneralizationRuleInterface {

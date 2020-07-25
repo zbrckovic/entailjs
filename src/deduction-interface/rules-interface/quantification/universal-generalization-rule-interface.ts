@@ -1,15 +1,12 @@
-import { Sym } from 'abstract-structures/sym'
-import { DeductionInterface } from 'deduction-interface/deduction-interface'
-import {
-    TermAlreadyUsedError,
-    TermsCyclicDependenciesError
-} from 'deduction-interface/rules-interface/quantification/quantification-rule-interface'
-import { RegularRuleApplicationSpec } from 'deduction-structure/rule-application-spec'
+import { Sym } from '../../../abstract-structures/sym'
+import { RegularRuleApplicationSpec } from '../../../deduction-structure/rule-application-spec'
 import {
     CyclicDependenciesError as TermDependencyGraphCyclicDependenciesError,
     TermAlreadyUsedError as TermDependencyGraphTermAlreadyUsedError
-} from 'deduction-structure/term-dependency-graph'
+} from '../../../deduction-structure/term-dependency-graph'
+import { DeductionInterface } from '../../deduction-interface'
 import { GeneralizationRuleInterface } from './generalization-rule-interface'
+import { TermAlreadyUsedError, TermsCyclicDependenciesError } from './quantification-rule-interface'
 
 export class UniversalGeneralizationRuleInterface extends GeneralizationRuleInterface {
     protected concreteApply(newTerm: Sym, oldTerm?: Sym) {

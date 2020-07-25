@@ -8,9 +8,9 @@ export class SyntacticInfo extends Record<{
     text: '',
     placement: Placement.Prefix
 }, 'SyntacticInfo') {
-    static prefix(text: string) { return new SyntacticInfo({ text }) }
+    static prefix(text: string) { return new SyntacticInfo({text}) }
 
-    static infix(text: string) { return new SyntacticInfo({ text, placement: Placement.Infix }) }
+    static infix(text: string) { return new SyntacticInfo({text, placement: Placement.Infix}) }
 
     createDescription(arity = 1) {
         switch (this.placement) {

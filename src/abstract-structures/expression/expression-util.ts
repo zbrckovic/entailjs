@@ -1,6 +1,6 @@
-import { ExpressionError } from 'abstract-structures/expression/error'
-import { Sym } from 'abstract-structures/sym'
 import { List } from 'immutable'
+import { Sym } from '../sym'
+import { ExpressionError } from './error'
 import { Expression } from './expression'
 
 /**

@@ -1,6 +1,6 @@
 import { Map, Set } from 'immutable'
-import { FormulaParser } from 'parsers/formula-parser'
-import { primitivePresentationCtx } from 'presentation/sym-presentation/primitive-presentation-ctx'
+import { FormulaParser } from '../parsers/formula-parser'
+import { primitivePresentationCtx } from '../presentation/sym-presentation/primitive-presentation-ctx'
 import {
     evaluate,
     findInterpretations,
@@ -17,11 +17,11 @@ type InterpretationObject = {
 }
 
 test.each<[string, InterpretationObject, boolean]>([
-    ['p', { p: true }, true],
-    ['p', { p: false }, false],
-    ['~p', { p: true }, false],
-    ['p -> q', { p: true, q: false }, false],
-    ['p -> q', { p: true, q: true }, true]
+    ['p', {p: true}, true],
+    ['p', {p: false}, false],
+    ['~p', {p: true}, false],
+    ['p -> q', {p: true, q: false}, false],
+    ['p -> q', {p: true, q: true}, true]
 ])('evaluate(%s, %j) is %s', (formulaText, interpretationObj, expected) => {
     const formula = parser.parse(formulaText)
     const assignments = createInterpretation(interpretationObj)
@@ -42,12 +42,12 @@ test.each([
 })
 
 test.each<[string, boolean, InterpretationObject[]]>([
-    ['p', true, [{ p: true }]],
-    ['p', false, [{ p: false }]],
-    ['~p', false, [{ p: true }]],
-    ['~p', true, [{ p: false }]],
-    ['p & q', true, [{ p: true, q: true }]],
-    ['p -> q', true, [{ p: true, q: true }, { p: false, q: true }, { p: false, q: false }]]
+    ['p', true, [{p: true}]],
+    ['p', false, [{p: false}]],
+    ['~p', false, [{p: true}]],
+    ['~p', true, [{p: false}]],
+    ['p & q', true, [{p: true, q: true}]],
+    ['p -> q', true, [{p: true, q: true}, {p: false, q: true}, {p: false, q: false}]]
 ])('findInterpretations(%s, %s) is %j', (formulaText, value, interpretationObjs) => {
     const formula = parser.parse(formulaText)
     const expected = Set(interpretationObjs.map(createInterpretation))

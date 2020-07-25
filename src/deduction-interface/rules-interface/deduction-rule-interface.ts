@@ -1,6 +1,6 @@
-import { DeductionInterface } from 'deduction-interface/deduction-interface'
-import { Deduction } from 'deduction-structure'
-import { RegularRuleApplicationSpec } from 'deduction-structure/rule-application-spec'
+import { Deduction } from '../../deduction-structure'
+import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
+import { DeductionInterface } from '../deduction-interface'
 
 export class DeductionRuleInterface {
     constructor(

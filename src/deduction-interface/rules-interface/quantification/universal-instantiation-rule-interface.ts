@@ -1,6 +1,6 @@
-import { Sym } from 'abstract-structures/sym'
-import { DeductionInterface } from 'deduction-interface/deduction-interface'
-import { RegularRuleApplicationSpec } from 'deduction-structure/rule-application-spec'
+import { Sym } from '../../../abstract-structures/sym'
+import { RegularRuleApplicationSpec } from '../../../deduction-structure/rule-application-spec'
+import { DeductionInterface } from '../../deduction-interface'
 import { InstantiationRuleInterface } from './instantiation-rule-interface'
 
 export class UniversalInstantiationRuleInterface extends InstantiationRuleInterface {

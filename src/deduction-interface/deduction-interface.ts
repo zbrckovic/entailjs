@@ -1,5 +1,5 @@
-import { DeductionInterfaceError } from 'deduction-interface/error'
-import { Deduction } from 'deduction-structure'
+import { Deduction } from '../deduction-structure'
+import { DeductionInterfaceError } from './error'
 import { RulesInterface } from './rules-interface'
 
 /**

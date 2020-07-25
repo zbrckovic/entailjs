@@ -1,8 +1,8 @@
-import { conjunction } from 'primitive-syms'
-import { Sym } from 'abstract-structures/sym'
 import { is } from 'immutable'
-import { FormulaParser } from 'parsers/formula-parser'
-import { primitivePresentationCtx } from 'presentation/sym-presentation/primitive-presentation-ctx'
+import { FormulaParser } from '../../parsers/formula-parser'
+import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
+import { conjunction } from '../../primitive-syms'
+import { Sym } from '../sym'
 import { connectWithBinarySym, NotEnoughExpressionsError } from './expression-util'
 
 let parser: FormulaParser

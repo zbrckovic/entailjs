@@ -1,7 +1,7 @@
-import { Expression } from 'abstract-structures/expression'
-import { Deduction } from 'deduction-structure'
-import { RegularRuleApplicationSpec } from 'deduction-structure/rule-application-spec'
-import { DeductionInterface } from 'deduction-interface/deduction-interface'
+import { Expression } from '../../abstract-structures/expression'
+import { Deduction } from '../../deduction-structure'
+import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
+import { DeductionInterface } from '../deduction-interface'
 
 export class PremiseRuleInterface {
     constructor(private deduction: Deduction) {}

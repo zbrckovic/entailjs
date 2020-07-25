@@ -1,6 +1,6 @@
-import { Sym } from 'abstract-structures/sym'
-import { BaseError } from 'error'
 import { Map, Record, Set } from 'immutable'
+import { Sym } from '../../abstract-structures/sym'
+import { BaseError } from '../../error'
 
 /**
  * Graph of dependencies between free terms of a deduction.
@@ -11,7 +11,7 @@ import { Map, Record, Set } from 'immutable'
 export class TermDependencyGraph extends Record<{
     /** Direct dependencies. */
     dependencies: Map<Sym, Set<Sym>>
-}>({ dependencies: Map() }, 'TermDependencyGraph') {
+}>({dependencies: Map()}, 'TermDependencyGraph') {
     /**
      * Add direct dependency and normalize graph (remove redundant direct dependencies which now
      * became transitive).

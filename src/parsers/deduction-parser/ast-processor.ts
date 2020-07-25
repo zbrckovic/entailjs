@@ -1,15 +1,15 @@
-import { Expression } from 'abstract-structures/expression'
-import { Sym } from 'abstract-structures/sym'
-import { DeductionInterface } from 'deduction-interface'
-import { Deduction } from 'deduction-structure'
-import { getRule, Rule } from 'deduction-structure/rule'
-import { BaseError } from 'error'
 import { Map, Set } from 'immutable'
-import { AstDeduction, Step as AstStep } from 'parsers/peg/ast-deduction'
-import { SymPresentation } from 'presentation/sym-presentation'
-import { PresentationCtx } from 'presentation/sym-presentation/presentation-ctx'
-import { findDuplicates } from 'utils'
+import { Expression } from '../../abstract-structures/expression'
+import { Sym } from '../../abstract-structures/sym'
+import { DeductionInterface } from '../../deduction-interface'
+import { Deduction } from '../../deduction-structure'
+import { getRule, Rule } from '../../deduction-structure/rule'
+import { BaseError } from '../../error'
+import { SymPresentation } from '../../presentation/sym-presentation'
+import { PresentationCtx } from '../../presentation/sym-presentation/presentation-ctx'
+import { findDuplicates } from '../../utils'
 import { AstProcessor as FormulaAstProcessor } from '../formula-parser/ast-processor'
+import { AstDeduction, Step as AstStep } from '../peg/ast-deduction'
 
 export class AstProcessor {
     private readonly formulaAstProcessor: FormulaAstProcessor
@@ -24,7 +24,7 @@ export class AstProcessor {
         this.formulaAstProcessor = new FormulaAstProcessor(presentationCtx)
     }
 
-    process({ steps }: AstDeduction) {
+    process({steps}: AstDeduction) {
         let deductionInterface = DeductionInterface.start()
 
         deductionInterface = steps.reduce(
@@ -144,7 +144,7 @@ export class AstProcessor {
 
         const maxStepOrdinal = deduction.size
 
-        for (const assumptionOrdinal of assumptionsOrdinals) {
+        for (const assumptionOrdinal of assumptionsOrdinals.toArray()) {
             if (assumptionOrdinal > maxStepOrdinal) {
                 throw new AssumptionOrdinalOutOfRangeError(assumptionOrdinal)
             }

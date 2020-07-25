@@ -1,5 +1,5 @@
-import { Expression } from 'abstract-structures/expression'
-import { Set, Record } from 'immutable'
+import { Record, Set } from 'immutable'
+import { Expression } from '../abstract-structures/expression'
 import { RegularRuleApplicationSummary, RuleApplicationSummary } from './rule-application-summary'
 
 export class Step extends Record<{

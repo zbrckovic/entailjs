@@ -1,8 +1,8 @@
-import { Expression } from 'abstract-structures/expression'
-import { existentialQuantifier, implication, universalQuantifier } from 'primitive-syms'
-import { Sym } from 'abstract-structures/sym'
-import { Rule } from 'deduction-structure/rule'
 import { List, OrderedSet, Record } from 'immutable'
+import { Expression } from '../../abstract-structures/expression'
+import { Sym } from '../../abstract-structures/sym'
+import { existentialQuantifier, implication, universalQuantifier } from '../../primitive-syms'
+import { Rule } from '../rule'
 import { TermDependencies } from '../term-dependency-graph/term-dependencies'
 
 /**
@@ -75,7 +75,7 @@ export class RegularRuleApplicationSpec extends Record<{
     }
 
     static universalInstantiation(
-        { boundSym, children }: Expression,
+        {boundSym, children}: Expression,
         premiseIndex: number,
         newTerm?: Sym
     ) {
@@ -115,14 +115,14 @@ export class RegularRuleApplicationSpec extends Record<{
                     .remove(oldTerm)
                     .reduce(
                         (acc, dependencyTerm) => acc.addDependency(dependencyTerm),
-                        new TermDependencies({ dependent: oldTerm })
+                        new TermDependencies({dependent: oldTerm})
                     )
                 : undefined
         })
     }
 
     static existentialInstantiation(
-        { boundSym, children }: Expression,
+        {boundSym, children}: Expression,
         premiseIndex: number,
         newTerm?: Sym
     ) {
@@ -142,7 +142,7 @@ export class RegularRuleApplicationSpec extends Record<{
                     .remove(newTerm)
                     .reduce(
                         (acc, dependencyTerm) => acc.addDependency(dependencyTerm),
-                        new TermDependencies({ dependent: newTerm })
+                        new TermDependencies({dependent: newTerm})
                     )
                 : undefined
         })

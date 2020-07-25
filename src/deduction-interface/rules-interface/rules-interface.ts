@@ -1,14 +1,14 @@
-import { DeductionRuleInterface } from 'deduction-interface/rules-interface/deduction-rule-interface'
+import { Deduction } from '../../deduction-structure'
+import { Rule } from '../../deduction-structure/rule'
+import { existentialQuantifier, universalQuantifier } from '../../primitive-syms'
+import { DeductionRuleInterface } from './deduction-rule-interface'
+import { PremiseRuleInterface } from './premise-rule-interface'
 import {
     ExistentialGeneralizationRuleInterface,
     ExistentialInstantiationRuleInterface,
     UniversalGeneralizationRuleInterface,
     UniversalInstantiationRuleInterface
-} from 'deduction-interface/rules-interface/quantification'
-import { Deduction } from 'deduction-structure'
-import { Rule } from 'deduction-structure/rule'
-import { existentialQuantifier, universalQuantifier } from 'primitive-syms'
-import { PremiseRuleInterface } from './premise-rule-interface'
+} from './quantification'
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
 import { TheoremRuleInterface } from './theorem-rule-interface'
 

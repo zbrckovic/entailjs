@@ -1,7 +1,7 @@
-import { ExpressionError } from 'abstract-structures/expression/error'
-import { Sym } from 'abstract-structures/sym'
-import { Kind } from 'abstract-structures/sym/kind'
 import { List, Range, Record, Set } from 'immutable'
+import { Sym } from '../sym'
+import { Kind } from '../sym/kind'
+import { ExpressionError } from './error'
 
 /**
  * Abstract tree-like structure which is used to represents formulas and terms.

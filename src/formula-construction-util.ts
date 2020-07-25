@@ -1,6 +1,6 @@
-import { connectWithBinarySym, Expression } from 'abstract-structures/expression'
 import { List } from 'immutable'
-import { conjunction, implication } from 'primitive-syms'
+import { connectWithBinarySym, Expression } from './abstract-structures/expression'
+import { conjunction, implication } from './primitive-syms'
 
 /**
  * Create conjunction of `formulas`. If there's only one formula return it.

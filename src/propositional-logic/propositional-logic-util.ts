@@ -1,14 +1,14 @@
-import { Expression } from 'abstract-structures/expression'
-import { Sym } from 'abstract-structures/sym'
-import { Category } from 'abstract-structures/sym/category'
-import { BaseError } from 'error'
 import { Map, Set } from 'immutable'
+import { Expression } from '../abstract-structures/expression'
+import { Sym } from '../abstract-structures/sym'
+import { Category } from '../abstract-structures/sym/category'
+import { BaseError } from '../error'
 import { primitiveTruthFunctions } from './primitive-truth-functions'
 
 export type Interpretation = Map<Sym, boolean>
 
 export const evaluate = (
-    { sym, children }: Expression,
+    {sym, children}: Expression,
     interpretation: Interpretation = Map()
 ): boolean => {
     if (sym.getCategory() !== Category.FF) throw new NotTruthFunctionalError()
@@ -34,7 +34,7 @@ export const findInterpretations = (formula: Expression, value: boolean) =>
  * Find interpretations which are extensions of `interpretation`.
  */
 const findInterpretationsLimitedByBaseInterpretation = (
-    { sym, children }: Expression,
+    {sym, children}: Expression,
     value: boolean,
     interpretation: Interpretation = Map()
 ): Set<Interpretation> => {

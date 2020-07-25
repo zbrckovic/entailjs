@@ -5,11 +5,5 @@ module.exports = {
       { targets: { node: 'current' } }
     ],
     '@babel/preset-typescript',
-  ],
-  plugins: [
-    [
-      'module-resolver',
-      { root: ['./src'], }
-    ]
   ]
 }

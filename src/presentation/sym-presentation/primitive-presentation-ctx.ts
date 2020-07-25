@@ -1,3 +1,5 @@
+import { Map } from 'immutable'
+import { Sym } from '../../abstract-structures/sym'
 import {
     conjunction,
     disjunction,
@@ -6,9 +8,7 @@ import {
     implication,
     negation,
     universalQuantifier
-} from 'primitive-syms'
-import { Sym } from 'abstract-structures/sym'
-import { Map } from 'immutable'
+} from '../../primitive-syms'
 import { PresentationCtx } from './presentation-ctx'
 import { SymPresentation } from './sym-presentation'
 import { SyntacticInfo } from './syntactic-info'

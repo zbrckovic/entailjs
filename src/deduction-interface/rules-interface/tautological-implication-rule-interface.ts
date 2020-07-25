@@ -1,10 +1,10 @@
-import { Expression } from 'abstract-structures/expression'
-import { DeductionInterface } from 'deduction-interface/deduction-interface'
-import { DeductionInterfaceError } from 'deduction-interface/error'
-import { Deduction } from 'deduction-structure'
-import { RegularRuleApplicationSpec } from 'deduction-structure/rule-application-spec'
 import { OrderedSet } from 'immutable'
-import { isLogicalConsequence } from 'propositional-logic/propositional-logic'
+import { Expression } from '../../abstract-structures/expression'
+import { Deduction } from '../../deduction-structure'
+import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
+import { isLogicalConsequence } from '../../propositional-logic/propositional-logic'
+import { DeductionInterface } from '../deduction-interface'
+import { DeductionInterfaceError } from '../error'
 
 export class TautologicalImplicationRuleInterface {
     constructor(

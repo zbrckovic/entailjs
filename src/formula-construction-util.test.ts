@@ -1,10 +1,10 @@
+import { is } from 'immutable'
 import {
     createConjunction,
     createImplicationWithAntecedentsAsConjunction
-} from 'formula-construction-util'
-import { is } from 'immutable'
-import { FormulaParser } from 'parsers/formula-parser'
-import { primitivePresentationCtx } from 'presentation/sym-presentation/primitive-presentation-ctx'
+} from './formula-construction-util'
+import { FormulaParser } from './parsers/formula-parser'
+import { primitivePresentationCtx } from './presentation/sym-presentation/primitive-presentation-ctx'
 
 let parser: FormulaParser
 beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })

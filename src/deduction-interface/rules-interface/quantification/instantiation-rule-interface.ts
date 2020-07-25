@@ -1,7 +1,7 @@
-import { Expression, NoChildAtIndexError } from 'abstract-structures/expression'
-import { Sym } from 'abstract-structures/sym'
-import { DeductionInterface } from 'deduction-interface/deduction-interface'
-import { DeductionInterfaceError } from 'deduction-interface/error'
+import { Expression, NoChildAtIndexError } from '../../../abstract-structures/expression'
+import { Sym } from '../../../abstract-structures/sym'
+import { DeductionInterface } from '../../deduction-interface'
+import { DeductionInterfaceError } from '../../error'
 import {
     InvalidSubstitutionResultError,
     QuantificationRuleInterface

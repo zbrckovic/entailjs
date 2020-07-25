@@ -1,5 +1,5 @@
 import { Record, Set } from 'immutable'
-import { Sym } from 'abstract-structures/sym'
+import { Sym } from '../../abstract-structures/sym'
 
 /** Dependencies for a single term. */
 export class TermDependencies extends Record<{

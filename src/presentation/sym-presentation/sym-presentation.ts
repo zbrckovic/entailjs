@@ -13,7 +13,7 @@ export class SymPresentation extends Record<{
     ascii: new SyntacticInfo(),
     unicode: undefined
 }, 'SymPresentation') {
-    getDefaultSyntacticInfo() { return this.ascii ?? this.unicode }
+    getDefaultSyntacticInfo() { return this.unicode ?? this.ascii }
 
     createDescription(arity = 1) { return this.ascii.createDescription(arity) }
 }

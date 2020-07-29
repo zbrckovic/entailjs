@@ -1,4 +1,4 @@
-import { Set } from 'immutable'
+import { Set, Map, Collection } from 'immutable'
 
 export function findDuplicates<T>(items: T[]): Set<T> {
     let traversed = Set<T>()
@@ -14,3 +14,7 @@ export function findDuplicates<T>(items: T[]): Set<T> {
 
     return duplicates
 }
+
+export type Entry<K, V> = readonly [K, V]
+
+export type Entries<K, V> = readonly [K, V][]

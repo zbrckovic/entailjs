@@ -1,5 +1,6 @@
 import { Map, Set } from 'immutable'
 import { Sym } from '../../abstract-structures/sym'
+import { Entries } from '../../utils'
 import {
     CyclicDependenciesError,
     TermAlreadyUsedError,
@@ -17,7 +18,7 @@ describe('#addDirectDependency()', () => {
         const graph = new TermDependencyGraph({
             dependencies: Map([
                 [term0, Set()]
-            ] as readonly [Sym, Set<Sym>][])
+            ] as Entries<Sym, Set<Sym>>)
         })
 
         expect(() => { graph.addDependencies(term0, term1) }).toThrow(TermAlreadyUsedError)
@@ -28,7 +29,7 @@ describe('#addDirectDependency()', () => {
             dependencies: Map([
                 [term0, Set.of(term1, term2)],
                 [term2, Set.of(term3)]
-            ] as readonly [Sym, Set<Sym>][])
+            ] as Entries<Sym, Set<Sym>>)
         })
 
         expect(() => { graph.addDependencies(term1, term0) }).toThrow(CyclicDependenciesError)
@@ -44,7 +45,7 @@ describe('#addDirectDependency()', () => {
             dependencies: Map([
                 [term0, Set.of(term1, term2)],
                 [term2, Set.of(term3)]
-            ] as readonly [Sym, Set<Sym>][])
+            ] as Entries<Sym, Set<Sym>>)
         })
 
         expect(actual.equals(expected)).toBe(true)
@@ -55,13 +56,13 @@ describe('#addDirectDependency()', () => {
             new TermDependencyGraph({
                 dependencies: Map([
                     [term0, Set.of(term1, term2)]
-                ] as readonly [Sym, Set<Sym>][])
+                ] as Entries<Sym, Set<Sym>>)
             }),
             new TermDependencyGraph({
                 dependencies: Map([
                     [term0, Set.of(term1)],
                     [term1, Set.of(term2)]
-                ] as readonly [Sym, Set<Sym>][])
+                ] as Entries<Sym, Set<Sym>>)
             }),
             term1,
             term2
@@ -71,14 +72,14 @@ describe('#addDirectDependency()', () => {
                 dependencies: Map([
                     [term0, Set.of(term1, term3)],
                     [term2, Set.of(term3)]
-                ] as readonly [Sym, Set<Sym>][])
+                ] as Entries<Sym, Set<Sym>>)
             }),
             new TermDependencyGraph({
                 dependencies: Map([
                     [term0, Set.of(term1)],
                     [term1, Set.of(term2)],
                     [term2, Set.of(term3)]
-                ] as readonly [Sym, Set<Sym>][])
+                ] as Entries<Sym, Set<Sym>>)
             }),
             term1,
             term2
@@ -95,7 +96,7 @@ test('#hasDirectDependency()', () => {
         dependencies: Map([
             [term0, Set.of(term1, term2)],
             [term2, Set.of(term3)]
-        ] as readonly [Sym, Set<Sym>][])
+        ] as Entries<Sym, Set<Sym>>)
     })
 
     expect(graph.hasDirectDependency(term0, term4)).toBe(false)
@@ -109,7 +110,7 @@ test('#hasDependency()', () => {
         dependencies: Map([
             [term0, Set.of(term1, term2)],
             [term2, Set.of(term3)]
-        ] as readonly [Sym, Set<Sym>][])
+        ] as Entries<Sym, Set<Sym>>)
     })
 
     expect(graph.hasDependency(term0, term4)).toBe(false)
@@ -122,7 +123,7 @@ test('#getDirectDependents()', () => {
         dependencies: Map([
             [term0, Set.of(term2, term3)],
             [term1, Set.of(term2)]
-        ] as readonly [Sym, Set<Sym>][])
+        ] as Entries<Sym, Set<Sym>>)
     })
 
     expect(graph.getDirectDependents(term2).equals(Set.of(term0, term1))).toBe(true)
@@ -135,7 +136,7 @@ test('#getDependents()', () => {
             [term0, Set.of(term1)],
             [term1, Set.of(term3)],
             [term2, Set.of(term3)]
-        ] as readonly [Sym, Set<Sym>][])
+        ] as Entries<Sym, Set<Sym>>)
     })
 
     expect(graph.getDependents(term1).equals(Set.of(term0))).toBe(true)
@@ -147,7 +148,7 @@ test('#getDependencies()', () => {
         dependencies: Map([
             [term0, Set.of(term1, term2)],
             [term2, Set.of(term3)]
-        ] as readonly [Sym, Set<Sym>][])
+        ] as Entries<Sym, Set<Sym>>)
     })
 
     expect(graph.getDependencies(term2).equals(Set.of(term3))).toBe(true)

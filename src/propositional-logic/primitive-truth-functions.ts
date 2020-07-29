@@ -1,6 +1,7 @@
-import { List, Map } from 'immutable'
+import { List, Map, Set } from 'immutable'
 import { Sym } from '../abstract-structures/sym'
 import { conjunction, disjunction, equivalence, implication, negation } from '../primitive-syms'
+import { Entries } from '../utils'
 
 export type TruthTable = Map<List<boolean>, boolean>
 
@@ -10,7 +11,7 @@ export const primitiveTruthFunctions = Map<Sym, TruthTable>([
         Map([
             [List.of<boolean>(true), false],
             [List.of<boolean>(false), true]
-        ] as [List<boolean>, boolean][])
+        ] as Entries<List<boolean>, boolean>)
     ],
     [
         conjunction,
@@ -19,7 +20,7 @@ export const primitiveTruthFunctions = Map<Sym, TruthTable>([
             [List.of(true, false), false],
             [List.of(false, true), false],
             [List.of(false, false), false]
-        ] as [List<boolean>, boolean][])
+        ] as Entries<List<boolean>, boolean>)
     ],
     [
         disjunction,
@@ -28,7 +29,7 @@ export const primitiveTruthFunctions = Map<Sym, TruthTable>([
             [List.of(true, false), true],
             [List.of(false, true), true],
             [List.of(false, false), false]
-        ] as [List<boolean>, boolean][])
+        ] as Entries<List<boolean>, boolean>)
     ],
     [
         implication,
@@ -37,7 +38,7 @@ export const primitiveTruthFunctions = Map<Sym, TruthTable>([
             [List.of(true, false), false],
             [List.of(false, true), true],
             [List.of(false, false), true]
-        ] as [List<boolean>, boolean][])
+        ] as Entries<List<boolean>, boolean>)
     ],
     [
         equivalence,
@@ -46,6 +47,6 @@ export const primitiveTruthFunctions = Map<Sym, TruthTable>([
             [List.of(true, false), false],
             [List.of(false, true), false],
             [List.of(false, false), true]
-        ] as [List<boolean>, boolean][])
+        ] as Entries<List<boolean>, boolean>)
     ]
-] as [Sym, TruthTable][])
+] as Entries<Sym, TruthTable>)

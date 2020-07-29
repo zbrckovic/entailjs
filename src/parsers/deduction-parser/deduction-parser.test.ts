@@ -7,6 +7,7 @@ import { Step } from '../../deduction-structure/step'
 import { TermDependencyGraph } from '../../deduction-structure/term-dependency-graph'
 import { TermDependencies } from '../../deduction-structure/term-dependency-graph/term-dependencies'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
+import { Entries } from '../../utils'
 import { FormulaParser } from '../formula-parser'
 import { DeductionParser } from './deduction-parser'
 
@@ -86,7 +87,7 @@ test('parse()', () => {
             dependencies: Map([
                 [formulaParser.getSym('a')!, Set()],
                 [formulaParser.getSym('b')!, Set()]
-            ] as readonly [Sym, Set<Sym>][])
+            ] as Entries<Sym, Set<Sym>>)
         })
     })
 

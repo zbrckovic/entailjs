@@ -1,4 +1,4 @@
-import { Map } from 'immutable'
+import { Map, Set } from 'immutable'
 import { Sym } from '../../abstract-structures/sym'
 import {
     conjunction,
@@ -9,6 +9,7 @@ import {
     negation,
     universalQuantifier
 } from '../../primitive-syms'
+import { Entries } from '../../utils'
 import { PresentationCtx } from './presentation-ctx'
 import { SymPresentation } from './sym-presentation'
 import { SyntacticInfo } from './syntactic-info'
@@ -64,4 +65,4 @@ export const primitivePresentationCtx: PresentationCtx = Map<Sym, SymPresentatio
             unicode: SyntacticInfo.prefix('∃')
         })
     ]
-] as readonly [Sym, SymPresentation][])
+] as Entries<Sym, SymPresentation>)

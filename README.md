@@ -1,8 +1,8 @@
 # entail-core
 Construct first-order logic proofs in the system of natural deduction.
 
-This library provides an API for the correct construction of proofs in the system of natural 
-deduction. We based the system on the one presented by W.V.Quine in `Methods of Logic`.
+ This library provides an API for the construction of proofs in the system of natural deduction. 
+The system is based on the one presented by W. V. Quine in `Methods of Logic`.
 
 ## Entail Expression Language (EEL)
 

@@ -142,7 +142,7 @@ formula `A[x] F(x) -> G(x)` is actually `(A[x] F(x)) -> G(x)`, not `A[x] (F(x) -
     PropositionalVariable 
         [a-z][a-zA-Z0-9_]*
     
-    PropositionalCosntant
+    PropositionalConstant
         T
 
     Quantifier
@@ -164,11 +164,15 @@ formula `A[x] F(x) -> G(x)` is actually `(A[x] F(x)) -> G(x)`, not `A[x] (F(x) -
         [a-z][a-zA-Z0-9_]*
 
 There are some points which are not apparent from the specified grammar:
-  - Although grammar requires parentheses around compound expressions with binary infix 
-    operator, they can be omitted at the root level. For example, we don't have to write 
-    `(p -> q)` because `p -> q` is also valid.  
+  - Although grammar requires parentheses around compound expressions with binary infix operator, 
+    they can be omitted at the root level. For example, we don't need to write `(p -> q)` because 
+    `p -> q` is also ok.  
 
-  - Spaces are generally not significant and can appear anywhere between two tokens.
+  - Spaces are required between tokens where their omission would result in ambiguity (where two 
+    conjoined tokens can no longer be recognized as separate). Wherever whispace is used it's not 
+    significant whether the actual whitespace character is space, tab or a newline. Multiple 
+    whitespace characters in a row are also allowed and can be used freely to format an expression 
+    in a more readable way.
 
 ## Development
 

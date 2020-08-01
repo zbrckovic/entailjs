@@ -59,7 +59,7 @@ export const RulesInterface = (deduction: Deduction, ...steps: number[]): RulesI
 
         const firstStepIsPremise = firstStep.ruleApplicationSummary.rule === Rule.Premise
         const firstIsAssumptionForSecond = secondStep.assumptions
-            .contains(firstStepIndex)
+                                                     .contains(firstStepIndex)
 
         if (firstStepIsPremise && firstIsAssumptionForSecond) {
             result[Rule.Deduction] = new DeductionRuleInterface(

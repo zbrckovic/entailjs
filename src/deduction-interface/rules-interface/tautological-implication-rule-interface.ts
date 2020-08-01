@@ -2,9 +2,9 @@ import { OrderedSet } from 'immutable'
 import { Expression } from '../../abstract-structures/expression'
 import { Deduction } from '../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
+import { EntailCoreError } from '../../error'
 import { isLogicalConsequence } from '../../propositional-logic/propositional-logic'
 import { DeductionInterface } from '../deduction-interface'
-import { DeductionInterfaceError } from '../error'
 
 export class TautologicalImplicationRuleInterface {
     constructor(
@@ -28,7 +28,7 @@ export class TautologicalImplicationRuleInterface {
     }
 }
 
-export class InvalidTautologicalImplicationError extends DeductionInterfaceError {
+export class InvalidTautologicalImplicationError extends EntailCoreError {
     constructor(
         readonly assumptions: Expression[],
         readonly consequence: Expression

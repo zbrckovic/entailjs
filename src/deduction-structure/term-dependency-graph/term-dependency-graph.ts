@@ -1,6 +1,6 @@
 import { Map, Record, Set } from 'immutable'
 import { Sym } from '../../abstract-structures/sym'
-import { BaseError } from '../../error'
+import { EntailCoreError } from '../../error'
 
 /**
  * Graph of dependencies between free terms of a deduction.
@@ -136,15 +136,13 @@ export class TermDependencyGraph extends Record<{
     }
 }
 
-export abstract class TermDependencyGraphError extends BaseError {}
-
-export class TermAlreadyUsedError extends TermDependencyGraphError {
+export class TermAlreadyUsedError extends EntailCoreError {
     constructor(readonly term: Sym) {
         super(`term ${term} is already used`)
     }
 }
 
-export class CyclicDependenciesError extends TermDependencyGraphError {
+export class CyclicDependenciesError extends EntailCoreError {
     constructor(
         readonly dependentTerm: Sym,
         readonly dependencyTerm: Sym

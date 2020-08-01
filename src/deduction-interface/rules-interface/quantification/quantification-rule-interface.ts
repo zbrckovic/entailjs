@@ -1,6 +1,6 @@
 import { Sym } from '../../../abstract-structures/sym'
 import { Deduction } from '../../../deduction-structure'
-import { DeductionInterfaceError } from '../../error'
+import { EntailCoreError } from '../../../error'
 
 export abstract class QuantificationRuleInterface {
     constructor(
@@ -11,15 +11,13 @@ export abstract class QuantificationRuleInterface {
     protected get premise() { return this.deduction.getStep(this.stepIndex).formula }
 }
 
-export class InvalidSubstitutionResultError extends DeductionInterfaceError {}
-
-export class TermAlreadyUsedError extends DeductionInterfaceError {
+export class TermAlreadyUsedError extends EntailCoreError {
     constructor(readonly term: Sym) {
         super(`term ${term} is already used`)
     }
 }
 
-export class TermsCyclicDependenciesError extends DeductionInterfaceError {
+export class TermsCyclicDependenciesError extends EntailCoreError {
     constructor(
         readonly dependentTerm: Sym,
         readonly dependencyTerm: Sym

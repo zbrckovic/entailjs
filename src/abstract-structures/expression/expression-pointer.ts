@@ -1,7 +1,7 @@
 import { List, Record, Set } from 'immutable'
 import { Sym } from '../sym'
-import { ExpressionError } from './error'
 import { Expression, Position } from './expression'
+import { EntailCoreError } from '../../error'
 
 /**
  * Pointer to the specific subexpression of the base expression.
@@ -80,4 +80,4 @@ export class ExpressionPointer extends Record<{
     }
 }
 
-export class CantGetParentOfRootError extends ExpressionError {}
+export class CantGetParentOfRootError extends EntailCoreError {}

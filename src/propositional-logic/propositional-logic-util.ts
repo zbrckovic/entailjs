@@ -1,8 +1,7 @@
 import { Map, Set } from 'immutable'
 import { Expression } from '../abstract-structures/expression'
-import { Sym } from '../abstract-structures/sym'
-import { Category } from '../abstract-structures/sym/category'
-import { BaseError } from '../error'
+import { Category, Sym } from '../abstract-structures/sym'
+import { EntailCoreError } from '../error'
 import { primitiveTruthFunctions } from './primitive-truth-functions'
 
 export type Interpretation = Map<Sym, boolean>
@@ -85,8 +84,6 @@ const getTruthTable = (sym: Sym) => {
     return truthFunction
 }
 
-export abstract class EvaluationError extends BaseError {}
+export class NotTruthFunctionalError extends EntailCoreError {}
 
-export class NotTruthFunctionalError extends EvaluationError {}
-
-export class NoAssignedValueError extends EvaluationError {}
+export class NoAssignedValueError extends EntailCoreError {}

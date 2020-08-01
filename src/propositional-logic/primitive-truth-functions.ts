@@ -1,4 +1,4 @@
-import { List, Map, Set } from 'immutable'
+import { List, Map } from 'immutable'
 import { Sym } from '../abstract-structures/sym'
 import { conjunction, disjunction, equivalence, implication, negation } from '../primitive-syms'
 import { Entries } from '../utils'

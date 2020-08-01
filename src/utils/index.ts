@@ -1,4 +1,4 @@
-import { Set, Map, Collection } from 'immutable'
+import { Set } from 'immutable'
 
 export function findDuplicates<T>(items: T[]): Set<T> {
     let traversed = Set<T>()

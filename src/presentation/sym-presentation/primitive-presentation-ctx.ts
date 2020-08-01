@@ -1,4 +1,4 @@
-import { Map, Set } from 'immutable'
+import { Map } from 'immutable'
 import { Sym } from '../../abstract-structures/sym'
 import {
     conjunction,

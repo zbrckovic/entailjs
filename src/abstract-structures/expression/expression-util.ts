@@ -1,7 +1,7 @@
 import { List } from 'immutable'
 import { Sym } from '../sym'
-import { ExpressionError } from './error'
 import { Expression } from './expression'
+import { EntailCoreError } from '../../error'
 
 /**
  * Reduce `expressions` to a single expression using binary connective. Reduction is performed from
@@ -21,4 +21,4 @@ export const connectWithBinarySym = (expressions: Expression[], sym: Sym) => {
     return rest.reduce(connect, connect(first, second))
 }
 
-export class NotEnoughExpressionsError extends ExpressionError {}
+export class NotEnoughExpressionsError extends EntailCoreError {}

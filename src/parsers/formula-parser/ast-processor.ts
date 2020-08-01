@@ -3,7 +3,7 @@ import { Expression } from '../../abstract-structures/expression'
 import { Sym } from '../../abstract-structures/sym'
 import { Category } from '../../abstract-structures/sym/category'
 import { Kind } from '../../abstract-structures/sym/kind'
-import { BaseError } from '../../error'
+import { EntailCoreError } from '../../error'
 import { SymPresentation } from '../../presentation/sym-presentation'
 import { Placement } from '../../presentation/sym-presentation/placement'
 import {
@@ -128,21 +128,19 @@ export class AstProcessor {
     getSym(text: string) { return this.textToSymMap.get(text) }
 }
 
-export abstract class AstProcessorError extends BaseError {}
-
-export class InvalidBoundSymbolCategoryError extends AstProcessorError {
+export class InvalidBoundSymbolCategoryError extends EntailCoreError {
     constructor(readonly sym: Sym) {
         super(`symbol ${sym} has wrong category to be bound`)
     }
 }
 
-export class InvalidBoundSymbolArityError extends AstProcessorError {
+export class InvalidBoundSymbolArityError extends EntailCoreError {
     constructor(readonly sym: Sym) {
         super(`symbol ${sym} has wrong arity to be bound`)
     }
 }
 
-export class InvalidArityError extends AstProcessorError {
+export class InvalidArityError extends EntailCoreError {
     constructor(
         readonly sym: Sym,
         readonly arity: number
@@ -151,7 +149,7 @@ export class InvalidArityError extends AstProcessorError {
     }
 }
 
-export class InvalidSymbolKindError extends AstProcessorError {
+export class InvalidSymbolKindError extends EntailCoreError {
     constructor(
         readonly sym: Sym,
         readonly kind: Kind
@@ -160,7 +158,7 @@ export class InvalidSymbolKindError extends AstProcessorError {
     }
 }
 
-export class InvalidSymbolPlacementError extends AstProcessorError {
+export class InvalidSymbolPlacementError extends EntailCoreError {
     constructor(
         readonly sym: Sym,
         readonly placement: Placement

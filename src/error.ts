@@ -3,7 +3,7 @@
  *
  * Whenever we throw an error which should be caught, that error should inherit this base class.
  */
-export abstract class BaseError extends Error {
+export abstract class EntailCoreError extends Error {
     constructor(message?: string) {
         super(message)
 

@@ -1,7 +1,6 @@
 import { List, Map } from 'immutable'
 import { Expression } from '../abstract-structures/expression'
-import { Sym } from '../abstract-structures/sym'
-import { Category } from '../abstract-structures/sym/category'
+import { Category, Sym } from '../abstract-structures/sym'
 
 /**
  * Traverse `formula` and replace each non-truth-functional subformula with a generated

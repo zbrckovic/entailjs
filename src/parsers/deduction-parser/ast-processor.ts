@@ -4,7 +4,7 @@ import { Sym } from '../../abstract-structures/sym'
 import { DeductionInterface } from '../../deduction-interface'
 import { Deduction } from '../../deduction-structure'
 import { getRule, Rule } from '../../deduction-structure/rule'
-import { BaseError } from '../../error'
+import { EntailCoreError } from '../../error'
 import { SymPresentation } from '../../presentation/sym-presentation'
 import { PresentationCtx } from '../../presentation/sym-presentation/presentation-ctx'
 import { findDuplicates } from '../../utils'
@@ -167,30 +167,25 @@ export class AstProcessor {
     getSym(text: string) { return this.formulaAstProcessor.getSym(text) }
 }
 
-export abstract class AstProcessorError extends BaseError {}
-
-export class InvalidStepOrdinalError extends AstProcessorError {
-    constructor(
-        readonly actual: number,
-        readonly expected: number
-    ) {
+export class InvalidStepOrdinalError extends EntailCoreError {
+    constructor(readonly actual: number, readonly expected: number) {
         super(`encountered invalid step ordinal ${actual} at step ${expected}`)
     }
 }
 
-export class DuplicateAssumptionsOrdinalsError extends AstProcessorError {
+export class DuplicateAssumptionsOrdinalsError extends EntailCoreError {
     constructor(readonly assumptionsOrdinals: Set<number>) {
         super(`encountered duplicate assumption ordinal(s): ${assumptionsOrdinals.join(', ')}`)
     }
 }
 
-export class AssumptionOrdinalOutOfRangeError extends AstProcessorError {
+export class AssumptionOrdinalOutOfRangeError extends EntailCoreError {
     constructor(readonly assumptionOrdinal: number) {
         super(`assumption ordinal ${assumptionOrdinal} is out of range`)
     }
 }
 
-export class AssumptionInvalidRuleError extends AstProcessorError {
+export class AssumptionInvalidRuleError extends EntailCoreError {
     constructor(
         readonly stepOrdinal: number,
         readonly rule: Rule
@@ -199,7 +194,7 @@ export class AssumptionInvalidRuleError extends AstProcessorError {
     }
 }
 
-export class InvalidAssumptionsOrdinalsError extends AstProcessorError {
+export class InvalidAssumptionsOrdinalsError extends EntailCoreError {
     constructor(
         readonly stepOrdinal: number,
         readonly assumptionOrdinals: number[]
@@ -210,7 +205,7 @@ export class InvalidAssumptionsOrdinalsError extends AstProcessorError {
     }
 }
 
-export class RuleNotAllowedError extends AstProcessorError {
+export class RuleNotAllowedError extends EntailCoreError {
     constructor(
         readonly stepOrdinal: number,
         readonly rule: Rule
@@ -219,7 +214,7 @@ export class RuleNotAllowedError extends AstProcessorError {
     }
 }
 
-export class InvalidFormulaError extends AstProcessorError {
+export class InvalidFormulaError extends EntailCoreError {
     constructor(readonly formula: Expression) {
         super(`invalid formula "${formula}"`)
     }

@@ -1,7 +1,7 @@
 import { Expression, NoChildAtIndexError } from '../../../abstract-structures/expression'
 import { Sym } from '../../../abstract-structures/sym'
+import { EntailCoreError } from '../../../error'
 import { DeductionInterface } from '../../deduction-interface'
-import { DeductionInterfaceError } from '../../error'
 import {
     InvalidSubstitutionResultError,
     QuantificationRuleInterface
@@ -51,6 +51,6 @@ export abstract class InstantiationRuleInterface extends QuantificationRuleInter
     }
 }
 
-export class TermNotProvidedForNonVacuousQuantificationError extends DeductionInterfaceError {}
+export class TermNotProvidedForNonVacuousQuantificationError extends EntailCoreError {}
 
-export class InstanceTermBecomesIllegallyBoundError extends DeductionInterfaceError {}
+export class InstanceTermBecomesIllegallyBoundError extends EntailCoreError {}

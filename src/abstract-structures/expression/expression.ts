@@ -1,7 +1,7 @@
 import { List, Range, Record, Set } from 'immutable'
 import { Sym } from '../sym'
 import { Kind } from '../sym/kind'
-import { ExpressionError } from './error'
+import { EntailCoreError } from '../../error'
 
 /**
  * Abstract tree-like structure which is used to represents formulas and terms.
@@ -196,13 +196,13 @@ const resolveChildren = (
     }
 }
 
-export class ExpressionDoesntBindError extends ExpressionError {
+export class ExpressionDoesntBindError extends EntailCoreError {
     constructor(readonly expression: Expression) {
         super(`expression ${expression} doesn't bind`)
     }
 }
 
-export class NoChildAtIndexError extends ExpressionError {
+export class NoChildAtIndexError extends EntailCoreError {
     constructor(
         readonly expression: Expression,
         readonly index: number

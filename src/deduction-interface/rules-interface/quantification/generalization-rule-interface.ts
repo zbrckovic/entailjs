@@ -1,8 +1,8 @@
 import { is } from 'immutable'
 import { Expression, NoChildAtIndexError } from '../../../abstract-structures/expression'
 import { Sym } from '../../../abstract-structures/sym'
+import { EntailCoreError } from '../../../error'
 import { DeductionInterface } from '../../deduction-interface'
-import { DeductionInterfaceError } from '../../error'
 import {
     InvalidSubstitutionResultError,
     QuantificationRuleInterface
@@ -63,6 +63,6 @@ interface Substitution {
     newTerm: Sym
 }
 
-export class GeneralizedTermIllegallyBindsError extends DeductionInterfaceError {}
+export class GeneralizedTermIllegallyBindsError extends EntailCoreError {}
 
-export class GeneralizedTermBecomesIllegallyBoundError extends DeductionInterfaceError {}
+export class GeneralizedTermBecomesIllegallyBoundError extends EntailCoreError {}

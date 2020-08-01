@@ -1,5 +1,5 @@
 import { Deduction } from '../deduction-structure'
-import { DeductionInterfaceError } from './error'
+import { EntailCoreError } from '../error'
 import { RulesInterface } from './rules-interface'
 
 /**
@@ -32,7 +32,7 @@ export class DeductionInterface {
     }
 }
 
-export class StepOrdinalOutOfRangeError extends DeductionInterfaceError {
+export class StepOrdinalOutOfRangeError extends EntailCoreError {
     constructor(
         readonly stepOrdinal: number,
         readonly maxStepOrdinal: number

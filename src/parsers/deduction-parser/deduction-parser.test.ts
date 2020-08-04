@@ -93,3 +93,39 @@ test('parse()', () => {
 
     expect(is(actual, expected)).toBe(true)
 })
+
+test('parse()', () => {
+    const text = `
+          (1) A[x] (F(x) -> G(x))                                                       / P;
+          (2) A[x] (G(x) -> H(x))                                                       / P;
+          (3) E[x] F(x)                                                                 / P;
+        3 (4) F(a)                                                                      / EI 3;
+        1 (5) F(a) -> G(a)                                                              / UI 1;
+        2 (6) G(a) -> H(a)                                                              / UI 2;
+    1,2,3 (7) H(a)                                                                      / TI 4,5,6;
+    1,2,3 (8) E[x] H(x)                                                                 / EG 7;
+      1,2 (9) E[x] F(x) -> E[x] H(x)                                                    / D 3, 8;
+        1 (10) A[x] (G(x) -> H(x)) -> (E[x] F(x) -> E[x] H(x))                          / D 2, 9;
+          (11) A[x] (F(x) -> G(x)) -> (A[x] (G(x) -> H(x)) -> (E[x] F(x) -> E[x] H(x))) / D 1, 10; 
+    `
+
+    const actual = parser.parse(text)
+
+    const formulaParser = new FormulaParser(parser.presentationCtx)
+
+    const expected = new Deduction({
+        steps: List.of(
+            new Step({
+                formula: formulaParser.parse('A[x] (F(x) -> G(x))'),
+                ruleApplicationSummary: new RegularRuleApplicationSummary({
+                    rule: Rule.Premise
+                })
+            })
+        ),
+        termDependencyGraph: new TermDependencyGraph({
+            dependencies: Map([] as Entries<Sym, Set<Sym>>)
+        })
+    })
+
+    // expect(is(actual, expected)).toBe(true)
+})

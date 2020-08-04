@@ -115,14 +115,18 @@ export class Deduction extends Record<{
     ) {
         let assumptions = premises
             .toIndexedSeq()
-            .map(premise => this.getStep(premise))
-            .flatMap(
-                ({ assumptions, ruleApplicationSummary: { rule } }: Step, i: number) => {
-                    if (rule === Rule.Premise || rule === Rule.Theorem) {
-                        assumptions = assumptions.add(i)
-                    }
-                    return assumptions
-                })
+            .flatMap(premise => {
+                const step = this.getStep(premise)
+
+                let { assumptions } = step
+                const { ruleApplicationSummary: { rule } } = step
+
+                if (rule === Rule.Premise || rule === Rule.Theorem) {
+                    assumptions = assumptions.add(premise)
+                }
+
+                return assumptions
+            })
             .toSet()
 
         if (toRemove !== undefined) assumptions = assumptions.remove(toRemove)

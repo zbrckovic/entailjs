@@ -1,8 +1,6 @@
 import { List, Map } from 'immutable'
 import { Expression } from '../../abstract-structures/expression'
-import { Sym } from '../../abstract-structures/sym'
-import { Category } from '../../abstract-structures/sym/category'
-import { Kind } from '../../abstract-structures/sym/kind'
+import { Category, Kind, Sym } from '../../abstract-structures/sym'
 import { EntailCoreError } from '../../error'
 import { SymPresentation } from '../../presentation/sym-presentation'
 import { Placement } from '../../presentation/sym-presentation/placement'
@@ -19,11 +17,17 @@ export class AstProcessor {
     private _textToSymMap: Map<string, Sym>
     private _maxSymId: number
 
-    get presentationCtx(): PresentationCtx { return this._presentationCtx }
+    get presentationCtx(): PresentationCtx {
+        return this._presentationCtx
+    }
 
-    get textToSymMap(): Map<string, Sym> { return this._textToSymMap }
+    get textToSymMap(): Map<string, Sym> {
+        return this._textToSymMap
+    }
 
-    get maxSymId(): number { return this._maxSymId }
+    get maxSymId(): number {
+        return this._maxSymId
+    }
 
     /**
      * @param presentationCtx
@@ -116,16 +120,22 @@ export class AstProcessor {
         }
     }
 
-    private static isUpperWord(text: string) { return /^[A-Z]\w*/.test(text) }
+    private static isUpperWord(text: string) {
+        return /^[A-Z]\w*/.test(text)
+    }
 
-    private static isLowerWord(text: string) { return /^[a-z]\w*/.test(text) }
+    private static isLowerWord(text: string) {
+        return /^[a-z]\w*/.test(text)
+    }
 
     addPresentation(sym: Sym, presentation: SymPresentation) {
         this._presentationCtx = this.presentationCtx.set(sym, presentation)
         this._textToSymMap = this.textToSymMap.set(presentation.ascii.text, sym)
     }
 
-    getSym(text: string) { return this.textToSymMap.get(text) }
+    getSym(text: string) {
+        return this.textToSymMap.get(text)
+    }
 }
 
 export class InvalidBoundSymbolCategoryError extends EntailCoreError {

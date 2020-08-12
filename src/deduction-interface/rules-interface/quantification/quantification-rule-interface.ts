@@ -25,3 +25,5 @@ export class TermsCyclicDependenciesError extends EntailCoreError {
         super(`term ${dependentTerm} forms a cycle by depending on ${dependencyTerm}`)
     }
 }
+
+export class InvalidSubstitutionResultError extends EntailCoreError {}

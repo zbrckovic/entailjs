@@ -2,7 +2,10 @@ import { Expression, NoChildAtIndexError } from '../../../abstract-structures/ex
 import { Sym } from '../../../abstract-structures/sym'
 import { EntailCoreError } from '../../../error'
 import { DeductionInterface } from '../../deduction-interface'
-import { QuantificationRuleInterface } from './quantification-rule-interface'
+import {
+    InvalidSubstitutionResultError,
+    QuantificationRuleInterface
+} from './quantification-rule-interface'
 
 export abstract class InstantiationRuleInterface extends QuantificationRuleInterface {
     /**
@@ -47,8 +50,6 @@ export abstract class InstantiationRuleInterface extends QuantificationRuleInter
         }
     }
 }
-
-export class InvalidSubstitutionResultError extends EntailCoreError {}
 
 export class TermNotProvidedForNonVacuousQuantificationError extends EntailCoreError {}
 

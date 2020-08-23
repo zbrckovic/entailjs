@@ -2,14 +2,14 @@ import { List, Map } from 'immutable'
 import { Expression } from '../../abstract-structures/expression'
 import { Category, Kind, Sym } from '../../abstract-structures/sym'
 import { createError, ErrorName } from '../../error'
-import { SymPresentation } from '../../presentation/sym-presentation'
-import { Placement } from '../../presentation/sym-presentation/placement'
 import {
     createTextToSymMap,
     getMaxSymId,
-    PresentationCtx
-} from '../../presentation/sym-presentation/presentation-ctx'
-import { SyntacticInfo } from '../../presentation/sym-presentation/syntactic-info'
+    Placement,
+    PresentationCtx,
+    SymPresentation,
+    SyntacticInfo
+} from '../../presentation/sym-presentation'
 import { AstFormula, isBracketed } from '../peg/ast-formula'
 
 export class AstProcessor {

@@ -1,6 +1,5 @@
 import { Sym } from '../../abstract-structures/sym'
-import { SymPresentation } from '../../presentation/sym-presentation'
-import { PresentationCtx } from '../../presentation/sym-presentation/presentation-ctx'
+import { PresentationCtx, SymPresentation } from '../../presentation/sym-presentation'
 import { parseDeduction } from '../peg'
 import { AstProcessor } from './ast-processor'
 

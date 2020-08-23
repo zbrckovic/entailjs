@@ -1,7 +1,7 @@
 import { is } from 'immutable'
 import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
-import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
+import { primitivePresentationCtx } from '../../presentation/sym-presentation'
 import { conjunction } from '../../primitive-syms'
 import { Sym } from '../sym'
 import { connectWithBinarySym } from './expression-util'

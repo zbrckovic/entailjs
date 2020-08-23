@@ -5,7 +5,7 @@ import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-ap
 import { Step } from '../../deduction-structure/step'
 import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
-import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
+import { primitivePresentationCtx } from '../../presentation/sym-presentation'
 import { DeductionInterface } from '../deduction-interface'
 
 let parser: FormulaParser

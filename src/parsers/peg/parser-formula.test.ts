@@ -1,5 +1,5 @@
 import { parseFormula } from '.'
-import { Placement } from '../../presentation/sym-presentation/placement'
+import { Placement } from '../../presentation/sym-presentation'
 import { AstFormula } from './ast-formula'
 
 test.each<[string, AstFormula]>([

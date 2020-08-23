@@ -1,4 +1,4 @@
-import { Placement } from '../../presentation/sym-presentation/placement'
+import { Placement } from '../../presentation/sym-presentation'
 
 interface BracketedExpression {
     expression: AstFormula

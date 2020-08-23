@@ -4,7 +4,7 @@ import {
     createImplicationWithAntecedentsAsConjunction
 } from './formula-construction-util'
 import { FormulaParser } from './parsers/formula-parser'
-import { primitivePresentationCtx } from './presentation/sym-presentation/primitive-presentation-ctx'
+import { primitivePresentationCtx } from './presentation/sym-presentation'
 
 let parser: FormulaParser
 beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })

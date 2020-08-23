@@ -2,7 +2,7 @@ import { Rule } from '../../deduction-structure/rule'
 import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
 import { Step } from '../../deduction-structure/step'
 import { FormulaParser } from '../../parsers/formula-parser'
-import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
+import { primitivePresentationCtx } from '../../presentation/sym-presentation'
 import { DeductionInterface } from '../deduction-interface'
 
 let parser: FormulaParser

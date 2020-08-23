@@ -1,12 +1,11 @@
 import { Map, Set } from 'immutable'
+import { ErrorName } from '../error'
 import { FormulaParser } from '../parsers/formula-parser'
-import { primitivePresentationCtx } from '../presentation/sym-presentation/primitive-presentation-ctx'
+import { primitivePresentationCtx } from '../presentation/sym-presentation'
 import {
     evaluate,
     findInterpretations,
-    Interpretation,
-    NoAssignedValueError,
-    NotTruthFunctionalError
+    Interpretation
 } from './propositional-logic-util'
 
 let parser: FormulaParser
@@ -31,9 +30,9 @@ test.each<[string, InterpretationObject, boolean]>([
 })
 
 test.each([
-    ['p', {}, NoAssignedValueError],
-    ['F(x)', {}, NotTruthFunctionalError],
-    ['A[x] F(x)', {}, NotTruthFunctionalError]
+    ['p', {}, ErrorName.NO_ASSIGNED_VALUE_ERROR],
+    ['F(x)', {}, ErrorName.NOT_TRUTH_FUNCTIONAL],
+    ['A[x] F(x)', {}, ErrorName.NOT_TRUTH_FUNCTIONAL]
 ])('%s for %j throws %s', (formulaText, interpretationObj, expected) => {
     const formula = parser.parse(formulaText)
     const assignments = createInterpretation(interpretationObj)

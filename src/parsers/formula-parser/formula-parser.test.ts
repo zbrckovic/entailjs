@@ -2,9 +2,11 @@ import { List, Set } from 'immutable'
 import { Expression } from '../../abstract-structures/expression'
 import { Sym } from '../../abstract-structures/sym'
 import { ErrorName } from '../../error'
-import { SymPresentation } from '../../presentation/sym-presentation'
-import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
-import { SyntacticInfo } from '../../presentation/sym-presentation/syntactic-info'
+import {
+    primitivePresentationCtx,
+    SymPresentation,
+    SyntacticInfo
+} from '../../presentation/sym-presentation'
 import {
     existentialQuantifier,
     implication,

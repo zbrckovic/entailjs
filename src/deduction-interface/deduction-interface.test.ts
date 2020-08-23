@@ -1,7 +1,7 @@
 import { Rule } from '../deduction-structure/rule'
 import { ErrorName } from '../error'
-import { DeductionParser } from '../parsers/deduction-parser/deduction-parser'
-import { primitivePresentationCtx } from '../presentation/sym-presentation/primitive-presentation-ctx'
+import { DeductionParser } from '../parsers/deduction-parser'
+import { primitivePresentationCtx } from '../presentation/sym-presentation'
 import { DeductionInterface } from './deduction-interface'
 
 let parser: DeductionParser

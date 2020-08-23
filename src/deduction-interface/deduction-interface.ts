@@ -1,5 +1,5 @@
 import { Deduction } from '../deduction-structure'
-import { EntailCoreError } from '../error'
+import { createError, ErrorName } from '../error'
 import { RulesInterface } from './rules-interface'
 
 /**
@@ -25,18 +25,13 @@ export class DeductionInterface {
         ))
 
         if (stepOrdinalOutOfRange !== undefined) {
-            throw new StepOrdinalOutOfRangeError(stepOrdinalOutOfRange, this.deduction.size)
+            throw createError(
+                ErrorName.STEP_ORDINAL_OUT_OF_RANGE,
+                undefined,
+                { stepOrdinalOutOfRange, size: this.deduction.size }
+            )
         }
 
         return ordinals.map(ordinal => ordinal - 1)
-    }
-}
-
-export class StepOrdinalOutOfRangeError extends EntailCoreError {
-    constructor(
-        readonly stepOrdinal: number,
-        readonly maxStepOrdinal: number
-    ) {
-        super(`step ordinal ${stepOrdinal} is out of range [1 - ${maxStepOrdinal}]`)
     }
 }

@@ -1,3 +1,3 @@
-export { Expression, ExpressionDoesntBindError, NoChildAtIndexError } from './expression'
-export { ExpressionPointer, CantGetParentOfRootError } from './expression-pointer'
-export { NotEnoughExpressionsError, connectWithBinarySym } from './expression-util'
+export { Expression } from './expression'
+export { ExpressionPointer } from './expression-pointer'
+export { connectWithBinarySym } from './expression-util'

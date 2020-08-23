@@ -1,7 +1,7 @@
 import { List } from 'immutable'
+import { createError, ErrorName } from '../../error'
 import { Sym } from '../sym'
 import { Expression } from './expression'
-import { EntailCoreError } from '../../error'
 
 /**
  * Reduce `expressions` to a single expression using binary connective. Reduction is performed from
@@ -10,7 +10,7 @@ import { EntailCoreError } from '../../error'
  * From A, B, C we will get ((A, B), C), not (A, (B, C)).
  */
 export const connectWithBinarySym = (expressions: Expression[], sym: Sym) => {
-    if (expressions.length < 2) throw new NotEnoughExpressionsError()
+    if (expressions.length < 2) throw createError(ErrorName.NOT_ENOUGH_EXPRESSIONS)
     const [first, second, ...rest] = expressions
 
     const connect = (first: Expression, second: Expression) => new Expression({
@@ -20,5 +20,3 @@ export const connectWithBinarySym = (expressions: Expression[], sym: Sym) => {
 
     return rest.reduce(connect, connect(first, second))
 }
-
-export class NotEnoughExpressionsError extends EntailCoreError {}

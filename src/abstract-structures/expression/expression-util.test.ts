@@ -1,9 +1,10 @@
 import { is } from 'immutable'
+import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
 import { conjunction } from '../../primitive-syms'
 import { Sym } from '../sym'
-import { connectWithBinarySym, NotEnoughExpressionsError } from './expression-util'
+import { connectWithBinarySym } from './expression-util'
 
 let parser: FormulaParser
 beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
@@ -23,19 +24,19 @@ test.each<[string[], Sym, string]>([
 })
 
 test(
-    `connectWithBinarySym() throws ${NotEnoughExpressionsError.name} for empty list`,
+    `connectWithBinarySym() throws ${ErrorName.NOT_ENOUGH_EXPRESSIONS} for empty list`,
     () => {
         expect(() => { connectWithBinarySym([], conjunction) })
-            .toThrow(NotEnoughExpressionsError)
+            .toThrow(ErrorName.NOT_ENOUGH_EXPRESSIONS)
     }
 )
 
 test(
-    `connectWithBinarySym() throws ${NotEnoughExpressionsError.name} for singleton list`,
+    `connectWithBinarySym() throws ${ErrorName.NOT_ENOUGH_EXPRESSIONS} for singleton list`,
     () => {
         const expression = parser.parse('p')
 
         expect(() => { connectWithBinarySym([expression], conjunction) })
-            .toThrow(NotEnoughExpressionsError)
+            .toThrow(ErrorName.NOT_ENOUGH_EXPRESSIONS)
     }
 )

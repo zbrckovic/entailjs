@@ -1,7 +1,7 @@
 import { Map, Set } from 'immutable'
 import { Expression } from '../abstract-structures/expression'
 import { Category, Sym } from '../abstract-structures/sym'
-import { EntailCoreError } from '../error'
+import { createError, ErrorName } from '../error'
 import { primitiveTruthFunctions } from './primitive-truth-functions'
 
 export type Interpretation = Map<Sym, boolean>
@@ -10,11 +10,11 @@ export const evaluate = (
     { sym, children }: Expression,
     interpretation: Interpretation = Map()
 ): boolean => {
-    if (sym.getCategory() !== Category.FF) throw new NotTruthFunctionalError()
+    if (sym.getCategory() !== Category.FF) throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
 
     if (sym.arity === 0) {
         const value = interpretation.get(sym)
-        if (value === undefined) throw new NoAssignedValueError()
+        if (value === undefined) throw createError(ErrorName.NO_ASSIGNED_VALUE_ERROR)
         return value
     }
 
@@ -38,7 +38,7 @@ const findInterpretationsLimitedByBaseInterpretation = (
     interpretation: Interpretation = Map()
 ): Set<Interpretation> => {
     if (sym.getCategory() !== Category.FF || sym.binds) {
-        throw new NotTruthFunctionalError()
+        throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
     }
 
     if (sym.arity === 0) {
@@ -80,10 +80,6 @@ const findInterpretationsLimitedByBaseInterpretations = (
 
 const getTruthTable = (sym: Sym) => {
     const truthFunction = primitiveTruthFunctions.get(sym)
-    if (truthFunction === undefined) throw new NoAssignedValueError()
+    if (truthFunction === undefined) throw createError(ErrorName.NO_ASSIGNED_VALUE_ERROR)
     return truthFunction
 }
-
-export class NotTruthFunctionalError extends EntailCoreError {}
-
-export class NoAssignedValueError extends EntailCoreError {}

@@ -1,6 +1,6 @@
 import { Map, Record, Set } from 'immutable'
 import { Sym } from '../../abstract-structures/sym'
-import { EntailCoreError } from '../../error'
+import { createError, ErrorName } from '../../error'
 
 /**
  * Graph of dependencies between free terms of a deduction.
@@ -20,14 +20,14 @@ export class TermDependencyGraph extends Record<{
         const dependenciesSet = Set(dependencies)
 
         if (this.dependencies.has(dependent)) {
-            throw new TermAlreadyUsedError(dependent)
+            throw createError(ErrorName.TERM_ALREADY_USED, undefined, dependent)
         }
 
         const cycleInducingDependency = dependenciesSet.find(
             dependency => this.hasDependency(dependency, dependent)
         )
         if (cycleInducingDependency !== undefined) {
-            throw new CyclicDependenciesError(dependent, cycleInducingDependency)
+            throw createError(ErrorName.CYCLIC_DEPENDENCIES, undefined, cycleInducingDependency)
         }
 
         return dependenciesSet.reduce<TermDependencyGraph>(
@@ -135,19 +135,3 @@ export class TermDependencyGraph extends Record<{
         )
     }
 }
-
-export class TermAlreadyUsedError extends EntailCoreError {
-    constructor(readonly term: Sym) {
-        super(`term ${term} is already used`)
-    }
-}
-
-export class CyclicDependenciesError extends EntailCoreError {
-    constructor(
-        readonly dependentTerm: Sym,
-        readonly dependencyTerm: Sym
-    ) {
-        super(`term ${dependentTerm} forms a cycle by depending on ${dependencyTerm}`)
-    }
-}
-

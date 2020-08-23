@@ -1,6 +1,6 @@
 import { is, Map, OrderedMap } from 'immutable'
 import { Sym } from '../../abstract-structures/sym'
-import { Category } from '../../abstract-structures/sym/category'
+import { Category } from '../../abstract-structures/sym'
 import { Entries } from '../../utils'
 import { groupByCategory, PresentationCtx } from './presentation-ctx'
 import { SymPresentation } from './sym-presentation'

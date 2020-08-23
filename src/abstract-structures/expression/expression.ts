@@ -1,7 +1,6 @@
 import { List, Range, Record, Set } from 'immutable'
-import { Sym } from '../sym'
-import { Kind } from '../sym/kind'
-import { EntailCoreError } from '../../error'
+import { createError, ErrorName } from '../../error'
+import { Kind, Sym } from '../sym'
 
 /**
  * Abstract tree-like structure which is used to represents formulas and terms.
@@ -26,7 +25,9 @@ export class Expression extends Record<{
 }, 'Expression') {
     getChild(i: number): Expression {
         const child = this.children.get(i)
-        if (child === undefined) throw new NoChildAtIndexError(this, i)
+        if (child === undefined) {
+            throw createError(ErrorName.NO_CHILD_AT_INDEX, undefined, { expression: this, i })
+        }
         return child
     }
 
@@ -99,7 +100,9 @@ export class Expression extends Record<{
 
     findBoundOccurrences(): List<Position> {
         const boundSym = this.boundSym
-        if (boundSym === undefined) throw new ExpressionDoesntBindError(this)
+        if (boundSym === undefined) {
+            throw createError(ErrorName.EXPRESSION_DOESNT_BIND, undefined, this)
+        }
 
         return this.children.flatMap(
             (child, i) =>
@@ -140,7 +143,9 @@ export class Expression extends Record<{
         return Set<Sym>().withMutations(mutableSyms => {
             mutableSyms.add(this.sym)
             if (this.boundSym !== undefined) mutableSyms.add(this.boundSym)
-            this.children.forEach(child => { mutableSyms.union(child.getSyms()) })
+            this.children.forEach(child => {
+                mutableSyms.union(child.getSyms())
+            })
         })
     }
 
@@ -148,7 +153,9 @@ export class Expression extends Record<{
         return Set<Sym>().withMutations(mutableSyms => {
             if (!boundSyms.contains(this.sym)) mutableSyms.add(this.sym)
             if (this.boundSym !== undefined) boundSyms = boundSyms.add(this.boundSym)
-            this.children.forEach(child => { mutableSyms.union(child.getFreeSyms(boundSyms)) })
+            this.children.forEach(child => {
+                mutableSyms.union(child.getFreeSyms(boundSyms))
+            })
         })
     }
 
@@ -193,21 +200,6 @@ const resolveChildren = (
     } else {
         if (getChild === undefined) throw new Error('getChild not present')
         return oldChildren.concat(Range(oldChildren.size, newSym.arity).map(getChild))
-    }
-}
-
-export class ExpressionDoesntBindError extends EntailCoreError {
-    constructor(readonly expression: Expression) {
-        super(`expression ${expression} doesn't bind`)
-    }
-}
-
-export class NoChildAtIndexError extends EntailCoreError {
-    constructor(
-        readonly expression: Expression,
-        readonly index: number
-    ) {
-        super(`can't get child of ${expression} at index ${index}`)
     }
 }
 

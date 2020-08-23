@@ -1,11 +1,8 @@
 import { Map, Set } from 'immutable'
 import { Sym } from '../../abstract-structures/sym'
+import { ErrorName } from '../../error'
 import { Entries } from '../../utils'
-import {
-    CyclicDependenciesError,
-    TermAlreadyUsedError,
-    TermDependencyGraph
-} from './term-dependency-graph'
+import { TermDependencyGraph } from './term-dependency-graph'
 
 const term0 = Sym.tt({ id: 0 })
 const term1 = Sym.tt({ id: 1 })
@@ -14,17 +11,17 @@ const term3 = Sym.tt({ id: 3 })
 const term4 = Sym.tt({ id: 4 })
 
 describe('#addDirectDependency()', () => {
-    test(`throws ${TermAlreadyUsedError.name}`, () => {
+    test(`throws ${ErrorName.TERM_ALREADY_USED}`, () => {
         const graph = new TermDependencyGraph({
             dependencies: Map([
                 [term0, Set()]
             ] as Entries<Sym, Set<Sym>>)
         })
 
-        expect(() => { graph.addDependencies(term0, term1) }).toThrow(TermAlreadyUsedError)
+        expect(() => { graph.addDependencies(term0, term1) }).toThrow(ErrorName.TERM_ALREADY_USED)
     })
 
-    test(`throws ${CyclicDependenciesError.name}`, () => {
+    test(`throws ${ErrorName.CYCLIC_DEPENDENCIES}`, () => {
         const graph = new TermDependencyGraph({
             dependencies: Map([
                 [term0, Set.of(term1, term2)],
@@ -32,8 +29,8 @@ describe('#addDirectDependency()', () => {
             ] as Entries<Sym, Set<Sym>>)
         })
 
-        expect(() => { graph.addDependencies(term1, term0) }).toThrow(CyclicDependenciesError)
-        expect(() => { graph.addDependencies(term3, term0) }).toThrow(CyclicDependenciesError)
+        expect(() => { graph.addDependencies(term1, term0) }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
+        expect(() => { graph.addDependencies(term3, term0) }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
     })
 
     test('basic case', () => {

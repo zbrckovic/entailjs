@@ -1,15 +1,16 @@
 import { fromJS, is, List, Set } from 'immutable'
+import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
-import { CantGetParentOfRootError, ExpressionPointer } from './expression-pointer'
+import { ExpressionPointer } from './expression-pointer'
 
 let parser: FormulaParser
 beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
 
-test(`#getParentPointer() throws ${CantGetParentOfRootError.name} for root.`, () => {
+test(`#getParentPointer() throws ${ErrorName.CANT_GET_PARENT_OF_ROOT} for root.`, () => {
     const expression = parser.parse('p')
     const pointer = new ExpressionPointer({ expression })
-    expect(() => { pointer.parent }).toThrow(CantGetParentOfRootError)
+    expect(() => { pointer.parent }).toThrow(ErrorName.CANT_GET_PARENT_OF_ROOT)
 })
 
 test('#getParentPointer({ p -> q, [1] }) for is { p -> q, [] }', () => {

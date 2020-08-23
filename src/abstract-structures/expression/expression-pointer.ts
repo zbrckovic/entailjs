@@ -1,7 +1,7 @@
 import { List, Record, Set } from 'immutable'
+import { createError, ErrorName } from '../../error'
 import { Sym } from '../sym'
 import { Expression, Position } from './expression'
-import { EntailCoreError } from '../../error'
 
 /**
  * Pointer to the specific subexpression of the base expression.
@@ -16,12 +16,16 @@ export class ExpressionPointer extends Record<{
     expression: new Expression(),
     position: List()
 }, 'ExpressionPointer') {
-    get isRoot() { return this.position.isEmpty() }
+    get isRoot() {
+        return this.position.isEmpty()
+    }
 
-    get target() { return this.expression.getSubexpression(this.position) }
+    get target() {
+        return this.expression.getSubexpression(this.position)
+    }
 
     get parent(): ExpressionPointer {
-        if (this.isRoot) throw new CantGetParentOfRootError()
+        if (this.isRoot) throw createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
 
         return this.update('position', position => position.butLast())
     }
@@ -79,5 +83,3 @@ export class ExpressionPointer extends Record<{
             .union(parent.getBoundSyms())
     }
 }
-
-export class CantGetParentOfRootError extends EntailCoreError {}

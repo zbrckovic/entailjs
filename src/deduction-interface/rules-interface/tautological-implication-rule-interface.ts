@@ -2,7 +2,7 @@ import { OrderedSet } from 'immutable'
 import { Expression } from '../../abstract-structures/expression'
 import { Deduction } from '../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
-import { EntailCoreError } from '../../error'
+import { createError, ErrorName } from '../../error'
 import { isLogicalConsequence } from '../../propositional-logic/propositional-logic'
 import { DeductionInterface } from '../deduction-interface'
 
@@ -16,7 +16,11 @@ export class TautologicalImplicationRuleInterface {
         const assumptions = this.stepIndexes.map(i => this.deduction.getStep(i).formula)
 
         if (!isLogicalConsequence(assumptions, formula)) {
-            throw new InvalidTautologicalImplicationError(assumptions, formula)
+            throw createError(
+                ErrorName.INVALID_TAUTOLOGICAL_IMPLICATION,
+                undefined,
+                { assumptions, formula }
+            )
         }
 
         const ruleApplicationSpec = RegularRuleApplicationSpec.tautologicalImplication(
@@ -25,14 +29,5 @@ export class TautologicalImplicationRuleInterface {
         )
         const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
         return new DeductionInterface(newDeduction)
-    }
-}
-
-export class InvalidTautologicalImplicationError extends EntailCoreError {
-    constructor(
-        readonly assumptions: Expression[],
-        readonly consequence: Expression
-    ) {
-        super(`assumption(s) ${assumptions.join(', ')} do(es)n't entail ${consequence}`)
     }
 }

@@ -1,11 +1,8 @@
-import { Expression, NoChildAtIndexError } from '../../../abstract-structures/expression'
+import { Expression } from '../../../abstract-structures/expression'
 import { Sym } from '../../../abstract-structures/sym'
-import { EntailCoreError } from '../../../error'
+import { createError, ErrorName } from '../../../error'
 import { DeductionInterface } from '../../deduction-interface'
-import {
-    InvalidSubstitutionResultError,
-    QuantificationRuleInterface
-} from './quantification-rule-interface'
+import { QuantificationRuleInterface } from './quantification-rule-interface'
 
 export abstract class InstantiationRuleInterface extends QuantificationRuleInterface {
     /**
@@ -17,13 +14,13 @@ export abstract class InstantiationRuleInterface extends QuantificationRuleInter
 
         if (newTerm === undefined) {
             if (!premise.findBoundOccurrences().isEmpty()) {
-                throw new TermNotProvidedForNonVacuousQuantificationError()
+                throw createError(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
             }
         } else {
             const oldTerm = premise.boundSym!
             const child = premise.children.first<Expression>()
             if (child.findBoundSymsAtFreeOccurrencesOfSym(oldTerm).contains(newTerm)) {
-                throw new InstanceTermBecomesIllegallyBoundError()
+                throw createError(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
             }
         }
 
@@ -43,14 +40,10 @@ export abstract class InstantiationRuleInterface extends QuantificationRuleInter
         try {
             return formula.getSubexpression(firstOccurrence.shift()).sym
         } catch (e) {
-            if (e instanceof NoChildAtIndexError) {
-                throw new InvalidSubstitutionResultError()
+            if (e.name === ErrorName.NO_CHILD_AT_INDEX) {
+                throw createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
             }
             throw e
         }
     }
 }
-
-export class TermNotProvidedForNonVacuousQuantificationError extends EntailCoreError {}
-
-export class InstanceTermBecomesIllegallyBoundError extends EntailCoreError {}

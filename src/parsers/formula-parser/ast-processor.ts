@@ -1,7 +1,7 @@
 import { List, Map } from 'immutable'
 import { Expression } from '../../abstract-structures/expression'
 import { Category, Kind, Sym } from '../../abstract-structures/sym'
-import { EntailCoreError } from '../../error'
+import { createError, ErrorName } from '../../error'
 import { SymPresentation } from '../../presentation/sym-presentation'
 import { Placement } from '../../presentation/sym-presentation/placement'
 import {
@@ -54,11 +54,19 @@ export class AstProcessor {
             ?? this.createSym(kind, arity, ast.boundSym !== undefined, ast.sym, ast.symPlacement)
 
         if (this._presentationCtx.get(mainSym)!.ascii.placement !== ast.symPlacement) {
-            throw new InvalidSymbolPlacementError(mainSym, ast.symPlacement)
+            throw createError(
+                ErrorName.INVALID_SYMBOL_PLACEMENT,
+                undefined,
+                { sym: mainSym, symPlacement: ast.symPlacement }
+            )
         }
 
-        if (mainSym.arity !== arity) throw new InvalidArityError(mainSym, arity)
-        if (mainSym.kind !== kind) throw new InvalidSymbolKindError(mainSym, kind)
+        if (mainSym.arity !== arity) {
+            throw createError(ErrorName.INVALID_ARITY, undefined, { sym: mainSym, arity })
+        }
+        if (mainSym.kind !== kind) {
+            throw createError(ErrorName.INVALID_SYMBOL_KIND, undefined, { sym: mainSym, kind })
+        }
 
         let boundSym: Sym | undefined
         if (ast.boundSym !== undefined) {
@@ -66,11 +74,19 @@ export class AstProcessor {
 
             if (boundSym !== undefined) {
                 if (boundSym.getCategory() !== Category.TT) {
-                    throw new InvalidBoundSymbolCategoryError(boundSym)
+                    throw createError(
+                        ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
+                        undefined,
+                        boundSym
+                    )
                 }
 
                 if (boundSym.arity !== 0) {
-                    throw new InvalidBoundSymbolArityError(boundSym)
+                    throw createError(
+                        ErrorName.INVALID_BOUND_SYMBOL_ARITY,
+                        undefined,
+                        boundSym
+                    )
                 }
             } else {
                 boundSym = this.createSym(Kind.Term, 0, false, ast.boundSym, Placement.Prefix)
@@ -135,44 +151,5 @@ export class AstProcessor {
 
     getSym(text: string) {
         return this.textToSymMap.get(text)
-    }
-}
-
-export class InvalidBoundSymbolCategoryError extends EntailCoreError {
-    constructor(readonly sym: Sym) {
-        super(`symbol ${sym} has wrong category to be bound`)
-    }
-}
-
-export class InvalidBoundSymbolArityError extends EntailCoreError {
-    constructor(readonly sym: Sym) {
-        super(`symbol ${sym} has wrong arity to be bound`)
-    }
-}
-
-export class InvalidArityError extends EntailCoreError {
-    constructor(
-        readonly sym: Sym,
-        readonly arity: number
-    ) {
-        super(`symbol ${sym} is used with wrong arity ${arity}`)
-    }
-}
-
-export class InvalidSymbolKindError extends EntailCoreError {
-    constructor(
-        readonly sym: Sym,
-        readonly kind: Kind
-    ) {
-        super(`encountered symbol ${sym} where symbol of kind ${kind} was expected`)
-    }
-}
-
-export class InvalidSymbolPlacementError extends EntailCoreError {
-    constructor(
-        readonly sym: Sym,
-        readonly placement: Placement
-    ) {
-        super(`symbol ${sym} has wrong placement ${placement}`)
     }
 }

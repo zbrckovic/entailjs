@@ -1,12 +1,9 @@
 import { is } from 'immutable'
-import { Expression, NoChildAtIndexError } from '../../../abstract-structures/expression'
+import { Expression } from '../../../abstract-structures/expression'
 import { Sym } from '../../../abstract-structures/sym'
-import { EntailCoreError } from '../../../error'
+import { createError, ErrorName } from '../../../error'
 import { DeductionInterface } from '../../deduction-interface'
-import {
-    InvalidSubstitutionResultError,
-    QuantificationRuleInterface
-} from './quantification-rule-interface'
+import { QuantificationRuleInterface } from './quantification-rule-interface'
 
 export abstract class GeneralizationRuleInterface extends QuantificationRuleInterface {
     /**
@@ -20,14 +17,14 @@ export abstract class GeneralizationRuleInterface extends QuantificationRuleInte
         const substitutionRequired = !is(newTerm, oldTerm)
         if (substitutionRequired) {
             if (premise.getFreeSyms().contains(newTerm)) {
-                throw new GeneralizedTermIllegallyBindsError()
+                throw createError(ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS)
             }
 
             if (
                 oldTerm !== undefined &&
                 premise.findBoundSymsAtFreeOccurrencesOfSym(oldTerm).contains(newTerm)
             ) {
-                throw new GeneralizedTermBecomesIllegallyBoundError()
+                throw createError(ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND)
             }
         }
 
@@ -42,7 +39,7 @@ export abstract class GeneralizationRuleInterface extends QuantificationRuleInte
      */
     determineSubstitutionInPotentialResult(formula: Expression): Substitution {
         const newTerm = formula.boundSym
-        if (newTerm === undefined) throw new InvalidSubstitutionResultError()
+        if (newTerm === undefined) throw createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
 
         try {
             const firstBoundOccurrencePosition = formula.findBoundOccurrences().first(undefined)
@@ -50,8 +47,8 @@ export abstract class GeneralizationRuleInterface extends QuantificationRuleInte
             const oldTerm = this.premise.getSubexpression(firstBoundOccurrencePosition.shift()).sym
             return { oldTerm, newTerm }
         } catch (e) {
-            if (e instanceof NoChildAtIndexError) {
-                throw new InvalidSubstitutionResultError()
+            if (e.name === ErrorName.NO_CHILD_AT_INDEX) {
+                throw createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
             }
             throw e
         }
@@ -62,7 +59,3 @@ interface Substitution {
     oldTerm?: Sym
     newTerm: Sym
 }
-
-export class GeneralizedTermIllegallyBindsError extends EntailCoreError {}
-
-export class GeneralizedTermBecomesIllegallyBoundError extends EntailCoreError {}

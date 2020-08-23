@@ -1,6 +1,7 @@
 import { List, Set } from 'immutable'
 import { Expression } from '../../abstract-structures/expression'
 import { Sym } from '../../abstract-structures/sym'
+import { ErrorName } from '../../error'
 import { SymPresentation } from '../../presentation/sym-presentation'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
 import { SyntacticInfo } from '../../presentation/sym-presentation/syntactic-info'
@@ -11,7 +12,6 @@ import {
     primitiveSyms,
     universalQuantifier
 } from '../../primitive-syms'
-import { InvalidBoundSymbolCategoryError, InvalidSymbolKindError } from './ast-processor'
 import { FormulaParser } from './formula-parser'
 
 let parser: FormulaParser
@@ -149,27 +149,27 @@ test('parse(\'A[x] E[y] (F(x, y) -> ~G(y, x))\'', () => {
     expect(addedSyms.equals(expectedAddedSyms)).toBe(true)
 })
 
-test(`parse('~x') throws ${InvalidSymbolKindError.name}`, () => {
+test(`parse('~x') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
     const text = '~x'
     const presentationX = new SymPresentation({ ascii: SyntacticInfo.prefix('x') })
     parser.addPresentation(Sym.tt(), presentationX)
 
-    expect(() => parser.parse(text)).toThrow(InvalidSymbolKindError)
+    expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
-test(`parse('F(x)') throws ${InvalidSymbolKindError.name}`, () => {
+test(`parse('F(x)') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
     const text = 'F(x)'
     const presentationX = new SymPresentation({ ascii: SyntacticInfo.prefix('x') })
     parser.addPresentation(Sym.ff(), presentationX)
 
-    expect(() => parser.parse(text)).toThrow(InvalidSymbolKindError)
+    expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
-test(`parse('A[x] p') throws ${InvalidBoundSymbolCategoryError.name}`, () => {
+test(`parse('A[x] p') throws ${ErrorName.INVALID_BOUND_SYMBOL_CATEGORY}`, () => {
     const text = 'A[x] p'
     const presentationX = new SymPresentation({ ascii: SyntacticInfo.prefix('x') })
     const symX = parser.addPresentation(Sym.ff(), presentationX)
     parser.addPresentation(symX, presentationX)
 
-    expect(() => parser.parse(text)).toThrow(InvalidBoundSymbolCategoryError)
+    expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_BOUND_SYMBOL_CATEGORY)
 })

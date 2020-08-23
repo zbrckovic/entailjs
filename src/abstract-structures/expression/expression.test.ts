@@ -1,7 +1,7 @@
 import { fromJS, List, Set } from 'immutable'
+import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
-import { ExpressionDoesntBindError } from './expression'
 
 let parser: FormulaParser
 beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
@@ -40,10 +40,10 @@ test.each([
 test.each([
     ['p'],
     ['F(x)']
-])(`#findBoundOccurrences(%s) throws ${ExpressionDoesntBindError.name}`, text => {
+])(`#findBoundOccurrences(%s) throws ${ErrorName.EXPRESSION_DOESNT_BIND}`, text => {
     const formula = parser.parse(text)
 
-    expect(() => { formula.findBoundOccurrences() }).toThrow(ExpressionDoesntBindError)
+    expect(() => { formula.findBoundOccurrences() }).toThrow(ErrorName.EXPRESSION_DOESNT_BIND)
 })
 
 test.each([

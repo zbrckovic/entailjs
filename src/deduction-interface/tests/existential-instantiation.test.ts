@@ -4,13 +4,10 @@ import { Rule } from '../../deduction-structure/rule'
 import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
 import { Step } from '../../deduction-structure/step'
 import { TermDependencies } from '../../deduction-structure/term-dependency-graph/term-dependencies'
+import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
 import { DeductionInterface } from '../deduction-interface'
-import {
-    InstanceTermBecomesIllegallyBoundError,
-    TermNotProvidedForNonVacuousQuantificationError
-} from '../rules-interface/quantification/instantiation-rule-interface'
 
 let parser: FormulaParser
 beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
@@ -118,7 +115,7 @@ test('with dependency terms', () => {
     expect(actual.equals(expected)).toBe(true)
 })
 
-test(`throws ${TermNotProvidedForNonVacuousQuantificationError.name}`, () => {
+test(`throws ${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}`, () => {
     const formula0 = parser.parse('E[x] F(x, a)')
 
     const deduction = new Deduction({
@@ -136,10 +133,10 @@ test(`throws ${TermNotProvidedForNonVacuousQuantificationError.name}`, () => {
             .selectSteps(1)
             [Rule.ExistentialInstantiation]!
             .apply()
-    }).toThrow(TermNotProvidedForNonVacuousQuantificationError)
+    }).toThrow(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
 })
 
-test(`throws ${InstanceTermBecomesIllegallyBoundError.name}`, () => {
+test(`throws ${ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
     const formula0 = parser.parse('E[x] A[y] F(x, y)')
 
     const deduction = new Deduction({
@@ -157,5 +154,5 @@ test(`throws ${InstanceTermBecomesIllegallyBoundError.name}`, () => {
             .selectSteps(1)
             [Rule.ExistentialInstantiation]!
             .apply(parser.getSym('y'))
-    }).toThrow(InstanceTermBecomesIllegallyBoundError)
+    }).toThrow(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
 })

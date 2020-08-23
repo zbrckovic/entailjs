@@ -3,13 +3,10 @@ import { Deduction } from '../../deduction-structure'
 import { Rule } from '../../deduction-structure/rule'
 import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
 import { Step } from '../../deduction-structure/step'
+import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation/primitive-presentation-ctx'
 import { DeductionInterface } from '../deduction-interface'
-import {
-    GeneralizedTermBecomesIllegallyBoundError,
-    GeneralizedTermIllegallyBindsError
-} from '../rules-interface/quantification/generalization-rule-interface'
 
 let parser: FormulaParser
 beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
@@ -82,7 +79,7 @@ test('simple', () => {
     expect(actual.equals(expected)).toBe(true)
 })
 
-test(`throws ${GeneralizedTermIllegallyBindsError.name}`, () => {
+test(`throws ${ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS}`, () => {
     const formula0 = parser.parse('F(a, x)')
 
     const deduction = new Deduction({
@@ -103,10 +100,10 @@ test(`throws ${GeneralizedTermIllegallyBindsError.name}`, () => {
             .apply(parser.getSym('x')!, parser.getSym('a'))
             .deduction
             .getLastStep()
-    }).toThrow(GeneralizedTermIllegallyBindsError)
+    }).toThrow(ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS)
 })
 
-test(`throws ${GeneralizedTermBecomesIllegallyBoundError.name}`, () => {
+test(`throws ${ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
     const formula0 = parser.parse('A[x] F(a)')
 
     const deduction = new Deduction({
@@ -127,6 +124,6 @@ test(`throws ${GeneralizedTermBecomesIllegallyBoundError.name}`, () => {
             .apply(parser.getSym('x')!, parser.getSym('a'))
             .deduction
             .getLastStep()
-    }).toThrow(GeneralizedTermBecomesIllegallyBoundError)
+    }).toThrow(ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND)
 })
 

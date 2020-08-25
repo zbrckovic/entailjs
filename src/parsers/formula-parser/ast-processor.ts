@@ -6,10 +6,10 @@ import {
     createTextToSymMap,
     getMaxSymId,
     Placement,
-    PresentationCtx,
     SymPresentation,
     SyntacticInfo
 } from '../../presentation/sym-presentation'
+import { PresentationCtx } from '../../presentation/sym-presentation/presentation-ctx'
 import { AstFormula, isBracketed } from '../peg/ast-formula'
 
 export class AstProcessor {

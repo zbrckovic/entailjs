@@ -62,7 +62,7 @@ export class AstProcessor {
                 {
                     sym: mainSym,
                     presentation: mainSymPresentation,
-                    expectedSymPlacement: ast.symPlacement
+                    placement: ast.symPlacement
                 }
             )
         }
@@ -71,14 +71,14 @@ export class AstProcessor {
             throw createError(
                 ErrorName.INVALID_ARITY,
                 undefined,
-                { sym: mainSym, presentation: mainSymPresentation, expectedArity: arity }
+                { sym: mainSym, presentation: mainSymPresentation, arity }
             )
         }
         if (mainSym.kind !== kind) {
             throw createError(
                 ErrorName.INVALID_SYMBOL_KIND,
                 undefined,
-                { sym: mainSym, presentation: mainSymPresentation, expectedKind: kind }
+                { sym: mainSym, presentation: mainSymPresentation, kind }
             )
         }
 

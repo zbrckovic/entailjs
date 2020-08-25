@@ -53,19 +53,33 @@ export class AstProcessor {
         const mainSym = this._textToSymMap.get(ast.sym)
             ?? this.createSym(kind, arity, ast.boundSym !== undefined, ast.sym, ast.symPlacement)
 
-        if (this._presentationCtx.get(mainSym)!.ascii.placement !== ast.symPlacement) {
+        const mainSymPresentation = this._presentationCtx.get(mainSym)!
+
+        if (mainSymPresentation.ascii.placement !== ast.symPlacement) {
             throw createError(
                 ErrorName.INVALID_SYMBOL_PLACEMENT,
                 undefined,
-                { sym: mainSym, symPlacement: ast.symPlacement }
+                {
+                    sym: mainSym,
+                    presentation: mainSymPresentation,
+                    expectedSymPlacement: ast.symPlacement
+                }
             )
         }
 
         if (mainSym.arity !== arity) {
-            throw createError(ErrorName.INVALID_ARITY, undefined, { sym: mainSym, arity })
+            throw createError(
+                ErrorName.INVALID_ARITY,
+                undefined,
+                { sym: mainSym, presentation: mainSymPresentation, expectedArity: arity }
+            )
         }
         if (mainSym.kind !== kind) {
-            throw createError(ErrorName.INVALID_SYMBOL_KIND, undefined, { sym: mainSym, kind })
+            throw createError(
+                ErrorName.INVALID_SYMBOL_KIND,
+                undefined,
+                { sym: mainSym, presentation: mainSymPresentation, expectedKind: kind }
+            )
         }
 
         let boundSym: Sym | undefined
@@ -77,7 +91,7 @@ export class AstProcessor {
                     throw createError(
                         ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
                         undefined,
-                        boundSym
+                        { sym: boundSym, presentation: this._presentationCtx.get(boundSym)! }
                     )
                 }
 
@@ -85,7 +99,7 @@ export class AstProcessor {
                     throw createError(
                         ErrorName.INVALID_BOUND_SYMBOL_ARITY,
                         undefined,
-                        boundSym
+                        { sym: boundSym, presentation: this._presentationCtx.get(boundSym)! }
                     )
                 }
             } else {

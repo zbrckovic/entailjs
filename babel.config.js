@@ -21,11 +21,5 @@ module.exports = api => {
       }
     ]
 
-  return {
-    presets: [
-      presetEnv,
-      '@babel/preset-typescript'
-    ],
-    ignore: ['**/*.d.ts']
-  }
+  return { presets: [presetEnv] }
 }

@@ -5,13 +5,13 @@ module.exports = {
     ecmaVersion: 6,
     sourceType: 'module',
   },
+  plugins: ['babel'],
   env: {
     es6: true,
     jest: true
   },
   extends: ['standard'],
   rules: {
-    'react/prop-types': 'off',
     'max-len': ['error', {
       code: 100,
       ignoreStrings: true,

@@ -2,7 +2,7 @@ export {
     Expression, ExpressionPointer, connectWithBinarySym
 } from './abstract-structures/expression'
 export { Category, Kind, Sym } from './abstract-structures/sym'
-export { Deduction, Rule } from './deduction-structure'
+export { Deduction, Rule, TermDependencyGraph } from './deduction-structure'
 export { FormulaParser, DeductionParser } from './parsers'
 export { ErrorName } from './error'
 export { DeductionInterface } from './deduction-interface'
@@ -20,5 +20,5 @@ export {
     implication,
     negation,
     primitiveSyms,
-    universalQuantifier,
+    universalQuantifier
 } from './primitive-syms'

@@ -1,1 +1,1 @@
-export * from './term-dependency-graph'
+export { TermDependencyGraph } from './term-dependency-graph'

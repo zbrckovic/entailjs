@@ -5,8 +5,8 @@
  * term.
  */
 export const Kind = {
-    /** Represents an expression standing for something which is either true or false (sentence). */
-    Formula: 'Formula',
-    /** Represents an expression standing for a specific object (name). */
-    Term: 'Term'
+  /** Represents an expression standing for something which is either true or false (sentence). */
+  Formula: 'Formula',
+  /** Represents an expression standing for a specific object (name). */
+  Term: 'Term'
 }

@@ -71,7 +71,7 @@ export class RegularRuleApplicationSpec extends Record({
     })
   }
 
-  static universalGeneralization(premise, premiseIndex, newTerm, oldTerm,) {
+  static universalGeneralization(premise, premiseIndex, newTerm, oldTerm) {
     const child = oldTerm !== undefined
       ? premise.replaceFreeOccurrences(oldTerm, newTerm)
       : premise

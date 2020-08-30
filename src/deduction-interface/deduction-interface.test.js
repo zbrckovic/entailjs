@@ -16,8 +16,7 @@ test(`throws ${ErrorName.TERM_ALREADY_USED}`, () => {
   expect(() => {
     DeductionInterface
       .start(deduction)
-      .selectSteps(2)
-      [Rule.UniversalGeneralization]
+      .selectSteps(2)[Rule.UniversalGeneralization]
       .apply(parser.getSym('x'), parser.getSym('a'))
   }).toThrow(ErrorName.TERM_ALREADY_USED)
 })
@@ -32,8 +31,7 @@ test(`throws ${ErrorName.CYCLIC_DEPENDENCIES}`, () => {
   expect(() => {
     DeductionInterface
       .start(deduction)
-      .selectSteps(3)
-      [Rule.UniversalGeneralization]
+      .selectSteps(3)[Rule.UniversalGeneralization]
       .apply(parser.getSym('x'), parser.getSym('a'))
   }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
 })

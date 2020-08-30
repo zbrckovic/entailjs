@@ -24,8 +24,7 @@ test('vacuous', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.UniversalGeneralization]
+    .selectSteps(1)[Rule.UniversalGeneralization]
     .apply(parser.getSym('x'))
     .deduction
     .getLastStep()
@@ -56,8 +55,7 @@ test('simple', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.UniversalGeneralization]
+    .selectSteps(1)[Rule.UniversalGeneralization]
     .apply(parser.getSym('x'), parser.getSym('a'))
     .deduction
     .getLastStep()
@@ -89,8 +87,7 @@ test('with dependency terms', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.UniversalGeneralization]
+    .selectSteps(1)[Rule.UniversalGeneralization]
     .apply(parser.getSym('x'), parser.getSym('a'))
     .deduction
     .getLastStep()

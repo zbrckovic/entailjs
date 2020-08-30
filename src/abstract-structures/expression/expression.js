@@ -1,6 +1,6 @@
 import { List, Range, Record, Set } from 'immutable'
 import { createError, ErrorName } from '../../error'
-import { Kind, Sym } from '../sym'
+import { Kind } from '../sym'
 
 /**
  * Abstract tree-like structure which is used to represents formulas and terms.

@@ -32,8 +32,7 @@ test('deduction', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1, 2)
-    [Rule.Deduction]
+    .selectSteps(1, 2)[Rule.Deduction]
     .apply()
     .deduction
     .getLastStep()

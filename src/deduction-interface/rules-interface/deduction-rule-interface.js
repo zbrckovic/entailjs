@@ -2,7 +2,7 @@ import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-appli
 import { DeductionInterface } from '../deduction-interface'
 
 export class DeductionRuleInterface {
-  constructor(deduction, firstStepIndex, secondStepIndex,) {
+  constructor(deduction, firstStepIndex, secondStepIndex) {
     this.deduction = deduction
     this.firstStepIndex = firstStepIndex
     this.secondStepIndex = secondStepIndex

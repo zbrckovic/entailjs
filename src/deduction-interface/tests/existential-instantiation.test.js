@@ -1,6 +1,5 @@
 import { List, OrderedSet, Set } from 'immutable'
-import { Deduction } from '../../deduction-structure'
-import { Rule } from '../../deduction-structure/rule'
+import { Deduction, Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
 import { Step } from '../../deduction-structure/step'
 import { TermDependencies } from '../../deduction-structure/term-dependency-graph/term-dependencies'
@@ -26,8 +25,7 @@ test('vacuous', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.ExistentialInstantiation]
+    .selectSteps(1)[Rule.ExistentialInstantiation]
     .apply()
     .deduction
     .getLastStep()
@@ -58,8 +56,7 @@ test('simple', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.ExistentialInstantiation]
+    .selectSteps(1)[Rule.ExistentialInstantiation]
     .apply(parser.getSym('a'))
     .deduction
     .getLastStep()
@@ -93,8 +90,7 @@ test('with dependency terms', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.ExistentialInstantiation]
+    .selectSteps(1)[Rule.ExistentialInstantiation]
     .apply(parser.getSym('a'))
     .deduction
     .getLastStep()
@@ -129,8 +125,7 @@ test(`throws ${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}`, () 
 
   expect(() => {
     new DeductionInterface(deduction)
-      .selectSteps(1)
-      [Rule.ExistentialInstantiation]
+      .selectSteps(1)[Rule.ExistentialInstantiation]
       .apply()
   }).toThrow(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
 })
@@ -149,8 +144,7 @@ test(`throws ${ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
 
   expect(() => {
     new DeductionInterface(deduction)
-      .selectSteps(1)
-      [Rule.ExistentialInstantiation]
+      .selectSteps(1)[Rule.ExistentialInstantiation]
       .apply(parser.getSym('y'))
   }).toThrow(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
 })

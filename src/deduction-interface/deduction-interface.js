@@ -30,7 +30,10 @@ export class DeductionInterface {
       throw createError(
         ErrorName.STEP_ORDINAL_OUT_OF_RANGE,
         undefined,
-        { stepOrdinalOutOfRange, size: this.deduction.size }
+        {
+          stepOrdinalOutOfRange,
+          size: this.deduction.size
+        }
       )
     }
 

@@ -23,8 +23,7 @@ test('tautological implication', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.TautologicalImplication]
+    .selectSteps(1)[Rule.TautologicalImplication]
     .apply(formula1)
     .deduction
     .getLastStep()

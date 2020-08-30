@@ -41,7 +41,6 @@ export const RulesInterface = (deduction, ...steps) => {
         deduction,
         step
       )
-
     }
 
     result[Rule.UniversalGeneralization] = new UniversalGeneralizationRuleInterface(

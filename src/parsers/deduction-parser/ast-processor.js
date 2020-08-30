@@ -39,21 +39,27 @@ export class AstProcessor {
     const formula = this.formulaAstProcessor.process(astStep.formula)
     const availableRules = deductionInterface.selectSteps(...premisesOrdinals)
 
+    const ruleInterface = availableRules[rule]
+
+    let oldTerm
+    let newTerm
+
     switch (rule) {
       case Rule.Premise: {
-        const ruleInterface = availableRules[rule]
         if (ruleInterface === undefined) {
           throw createError(
             ErrorName.RULE_NOT_ALLOWED,
             undefined,
-            { stepOrdinal, rule }
+            {
+              stepOrdinal,
+              rule
+            }
           )
         }
         deductionInterface = ruleInterface.apply(formula)
         break
       }
       case Rule.Deduction: {
-        const ruleInterface = availableRules[rule]
         if (ruleInterface === undefined) {
           throw createError(
             ErrorName.RULE_NOT_ALLOWED,
@@ -65,24 +71,28 @@ export class AstProcessor {
         break
       }
       case Rule.TautologicalImplication: {
-        const ruleInterface = availableRules[rule]
         if (ruleInterface === undefined) {
           throw createError(
             ErrorName.RULE_NOT_ALLOWED,
             undefined,
-            { stepOrdinal, rule }
+            {
+              stepOrdinal,
+              rule
+            }
           )
         }
         deductionInterface = ruleInterface.apply(formula)
         break
       }
       case Rule.UniversalInstantiation: {
-        const ruleInterface = availableRules[rule]
         if (ruleInterface === undefined) {
           throw createError(
             ErrorName.RULE_NOT_ALLOWED,
             undefined,
-            { stepOrdinal, rule }
+            {
+              stepOrdinal,
+              rule
+            }
           )
         }
         const newSym = ruleInterface.determineNewTermInPotentialResult(formula)
@@ -90,28 +100,32 @@ export class AstProcessor {
         break
       }
       case Rule.UniversalGeneralization: {
-        const ruleInterface = availableRules[rule]
         if (ruleInterface === undefined) {
           throw createError(
             ErrorName.RULE_NOT_ALLOWED,
             undefined,
-            { stepOrdinal, rule }
+            {
+              stepOrdinal,
+              rule
+            }
           )
         }
-        const {
+        ({
           oldTerm,
           newTerm
-        } = ruleInterface.determineSubstitutionInPotentialResult(formula)
+        } = ruleInterface.determineSubstitutionInPotentialResult(formula))
         deductionInterface = ruleInterface.apply(newTerm, oldTerm)
         break
       }
       case Rule.ExistentialInstantiation: {
-        const ruleInterface = availableRules[rule]
         if (ruleInterface === undefined) {
           throw createError(
             ErrorName.RULE_NOT_ALLOWED,
             undefined,
-            { stepOrdinal, rule }
+            {
+              stepOrdinal,
+              rule
+            }
           )
         }
         const newSym = ruleInterface.determineNewTermInPotentialResult(formula)
@@ -119,27 +133,31 @@ export class AstProcessor {
         break
       }
       case Rule.ExistentialGeneralization:
-        const ruleInterface = availableRules[rule]
         if (ruleInterface === undefined) {
           throw createError(
             ErrorName.RULE_NOT_ALLOWED,
             undefined,
-            { stepOrdinal, rule }
+            {
+              stepOrdinal,
+              rule
+            }
           )
         }
-        const {
+        ({
           oldTerm,
           newTerm
-        } = ruleInterface.determineSubstitutionInPotentialResult(formula)
+        } = ruleInterface.determineSubstitutionInPotentialResult(formula))
         deductionInterface = ruleInterface.apply(newTerm, oldTerm)
         break
       case Rule.Theorem: {
-        const ruleInterface = availableRules[rule]
         if (ruleInterface === undefined) {
           throw createError(
             ErrorName.RULE_NOT_ALLOWED,
             undefined,
-            { stepOrdinal, rule }
+            {
+              stepOrdinal,
+              rule
+            }
           )
         }
         deductionInterface = ruleInterface.apply()
@@ -154,7 +172,10 @@ export class AstProcessor {
       throw createError(
         ErrorName.INVALID_ASSUMPTION_ORDINALS,
         undefined,
-        { stepOrdinal, assumptionsOrdinals }
+        {
+          stepOrdinal,
+          assumptionsOrdinals
+        }
       )
     }
 
@@ -174,7 +195,10 @@ export class AstProcessor {
       throw createError(
         ErrorName.INVALID_STEP_ORDINAL,
         undefined,
-        { encounteredStepOrdinal, actualStepOrdinal }
+        {
+          encounteredStepOrdinal,
+          actualStepOrdinal
+        }
       )
     }
   }
@@ -210,7 +234,10 @@ export class AstProcessor {
         throw createError(
           ErrorName.ASSUMPTION_INVALID_RULE,
           undefined,
-          { assumptionOrdinal, assumptionRule }
+          {
+            assumptionOrdinal,
+            assumptionRule
+          }
         )
       }
     }

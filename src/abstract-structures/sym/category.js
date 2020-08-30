@@ -26,7 +26,7 @@ export const Category = {
    *
    * Reserved for definite descriptions.
    */
-  TF: 'TF',
+  TF: 'TF'
 }
 
 const precedence = {

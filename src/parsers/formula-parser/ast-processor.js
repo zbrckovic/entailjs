@@ -41,8 +41,8 @@ export class AstProcessor {
     const childrenAsts = List(ast.children)
     const arity = childrenAsts.size
 
-    const mainSym = this._textToSymMap.get(ast.sym)
-      ?? this._createSym(kind, arity, ast.boundSym !== undefined, ast.sym, ast.symPlacement)
+    const mainSym = this._textToSymMap.get(ast.sym) ??
+      this._createSym(kind, arity, ast.boundSym !== undefined, ast.sym, ast.symPlacement)
 
     const mainSymPresentation = this._presentationCtx.get(mainSym)
 
@@ -62,14 +62,22 @@ export class AstProcessor {
       throw createError(
         ErrorName.INVALID_ARITY,
         undefined,
-        { sym: mainSym, presentation: mainSymPresentation, arity }
+        {
+          sym: mainSym,
+          presentation: mainSymPresentation,
+          arity
+        }
       )
     }
     if (mainSym.kind !== kind) {
       throw createError(
         ErrorName.INVALID_SYMBOL_KIND,
         undefined,
-        { sym: mainSym, presentation: mainSymPresentation, kind }
+        {
+          sym: mainSym,
+          presentation: mainSymPresentation,
+          kind
+        }
       )
     }
 
@@ -82,7 +90,10 @@ export class AstProcessor {
           throw createError(
             ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
             undefined,
-            { sym: boundSym, presentation: this._presentationCtx.get(boundSym) }
+            {
+              sym: boundSym,
+              presentation: this._presentationCtx.get(boundSym)
+            }
           )
         }
 
@@ -90,7 +101,10 @@ export class AstProcessor {
           throw createError(
             ErrorName.INVALID_BOUND_SYMBOL_ARITY,
             undefined,
-            { sym: boundSym, presentation: this._presentationCtx.get(boundSym) }
+            {
+              sym: boundSym,
+              presentation: this._presentationCtx.get(boundSym)
+            }
           )
         }
       } else {
@@ -108,9 +122,18 @@ export class AstProcessor {
   _createSym(kind, arity, binds, text, placement) {
     const argumentKind = AstProcessor._determineArgumentKind(kind, text)
     const id = this.maxSymId + 1
-    const sym = new Sym({ id, kind, argumentKind, arity, binds })
+    const sym = new Sym({
+      id,
+      kind,
+      argumentKind,
+      arity,
+      binds
+    })
     const symPresentation = new SymPresentation({
-      ascii: new SyntacticInfo({ text, placement })
+      ascii: new SyntacticInfo({
+        text,
+        placement
+      })
     })
 
     this._textToSymMap = this._textToSymMap.set(text, sym)

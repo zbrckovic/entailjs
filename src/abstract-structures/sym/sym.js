@@ -26,13 +26,13 @@ export class Sym extends Record({
     return new Sym({ ...props, ...Sym.getKindsFromCategory(category) })
   }
 
-  static ff(props = {}) { return Sym.fromCategory(Category.FF, props)}
+  static ff(props = {}) { return Sym.fromCategory(Category.FF, props) }
 
-  static ft(props = {}) { return Sym.fromCategory(Category.FT, props)}
+  static ft(props = {}) { return Sym.fromCategory(Category.FT, props) }
 
-  static tf(props = {}) { return Sym.fromCategory(Category.TF, props)}
+  static tf(props = {}) { return Sym.fromCategory(Category.TF, props) }
 
-  static tt(props = {}) { return Sym.fromCategory(Category.TT, props)}
+  static tt(props = {}) { return Sym.fromCategory(Category.TT, props) }
 
   static getCategoriesWithKind(kind) {
     switch (kind) {
@@ -46,13 +46,25 @@ export class Sym extends Record({
   static getKindsFromCategory(category) {
     switch (category) {
       case Category.FF:
-        return { kind: Kind.Formula, argumentKind: Kind.Formula }
+        return {
+          kind: Kind.Formula,
+          argumentKind: Kind.Formula
+        }
       case Category.FT:
-        return { kind: Kind.Formula, argumentKind: Kind.Term }
+        return {
+          kind: Kind.Formula,
+          argumentKind: Kind.Term
+        }
       case Category.TF:
-        return { kind: Kind.Term, argumentKind: Kind.Formula }
+        return {
+          kind: Kind.Term,
+          argumentKind: Kind.Formula
+        }
       case Category.TT:
-        return { kind: Kind.Term, argumentKind: Kind.Term }
+        return {
+          kind: Kind.Term,
+          argumentKind: Kind.Term
+        }
     }
   }
 

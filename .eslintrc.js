@@ -17,7 +17,6 @@ module.exports = {
       ignoreStrings: true,
       ignoreTemplateLiterals: true
     }],
-    'no-unused-expressions': 'off',
-    'babel/no-unused-expressions': 'error'
+    'space-before-function-paren': ['error', 'never']
   }
 }

@@ -1,7 +1,7 @@
 export {
-    isSatisfiable,
-    isFalsifiable,
-    isContingent,
-    isTautology,
-    isContradiction
+  isSatisfiable,
+  isFalsifiable,
+  isContingent,
+  isTautology,
+  isContradiction
 } from './propositional-logic'

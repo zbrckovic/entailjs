@@ -26,8 +26,7 @@ test('vacuous', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.ExistentialGeneralization]
+    .selectSteps(1)[Rule.ExistentialGeneralization]
     .apply(parser.getSym('x'))
     .deduction
     .getLastStep()
@@ -60,8 +59,7 @@ test('simple', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.ExistentialGeneralization]
+    .selectSteps(1)[Rule.ExistentialGeneralization]
     .apply(parser.getSym('x'), parser.getSym('a'))
     .deduction
     .getLastStep()
@@ -94,8 +92,7 @@ test(`throws ${ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS}`, () => {
 
   expect(() => {
     new DeductionInterface(deduction)
-      .selectSteps(1)
-      [Rule.ExistentialGeneralization]
+      .selectSteps(1)[Rule.ExistentialGeneralization]
       .apply(parser.getSym('x'), parser.getSym('a'))
       .deduction
       .getLastStep()
@@ -118,11 +115,9 @@ test(`throws ${ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
 
   expect(() => {
     new DeductionInterface(deduction)
-      .selectSteps(1)
-      [Rule.ExistentialGeneralization]
+      .selectSteps(1)[Rule.ExistentialGeneralization]
       .apply(parser.getSym('x'), parser.getSym('a'))
       .deduction
       .getLastStep()
   }).toThrow(ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND)
 })
-

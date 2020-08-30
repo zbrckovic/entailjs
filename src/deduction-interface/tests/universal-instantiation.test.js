@@ -24,8 +24,7 @@ test('vacuous', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.UniversalInstantiation]
+    .selectSteps(1)[Rule.UniversalInstantiation]
     .apply()
     .deduction
     .getLastStep()
@@ -56,8 +55,7 @@ test('simple', () => {
   })
 
   const actual = new DeductionInterface(deduction)
-    .selectSteps(1)
-    [Rule.UniversalInstantiation]
+    .selectSteps(1)[Rule.UniversalInstantiation]
     .apply(parser.getSym('a'))
     .deduction
     .getLastStep()
@@ -88,8 +86,7 @@ test(`throws ${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}`, () 
 
   expect(() => {
     new DeductionInterface(deduction)
-      .selectSteps(1)
-      [Rule.UniversalInstantiation]
+      .selectSteps(1)[Rule.UniversalInstantiation]
       .apply()
   }).toThrow(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
 })
@@ -108,8 +105,7 @@ test(`throws ${ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
 
   expect(() => {
     new DeductionInterface(deduction)
-      .selectSteps(1)
-      [Rule.UniversalInstantiation]
+      .selectSteps(1)[Rule.UniversalInstantiation]
       .apply(parser.getSym('y'))
   }).toThrow(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
 })

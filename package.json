@@ -12,10 +12,10 @@
     "test:clear-cache": "jest --clearCache",
     "test:coverage": "jest --coverage",
     "test": "jest",
-    "lint": "eslint ./src --ext .js",
+    "lint": "eslint ./src",
     "build:clean": "rimraf -rf lib",
     "build:generate-grammars": "pegjs --allowed-start-rules \"StartFormula, StartDeduction\" src/parsers/peg/grammar.pegjs",
-    "build:compile": "babel src --out-dir lib --extensions \".js\"",
+    "build:compile": "babel src --out-dir lib",
     "build": "npm run build:clean && npm run build:generate-grammars && npm run build:compile"
   },
   "repository": {
@@ -43,6 +43,7 @@
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
+    "babel-eslint": "^10.1.0",
     "babel-jest": "^26.1.0",
     "eslint": "^7.1.0",
     "eslint-config-standard": "^14.1.1",

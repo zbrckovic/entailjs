@@ -29,8 +29,8 @@ test.each([
   [Kind.Term, Kind.Term, Category.TT],
   [Kind.Term, Kind.Formula, Category.TF]
 ])('#getCategory() for sym with kinds %s, %s is %s', (kind, argumentKind, category) => {
-  const sym = new Sym({ kind, argumentKind })
-  expect(sym.getCategory()).toEqual(category)
+  const sym = Sym.create({ kind, argumentKind })
+  expect(Sym.getCategory(sym)).toEqual(category)
 })
 
 test.each([

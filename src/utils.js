@@ -1,8 +1,6 @@
-import { Set } from 'immutable'
-
 export const findDuplicates = items => {
-  let traversed = Set()
-  let duplicates = Set()
+  let traversed = new Set()
+  let duplicates = new Set()
 
   for (const item of items) {
     if (traversed.has(item)) {

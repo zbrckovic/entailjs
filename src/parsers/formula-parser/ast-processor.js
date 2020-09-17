@@ -12,6 +12,10 @@ import {
 import { isBracketed } from '../peg/ast-formula'
 
 export class AstProcessor {
+  get syms() {
+    return this._syms
+  }
+
   get presentationCtx() {
     return this._presentationCtx
   }
@@ -25,11 +29,13 @@ export class AstProcessor {
   }
 
   /**
-   * @param presentationCtx
+   * @param syms - syms by id
+   * @param presentationCtx - presentationsById
    * @param textToSymMap - For optimization
    * @param maxSymId - For optimization
    */
-  constructor(presentationCtx, textToSymMap, maxSymId) {
+  constructor(syms, presentationCtx, textToSymMap, maxSymId) {
+    this._syms = syms
     this._presentationCtx = presentationCtx
     this._textToSymMap = textToSymMap ?? createTextToSymMap(this._presentationCtx)
     this._maxSymId = maxSymId ?? getMaxSymId(this._textToSymMap)
@@ -44,7 +50,7 @@ export class AstProcessor {
     const mainSym = this._textToSymMap.get(ast.sym) ??
       this._createSym(kind, arity, ast.boundSym !== undefined, ast.sym, ast.symPlacement)
 
-    const mainSymPresentation = this._presentationCtx.get(mainSym)
+    const mainSymPresentation = this._presentationCtx[mainSym.id]
 
     if (mainSymPresentation.ascii.placement !== ast.symPlacement) {
       throw createError(
@@ -83,16 +89,16 @@ export class AstProcessor {
 
     let boundSym
     if (ast.boundSym !== undefined) {
-      boundSym = this._textToSymMap.get(ast.boundSym)
+      boundSym = this._textToSymMap[ast.boundSym.id]
 
       if (boundSym !== undefined) {
-        if (boundSym.getCategory() !== Category.TT) {
+        if (Sym.getCategory(boundSym) !== Category.TT) {
           throw createError(
             ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
             undefined,
             {
               sym: boundSym,
-              presentation: this._presentationCtx.get(boundSym)
+              presentation: this._presentationCtx[boundSym.id]
             }
           )
         }
@@ -103,7 +109,7 @@ export class AstProcessor {
             undefined,
             {
               sym: boundSym,
-              presentation: this._presentationCtx.get(boundSym)
+              presentation: this._presentationCtx[boundSym.id]
             }
           )
         }
@@ -112,7 +118,7 @@ export class AstProcessor {
       }
     }
 
-    return new Expression({
+    return Expression.create({
       sym: mainSym,
       boundSym: boundSym,
       children: childrenAsts.map(childAst => this.process(childAst, mainSym.argumentKind))
@@ -122,23 +128,14 @@ export class AstProcessor {
   _createSym(kind, arity, binds, text, placement) {
     const argumentKind = AstProcessor._determineArgumentKind(kind, text)
     const id = this.maxSymId + 1
-    const sym = new Sym({
-      id,
-      kind,
-      argumentKind,
-      arity,
-      binds
-    })
-    const symPresentation = new SymPresentation({
-      ascii: new SyntacticInfo({
-        text,
-        placement
-      })
+    const sym = Sym.create({ id, kind, argumentKind, arity, binds })
+    const symPresentation = SymPresentation.create({
+      ascii: SyntacticInfo.create({ text, placement })
     })
 
-    this._textToSymMap = this._textToSymMap.set(text, sym)
-    this._presentationCtx = this._presentationCtx.set(sym, symPresentation)
-
+    this._syms = { ...this._syms, [sym.id]: sym }
+    this._textToSymMap = { ...this._textToSymMap, [text]: sym }
+    this._presentationCtx = { ...this._presentationCtx, [sym.id]: symPresentation }
     this._maxSymId = id
 
     return sym
@@ -163,11 +160,13 @@ export class AstProcessor {
   static _isLowerWord(text) { return /^[a-z]\w*/.test(text) }
 
   addPresentation(sym, presentation) {
-    this._presentationCtx = this.presentationCtx.set(sym, presentation)
-    this._textToSymMap = this.textToSymMap.set(presentation.ascii.text, sym)
+    this._syms = { ...this._syms, [sym.id]: sym }
+    this._presentationCtx = { ...this.presentationCtx, [sym.id]: presentation }
+    this._textToSymMap = { ...this.textToSymMap, [presentation.ascii.text]: sym }
+    this._maxSymId = Math.max(this.maxSymId, sym.id)
   }
 
   getSym(text) {
-    return this.textToSymMap.get(text)
+    return this.textToSymMap[text]
   }
 }

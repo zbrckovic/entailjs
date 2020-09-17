@@ -1,9 +1,10 @@
+import { primitiveSyms } from '../../lib'
 import { FormulaParser } from '../parsers/formula-parser'
 import { primitivePresentationCtx } from '../presentation/sym-presentation'
 import { isLogicalConsequence, isTautology } from './propositional-logic'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
 
 test.each([
   ['p', false],

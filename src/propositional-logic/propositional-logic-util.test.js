@@ -2,10 +2,11 @@ import { Map, Set } from 'immutable'
 import { ErrorName } from '../error'
 import { FormulaParser } from '../parsers/formula-parser'
 import { primitivePresentationCtx } from '../presentation/sym-presentation'
+import { primitiveSyms } from '../primitive-syms'
 import { evaluate, findInterpretations } from './propositional-logic-util'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
 
 test.each([
   ['p', { p: true }, true],

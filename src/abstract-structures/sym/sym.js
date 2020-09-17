@@ -21,15 +21,15 @@ export const Sym = {
     argumentKind = Kind.Formula,
     arity = 0,
     binds = false
-  }) => ({ id, kind, argumentKind, arity, binds }),
+  } = {}) => ({ id, kind, argumentKind, arity, binds }),
 
   fromCategory: (category, props = {}) =>
     Sym.create({ ...props, ...Sym.getKindsFromCategory(category) }),
 
-  ff: (props = {}) => Sym.fromCategory(Category.FF, props),
-  ft: (props = {}) => Sym.fromCategory(Category.FT, props),
-  tf: (props = {}) => Sym.fromCategory(Category.TF, props),
-  tt: (props = {}) => Sym.fromCategory(Category.TT, props),
+  createFF: (props = {}) => Sym.fromCategory(Category.FF, props),
+  createFT: (props = {}) => Sym.fromCategory(Category.FT, props),
+  createTF: (props = {}) => Sym.fromCategory(Category.TF, props),
+  createTT: (props = {}) => Sym.fromCategory(Category.TT, props),
 
   getCategory: sym => {
     switch (sym.kind) {

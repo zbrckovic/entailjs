@@ -3,10 +3,10 @@ import { Kind } from './kind'
 import { Sym } from './sym'
 
 test.each([
-  ['createFF', Kind.Formula, Kind.Formula, Sym.ff()],
-  ['createFT', Kind.Formula, Kind.Term, Sym.ft()],
-  ['createTT', Kind.Term, Kind.Term, Sym.tt()],
-  ['createTF', Kind.Term, Kind.Formula, Sym.tf()]
+  ['createFF', Kind.Formula, Kind.Formula, Sym.createFF()],
+  ['createFT', Kind.Formula, Kind.Term, Sym.createFT()],
+  ['createTT', Kind.Term, Kind.Term, Sym.createTT()],
+  ['createTF', Kind.Term, Kind.Formula, Sym.createTF()]
 ])('.%s() has kinds %s, %s', (msg, kind, argumentKind, actual) => {
   expect(actual.kind).toEqual(kind)
   expect(actual.argumentKind).toEqual(argumentKind)

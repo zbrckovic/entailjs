@@ -2,11 +2,11 @@ import { is } from 'immutable'
 import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
-import { conjunction } from '../../primitive-syms'
+import { conjunction, primitiveSyms } from '../../primitive-syms'
 import { connectWithBinarySym } from './expression-util'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
 
 test.each([
   [['p', 'q'], conjunction, 'p & q'],

@@ -6,14 +6,16 @@ import { findDuplicates } from '../../utils'
 import { AstProcessor as FormulaAstProcessor } from '../formula-parser/ast-processor'
 
 export class AstProcessor {
+  get syms() { return this.formulaAstProcessor.syms }
+
   get presentationCtx() { return this.formulaAstProcessor.presentationCtx }
 
   get textToSymMap() { return this.formulaAstProcessor.textToSymMap }
 
   get maxSymId() { return this.formulaAstProcessor.maxSymId }
 
-  constructor(presentationCtx) {
-    this.formulaAstProcessor = new FormulaAstProcessor(presentationCtx)
+  constructor(syms, presentationCtx) {
+    this.formulaAstProcessor = new FormulaAstProcessor(syms, presentationCtx)
   }
 
   process({ steps }) {

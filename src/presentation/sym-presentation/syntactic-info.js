@@ -1,20 +1,19 @@
-import { Record, Repeat } from 'immutable'
+import * as _ from 'lodash'
 import { Placement } from './placement'
 
-export class SyntacticInfo extends Record({
-  text: '',
-  placement: Placement.Prefix
-}, 'SyntacticInfo') {
-  static prefix(text) { return new SyntacticInfo({ text }) }
+export const SyntacticInfo = {
+  create: ({ text, placement = Placement.Prefix }) => ({ text, placement }),
 
-  static infix(text) { return new SyntacticInfo({ text, placement: Placement.Infix }) }
+  createPrefix: text => SyntacticInfo.create({ text, placement: Placement.Prefix }),
 
-  createDescription(arity = 1) {
-    switch (this.placement) {
+  createInfix: text => SyntacticInfo.create({ text, placement: Placement.Infix }),
+
+  createDescription: (info, arity = 1) => {
+    switch (info.placement) {
       case Placement.Prefix:
-        return `${this.text}${Repeat(' _', arity).join('')}`
+        return `${info.text}${_.repeat(' _', arity).join('')}`
       case Placement.Infix:
-        return `_ ${this.text} _`
+        return `_ ${info.text} _`
     }
   }
 }

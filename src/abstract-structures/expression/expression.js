@@ -1,7 +1,7 @@
 import { Range } from 'immutable'
+import * as _ from 'lodash'
 import { createError, ErrorName } from '../../error'
 import { Kind } from '../sym'
-import * as _ from 'lodash'
 
 /**
  * Abstract tree-like structure which is used to represents formulas and terms.
@@ -62,12 +62,12 @@ export const Expression = {
   },
 
   getSubexpressionsOnPath: (expression, position) => {
-    let result = [expression]
+    const result = [expression]
 
     if (position.length > 0) {
       const [firstIndex, ...restIndexes] = position
       const child = Expression.getChild(expression, firstIndex)
-      result = [...result, Expression.getSubexpressionsOnPath(child, restIndexes)]
+      result.push(...Expression.getSubexpressionsOnPath(child, restIndexes))
     }
 
     return result
@@ -151,7 +151,7 @@ export const Expression = {
     ),
 
   getSyms: expression => {
-    let result = {}
+    const result = {}
     result[expression.sym.id] = expression.sym
 
     if (expression.boundSym !== undefined) {
@@ -159,14 +159,14 @@ export const Expression = {
     }
 
     expression.children.forEach(child => {
-      result = { ...result, ...Expression.getSyms(child) }
+      Object.assign(result, Expression.getSyms(child))
     })
 
     return result
   },
 
   getFreeSyms: (expression, boundSyms = {}) => {
-    let result = {}
+    const result = {}
 
     if (boundSyms[expression.sym.id] === undefined) {
       result[expression.sym.id] = expression.sym
@@ -177,7 +177,7 @@ export const Expression = {
     }
 
     expression.children.forEach(child => {
-      result = { ...result, ...Expression.getFreeSyms(child, boundSyms) }
+      Object.assign(result, Expression.getFreeSyms(child, boundSyms))
     })
 
     return result

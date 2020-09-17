@@ -15,7 +15,7 @@ export class FormulaParser {
   parse(text) { return this.astProcessor.process(parseFormula(text)) }
 
   addPresentation(sym, presentation) {
-    const newSym = sym.set('id', this.maxSymId + 1)
+    const newSym = { ...sym, id: this.maxSymId + 1 }
     this.astProcessor.addPresentation(newSym, presentation)
     return newSym
   }

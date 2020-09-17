@@ -1,4 +1,3 @@
-import { Record } from 'immutable'
 import { SyntacticInfo } from './syntactic-info'
 
 /**
@@ -6,11 +5,11 @@ import { SyntacticInfo } from './syntactic-info'
  *
  * ASCII is used for plain text environments. Unicode is used in GUI.
  */
-export class SymPresentation extends Record({
-  ascii: new SyntacticInfo(),
-  unicode: undefined
-}, 'SymPresentation') {
-  getDefaultSyntacticInfo() { return this.unicode ?? this.ascii }
+export const SymPresentation = {
+  create: ({ ascii, unicode }) => ({ ascii, unicode }),
 
-  createDescription(arity = 1) { return this.ascii.createDescription(arity) }
+  getDefaultSyntacticInfo: presentation => presentation.unicode ?? presentation.ascii,
+
+  createDescription: (presentation, arity = 1) =>
+    SyntacticInfo.createDescription(presentation.ascii, arity)
 }

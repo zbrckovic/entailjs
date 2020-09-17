@@ -1,4 +1,5 @@
-import { List, Set } from 'immutable'
+import { Set } from 'immutable'
+import * as _ from 'lodash'
 import { Expression } from '../../abstract-structures/expression'
 import { Sym } from '../../abstract-structures/sym'
 import { ErrorName } from '../../error'
@@ -17,160 +18,156 @@ import {
 import { FormulaParser } from './formula-parser'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
 
 test('parse(\'p\')', () => {
-  const sym = Sym.ff({ id: parser.maxSymId + 1 })
+  const sym = Sym.createFF({ id: parser.maxSymId + 1 })
 
-  const expectedFormula = new Expression({ sym })
-  const expectedAddedSyms = Set.of(sym)
+  const expectedFormula = Expression.create({ sym })
+  const expectedAddedSyms = { [sym.id]: sym }
 
   const formula = parser.parse('p')
-  const addedSyms = parser.textToSymMap.toSet().subtract(primitiveSyms)
+
+  const addedSyms = _.pickBy(parser.syms, (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
-  expect(addedSyms.equals(expectedAddedSyms)).toBe(true)
+  expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
 test('parse(\'p -> q\')', () => {
   const symP = Sym.ff({ id: parser.maxSymId + 1 })
   const symQ = Sym.ff({ id: parser.maxSymId + 2 })
 
-  const expectedFormula = new Expression({
+  const expectedFormula = Expression.create({
     sym: implication,
-    children: List.of(
-      new Expression({ sym: symP }),
-      new Expression({ sym: symQ })
-    )
+    children: [Expression.create({ sym: symP }), Expression.create({ sym: symQ })]
   })
 
-  const expectedAddedSyms = Set.of(symP, symQ)
+  const expectedAddedSyms = { [symP.id]: symP, [symQ.id]: symQ }
 
   const formula = parser.parse('p -> q')
-  const addedSyms = parser.textToSymMap.toSet().subtract(primitiveSyms)
+
+  const addedSyms = _.pickBy(parser.syms, (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
-  expect(addedSyms.equals(expectedAddedSyms)).toBe(true)
+  expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
 test('parse(\'F(x, y)\')', () => {
-  const symF = Sym.ft({ id: parser.maxSymId + 1, arity: 2 })
-  const symX = Sym.tt({ id: parser.maxSymId + 2 })
-  const symY = Sym.tt({ id: parser.maxSymId + 3 })
+  const symF = Sym.createFT({ id: parser.maxSymId + 1, arity: 2 })
+  const symX = Sym.createTT({ id: parser.maxSymId + 2 })
+  const symY = Sym.createTT({ id: parser.maxSymId + 3 })
 
-  const expectedFormula = new Expression({
+  const expectedFormula = Expression.create({
     sym: symF,
-    children: List.of(
-      new Expression({ sym: symX }),
-      new Expression({ sym: symY })
-    )
+    children: [Expression.create({ sym: symX }), Expression.create({ sym: symY })]
   })
 
-  const expectedAddedSyms = Set.of(symF, symX, symY)
+  const expectedAddedSyms = { [symF.id]: symF, [symX.id]: symX, [symY.id]: symY }
 
   const formula = parser.parse('F(x, y)')
-  const addedSyms = parser.textToSymMap.toSet().subtract(primitiveSyms)
+  const addedSyms = _.pickBy(parser.syms, (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
-  expect(addedSyms.equals(expectedAddedSyms)).toBe(true)
+  expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
 test('parse(\'A[x] F(x)\')', () => {
-  const symX = Sym.tt({ id: parser.maxSymId + 1 })
-  const symF = Sym.ft({ id: parser.maxSymId + 2, arity: 1 })
+  const symX = Sym.createTT({ id: parser.maxSymId + 1 })
+  const symF = Sym.createFT({ id: parser.maxSymId + 2, arity: 1 })
 
-  const expectedFormula = new Expression({
+  const expectedFormula = Expression.create({
     sym: universalQuantifier,
     boundSym: symX,
-    children: List.of(
-      new Expression({
+    children: [
+      Expression.create({
         sym: symF,
-        children: List.of(new Expression({ sym: symX }))
+        children: [Expression.create({ sym: symX })]
       })
-    )
+    ]
   })
 
   const expectedAddedSyms = Set.of(symF, symX)
 
   const formula = parser.parse('A[x] F(x)')
-  const addedSyms = parser.textToSymMap.toSet().subtract(primitiveSyms)
+  const addedSyms = _.pickBy(parser.syms, (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
-  expect(addedSyms.equals(expectedAddedSyms)).toBe(true)
+  expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
 test('parse(\'A[x] E[y] (F(x, y) -> ~G(y, x))\'', () => {
-  const symX = Sym.tt({ id: parser.maxSymId + 1 })
-  const symY = Sym.tt({ id: parser.maxSymId + 2 })
-  const symF = Sym.ft({ id: parser.maxSymId + 3, arity: 2 })
-  const symG = Sym.ft({ id: parser.maxSymId + 4, arity: 2 })
+  const symX = Sym.createTT({ id: parser.maxSymId + 1 })
+  const symY = Sym.createTT({ id: parser.maxSymId + 2 })
+  const symF = Sym.createFT({ id: parser.maxSymId + 3, arity: 2 })
+  const symG = Sym.createFT({ id: parser.maxSymId + 4, arity: 2 })
 
-  const expectedFormula = new Expression({
+  const expectedFormula = Expression.create({
     sym: universalQuantifier,
     boundSym: symX,
-    children: List.of(
-      new Expression({
+    children: [
+      Expression.create({
         sym: existentialQuantifier,
         boundSym: symY,
-        children: List.of(
-          new Expression({
+        children: [
+          Expression.create({
             sym: implication,
-            children: List.of(
-              new Expression({
+            children: [
+              Expression.create({
                 sym: symF,
-                children: List.of(
-                  new Expression({ sym: symX }),
-                  new Expression({ sym: symY })
-                )
+                children: [
+                  Expression.create({ sym: symX }),
+                  Expression.create({ sym: symY })
+                ]
               }),
-              new Expression({
+              Expression.create({
                 sym: negation,
-                children: List.of(
-                  new Expression({
+                children: [
+                  Expression.create({
                     sym: symG,
-                    children: List.of(
-                      new Expression({ sym: symY }),
-                      new Expression({ sym: symX })
-                    )
+                    children: [
+                      Expression.create({ sym: symY }),
+                      Expression.create({ sym: symX })
+                    ]
                   })
-                )
+                ]
               })
-            )
+            ]
           })
-        )
+        ]
       })
-    )
+    ]
   })
 
   const expectedAddedSyms = Set.of(symF, symG, symY, symX)
 
   const formula = parser.parse('A[x] E[y] (F(x, y) -> ~G(y, x))')
-  const addedSyms = parser.textToSymMap.toSet().subtract(primitiveSyms)
+  const addedSyms = _.pickBy(parser.syms, (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
-  expect(addedSyms.equals(expectedAddedSyms)).toBe(true)
+  expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
 test(`parse('~x') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
   const text = '~x'
-  const presentationX = new SymPresentation({ ascii: SyntacticInfo.prefix('x') })
-  parser.addPresentation(Sym.tt(), presentationX)
+  const presentationX = SymPresentation.create({ ascii: SyntacticInfo.prefix('x') })
+  parser.addPresentation(Sym.createTT(), presentationX)
 
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
 test(`parse('F(x)') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
   const text = 'F(x)'
-  const presentationX = new SymPresentation({ ascii: SyntacticInfo.prefix('x') })
-  parser.addPresentation(Sym.ff(), presentationX)
+  const presentationX = SymPresentation.create({ ascii: SyntacticInfo.prefix('x') })
+  parser.addPresentation(Sym.createFF(), presentationX)
 
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
 test(`parse('A[x] p') throws ${ErrorName.INVALID_BOUND_SYMBOL_CATEGORY}`, () => {
   const text = 'A[x] p'
-  const presentationX = new SymPresentation({ ascii: SyntacticInfo.prefix('x') })
-  const symX = parser.addPresentation(Sym.ff(), presentationX)
+  const presentationX = SymPresentation.create({ ascii: SyntacticInfo.prefix('x') })
+  const symX = parser.addPresentation(Sym.createFF(), presentationX)
   parser.addPresentation(symX, presentationX)
 
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_BOUND_SYMBOL_CATEGORY)

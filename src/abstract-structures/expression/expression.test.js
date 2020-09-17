@@ -2,9 +2,10 @@ import { fromJS, List, Set } from 'immutable'
 import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
+import { primitiveSyms } from '../../primitive-syms'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
 
 test.each([
   ['p', [], 'p'],

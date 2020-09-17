@@ -1,13 +1,13 @@
-import { is } from 'immutable'
 import {
   createConjunction,
   createImplicationWithAntecedentsAsConjunction
 } from './formula-construction-util'
 import { FormulaParser } from './parsers/formula-parser'
 import { primitivePresentationCtx } from './presentation/sym-presentation'
+import { primitiveSyms } from './primitive-syms'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
 
 test.each([
   [['p'], 'p'],
@@ -17,7 +17,7 @@ test.each([
   const expressions = formulaTexts.map(text => parser.parse(text))
   const expected = parser.parse(expectedFormulaText)
   const actual = createConjunction(expressions)
-  expect(is(actual, expected)).toBe(true)
+  expect(actual).toEqual(expected)
 })
 
 test('createImplicationWithAntecedentsAsConjunction()', () => {
@@ -30,5 +30,5 @@ test('createImplicationWithAntecedentsAsConjunction()', () => {
   const expected = parser.parse('((p & q) & r) -> s')
   const actual = createImplicationWithAntecedentsAsConjunction(antecedents, consequent)
 
-  expect(is(actual, expected)).toBe(true)
+  expect(actual).toEqual(expected)
 })

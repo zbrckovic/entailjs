@@ -5,11 +5,12 @@ import { Step } from '../../deduction-structure/step'
 import { TermDependencyGraph } from '../../deduction-structure/term-dependency-graph'
 import { TermDependencies } from '../../deduction-structure/term-dependency-graph/term-dependencies'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
+import { primitiveSyms } from '../../primitive-syms'
 import { FormulaParser } from '../formula-parser'
 import { DeductionParser } from './deduction-parser'
 
 let parser
-beforeEach(() => { parser = new DeductionParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new DeductionParser(primitiveSyms, primitivePresentationCtx) })
 
 test('parse()', () => {
   const text = `
@@ -23,7 +24,7 @@ test('parse()', () => {
 
   const actual = parser.parse(text)
 
-  const formulaParser = new FormulaParser(parser.presentationCtx)
+  const formulaParser = new FormulaParser(parser.syms, parser.presentationCtx)
 
   const expected = new Deduction({
     steps: List.of(
@@ -108,7 +109,7 @@ test('parse()', () => {
 
   const actual = parser.parse(text)
 
-  const formulaParser = new FormulaParser(parser.presentationCtx)
+  const formulaParser = new FormulaParser(parser.syms, parser.presentationCtx)
 
   const expected = new Deduction({
     steps: List.of(

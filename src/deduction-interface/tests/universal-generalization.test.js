@@ -5,10 +5,11 @@ import { Step } from '../../deduction-structure/step'
 import { TermDependencies } from '../../deduction-structure/term-dependency-graph/term-dependencies'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
+import { primitiveSyms } from '../../primitive-syms'
 import { DeductionInterface } from '../deduction-interface'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
 
 test('vacuous', () => {
   const formula0 = parser.parse('F(a)')

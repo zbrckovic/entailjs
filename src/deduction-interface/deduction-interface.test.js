@@ -1,11 +1,12 @@
 import { ErrorName } from '../error'
 import { DeductionParser } from '../parsers/deduction-parser'
 import { primitivePresentationCtx } from '../presentation/sym-presentation'
+import { primitiveSyms } from '../primitive-syms'
 import { DeductionInterface } from './deduction-interface'
 import { Rule } from '../deduction-structure'
 
 let parser
-beforeEach(() => { parser = new DeductionParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new DeductionParser(primitiveSyms, primitivePresentationCtx) })
 
 test(`throws ${ErrorName.TERM_ALREADY_USED}`, () => {
   const deduction = parser.parse(`

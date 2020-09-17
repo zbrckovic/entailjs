@@ -6,10 +6,11 @@ import { TermDependencies } from '../../deduction-structure/term-dependency-grap
 import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
+import { primitiveSyms } from '../../primitive-syms'
 import { DeductionInterface } from '../deduction-interface'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
 
 test('vacuous', () => {
   const formula0 = parser.parse('E[x] F(a)')

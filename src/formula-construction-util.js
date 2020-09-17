@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { connectWithBinarySym, Expression } from './abstract-structures/expression'
 import { conjunction, implication } from './primitive-syms'
 
@@ -7,10 +6,7 @@ export const createConjunction = formulas =>
   formulas.length === 1 ? formulas[0] : connectWithBinarySym(formulas, conjunction)
 
 export const createImplicationWithAntecedentsAsConjunction = (antecedents, consequent) =>
-  new Expression({
+  Expression.create({
     sym: implication,
-    children: List.of(
-      createConjunction(antecedents),
-      consequent
-    )
+    children: [createConjunction(antecedents), consequent]
   })

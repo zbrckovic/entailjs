@@ -4,10 +4,11 @@ import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-ap
 import { Step } from '../../deduction-structure/step'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
+import { primitiveSyms } from '../../primitive-syms'
 import { DeductionInterface } from '../deduction-interface'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitivePresentationCtx) })
+beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
 
 test('tautological implication', () => {
   const formula0 = parser.parse('~~p')

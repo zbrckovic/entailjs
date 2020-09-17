@@ -36,4 +36,4 @@ const precedence = {
   [Category.TF]: 3
 }
 
-export const order = (c1, c2) => precedence[c1] - precedence[c2]
+export const order = (category1, category2) => precedence[category1] - precedence[category2]

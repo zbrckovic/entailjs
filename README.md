@@ -15,7 +15,7 @@ contains the following properties:
     (expression and deduction for example)
 -   `kind` - one of two possible kinds a symbol can be: Formula or Term
 -   `argumentKind` - what kind of arguments this symbol accepts as children (when it occurs in an 
-    expression).
+    expression)
 -   `arity` - how many children this symbol accepts when it occurs in an expression
 
 #### Category

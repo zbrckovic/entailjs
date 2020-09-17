@@ -39,8 +39,7 @@ expression with such a symbol will never have children. However, `argumentKind` 
 defined because we'd like to associate definite category to each symbol. In order to avoid 
 redundancies and confusion we enforce the remark from previous paragraph as a rule: nullary symbol's 
 `kind` and `argumentKind` must always be the same. In other words: nullary symbol's category can 
-either be `FF` or `TT`, never `FT` or `TF`.  
-  
+either be `FF` or `TT`, never `FT` or `TF`.
 
 ## Entail Expression Language (EEL)
 

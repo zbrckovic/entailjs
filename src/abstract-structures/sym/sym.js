@@ -73,3 +73,5 @@ Sym.getKindsFromCategory = category => {
 }
 
 Sym.order = (sym1, sym2) => sym1.id - sym2.id
+
+Sym.equals = (sym1, sym2) => sym1.id === sym2.id

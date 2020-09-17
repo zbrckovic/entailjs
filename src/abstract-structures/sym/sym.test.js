@@ -3,10 +3,10 @@ import { Kind } from './kind'
 import { Sym } from './sym'
 
 test.each([
-  ['createFF', Kind.Formula, Kind.Formula, Sym.createFF()],
-  ['createFT', Kind.Formula, Kind.Term, Sym.createFT()],
-  ['createTT', Kind.Term, Kind.Term, Sym.createTT()],
-  ['createTF', Kind.Term, Kind.Formula, Sym.createTF()]
+  ['ff', Kind.Formula, Kind.Formula, Sym.ff()],
+  ['ft', Kind.Formula, Kind.Term, Sym.ft()],
+  ['tt', Kind.Term, Kind.Term, Sym.tt()],
+  ['tf', Kind.Term, Kind.Formula, Sym.tf()]
 ])('.%s() has kinds %s, %s', (msg, kind, argumentKind, actual) => {
   expect(actual.kind).toEqual(kind)
   expect(actual.argumentKind).toEqual(argumentKind)
@@ -29,7 +29,7 @@ test.each([
   [Kind.Term, Kind.Term, Category.TT],
   [Kind.Term, Kind.Formula, Category.TF]
 ])('#getCategory() for sym with kinds %s, %s is %s', (kind, argumentKind, category) => {
-  const sym = Sym.create({ kind, argumentKind })
+  const sym = Sym({ kind, argumentKind })
   expect(Sym.getCategory(sym)).toEqual(category)
 })
 

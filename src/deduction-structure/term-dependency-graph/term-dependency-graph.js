@@ -1,130 +1,117 @@
-import { Map, Record, Set } from 'immutable'
 import { createError, ErrorName } from '../../error'
 
-/**
- * Graph of dependencies between free terms of a deduction.
- *
- * This graph is maintained as a part of deduction. It's updated on each application of UG and
- * EI rule.
- */
-export class TermDependencyGraph extends Record({
-  /** Direct dependencies. */
-  dependencies: Map()
-}, 'TermDependencyGraph') {
-  /**
-   * Add direct dependency and normalize graph (remove redundant direct dependencies which now
-   * became transitive).
-   */
-  addDependencies(dependent, ...dependencies) {
-    const dependenciesSet = Set(dependencies)
+export const TermDependencyGraph = ({ ...props }) => ({ ...props })
 
-    if (this.dependencies.has(dependent)) {
-      throw createError(ErrorName.TERM_ALREADY_USED, undefined, dependent)
-    }
-
-    const cycleInducingDependency = dependenciesSet.find(
-      dependency => this.hasDependency(dependency, dependent)
-    )
-    if (cycleInducingDependency !== undefined) {
-      throw createError(ErrorName.CYCLIC_DEPENDENCIES, undefined, cycleInducingDependency)
-    }
-
-    return dependenciesSet.reduce(
-      (acc, dependency) => acc._normalize(dependent, dependency).update(
-        'dependencies',
-        map => map.update(dependent, Set(), values => values.add(dependency))
-      ),
-      this.update('dependencies', map => map.set(dependent, Set()))
-    )
+/** Add direct dependency and normalize graph. */
+TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) => {
+  if (graph[dependent] !== undefined) {
+    throw createError(ErrorName.TERM_ALREADY_USED, undefined, dependent)
   }
 
-  getDirectDependents(sym) {
-    return this.dependencies
-      .entrySeq()
-      .filter(([, dependencies]) => dependencies.contains(sym))
+  if (dependencies.length === 0) return graph
+
+  const cycleInducingDependency = dependencies.find(
+    dependency => TermDependencyGraph.hasDependency(graph, dependency, dependent)
+  )
+  if (cycleInducingDependency !== undefined) {
+    throw createError(ErrorName.CYCLIC_DEPENDENCIES, undefined, cycleInducingDependency)
+  }
+
+  let result = { ...graph, [dependent]: new Set() }
+
+  dependencies.forEach(dependency => {
+    result = normalize(result, dependent, dependency)
+    result[dependent].add(dependency)
+  })
+
+  return result
+}
+
+TermDependencyGraph.hasDependency = (graph, dependent, dependency, traversed = new Set()) => {
+  if (traversed.has(dependent)) throw new Error('Infinite recursion error')
+  traversed.add(dependent)
+
+  const dependencies = graph[dependent]
+  if (dependencies === undefined) return false
+  if (dependencies.has(dependency)) return true
+
+  return [...dependencies]
+    .some(sym => TermDependencyGraph.hasDependency(graph, sym, dependency, traversed))
+}
+
+TermDependencyGraph.getDirectDependents = (graph, sym) =>
+  new Set(
+    Object
+      .entries(graph)
+      .filter(([, dependencies]) => dependencies.has(sym))
       .map(([dependent]) => dependent)
-      .toSet()
-  }
+  )
 
-  getDependents(sym) { return this._getDependents(sym) }
+TermDependencyGraph.getDependencies = (graph, sym, traversed = new Set()) => {
+  if (traversed.has(sym)) throw new Error('Infinite recursion error')
+  traversed = traversed.add(sym)
 
-  _getDependents(sym, traversed = Set()) {
-    if (traversed.contains(sym)) throw new Error('Infinite recursion error')
-    traversed = traversed.add(sym)
+  const directDependencies = this.dependencies.get(sym, Set())
 
-    const directDependents = this.getDirectDependents(sym)
+  return directDependencies.reduce(
+    (acc, dependent) => acc.union(TermDependencyGraph.getDependencies(graph, dependent, traversed)),
+    directDependencies
+  )
+}
 
-    return directDependents.reduce(
-      (acc, dependent) => acc.union(this._getDependents(dependent, traversed)),
-      directDependents
-    )
-  }
+TermDependencyGraph.hasDirectDependency = (graph, dependent, dependency) =>
+  graph[dependent]?.has(dependency) || false
 
-  getDependencies(sym) { return this._getDependencies(sym) }
+TermDependencyGraph.getDependents = (graph, sym, traversed = Set()) => {
+  if (traversed.contains(sym)) throw new Error('Infinite recursion error')
+  traversed = traversed.add(sym)
 
-  _getDependencies(sym, traversed = Set()) {
-    if (traversed.contains(sym)) throw new Error('Infinite recursion error')
-    traversed = traversed.add(sym)
+  const directDependents = TermDependencyGraph.getDirectDependents(graph, sym)
 
-    const directDependencies = this.dependencies.get(sym, Set())
+  const transitiveDependents = directDependents.flatMap(
+    directDependent => TermDependencyGraph.getDependents(graph, directDependent, traversed)
+  )
 
-    return directDependencies.reduce(
-      (acc, dependent) => acc.union(this._getDependencies(dependent, traversed)),
-      directDependencies
-    )
-  }
+  return [...directDependents, ...transitiveDependents]
+}
 
-  hasDirectDependency(dependent, dependency) {
-    return this.dependencies.get(dependent)?.contains(dependency) || false
-  }
+/** Remove redundant direct dependencies if transitive dependencies exist. */
+const normalize = (graph, dependent, dependency) => {
+  const normalizedDownwards = normalizeDownwards(graph, dependent, dependency, true)
 
-  hasDependency(dependent, dependency) {
-    return this._hasDependency(dependent, dependency)
-  }
-
-  _hasDependency(dependent, dependency, traversed = Set()) {
-    if (traversed.contains(dependent)) throw new Error('Infinite recursion error')
-    traversed = traversed.add(dependent)
-
-    const sym1Dependencies = this.dependencies.get(dependent, Set())
-
-    return (
-      sym1Dependencies.contains(dependency) ||
-      sym1Dependencies.some(sym => this._hasDependency(sym, dependency, traversed))
-    )
-  }
-
-  _normalize(dependent, dependency) {
-    const normalizedDownwards = this._normalizeDownwards(dependent, dependency, true)
-
-    return normalizedDownwards.getDirectDependents(dependent).reduce(
-      (graph, furtherDependent) => graph._normalizeDownwards(furtherDependent, dependency),
+  return TermDependencyGraph
+    .getDirectDependents(normalizedDownwards, dependent)
+    .reduce(
+      (g, furtherDependent) => normalizeDownwards(g, furtherDependent, dependency),
       normalizedDownwards
     )
+}
+
+const normalizeDownwards = (graph, dependent, dependency, isRoot = false) => {
+  if (!isRoot && TermDependencyGraph.hasDirectDependency(graph, dependent, dependency)) {
+    return removeDirectDependency(graph, dependent, dependency)
   }
 
-  _normalizeDownwards(dependent, dependency, isRoot = false) {
-    if (!isRoot && this.hasDirectDependency(dependent, dependency)) {
-      return this._removeDirectDependency(dependent, dependency)
-    }
+  const transitiveDependencies = graph[dependency]
 
-    return this.dependencies.get(dependency)?.reduce(
-      (graph, furtherDependency) => graph._normalizeDownwards(dependent, furtherDependency),
-      this
-    ) || this
-  }
+  if (transitiveDependencies === undefined) return graph
 
-  _removeDirectDependency(dependent, dependency) {
-    const dependencyTerms = this.dependencies.get(dependent)
-    if (dependencyTerms === undefined) return this
+  return [...transitiveDependencies].reduce(
+    (graph, transitiveDependency) => normalizeDownwards(graph, dependent, transitiveDependency),
+    graph
+  )
+}
 
-    const newDependencyTerms = dependencyTerms.remove(dependency)
+const removeDirectDependency = (graph, dependent, dependency) => {
+  const dependencyTerms = graph[dependent]
+  if (dependencyTerms === undefined) return graph
 
-    return this.set(
-      'dependencies',
-      newDependencyTerms.isEmpty()
-        ? this.dependencies.remove(dependent)
-        : this.dependencies.set(dependent, newDependencyTerms)
-    )
-  }
+  const newDependencyTerms = new Set(dependencyTerms)
+  newDependencyTerms.delete(dependency)
+
+  const result = { ...graph }
+
+  if (newDependencyTerms.size === 0) delete result[dependency]
+
+  return result
 }

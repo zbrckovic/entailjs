@@ -4,18 +4,15 @@ import { createError, ErrorName } from '../../error'
 import { Kind } from '../sym'
 
 /**
- * Abstract tree-like structure which is used to represent formulas and terms.
- * @type Expression
- */
-
-/**
- * @param {Object} params
- * @param {Sym} params.sym - Main symbol.
- * @param {Sym} [params.boundSym] - Bound symbol (In first-order logic this will always be a nullary
+ * **Expression** is an abstract tree-like structure which is used to represent formulas and terms.
+ *
+ * @param params
+ * @param params.sym - Main symbol.
+ * @param [params.boundSym] - Bound symbol (In first-order logic this will always be a nullary
  * term (individual variable), but here we are at a higher level of abstraction and don't make this
  * assumption).
- * @param {Expression[]} params.children = []
- * @returns {Expression}
+ * @param params.children = []
+ * @returns New expression.
  */
 export const Expression = ({ sym, boundSym, children = [] }) => ({ sym, boundSym, children })
 

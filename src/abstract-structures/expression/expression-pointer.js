@@ -1,17 +1,10 @@
 import { createError, ErrorName } from '../../error'
 import { Expression } from './expression'
 
-/** @typedef {Object} ExpressionPointer */
-
 /**
- * Pointer to the specific subexpression of the base expression. It Contains the base *expression*
- * and the *position* which is a path to some subexpression. This subexpression is called a
- * 'target'.
- *
- * @param {Object} params
- * @param {Expression} params.expression
- * @param {number[]} params.position
- * @returns {ExpressionPointer}
+ * **ExpressionPointer** is a pointer to the specific subexpression of the base expression. It
+ * contains the base *expression* and the *position* which is a path to some subexpression. This
+ * subexpression is called a 'target'.
  */
 const ExpressionPointer = ({ expression, position = [] }) => ({ expression, position })
 

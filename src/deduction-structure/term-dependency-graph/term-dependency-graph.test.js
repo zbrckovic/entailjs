@@ -1,45 +1,38 @@
-import { Sym } from '../../abstract-structures/sym'
 import { ErrorName } from '../../error'
 import { TermDependencyGraph } from './term-dependency-graph'
 
-const term0 = Sym.tt({ id: 0 })
-const term1 = Sym.tt({ id: 1 })
-const term2 = Sym.tt({ id: 2 })
-const term3 = Sym.tt({ id: 3 })
-const term4 = Sym.tt({ id: 4 })
-
 describe('#addDirectDependency()', () => {
   test(`throws ${ErrorName.TERM_ALREADY_USED}`, () => {
-    const graph = TermDependencyGraph({ [term0.id]: new Set() })
+    const graph = TermDependencyGraph({ 0: new Set() })
 
     expect(() => {
-      TermDependencyGraph.addDependencies(graph, term0.id, term1.id)
+      TermDependencyGraph.addDependencies(graph, 0, 1)
     }).toThrow(ErrorName.TERM_ALREADY_USED)
   })
 
   test(`throws ${ErrorName.CYCLIC_DEPENDENCIES}`, () => {
     const graph = TermDependencyGraph({
-      [term0.id]: new Set([term1.id, term2.id]),
-      [term2.id]: new Set([term3.id])
+      0: new Set([1, 2]),
+      2: new Set([3])
     })
 
     expect(() => {
-      TermDependencyGraph.addDependencies(graph, term1.id, term0.id)
+      TermDependencyGraph.addDependencies(graph, 1, 0)
     }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
 
     expect(() => {
-      TermDependencyGraph.addDependencies(graph, term3.id, term0.id)
+      TermDependencyGraph.addDependencies(graph, 3, 0)
     }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
   })
 
   test('basic case', () => {
     let actual = TermDependencyGraph()
-    actual = TermDependencyGraph.addDependencies(actual, term0.id, term1.id, term2.id)
-    actual = TermDependencyGraph.addDependencies(actual, term2.id, term3.id)
+    actual = TermDependencyGraph.addDependencies(actual, 0, 1, 2)
+    actual = TermDependencyGraph.addDependencies(actual, 2, 3)
 
     const expected = TermDependencyGraph({
-      [term0.id]: new Set([term1.id, term2.id]),
-      [term2.id]: new Set([term3.id])
+      0: new Set([1, 2]),
+      2: new Set([3])
     })
 
     expect(actual).toEqual(expected)
@@ -47,28 +40,26 @@ describe('#addDirectDependency()', () => {
 
   test.each([
     [
+      TermDependencyGraph({ 0: new Set([1, 2]) }),
       TermDependencyGraph({
-        [term0.id]: new Set([term1.id, term2.id])
+        0: new Set([1]),
+        1: new Set([2])
       }),
-      TermDependencyGraph({
-        [term0.id]: new Set([term1.id]),
-        [term1.id]: new Set([term2.id])
-      }),
-      term1.id,
-      term2.id
+      1,
+      2
     ],
     [
       TermDependencyGraph({
-        [term0.id]: new Set([term1.id, term3.id]),
-        [term2.id]: new Set([term3.id])
+        0: new Set([1, 3]),
+        2: new Set([3])
       }),
       TermDependencyGraph({
-        [term0.id]: new Set([term1.id]),
-        [term1.id]: new Set([term2.id]),
-        [term2.id]: new Set([term3.id])
+        0: new Set([1]),
+        1: new Set([2]),
+        2: new Set([3])
       }),
-      term1.id,
-      term2.id
+      1,
+      2
     ]
   ])('normalization', (graph, expected, dependent, dependency) => {
     const actual = TermDependencyGraph.addDependencies(graph, dependent, dependency)
@@ -79,63 +70,54 @@ describe('#addDirectDependency()', () => {
 
 test('#hasDirectDependency()', () => {
   const graph = TermDependencyGraph({
-    [term0.id]: new Set([term1.id, term2.id]),
-    [term2.id]: new Set([term3.id])
+    0: new Set([1, 2]),
+    2: new Set([3])
   })
 
-  expect(TermDependencyGraph.hasDirectDependency(graph, term0.id, term4.id)).toBe(false)
-  expect(TermDependencyGraph.hasDirectDependency(graph, term0.id, term3.id)).toBe(false)
-  expect(TermDependencyGraph.hasDependency(graph, term0.id, term1.id)).toBe(true)
-  expect(TermDependencyGraph.hasDependency(graph, term0.id, term2.id)).toBe(true)
+  expect(TermDependencyGraph.hasDirectDependency(graph, 0, 4)).toBe(false)
+  expect(TermDependencyGraph.hasDirectDependency(graph, 0, 3)).toBe(false)
+  expect(TermDependencyGraph.hasDependency(graph, 0, 1)).toBe(true)
+  expect(TermDependencyGraph.hasDependency(graph, 0, 2)).toBe(true)
 })
 
 test('#hasDependency()', () => {
   const graph = TermDependencyGraph({
-    [term0.id]: new Set([term1.id, term2.id]),
-    [term2.id]: new Set([term3.id])
+    0: new Set([1, 2]),
+    2: new Set([3])
   })
 
-  expect(TermDependencyGraph.hasDependency(graph, term0.id, term4.id)).toBe(false)
-  expect(TermDependencyGraph.hasDependency(graph, term0.id, term1.id)).toBe(true)
-  expect(TermDependencyGraph.hasDependency(graph, term0.id, term3.id)).toBe(true)
+  expect(TermDependencyGraph.hasDependency(graph, 0, 4)).toBe(false)
+  expect(TermDependencyGraph.hasDependency(graph, 0, 1)).toBe(true)
+  expect(TermDependencyGraph.hasDependency(graph, 0, 3)).toBe(true)
 })
 
 test('#getDirectDependents()', () => {
   const graph = TermDependencyGraph({
-    [term0.id]: new Set([term2.id, term3.id]),
-    [term1.id]: new Set([term2.id])
+    0: new Set([2, 3]),
+    1: new Set([2])
   })
 
-  expect(new Set(TermDependencyGraph.getDirectDependents(graph, term2.id)))
-    .toEqual(new Set([term0.id, term1.id]))
-
-  expect(new Set(TermDependencyGraph.getDirectDependents(graph, term0.id)))
-    .toEqual(new Set())
+  expect(new Set(TermDependencyGraph.getDirectDependents(graph, 2))).toEqual(new Set([0, 1]))
+  expect(new Set(TermDependencyGraph.getDirectDependents(graph, 0))).toEqual(new Set())
 })
 
 test('#getDependents()', () => {
   const graph = TermDependencyGraph({
-    [term0.id]: new Set([term1.id]),
-    [term1.id]: new Set([term3.id]),
-    [term2.id]: new Set([term3.id])
+    0: new Set([1]),
+    1: new Set([3]),
+    2: new Set([3])
   })
 
-  expect(new Set(TermDependencyGraph.getDependents(graph, term1.id)))
-    .toEqual(new Set([term0.id]))
-
-  expect(new Set(TermDependencyGraph.getDependents(graph, term3.id)))
-    .toEqual(new Set([term1.id, term2.id, term0.id]))
+  expect(new Set(TermDependencyGraph.getDependents(graph, 1))).toEqual(new Set([0]))
+  expect(new Set(TermDependencyGraph.getDependents(graph, 3))).toEqual(new Set([1, 2, 0]))
 })
 
 test('#getDependencies()', () => {
   const graph = TermDependencyGraph({
-    [term0.id]: new Set([term1.id, term2.id]),
-    [term2.id]: new Set([term3.id])
+    0: new Set([1, 2]),
+    2: new Set([3])
   })
 
-  expect(new Set(TermDependencyGraph.getDependencies(graph, term2.id)))
-    .toEqual(new Set([term3.id]))
-
-  expect(new Set(TermDependencyGraph.getDependencies(graph, term0.id)))
-    .toEqual(new Set([term1.id, term2.id, term3.id]))
+  expect(new Set(TermDependencyGraph.getDependencies(graph, 2))).toEqual(new Set([3]))
+  expect(new Set(TermDependencyGraph.getDependencies(graph, 0))).toEqual(new Set([1, 2, 3]))
 })

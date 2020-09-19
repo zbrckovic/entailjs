@@ -1,3 +1,2 @@
-export { Sym } from './sym'
+export { Sym, Kind } from './sym'
 export { Category } from './category'
-export { Kind } from './kind'

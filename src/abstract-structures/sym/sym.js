@@ -1,5 +1,4 @@
 import { Category } from './category'
-import { Kind } from './kind'
 
 export const Sym = ({
   id = 0,
@@ -75,3 +74,8 @@ Sym.getKindsFromCategory = category => {
 Sym.order = (sym1, sym2) => sym1.id - sym2.id
 
 Sym.equals = (sym1, sym2) => sym1.id === sym2.id
+
+export const Kind = {
+  Formula: 'Formula',
+  Term: 'Term'
+}

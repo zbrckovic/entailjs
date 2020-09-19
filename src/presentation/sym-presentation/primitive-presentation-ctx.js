@@ -7,42 +7,41 @@ import {
   negation,
   universalQuantifier
 } from '../../primitive-syms'
-import { SymPresentation } from './sym-presentation'
-import { SyntacticInfo } from './syntactic-info'
+import { SymPresentation, SyntacticInfo } from './sym-presentation'
 
 /** Presentations for all primitive symbols. */
 export const primitivePresentationCtx = {
-  [negation.id]: SymPresentation.create({
+  [negation.id]: SymPresentation({
     ascii: SyntacticInfo.prefix('~'),
     unicode: SyntacticInfo.prefix('¬')
   }),
 
-  [conjunction.id]: SymPresentation.create({
+  [conjunction.id]: SymPresentation({
     ascii: SyntacticInfo.infix('&'),
     unicode: SyntacticInfo.infix('∧')
   }),
 
-  [disjunction.id]: SymPresentation.create({
+  [disjunction.id]: SymPresentation({
     ascii: SyntacticInfo.infix('|'),
     unicode: SyntacticInfo.infix('∨')
   }),
 
-  [implication.id]: SymPresentation.create({
+  [implication.id]: SymPresentation({
     ascii: SyntacticInfo.infix('->'),
     unicode: SyntacticInfo.infix('→')
   }),
 
-  [equivalence.id]: SymPresentation.create({
+  [equivalence.id]: SymPresentation({
     ascii: SyntacticInfo.infix('<->'),
     unicode: SyntacticInfo.infix('↔')
   }),
 
-  [universalQuantifier.id]: SymPresentation.create({
+  [universalQuantifier.id]: SymPresentation({
     ascii: SyntacticInfo.prefix('A'),
     unicode: SyntacticInfo.prefix('∀')
   }),
 
-  [existentialQuantifier.id]: SymPresentation.create({
+  [existentialQuantifier.id]: SymPresentation({
     ascii: SyntacticInfo.prefix('E'),
     unicode: SyntacticInfo.prefix('∃')
   })

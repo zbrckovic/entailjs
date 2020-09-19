@@ -1,85 +1,92 @@
 import { createError, ErrorName } from '../../error'
 import { Expression } from './expression'
 
+/** @typedef {Object} ExpressionPointer */
+
 /**
- * Pointer to the specific subexpression of the base expression.
+ * Pointer to the specific subexpression of the base expression. It Contains the base *expression*
+ * and the *position* which is a path to some subexpression. This subexpression is called a
+ * 'target'.
  *
- * Contains the base `expression` and the `position` which is a path to some subexpression. This
- * subexpression is called a 'target'.
+ * @param {Object} params
+ * @param {Expression} params.expression
+ * @param {number[]} params.position
+ * @returns {ExpressionPointer}
  */
-export const ExpressionPointer = {
-  create: ({ expression, position = [] }) => ({ expression, position }),
+const ExpressionPointer = ({ expression, position = [] }) => ({ expression, position })
 
-  isRoot: pointer => pointer.position.length === 0,
+ExpressionPointer.create = ({ expression, position = [] }) => ({ expression, position })
 
-  getTarget: pointer => Expression.getSubexpression(pointer.expression, pointer.position),
+ExpressionPointer.isRoot = pointer => pointer.position.length === 0
 
-  getParent: pointer => {
-    if (ExpressionPointer.isRoot(pointer)) throw createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
-    return { ...pointer, position: pointer.position.slice(0, -1) }
-  },
+ExpressionPointer.getTarget = pointer =>
+  Expression.getSubexpression(pointer.expression, pointer.position)
 
-  /**
-   * Return a path to the ancestor subexpression which binds `sym` at the target position.
-   *
-   * In other words, find the closest target's ancestor which has `sym` as its `boundSym`. If
-   * `sym` is not specified, `mainSym` at target is assumed.
-   */
-  findBindingOccurrence: (pointer, sym) => {
-    if (ExpressionPointer.isRoot(pointer)) return undefined
+ExpressionPointer.getParent = pointer => {
+  if (ExpressionPointer.isRoot(pointer)) throw createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
+  return { ...pointer, position: pointer.position.slice(0, -1) }
+}
 
-    sym = sym ?? ExpressionPointer.getTarget(pointer).sym
+/**
+ * Return a path to the ancestor subexpression which binds `sym` at the target position.
+ *
+ * In other words, find the closest target's ancestor which has `sym` as its `boundSym`. If
+ * `sym` is not specified, `mainSym` at target is assumed.
+ */
+ExpressionPointer.findBindingOccurrence = (pointer, sym) => {
+  if (ExpressionPointer.isRoot(pointer)) return undefined
 
-    const parentPointer = ExpressionPointer.getParent(pointer)
-    const { boundSym } = parentPointer.target
+  sym = sym ?? ExpressionPointer.getTarget(pointer).sym
 
-    return boundSym?.id === sym.id
-      ? parentPointer.position
-      : ExpressionPointer.findBindingOccurrence(parentPointer, sym)
-  },
+  const parentPointer = ExpressionPointer.getParent(pointer)
+  const { boundSym } = parentPointer.target
 
-  findFreeOccurrences: (pointer, sym) => {
-    const target = ExpressionPointer.getTarget(pointer)
+  return boundSym?.id === sym.id
+    ? parentPointer.position
+    : ExpressionPointer.findBindingOccurrence(parentPointer, sym)
+}
 
-    return Expression
-      .findFreeOccurrences(target, sym)
-      .map(position => pointer.position.concat(position))
-  },
+ExpressionPointer.findFreeOccurrences = (pointer, sym) => {
+  const target = ExpressionPointer.getTarget(pointer)
 
-  findBoundOccurrences: pointer => {
-    const target = ExpressionPointer.getTarget(pointer)
+  return Expression
+    .findFreeOccurrences(target, sym)
+    .map(position => pointer.position.concat(position))
+}
 
-    return Expression
-      .findBoundOccurrences(target)
-      .map(position => this.position.concat(position))
-  },
+ExpressionPointer.findBoundOccurrences = pointer => {
+  const target = ExpressionPointer.getTarget(pointer)
 
-  getSubexpressionsOnPath: pointer => {
-    const target = ExpressionPointer.getTarget(pointer)
+  return Expression
+    .findBoundOccurrences(target)
+    .map(position => this.position.concat(position))
+}
 
-    return Expression.getSubexpressionsOnPath(target.expression, pointer.position)
-  },
+ExpressionPointer.getSubexpressionsOnPath = pointer => {
+  const target = ExpressionPointer.getTarget(pointer)
 
-  /**
-   * Find all symbols which are bound by ancestors.
-   *
-   * It doesn't necessarily search for symbols which actually appear in the target. It
-   * searches for all symbols `S` which would be bound by some ancestor if we replaced the target
-   * with some formula containing `S` as free symbol.
-   */
-  getBoundSyms: pointer => {
-    if (ExpressionPointer.isRoot(pointer)) return {}
-    const parent = ExpressionPointer.getParent(pointer)
-    const boundSym = ExpressionPointer.getTarget(parent).boundSym
+  return Expression.getSubexpressionsOnPath(target.expression, pointer.position)
+}
 
-    const result = {}
+/**
+ * Find all symbols which are bound by ancestors.
+ *
+ * It doesn't necessarily search for symbols which actually appear in the target. It
+ * searches for all symbols `S` which would be bound by some ancestor if we replaced the target
+ * with some formula containing `S` as free symbol.
+ */
+ExpressionPointer.getBoundSyms = pointer => {
+  if (ExpressionPointer.isRoot(pointer)) return {}
+  const parent = ExpressionPointer.getParent(pointer)
+  const boundSym = ExpressionPointer.getTarget(parent).boundSym
 
-    if (boundSym !== undefined) {
-      result[boundSym.id] = boundSym
-    }
+  const result = {}
 
-    Object.assign(result, Expression.getBoundSyms(parent))
-
-    return result
+  if (boundSym !== undefined) {
+    result[boundSym.id] = boundSym
   }
+
+  Object.assign(result, Expression.getBoundSyms(parent))
+
+  return result
 }

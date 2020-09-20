@@ -3,18 +3,17 @@ import * as _ from 'lodash'
 import { createError, ErrorName } from '../../error'
 import { Kind } from '../sym'
 
-/**
- * **Expression** is an abstract tree-like structure which is used to represent formulas and terms.
- *
- * @param params
- * @param params.sym - Main symbol.
- * @param [params.boundSym] - Bound symbol (In first-order logic this will always be a nullary
- * term (individual variable), but here we are at a higher level of abstraction and don't make this
- * assumption).
- * @param params.children = []
- * @returns New expression.
- */
-export const Expression = ({ sym, boundSym, children = [] }) => ({ sym, boundSym, children })
+export const Expression = ({
+  // Main symbol of this expression.
+  sym,
+  // Optional bound symbol which will exists if `sym`'s `binds` is true. In first-order logic
+  // `boundSym` will always be a nullary term symbol (individual variable), but here we are at a
+  // higher level of abstraction and don't make this assumption.
+  boundSym,
+  // Array of subexpressions whose length will match `sym`'s arity and their kinds will match
+  // `sym`'s `argumentKind`
+  children = []
+}) => ({ sym, boundSym, children })
 
 Expression.getChild = (expression, i) => {
   const child = expression.children[i]
@@ -73,8 +72,10 @@ Expression.replaceSymAt = (
   expression,
   position,
   newSym,
-  getBoundSym, // called if new sym binds, but old one didnt
-  getChild // called if new sym has larger arity from old one
+  // This is called if new sym binds, but old one didnt.
+  getBoundSym,
+  // This called if new sym has larger arity from old one.
+  getChild
 ) =>
   Expression.updateSubexpression(expression, position, subexpression => {
     const { sym, boundSym, children } = subexpression

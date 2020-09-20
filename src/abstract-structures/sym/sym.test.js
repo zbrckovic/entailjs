@@ -1,5 +1,4 @@
-import { Category } from './category'
-import { Sym, Kind } from './sym'
+import { Sym, Kind, Category } from './sym'
 
 test.each([
   ['ff', Kind.Formula, Kind.Formula, Sym.ff()],

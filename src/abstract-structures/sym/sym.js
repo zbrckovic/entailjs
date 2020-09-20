@@ -1,10 +1,24 @@
-import { Category } from './category'
-
+// `Sym` (short for symbol) is the main entity from which `Expression`s are built. Word `symbol` has
+// been avoided because it's a built-in type in ES6.
 export const Sym = ({
+  // Non-negative integer which must be the same throughout all of this symbol's occurrences in some
+  // context (expression, deduction, etc...).
   id = 0,
+
+  // When this symbol is the main symbol of an expression `kind` determines which of two possible
+  // 'roles' this expression has - it can be either a formula or a term.
   kind = Kind.Formula,
+
+  // When this symbol is the main symbol of an expression `argumentKind` determines what kind of
+  // expressions are accepted as children.
   argumentKind = Kind.Formula,
+
+  // When this symbol is the main symbol of an expression `arity` determines how many children an
+  // expression must have.
   arity = 0,
+
+  // When this symbol is the main symbol of an expression `binds` determines whether expression also
+  // accepts a bound symbol. This will be true for quantifiers.
   binds = false
 } = {}) => ({ id, kind, argumentKind, arity, binds })
 
@@ -79,3 +93,42 @@ export const Kind = {
   Formula: 'Formula',
   Term: 'Term'
 }
+
+// Given that `kind` and `argumentKind` of symbol can have two values each, there are 4
+// possibilities. We classify symbols in four **categories** where `F` is for 'formula' and `T`
+// is for 'term'). Here are the correlations between `category` values and traditional
+// symbolic logic terminology:`
+export const Category = {
+  // Corresponds to propositional variables/constants when arity is zero and to propositional
+  // connectives when arity is positive.
+  FF: 'FF',
+
+  // Correspond to predicate variables/constants.
+  FT: 'FT',
+
+  // Corresponds to terms which could be either individual variables/constants when arity is zero or
+  // function variables/constants when arity is positive.
+  TT: 'TT',
+
+  // This is meant for constructs which behave as terms because they denote a thing, but accept
+  // a proposition as an argument. One such example are definitive descriptions: "x such that ...".
+  TF: 'TF'
+}
+
+// We didn't mention the cases of nullary `FT` and `TF` symbols. From the standpoint of symbolic
+// logic system it seems that there's no need to allow for nullary predicates when we already
+// have propositional variables. The same goes for nullary `TF` symbols. From the standpoint the
+// way this code is organized, when symbol is nullary `argumentKind` doesn't have significance
+// since expression with such a symbol will never have children. However, `argumentKind` will
+// always be defined because we'd like to associate definite category to each symbol. In order
+// we enforce the following rule: nullary symbol's `kind` and `argumentKind` must always be the
+// same. In other words: nullary symbol's category can either be `FF` or `TT`, never `FT` or `TF`.
+
+const precedence = {
+  [Category.FF]: 0,
+  [Category.FT]: 1,
+  [Category.TT]: 2,
+  [Category.TF]: 3
+}
+
+export const order = (category1, category2) => precedence[category1] - precedence[category2]

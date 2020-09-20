@@ -7,7 +7,7 @@ export const connectWithBinarySym = (expressions, sym) => {
   if (expressions.length < 2) throw createError(ErrorName.NOT_ENOUGH_EXPRESSIONS)
   const [first, second, ...rest] = expressions
 
-  const connect = (first, second) => Expression.create({ sym, children: [first, second] })
+  const connect = (first, second) => Expression({ sym, children: [first, second] })
 
   return rest.reduce(connect, connect(first, second))
 }

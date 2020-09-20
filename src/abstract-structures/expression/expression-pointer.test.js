@@ -1,4 +1,4 @@
-import { fromJS, is, List, Set } from 'immutable'
+import _ from 'lodash'
 import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
@@ -15,23 +15,18 @@ beforeEach(() => {
 
 test(`#getParentPointer() throws ${ErrorName.CANT_GET_PARENT_OF_ROOT} for root.`, () => {
   const expression = parser.parse('p')
-  const pointer = new ExpressionPointer({ expression })
-  expect(() => {
-    // eslint-disable-next-line no-unused-expressions
-    pointer.parent
-  }).toThrow(ErrorName.CANT_GET_PARENT_OF_ROOT)
+  const pointer = ExpressionPointer({ expression })
+
+  expect(() => { ExpressionPointer.getParent(pointer) }).toThrow(ErrorName.CANT_GET_PARENT_OF_ROOT)
 })
 
 test('#getParentPointer({ p -> q, [1] }) for is { p -> q, [] }', () => {
   const expression = parser.parse('p -> q')
-  const pointer = new ExpressionPointer({
-    expression,
-    position: List.of(1)
-  })
-  const expectedParentPointer = new ExpressionPointer({ expression })
-  const parentPointer = pointer.parent
+  const pointer = ExpressionPointer({ expression, position: [1] })
+  const expectedParentPointer = ExpressionPointer({ expression })
+  const parentPointer = ExpressionPointer.getParent(pointer)
 
-  expect(parentPointer.equals(expectedParentPointer)).toBe(true)
+  expect(parentPointer).toEqual(expectedParentPointer)
 })
 
 test.each([
@@ -44,22 +39,13 @@ test.each([
   ['A[x] (p -> E[x] F(x))', [0, 1, 0, 0], 'x', [0, 1]]
 ])(
   '#findDefinition({ %s, %j }, %s) is %j',
-  (formulaStr, positionArray, symbolText, expectedDefinitionPositionArray) => {
+  (formulaStr, position, symbolText, expectedDefinitionPosition) => {
     const expression = parser.parse(formulaStr)
-    const position = List(positionArray)
-    const pointer = new ExpressionPointer({
-      expression,
-      position
-    })
+    const pointer = ExpressionPointer({ expression, position })
     const sym = parser.getSym(symbolText)
-    const expectedDefinitionPosition = (
-      expectedDefinitionPositionArray === undefined
-        ? undefined
-        : List(expectedDefinitionPositionArray)
-    )
-    const actualDefinitionPosition = pointer.findBindingOccurrence(sym)
+    const actualDefinitionPosition = ExpressionPointer.findBindingOccurrence(pointer, sym)
 
-    expect(is(actualDefinitionPosition, expectedDefinitionPosition)).toBe(true)
+    expect(actualDefinitionPosition).toEqual(expectedDefinitionPosition)
   }
 )
 
@@ -67,18 +53,13 @@ test.each([
   ['p -> q', [], 'q', [[1]]]
 ])(
   '#findFreeOccurrences({ %s %j }, %s) is %j',
-  (formulaStr, positionArray, symbolText, expectedOccurrencesArray) => {
+  (formulaStr, position, symbolText, expectedFreeOccurrences) => {
     const expression = parser.parse(formulaStr)
-    const position = List(positionArray)
-    const pointer = new ExpressionPointer({
-      expression,
-      position
-    })
+    const pointer = ExpressionPointer({ expression, position })
     const sym = parser.getSym(symbolText)
-    const expectedFreeOccurrences = fromJS(expectedOccurrencesArray)
-    const freeOccurrences = pointer.findFreeOccurrences(sym)
+    const freeOccurrences = ExpressionPointer.findFreeOccurrences(pointer, sym)
 
-    expect(freeOccurrences.equals(expectedFreeOccurrences)).toBe(true)
+    expect(freeOccurrences).toEqual(expectedFreeOccurrences)
   }
 )
 
@@ -87,17 +68,12 @@ test.each([
   ['p -> A[x] F(y, y)', [1], []]
 ])(
   '#findBoundOccurrences({ %s %j }) is %j',
-  (formulaStr, positionArray, expectedBoundOccurrencesArray) => {
+  (formulaStr, position, expectedBoundOccurrences) => {
     const expression = parser.parse(formulaStr)
-    const position = List(positionArray)
-    const pointer = new ExpressionPointer({
-      expression,
-      position
-    })
-    const expectedBoundOccurrences = fromJS(expectedBoundOccurrencesArray)
-    const boundOccurrences = pointer.findBoundOccurrences()
+    const pointer = ExpressionPointer({ expression, position })
+    const boundOccurrences = ExpressionPointer.findBoundOccurrences(pointer)
 
-    expect(boundOccurrences.equals(expectedBoundOccurrences)).toBe(true)
+    expect(boundOccurrences).toEqual(expectedBoundOccurrences)
   }
 )
 
@@ -115,16 +91,19 @@ test.each([
   ['E[y] (F(y) -> A[x] F(y))', [0, 1, 0], ['x', 'y']]
 ])(
   '#getBoundSyms({ %s %j }) is %j',
-  (formulaStr, positionArray, expectedContextStr) => {
+  (formulaStr, position, expectedContextStr) => {
     const expression = parser.parse(formulaStr)
-    const position = List(positionArray)
     const pointer = new ExpressionPointer({
       expression,
       position
     })
-    const expectedContext = Set(expectedContextStr.map(symStr => parser.getSym(symStr)))
-    const context = pointer.getBoundSyms()
+    const expectedContext = _.fromPairs(
+      expectedContextStr
+        .map(symStr => parser.getSym(symStr))
+        .map(sym => ([sym.id, sym]))
+    )
+    const context = ExpressionPointer.getBoundSyms(pointer)
 
-    expect(context.equals(expectedContext)).toBe(true)
+    expect(context).toEqual(expectedContext)
   }
 )

@@ -6,7 +6,9 @@ import { conjunction, primitiveSyms } from '../../primitive-syms'
 import { connectWithBinarySym } from './expression-util'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
+beforeEach(() => {
+  parser = FormulaParser({ syms: primitiveSyms, presentationCtx: primitivePresentationCtx })
+})
 
 test.each([
   [['p', 'q'], conjunction, 'p & q'],
@@ -19,7 +21,7 @@ test.each([
 
   const actual = connectWithBinarySym(expressions, sym)
 
-  expect(is(actual, expected)).toBe(true)
+  expect(actual).toEqual(expected)
 })
 
 test(`connectWithBinarySym() throws ${ErrorName.NOT_ENOUGH_EXPRESSIONS} for empty list`, () => {

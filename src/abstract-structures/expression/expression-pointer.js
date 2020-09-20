@@ -27,7 +27,7 @@ ExpressionPointer.findBindingOccurrence = (pointer, sym) => {
   sym = sym ?? ExpressionPointer.getTarget(pointer).sym
 
   const parentPointer = ExpressionPointer.getParent(pointer)
-  const { boundSym } = parentPointer.target
+  const { boundSym } = ExpressionPointer.getTarget(parentPointer)
 
   return boundSym?.id === sym.id
     ? parentPointer.position
@@ -47,7 +47,7 @@ ExpressionPointer.findBoundOccurrences = pointer => {
 
   return Expression
     .findBoundOccurrences(target)
-    .map(position => this.position.concat(position))
+    .map(position => pointer.position.concat(position))
 }
 
 ExpressionPointer.getSubexpressionsOnPath = pointer => {
@@ -70,7 +70,7 @@ ExpressionPointer.getBoundSyms = pointer => {
     result[boundSym.id] = boundSym
   }
 
-  Object.assign(result, Expression.getBoundSyms(parent))
+  Object.assign(result, ExpressionPointer.getBoundSyms(parent))
 
   return result
 }

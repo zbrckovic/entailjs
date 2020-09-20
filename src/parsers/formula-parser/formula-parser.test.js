@@ -18,12 +18,14 @@ import {
 import { FormulaParser } from './formula-parser'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
+beforeEach(() => {
+  parser = FormulaParser({ syms: primitiveSyms, presentationCtx: primitivePresentationCtx })
+})
 
 test('parse(\'p\')', () => {
-  const sym = Sym.createFF({ id: parser.maxSymId + 1 })
+  const sym = Sym.ff({ id: parser.maxSymId + 1 })
 
-  const expectedFormula = Expression.create({ sym })
+  const expectedFormula = Expression({ sym })
   const expectedAddedSyms = { [sym.id]: sym }
 
   const formula = parser.parse('p')
@@ -38,9 +40,9 @@ test('parse(\'p -> q\')', () => {
   const symP = Sym.ff({ id: parser.maxSymId + 1 })
   const symQ = Sym.ff({ id: parser.maxSymId + 2 })
 
-  const expectedFormula = Expression.create({
+  const expectedFormula = Expression({
     sym: implication,
-    children: [Expression.create({ sym: symP }), Expression.create({ sym: symQ })]
+    children: [Expression({ sym: symP }), Expression({ sym: symQ })]
   })
 
   const expectedAddedSyms = { [symP.id]: symP, [symQ.id]: symQ }
@@ -54,13 +56,13 @@ test('parse(\'p -> q\')', () => {
 })
 
 test('parse(\'F(x, y)\')', () => {
-  const symF = Sym.createFT({ id: parser.maxSymId + 1, arity: 2 })
-  const symX = Sym.createTT({ id: parser.maxSymId + 2 })
-  const symY = Sym.createTT({ id: parser.maxSymId + 3 })
+  const symF = Sym.ft({ id: parser.maxSymId + 1, arity: 2 })
+  const symX = Sym.tt({ id: parser.maxSymId + 2 })
+  const symY = Sym.tt({ id: parser.maxSymId + 3 })
 
-  const expectedFormula = Expression.create({
+  const expectedFormula = Expression({
     sym: symF,
-    children: [Expression.create({ sym: symX }), Expression.create({ sym: symY })]
+    children: [Expression({ sym: symX }), Expression({ sym: symY })]
   })
 
   const expectedAddedSyms = { [symF.id]: symF, [symX.id]: symX, [symY.id]: symY }
@@ -73,16 +75,16 @@ test('parse(\'F(x, y)\')', () => {
 })
 
 test('parse(\'A[x] F(x)\')', () => {
-  const symX = Sym.createTT({ id: parser.maxSymId + 1 })
-  const symF = Sym.createFT({ id: parser.maxSymId + 2, arity: 1 })
+  const symX = Sym.tt({ id: parser.maxSymId + 1 })
+  const symF = Sym.ft({ id: parser.maxSymId + 2, arity: 1 })
 
-  const expectedFormula = Expression.create({
+  const expectedFormula = Expression({
     sym: universalQuantifier,
     boundSym: symX,
     children: [
-      Expression.create({
+      Expression({
         sym: symF,
-        children: [Expression.create({ sym: symX })]
+        children: [Expression({ sym: symX })]
       })
     ]
   })
@@ -97,37 +99,37 @@ test('parse(\'A[x] F(x)\')', () => {
 })
 
 test('parse(\'A[x] E[y] (F(x, y) -> ~G(y, x))\'', () => {
-  const symX = Sym.createTT({ id: parser.maxSymId + 1 })
-  const symY = Sym.createTT({ id: parser.maxSymId + 2 })
-  const symF = Sym.createFT({ id: parser.maxSymId + 3, arity: 2 })
-  const symG = Sym.createFT({ id: parser.maxSymId + 4, arity: 2 })
+  const symX = Sym.tt({ id: parser.maxSymId + 1 })
+  const symY = Sym.tt({ id: parser.maxSymId + 2 })
+  const symF = Sym.ft({ id: parser.maxSymId + 3, arity: 2 })
+  const symG = Sym.ft({ id: parser.maxSymId + 4, arity: 2 })
 
-  const expectedFormula = Expression.create({
+  const expectedFormula = Expression({
     sym: universalQuantifier,
     boundSym: symX,
     children: [
-      Expression.create({
+      Expression({
         sym: existentialQuantifier,
         boundSym: symY,
         children: [
-          Expression.create({
+          Expression({
             sym: implication,
             children: [
-              Expression.create({
+              Expression({
                 sym: symF,
                 children: [
-                  Expression.create({ sym: symX }),
-                  Expression.create({ sym: symY })
+                  Expression({ sym: symX }),
+                  Expression({ sym: symY })
                 ]
               }),
-              Expression.create({
+              Expression({
                 sym: negation,
                 children: [
-                  Expression.create({
+                  Expression({
                     sym: symG,
                     children: [
-                      Expression.create({ sym: symY }),
-                      Expression.create({ sym: symX })
+                      Expression({ sym: symY }),
+                      Expression({ sym: symX })
                     ]
                   })
                 ]
@@ -150,24 +152,24 @@ test('parse(\'A[x] E[y] (F(x, y) -> ~G(y, x))\'', () => {
 
 test(`parse('~x') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
   const text = '~x'
-  const presentationX = SymPresentation.create({ ascii: SyntacticInfo.prefix('x') })
-  parser.addPresentation(Sym.createTT(), presentationX)
+  const presentationX = SymPresentation({ ascii: SyntacticInfo.prefix('x') })
+  parser.addPresentation(Sym.tt(), presentationX)
 
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
 test(`parse('F(x)') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
   const text = 'F(x)'
-  const presentationX = SymPresentation.create({ ascii: SyntacticInfo.prefix('x') })
-  parser.addPresentation(Sym.createFF(), presentationX)
+  const presentationX = SymPresentation({ ascii: SyntacticInfo.prefix('x') })
+  parser.addPresentation(Sym.ff(), presentationX)
 
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
 test(`parse('A[x] p') throws ${ErrorName.INVALID_BOUND_SYMBOL_CATEGORY}`, () => {
   const text = 'A[x] p'
-  const presentationX = SymPresentation.create({ ascii: SyntacticInfo.prefix('x') })
-  const symX = parser.addPresentation(Sym.createFF(), presentationX)
+  const presentationX = SymPresentation({ ascii: SyntacticInfo.prefix('x') })
+  const symX = parser.addPresentation(Sym.ff(), presentationX)
   parser.addPresentation(symX, presentationX)
 
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_BOUND_SYMBOL_CATEGORY)

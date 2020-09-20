@@ -1,24 +1,20 @@
 import { parseFormula } from '../peg'
 import { AstProcessor } from './ast-processor'
 
-export class FormulaParser {
-  get presentationCtx() { return this.astProcessor.presentationCtx }
+export const FormulaParser = ({ syms, presentationCtx }) => {
+  const astProcessor = AstProcessor({ syms, presentationCtx })
 
-  get textToSymMap() { return this.astProcessor.textToSymMap }
+  const parse = text => astProcessor.process(parseFormula(text))
 
-  get maxSymId() { return this.astProcessor.maxSymId }
-
-  constructor(presentationCtx) {
-    this.astProcessor = new AstProcessor(presentationCtx)
-  }
-
-  parse(text) { return this.astProcessor.process(parseFormula(text)) }
-
-  addPresentation(sym, presentation) {
-    const newSym = { ...sym, id: this.maxSymId + 1 }
-    this.astProcessor.addPresentation(newSym, presentation)
-    return newSym
-  }
-
-  getSym(text) { return this.astProcessor.getSym(text) }
+  return ({
+    get syms() {
+      return astProcessor.syms
+    },
+    presentationCtx: astProcessor.presentationCtx,
+    textToSymMap: astProcessor.textToSymMap,
+    maxSymId: astProcessor.maxSymId,
+    parse,
+    getSym: astProcessor.getSym,
+    addPresentation: astProcessor.addPresentation
+  })
 }

@@ -1,10 +1,7 @@
 import * as _ from 'lodash'
 
-/**
- * ASCII and unicode presentation of a symbol.
- *
- * ASCII presentation is used for plain text environments. Unicode is used in GUI.
- */
+// ASCII and unicode presentation of a symbol. ASCII presentation is intended to be used in plain
+// text environments, while unicode is primarily intended for GUI and generated documents.
 export const SymPresentation = ({ ascii, unicode }) => ({ ascii, unicode })
 
 SymPresentation.getDefaultSyntacticInfo =
@@ -28,9 +25,7 @@ SyntacticInfo.createDescription = (info, arity = 1) => {
   }
 }
 
-/**
- * Represents two different positions a symbol can occupy relative to another syntactic entity.
- */
+// Represents two different positions a symbol can occupy relative to another syntactic entity.
 export const Placement = {
   Prefix: 'Prefix',
   Infix: 'Infix'

@@ -1,10 +1,9 @@
-/**
- * Organize symbols by their ASCII text presentations.
- *
- * @param presentationCtx - `SymPresentation`s by symbol ids
- * @param syms - symbols by ids
- * @returns {Object}
- */
+// **Presentation context** or is a mapping between symbol ids and their presentations.
+
+// Organizes symbols by their ASCII text presentations. It's assumed that each presentation in
+// `presentationCtx` will have a unique ASCII text. `syms` is a mapping between ids and symbols and
+// it should contain all symbols whose ids appear in `presentationCtx`. The result is useful to the
+// parser which needs a quick access to the symbol represented by some text it encountered.
 export const createTextToSymMap = (presentationCtx, syms) =>
   Object.fromEntries(
     Object
@@ -12,12 +11,7 @@ export const createTextToSymMap = (presentationCtx, syms) =>
       .map(([id, { ascii: { text } }]) => [text, syms[id]])
   )
 
-/**
- * Find highest symbol id
- *
- * @param textToSymMap - symbols by their ASCII text presentations
- * @returns {number} - highest symbol id or 0 of there's no symbols
- */
+// Find the highest symbol id in `textToSymMap`. If `textToSymMap` is empty return 0.
 export const getMaxSymId = textToSymMap => {
   const syms = Object.values(textToSymMap)
   return syms.length === 0 ? 0 : Math.max(...syms.map(({ id }) => id))

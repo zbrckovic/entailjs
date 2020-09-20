@@ -1,4 +1,3 @@
-export { SymPresentation, SyntacticInfo } from './sym-presentation'
-export { Placement } from './placement'
+export { SymPresentation, SyntacticInfo, Placement } from './sym-presentation'
 export { primitivePresentationCtx } from './primitive-presentation-ctx'
 export { createTextToSymMap, getMaxSymId } from './presentation-ctx'

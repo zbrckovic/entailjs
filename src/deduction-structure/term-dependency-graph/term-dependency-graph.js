@@ -1,15 +1,12 @@
 import { createError, ErrorName } from '../../error'
 
+// `TermDependencyGraph` is a mapping between a symbol id (dependent) and a set of symbol ids on
+// which it depends on (dependencies). It's important to note that `TermDependencyGraph` contains
+// only ids, not the actual symbols. Whenever a symbol is mentioned in this code, it's the id, not
+// the actual symbol object we are talking about.
 export const TermDependencyGraph = ({ ...props } = {}) => ({ ...props })
 
-/**
- * Add direct dependency and normalize the graph.
- *
- * @param {TermDependencyGraph} graph
- * @param {number} dependent
- * @param {...number} dependencies
- * @returns {TermDependencyGraph}
- */
+// Add direct dependency between `dependent` and `dependencies` and normalize the graph.
 TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) => {
   if (graph[dependent] !== undefined) {
     throw createError(ErrorName.TERM_ALREADY_USED, undefined, dependent)
@@ -34,16 +31,7 @@ TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) => {
   return result
 }
 
-/**
- * Check whether graph has direct or transitive dependency between `dependent` and `dependency`.
- *
- * @param {TermDependencyGraph} graph
- * @param {number} dependent
- * @param {number} dependency
- * @param {Set<number>} traversed - For tracking traversed dependencies in order to avoid infinite
- * recursion.
- * @returns {boolean}
- */
+// Check whether `graph` has direct or transitive dependency between `dependent` and `dependency`.
 TermDependencyGraph.hasDependency = (graph, dependent, dependency, traversed = new Set()) => {
   if (traversed.has(dependent)) throw new Error('Infinite recursion error')
   traversed.add(dependent)
@@ -58,28 +46,14 @@ TermDependencyGraph.hasDependency = (graph, dependent, dependency, traversed = n
   )
 }
 
-/**
- * Find all direct dependents of `dependency`.
- *
- * @param {TermDependencyGraph} graph
- * @param {number} dependency
- * @returns {number[]}
- */
+// Find all direct dependents of `dependency` and return them as an array.
 TermDependencyGraph.getDirectDependents = (graph, dependency) =>
   Object
     .entries(graph)
     .filter(([, dependencies]) => dependencies.has(dependency))
     .map(([dependent]) => parseInt(dependent, 10))
 
-/**
- * Find all direct or transitive dependencies of `dependent`.
- *
- * @param {TermDependencyGraph} graph
- * @param {number} dependent
- * @param {Set<number>} traversed - For tracking traversed dependents in order to avoid infinite
- * recursion.
- * @returns {number[]}
- */
+// Find all direct or transitive dependencies of `dependent` and return them as an array.
 TermDependencyGraph.getDependencies = (graph, dependent, traversed = new Set()) => {
   if (traversed.has(dependent)) throw new Error('Infinite recursion error')
   traversed.add(dependent)
@@ -117,15 +91,8 @@ TermDependencyGraph.getDependents = (graph, dependency, traversed = new Set()) =
   return [...directDependents, ...transitiveDependents]
 }
 
-/**
- * Remove direct dependencies which would become redundant if direct dependency between `dependent`
- * and `dependency` was introduced.
- *
- * @param {TermDependencyGraph} graph
- * @param {number} dependent
- * @param {number} dependency
- * @returns {TermDependencyGraph}
- */
+// Remove direct dependencies which would become redundant if direct dependency between `dependent`
+// and `dependency` was introduced to the `graph`.
 const normalize = (graph, dependent, dependency) => {
   const normalizedDownwards = normalizeDownwards(graph, dependent, dependency, true)
 
@@ -139,19 +106,9 @@ const normalize = (graph, dependent, dependency) => {
   )
 }
 
-/**
- * Remove direct dependencies which would become redundant if direct dependency between `dependent`
- * and `dependency` was introduced.
- *
- * It looks only downstream from `dependent` (only its descendants are considered).
- *
- * @param {TermDependencyGraph} graph
- * @param {number} dependent
- * @param {number} dependency
- * @param {boolean} isRoot - this flag is used to recognize that recursive call is not the first one
- * (on root) because that's a special case which has to be handled differently.
- * @returns {TermDependencyGraph}
- */
+// Remove direct dependencies which would become redundant if direct dependency between `dependent`
+// and `dependency` was introduced.
+// It looks only downstream from `dependent` (only its descendants are considered).
 const normalizeDownwards = (graph, dependent, dependency, isRoot = false) => {
   if (!isRoot && TermDependencyGraph.hasDirectDependency(graph, dependent, dependency)) {
     return removeDirectDependency(graph, dependent, dependency)
@@ -168,14 +125,7 @@ const normalizeDownwards = (graph, dependent, dependency, isRoot = false) => {
   )
 }
 
-/**
- * Remove direct dependency if it exists.
- *
- * @param {TermDependencyGraph} graph
- * @param {number} dependent
- * @param {number} dependency
- * @returns {TermDependencyGraph}
- */
+// Remove direct dependency between `dependent` and `dependency` if it exists.
 const removeDirectDependency = (graph, dependent, dependency) => {
   const dependencies = graph[dependent]
   if (dependencies === undefined) return graph

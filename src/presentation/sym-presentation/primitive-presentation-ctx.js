@@ -9,7 +9,7 @@ import {
 } from '../../primitive-syms'
 import { SymPresentation, SyntacticInfo } from './sym-presentation'
 
-/** Presentations for all primitive symbols. */
+// Presentations for all primitive symbols organized by symbol ids.
 export const primitivePresentationCtx = {
   [negation.id]: SymPresentation({
     ascii: SyntacticInfo.prefix('~'),

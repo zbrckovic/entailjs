@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { Expression } from '../../abstract-structures/expression'
 import { Category, Kind, Sym } from '../../abstract-structures/sym'
 import { createError, ErrorName } from '../../error'
@@ -11,56 +10,34 @@ import {
 } from '../../presentation/sym-presentation'
 import { isBracketed } from '../peg/ast-formula'
 
-export class AstProcessor {
-  get syms() {
-    return this._syms
-  }
+export const AstProcessor = ({
+  // All symbols by their ids.
+  syms,
+  // Presentations by symbol ids.
+  presentationCtx,
+  // Symbols by their ascii representation texts (for optimization).
+  textToSymMap = createTextToSymMap(presentationCtx, syms),
+  // Used when new symbol must be introduced to decide about its id (for optimization).
+  maxSymId = getMaxSymId(textToSymMap)
+}) => {
+  // Processes formula AST (returned from peg parser) and tries to construct expression (more
+  // precisely it returns a formula because parser accepts only formula expressions).
+  const process = (ast, kind = Kind.Formula) => {
+    if (isBracketed(ast)) return process(ast.expression, kind)
 
-  get presentationCtx() {
-    return this._presentationCtx
-  }
+    const childrenAsts = ast.children
+    const arity = childrenAsts.length
 
-  get textToSymMap() {
-    return this._textToSymMap
-  }
+    const mainSym = textToSymMap[ast.sym] ??
+      createSym(kind, arity, ast.boundSym !== undefined, ast.sym, ast.symPlacement)
 
-  get maxSymId() {
-    return this._maxSymId
-  }
-
-  /**
-   * @param syms - syms by id
-   * @param presentationCtx - presentationsById
-   * @param textToSymMap - For optimization
-   * @param maxSymId - For optimization
-   */
-  constructor(syms, presentationCtx, textToSymMap, maxSymId) {
-    this._syms = syms
-    this._presentationCtx = presentationCtx
-    this._textToSymMap = textToSymMap ?? createTextToSymMap(this._presentationCtx)
-    this._maxSymId = maxSymId ?? getMaxSymId(this._textToSymMap)
-  }
-
-  process(ast, kind = Kind.Formula) {
-    if (isBracketed(ast)) return this.process(ast.expression, kind)
-
-    const childrenAsts = List(ast.children)
-    const arity = childrenAsts.size
-
-    const mainSym = this._textToSymMap.get(ast.sym) ??
-      this._createSym(kind, arity, ast.boundSym !== undefined, ast.sym, ast.symPlacement)
-
-    const mainSymPresentation = this._presentationCtx[mainSym.id]
+    const mainSymPresentation = presentationCtx[mainSym.id]
 
     if (mainSymPresentation.ascii.placement !== ast.symPlacement) {
       throw createError(
         ErrorName.INVALID_SYMBOL_PLACEMENT,
         undefined,
-        {
-          sym: mainSym,
-          presentation: mainSymPresentation,
-          placement: ast.symPlacement
-        }
+        { sym: mainSym, presentation: mainSymPresentation, placement: ast.symPlacement }
       )
     }
 
@@ -68,38 +45,27 @@ export class AstProcessor {
       throw createError(
         ErrorName.INVALID_ARITY,
         undefined,
-        {
-          sym: mainSym,
-          presentation: mainSymPresentation,
-          arity
-        }
+        { sym: mainSym, presentation: mainSymPresentation, arity }
       )
     }
     if (mainSym.kind !== kind) {
       throw createError(
         ErrorName.INVALID_SYMBOL_KIND,
         undefined,
-        {
-          sym: mainSym,
-          presentation: mainSymPresentation,
-          kind
-        }
+        { sym: mainSym, presentation: mainSymPresentation, kind }
       )
     }
 
     let boundSym
     if (ast.boundSym !== undefined) {
-      boundSym = this._textToSymMap[ast.boundSym.id]
+      boundSym = textToSymMap[ast.boundSym.id]
 
       if (boundSym !== undefined) {
         if (Sym.getCategory(boundSym) !== Category.TT) {
           throw createError(
             ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
             undefined,
-            {
-              sym: boundSym,
-              presentation: this._presentationCtx[boundSym.id]
-            }
+            { sym: boundSym, presentation: presentationCtx[boundSym.id] }
           )
         }
 
@@ -107,66 +73,68 @@ export class AstProcessor {
           throw createError(
             ErrorName.INVALID_BOUND_SYMBOL_ARITY,
             undefined,
-            {
-              sym: boundSym,
-              presentation: this._presentationCtx[boundSym.id]
-            }
+            { sym: boundSym, presentation: presentationCtx[boundSym.id] }
           )
         }
       } else {
-        boundSym = this._createSym(Kind.Term, 0, false, ast.boundSym, Placement.Prefix)
+        boundSym = createSym(Kind.Term, 0, false, ast.boundSym, Placement.Prefix)
       }
     }
 
-    return Expression.create({
+    return Expression({
       sym: mainSym,
       boundSym: boundSym,
-      children: childrenAsts.map(childAst => this.process(childAst, mainSym.argumentKind))
+      children: childrenAsts.map(childAst => process(childAst, mainSym.argumentKind))
     })
   }
 
-  _createSym(kind, arity, binds, text, placement) {
-    const argumentKind = AstProcessor._determineArgumentKind(kind, text)
-    const id = this.maxSymId + 1
-    const sym = Sym.create({ id, kind, argumentKind, arity, binds })
-    const symPresentation = SymPresentation.create({
-      ascii: SyntacticInfo.create({ text, placement })
-    })
+  // Updates internal state by adding new association between symbol and its presentation.
+  const addPresentation = (sym, presentation) => {
+    syms = { ...syms, [sym.id]: sym }
+    presentationCtx = { ...presentationCtx, [sym.id]: presentation }
+    textToSymMap = { ...textToSymMap, [presentation.ascii.text]: sym }
+    maxSymId = Math.max(maxSymId, sym.id)
+  }
 
-    this._syms = { ...this._syms, [sym.id]: sym }
-    this._textToSymMap = { ...this._textToSymMap, [text]: sym }
-    this._presentationCtx = { ...this._presentationCtx, [sym.id]: symPresentation }
-    this._maxSymId = id
+  // Creates new symbol, generates new id for it, updates internal state according to new symbol
+  // addition and returns newly created symbol.
+  const createSym = (kind, arity, binds, text, placement) => {
+    const argumentKind = determineArgumentKind(kind, text)
+    const id = maxSymId + 1
+    const sym = Sym({ id, kind, argumentKind, arity, binds })
+    const presentation = SymPresentation({ ascii: SyntacticInfo({ text, placement }) })
+
+    addPresentation(sym, presentation)
 
     return sym
   }
 
-  static _determineArgumentKind(kind, text) {
-    switch (kind) {
-      case Kind.Formula: {
-        if (AstProcessor._isUpperWord(text)) return Kind.Term
-        if (AstProcessor._isLowerWord(text)) return Kind.Formula
-        break
-      }
-      case Kind.Term: {
-        if (AstProcessor._isLowerWord(text)) return Kind.Term
-        break
-      }
-    }
-  }
+  const getSym = text => textToSymMap[text]
 
-  static _isUpperWord(text) { return /^[A-Z]\w*/.test(text) }
-
-  static _isLowerWord(text) { return /^[a-z]\w*/.test(text) }
-
-  addPresentation(sym, presentation) {
-    this._syms = { ...this._syms, [sym.id]: sym }
-    this._presentationCtx = { ...this.presentationCtx, [sym.id]: presentation }
-    this._textToSymMap = { ...this.textToSymMap, [presentation.ascii.text]: sym }
-    this._maxSymId = Math.max(this.maxSymId, sym.id)
-  }
-
-  getSym(text) {
-    return this.textToSymMap[text]
+  return {
+    process,
+    getSym,
+    addPresentation,
+    get syms() { return syms },
+    get presentationCtx() { return presentationCtx },
+    get textToSymMap() { return textToSymMap },
+    get maxSymId() { return maxSymId }
   }
 }
+
+const determineArgumentKind = (kind, text) => {
+  switch (kind) {
+    case Kind.Formula: {
+      if (isUpperWord(text)) return Kind.Term
+      if (isLowerWord(text)) return Kind.Formula
+      break
+    }
+    case Kind.Term: {
+      if (isLowerWord(text)) return Kind.Term
+      break
+    }
+  }
+}
+
+const isUpperWord = text => /^[A-Z]\w*/.test(text)
+const isLowerWord = text => /^[a-z]\w*/.test(text)

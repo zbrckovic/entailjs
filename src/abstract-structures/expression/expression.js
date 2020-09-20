@@ -3,20 +3,19 @@ import * as _ from 'lodash'
 import { createError, ErrorName } from '../../error'
 import { Kind } from '../sym'
 
-/**
- * Abstract tree-like structure which is used to represents formulas and terms.
- */
+// Abstract tree-like structure which is used to represents formulas and terms.
 export const Expression = {
   create: ({
-    /** Main symbol */
+    // Main symbol of this expression.
     sym,
-    /**
-     * Bound symbol
-     *
-     * In first-order logic this will always be nullary term (individual variable), but here we are
-     * at a higher level of abstraction and don't make this assumption.
-     */
+
+    // Optional bound symbol which will exists if `sym`'s `binds` is true. In first-order logic
+    // `boundSym` will always be a nullary term symbol (individual variable), but here we are at a
+    // higher level of abstraction and don't make this assumption.
     boundSym,
+
+    // Array of subexpressions whose length will match `sym`'s arity and their kinds will match
+    // `sym`'s `argumentKind`
     children = []
   }) => ({ sym, boundSym, children }),
 
@@ -77,8 +76,10 @@ export const Expression = {
     expression,
     position,
     newSym,
-    getBoundSym, // called if new sym binds, but old one didnt
-    getChild // called if new sym has larger arity from old one
+    // This is called if new sym binds, but old one didnt.
+    getBoundSym,
+    // This called if new sym has larger arity from old one.
+    getChild
   ) =>
     Expression.updateSubexpression(expression, position, subexpression => {
       const { sym, boundSym, children } = subexpression

@@ -1,5 +1,5 @@
 import { Range } from 'immutable'
-import * as _ from 'lodash'
+import _ from 'lodash'
 import { createError, ErrorName } from '../../error'
 import { Kind } from '../sym'
 

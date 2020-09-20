@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 // ASCII and unicode presentation of a symbol. ASCII presentation is intended to be used in plain
 // text environments, while unicode is primarily intended for GUI and generated documents.

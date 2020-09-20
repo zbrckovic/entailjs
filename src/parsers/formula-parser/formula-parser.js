@@ -4,17 +4,29 @@ import { AstProcessor } from './ast-processor'
 export const FormulaParser = ({ syms, presentationCtx }) => {
   const astProcessor = AstProcessor({ syms, presentationCtx })
 
-  const parse = text => astProcessor.process(parseFormula(text))
+  const parse = text => {
+    const ast = parseFormula(text)
+    return astProcessor.process(ast)
+  }
+
+  const {
+    createSym,
+    addPresentation,
+    getSym,
+    getSyms,
+    getPresentationCtx,
+    getTextToSymMap,
+    getMaxSymId
+  } = astProcessor
 
   return ({
-    get syms() {
-      return astProcessor.syms
-    },
-    presentationCtx: astProcessor.presentationCtx,
-    textToSymMap: astProcessor.textToSymMap,
-    maxSymId: astProcessor.maxSymId,
     parse,
-    getSym: astProcessor.getSym,
-    addPresentation: astProcessor.addPresentation
+    createSym,
+    addPresentation,
+    getSym,
+    getSyms,
+    getPresentationCtx,
+    getTextToSymMap,
+    getMaxSymId
   })
 }

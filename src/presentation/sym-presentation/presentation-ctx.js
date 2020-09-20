@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 // **Presentation context** or is a mapping between symbol ids and their presentations.
 
 // Organizes symbols by their ASCII text presentations. It's assumed that each presentation in
@@ -5,7 +7,7 @@
 // it should contain all symbols whose ids appear in `presentationCtx`. The result is useful to the
 // parser which needs a quick access to the symbol represented by some text it encountered.
 export const createTextToSymMap = (presentationCtx, syms) =>
-  Object.fromEntries(
+  _.fromPairs(
     Object
       .entries(presentationCtx)
       .map(([id, { ascii: { text } }]) => [text, syms[id]])

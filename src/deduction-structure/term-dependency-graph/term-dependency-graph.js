@@ -1,9 +1,9 @@
 import { createError, ErrorName } from '../../error'
 
-// `TermDependencyGraph` is a mapping between a symbol id (dependent) and a set of symbol ids on
+// `TermDependencyGraph` is a mapping between symbol's id (dependent) and a set of symbol ids on
 // which it depends on (dependencies). It's important to note that `TermDependencyGraph` contains
-// only ids, not the actual symbols. Whenever a symbol is mentioned in this code, it's the id, not
-// the actual symbol object we are talking about.
+// only ids, not the actual symbols. Whenever we mention a symbol in this code or in comments,
+// it's the id, not the actual symbol object we are talking about.
 export const TermDependencyGraph = ({ ...props } = {}) => ({ ...props })
 
 // Add direct dependency between `dependent` and `dependencies` and normalize the graph.

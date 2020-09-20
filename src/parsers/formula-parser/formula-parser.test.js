@@ -1,5 +1,4 @@
-import { Set } from 'immutable'
-import * as _ from 'lodash'
+import _ from 'lodash'
 import { Expression } from '../../abstract-structures/expression'
 import { Sym } from '../../abstract-structures/sym'
 import { ErrorName } from '../../error'
@@ -23,60 +22,73 @@ beforeEach(() => {
 })
 
 test('parse(\'p\')', () => {
-  const sym = Sym.ff({ id: parser.maxSymId + 1 })
+  const sym = Sym.ff({ id: parser.getMaxSymId() + 1 })
 
   const expectedFormula = Expression({ sym })
   const expectedAddedSyms = { [sym.id]: sym }
 
   const formula = parser.parse('p')
 
-  const addedSyms = _.pickBy(parser.syms, (sym, id) => primitiveSyms[id] === undefined)
+  const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
   expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
 test('parse(\'p -> q\')', () => {
-  const symP = Sym.ff({ id: parser.maxSymId + 1 })
-  const symQ = Sym.ff({ id: parser.maxSymId + 2 })
+  const maxSymId = parser.getMaxSymId()
+
+  const symP = Sym.ff({ id: maxSymId + 1 })
+  const symQ = Sym.ff({ id: maxSymId + 2 })
 
   const expectedFormula = Expression({
     sym: implication,
     children: [Expression({ sym: symP }), Expression({ sym: symQ })]
   })
 
-  const expectedAddedSyms = { [symP.id]: symP, [symQ.id]: symQ }
+  const expectedAddedSyms = {
+    [symP.id]: symP,
+    [symQ.id]: symQ
+  }
 
   const formula = parser.parse('p -> q')
 
-  const addedSyms = _.pickBy(parser.syms, (sym, id) => primitiveSyms[id] === undefined)
+  const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
   expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
 test('parse(\'F(x, y)\')', () => {
-  const symF = Sym.ft({ id: parser.maxSymId + 1, arity: 2 })
-  const symX = Sym.tt({ id: parser.maxSymId + 2 })
-  const symY = Sym.tt({ id: parser.maxSymId + 3 })
+  const maxSymId = parser.getMaxSymId()
+
+  const symF = Sym.ft({ id: maxSymId + 1, arity: 2 })
+  const symX = Sym.tt({ id: maxSymId + 2 })
+  const symY = Sym.tt({ id: maxSymId + 3 })
 
   const expectedFormula = Expression({
     sym: symF,
     children: [Expression({ sym: symX }), Expression({ sym: symY })]
   })
 
-  const expectedAddedSyms = { [symF.id]: symF, [symX.id]: symX, [symY.id]: symY }
+  const expectedAddedSyms = {
+    [symF.id]: symF,
+    [symX.id]: symX,
+    [symY.id]: symY
+  }
 
   const formula = parser.parse('F(x, y)')
-  const addedSyms = _.pickBy(parser.syms, (sym, id) => primitiveSyms[id] === undefined)
+  const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
   expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
 test('parse(\'A[x] F(x)\')', () => {
-  const symX = Sym.tt({ id: parser.maxSymId + 1 })
-  const symF = Sym.ft({ id: parser.maxSymId + 2, arity: 1 })
+  const maxSymId = parser.getMaxSymId()
+
+  const symX = Sym.tt({ id: maxSymId + 1 })
+  const symF = Sym.ft({ id: maxSymId + 2, arity: 1 })
 
   const expectedFormula = Expression({
     sym: universalQuantifier,
@@ -89,20 +101,25 @@ test('parse(\'A[x] F(x)\')', () => {
     ]
   })
 
-  const expectedAddedSyms = Set.of(symF, symX)
+  const expectedAddedSyms = {
+    [symF.id]: symF,
+    [symX.id]: symX
+  }
 
   const formula = parser.parse('A[x] F(x)')
-  const addedSyms = _.pickBy(parser.syms, (sym, id) => primitiveSyms[id] === undefined)
+  const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
   expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
 test('parse(\'A[x] E[y] (F(x, y) -> ~G(y, x))\'', () => {
-  const symX = Sym.tt({ id: parser.maxSymId + 1 })
-  const symY = Sym.tt({ id: parser.maxSymId + 2 })
-  const symF = Sym.ft({ id: parser.maxSymId + 3, arity: 2 })
-  const symG = Sym.ft({ id: parser.maxSymId + 4, arity: 2 })
+  const maxSymId = parser.getMaxSymId()
+
+  const symX = Sym.tt({ id: maxSymId + 1 })
+  const symY = Sym.tt({ id: maxSymId + 2 })
+  const symF = Sym.ft({ id: maxSymId + 3, arity: 2 })
+  const symG = Sym.ft({ id: maxSymId + 4, arity: 2 })
 
   const expectedFormula = Expression({
     sym: universalQuantifier,
@@ -141,10 +158,15 @@ test('parse(\'A[x] E[y] (F(x, y) -> ~G(y, x))\'', () => {
     ]
   })
 
-  const expectedAddedSyms = Set.of(symF, symG, symY, symX)
+  const expectedAddedSyms = {
+    [symF.id]: symF,
+    [symG.id]: symG,
+    [symY.id]: symY,
+    [symX.id]: symX
+  }
 
   const formula = parser.parse('A[x] E[y] (F(x, y) -> ~G(y, x))')
-  const addedSyms = _.pickBy(parser.syms, (sym, id) => primitiveSyms[id] === undefined)
+  const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
   expect(addedSyms).toEqual(expectedAddedSyms)
@@ -152,24 +174,26 @@ test('parse(\'A[x] E[y] (F(x, y) -> ~G(y, x))\'', () => {
 
 test(`parse('~x') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
   const text = '~x'
+  const symX = Sym.tt({ id: parser.getMaxSymId() + 1 })
   const presentationX = SymPresentation({ ascii: SyntacticInfo.prefix('x') })
-  parser.addPresentation(Sym.tt(), presentationX)
+  parser.addPresentation(symX, presentationX)
 
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
 test(`parse('F(x)') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
   const text = 'F(x)'
+  const symX = Sym.ff({ id: parser.getMaxSymId() + 1 })
   const presentationX = SymPresentation({ ascii: SyntacticInfo.prefix('x') })
-  parser.addPresentation(Sym.ff(), presentationX)
+  parser.addPresentation(symX, presentationX)
 
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
 test(`parse('A[x] p') throws ${ErrorName.INVALID_BOUND_SYMBOL_CATEGORY}`, () => {
   const text = 'A[x] p'
+  const symX = Sym.ff({ id: parser.getMaxSymId() + 1 })
   const presentationX = SymPresentation({ ascii: SyntacticInfo.prefix('x') })
-  const symX = parser.addPresentation(Sym.ff(), presentationX)
   parser.addPresentation(symX, presentationX)
 
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_BOUND_SYMBOL_CATEGORY)

@@ -20,8 +20,9 @@ export const AstProcessor = ({
   // Used when new symbol must be introduced to decide about its id (for optimization).
   maxSymId = getMaxSymId(textToSymMap)
 }) => {
-  // Processes formula AST (returned from peg parser) and tries to construct expression (more
-  // precisely it returns a formula because parser accepts only formula expressions).
+  // Processes formula AST (returned from peg parser) and tries to construct an expression (more
+  // precisely it tries to construct a formula because parser accepts only formula expressions). If
+  // it can't, throws an error.
   const process = (ast, kind = Kind.Formula) => {
     if (isBracketed(ast)) return process(ast.expression, kind)
 
@@ -58,7 +59,7 @@ export const AstProcessor = ({
 
     let boundSym
     if (ast.boundSym !== undefined) {
-      boundSym = textToSymMap[ast.boundSym.id]
+      boundSym = textToSymMap[ast.boundSym]
 
       if (boundSym !== undefined) {
         if (Sym.getCategory(boundSym) !== Category.TT) {
@@ -109,16 +110,16 @@ export const AstProcessor = ({
     return sym
   }
 
-  const getSym = text => textToSymMap[text]
-
   return {
     process,
-    getSym,
+    createSym,
     addPresentation,
-    get syms() { return syms },
-    get presentationCtx() { return presentationCtx },
-    get textToSymMap() { return textToSymMap },
-    get maxSymId() { return maxSymId }
+    // Gets symbol associated with `text`.
+    getSym: text => textToSymMap[text],
+    getSyms: () => syms,
+    getPresentationCtx: () => presentationCtx,
+    getTextToSymMap: () => textToSymMap,
+    getMaxSymId: () => maxSymId
   }
 }
 

@@ -1,4 +1,3 @@
-import { is } from 'immutable'
 import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'

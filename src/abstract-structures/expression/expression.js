@@ -1,4 +1,3 @@
-import { Range } from 'immutable'
 import _ from 'lodash'
 import { createError, ErrorName } from '../../error'
 import { Kind } from '../sym'
@@ -113,7 +112,8 @@ Expression.findBoundOccurrences = expression => {
     throw createError(ErrorName.EXPRESSION_DOESNT_BIND, undefined, this)
   }
 
-  return expression.children.flatMap(
+  return _.flatMap(
+    expression.children,
     (child, i) =>
       Expression
         .findFreeOccurrences(child, boundSym)
@@ -124,13 +124,16 @@ Expression.findBoundOccurrences = expression => {
 Expression.replaceFreeOccurrences = (expression, sym, newSym, getBoundSym, getChild) =>
   Expression
     .findFreeOccurrences(expression, sym)
-    .reduce((acc, position) => Expression.replaceSymAt(
-      acc,
-      position,
-      newSym,
-      getBoundSym === undefined ? undefined : () => getBoundSym(position),
-      getChild === undefined ? undefined : () => getChild(position)
-    ), expression)
+    .reduce(
+      (intermediateExpression, position) => Expression.replaceSymAt(
+        intermediateExpression,
+        position,
+        newSym,
+        getBoundSym === undefined ? undefined : () => getBoundSym(position),
+        getChild === undefined ? undefined : () => getChild(position)
+      ),
+      expression
+    )
 
 Expression.replaceBoundOccurrences = (expression, newSym) => {
   const expressionWithReplacedBoundOccurrences = Expression
@@ -170,7 +173,7 @@ Expression.getFreeSyms = (expression, boundSyms = {}) => {
   }
 
   if (expression.boundSym !== undefined) {
-    boundSyms = { [expression.boundSym.id]: expression.boundSym }
+    boundSyms = { ...boundSyms, [expression.boundSym.id]: expression.boundSym }
   }
 
   expression.children.forEach(child => {
@@ -193,25 +196,29 @@ Expression.findBoundSymsAtFreeOccurrencesOfSym = (expression, sym, bound = {}) =
 
   if (expression.boundSym !== undefined) {
     if (expression.boundSym.id === sym.id) return result
-    bound.push(expression.boundSym)
+    bound[expression.boundSym.id] = expression.boundSym
   }
 
-  return expression.children.reduce(
-    (acc, child) => acc.union(Expression.findBoundSymsAtFreeOccurrencesOfSym(child, sym, bound)),
-    result
-  )
+  expression.children.forEach(child => {
+    const boundSymsAtFreeOccurrencesOfSym =
+      Expression.findBoundSymsAtFreeOccurrencesOfSym(child, sym, bound)
+
+    Object.assign(result, boundSymsAtFreeOccurrencesOfSym)
+  })
+
+  return result
 }
 
 const resolveChildren = (oldSym, newSym, oldChildren, getChild) => {
   if (oldSym.argumentKind !== newSym.argumentKind) {
     if (getChild === undefined) throw new Error('getChild not present')
-    return Range(0, newSym.arity).map(getChild).toList()
+    return _.range(0, newSym.arity).map(getChild)
   }
 
-  if (oldChildren.size >= newSym.arity) {
+  if (oldChildren.length >= newSym.arity) {
     return oldChildren.slice(0, newSym.arity)
   } else {
     if (getChild === undefined) throw new Error('getChild not present')
-    return oldChildren.concat(Range(oldChildren.size, newSym.arity).map(getChild))
+    return oldChildren.concat(_.range(oldChildren.length, newSym.arity).map(getChild))
   }
 }

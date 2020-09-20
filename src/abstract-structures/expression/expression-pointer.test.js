@@ -6,7 +6,12 @@ import { primitiveSyms } from '../../primitive-syms'
 import { ExpressionPointer } from './expression-pointer'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
+beforeEach(() => {
+  parser = FormulaParser({
+    syms: primitiveSyms,
+    presentationCtx: primitivePresentationCtx
+  })
+})
 
 test(`#getParentPointer() throws ${ErrorName.CANT_GET_PARENT_OF_ROOT} for root.`, () => {
   const expression = parser.parse('p')

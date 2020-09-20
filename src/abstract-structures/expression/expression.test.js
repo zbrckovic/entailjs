@@ -1,24 +1,29 @@
-import { fromJS, List, Set } from 'immutable'
+import _ from 'lodash'
 import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
 import { primitiveSyms } from '../../primitive-syms'
+import { Expression } from './expression'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
+beforeEach(() => {
+  parser = FormulaParser({
+    syms: primitiveSyms,
+    presentationCtx: primitivePresentationCtx
+  })
+})
 
 test.each([
   ['p', [], 'p'],
   ['~p', [0], 'p'],
   ['p -> q', [1], 'q'],
   ['A[x] E[x] (F(x, y) -> F(y, x))', [0, 0, 1], 'F(y, x)']
-])('#getSubexpression(%s, %j) is %s', (formulaText, positionArray, expectedSubformulaText) => {
+])('#getSubexpression(%s, %j) is %s', (formulaText, position, expectedSubformulaText) => {
   const formula = parser.parse(formulaText)
-  const position = List(positionArray)
   const expectedSubformula = parser.parse(expectedSubformulaText)
-  const subformula = formula.getSubexpression(position)
+  const subformula = Expression.getSubexpression(formula, position)
 
-  expect(subformula.equals(expectedSubformula)).toBe(true)
+  expect(subformula).toEqual(expectedSubformula)
 })
 
 test.each([
@@ -29,13 +34,12 @@ test.each([
   ['A[x] F(y)', 'y', [[0, 0]]],
   ['A[x] F(x)', 'x', []],
   ['A[x] F(x, y) -> E[y] F(y, x)', 'x', [[1, 0, 1]]]
-])('#findFreeOccurrences(%s, %s) is %j', (text, symbol, expectedPositionsArray) => {
+])('#findFreeOccurrences(%s, %s) is %j', (text, symbol, expectedPositions) => {
   const formula = parser.parse(text)
   const sym = parser.getSym(symbol)
-  const expectedPositions = fromJS(expectedPositionsArray)
-  const positions = formula.findFreeOccurrences(sym)
+  const positions = Expression.findFreeOccurrences(formula, sym)
 
-  expect(positions.equals(expectedPositions)).toBe(true)
+  expect(positions).toEqual(expectedPositions)
 })
 
 test.each([
@@ -44,34 +48,34 @@ test.each([
 ])(`#findBoundOccurrences(%s) throws ${ErrorName.EXPRESSION_DOESNT_BIND}`, text => {
   const formula = parser.parse(text)
 
-  expect(() => { formula.findBoundOccurrences() }).toThrow(ErrorName.EXPRESSION_DOESNT_BIND)
+  expect(() => { Expression.findBoundOccurrences(formula) })
+    .toThrow(ErrorName.EXPRESSION_DOESNT_BIND)
 })
 
 test.each([
   ['A[x] F(x)', [[0, 0]]],
   ['A[x] E[x] F(x)', []],
   ['A[x] (E[x] F(y, x) -> F(y, x))', [[0, 1, 1]]]
-])('#findBoundOccurrences(%s) is %j', (text, expectedPositionsArray) => {
+])('#findBoundOccurrences(%s) is %j', (text, expectedPositions) => {
   const formula = parser.parse(text)
-  const expectedPositions = fromJS(expectedPositionsArray)
-  const positions = formula.findBoundOccurrences()
+  const positions = Expression.findBoundOccurrences(formula)
 
-  expect(positions.equals(expectedPositions)).toBe(true)
+  expect(positions).toEqual(expectedPositions)
 })
 
 test.each([
   ['p', [], ['p']],
   ['~p', [0], ['~p', 'p']],
   ['A[x] (F(x) -> G(x))', [0, 1], ['A[x] (F(x) -> G(x))', 'F(x) -> G(x)', 'G(x)']]
-])('#getSubexpressionsOnPath(%s, %j) is %s', (text, pathArray, expectedFormulasTexts) => {
+])('#getSubexpressionsOnPath(%s, %j) is %s', (text, path, expectedFormulasTexts) => {
   const formula = parser.parse(text)
-  const path = List(pathArray)
-  const expectedFormulas = List(
-    expectedFormulasTexts.map(expectedFormulaText => parser.parse(expectedFormulaText))
+  const expectedFormulas = expectedFormulasTexts.map(
+    expectedFormulaText => parser.parse(expectedFormulaText)
   )
-  const formulas = formula.getSubexpressionsOnPath(path)
 
-  expect(formulas.equals(expectedFormulas)).toBe(true)
+  const formulas = Expression.getSubexpressionsOnPath(formula, path)
+
+  expect(formulas).toEqual(expectedFormulas)
 })
 
 test.each([
@@ -103,9 +107,11 @@ test.each([
     const newSym = parser.getSym(newSymText)
     const getBoundSym = () => parser.getSym(getBoundSymText())
     const getChild = () => parser.parse(getChildText())
-    const newFormula = oldFormula.replaceFreeOccurrences(oldSym, newSym, getBoundSym, getChild)
+    const newFormula = Expression.replaceFreeOccurrences(
+      oldFormula, oldSym, newSym, getBoundSym, getChild
+    )
 
-    expect(newFormula.equals(expectedNewFormula)).toBe(true)
+    expect(newFormula).toEqual(expectedNewFormula)
   }
 )
 
@@ -118,9 +124,9 @@ test.each([
     const oldFormula = parser.parse(oldFormulaText)
     const expectedNewFormula = parser.parse(expectedNewFormulaText)
     const sym = parser.getSym(symText)
-    const newFormula = oldFormula.replaceBoundOccurrences(sym)
+    const newFormula = Expression.replaceBoundOccurrences(oldFormula, sym)
 
-    expect(newFormula.equals(expectedNewFormula)).toBe(true)
+    expect(newFormula).toEqual(expectedNewFormula)
   }
 )
 
@@ -129,14 +135,13 @@ test.each([
   ['A[x] (E[x] F(x) -> F(x))', 'y', [0, 0], 'A[x] (E[y] F(y) -> F(x))']
 ])(
   '#replaceBoundOccurrencesAt(%s, %s, %j) is %s',
-  (oldFormulaText, symbolText, positionArray, expectedNewFormulaText) => {
+  (oldFormulaText, symbolText, position, expectedNewFormulaText) => {
     const oldFormula = parser.parse(oldFormulaText)
     const expectedNewFormula = parser.parse(expectedNewFormulaText)
     const sym = parser.getSym(symbolText)
-    const position = List(positionArray)
-    const newFormula = oldFormula.replaceBoundOccurrencesAt(position, sym)
+    const newFormula = Expression.replaceBoundOccurrencesAt(oldFormula, position, sym)
 
-    expect(newFormula.equals(expectedNewFormula)).toBe(true)
+    expect(newFormula).toEqual(expectedNewFormula)
   }
 )
 
@@ -148,10 +153,14 @@ test.each([
   ['A[x] F(x, y) -> E[y] F(y, x)', ['A', 'E', '->', 'F', 'x', 'y']]
 ])('#getSyms(%s) is %j', (formulaText, symsTexts) => {
   const formula = parser.parse(formulaText)
-  const expectedSyms = Set(symsTexts.map(symText => parser.getSym(symText)))
-  const syms = formula.getSyms()
+  const expectedSyms = _.fromPairs(
+    symsTexts
+      .map(symText => parser.getSym(symText))
+      .map(sym => ([sym.id, sym]))
+  )
+  const syms = Expression.getSyms(formula)
 
-  expect(syms.equals(expectedSyms)).toBe(true)
+  expect(syms).toEqual(expectedSyms)
 })
 
 test.each([
@@ -162,10 +171,14 @@ test.each([
   ['A[x] F(x) -> E[y] G(y, x)', ['A', 'E', 'F', 'G', '->', 'x']]
 ])('#getFreeSyms(%s) is %j', (formulaText, symsTexts) => {
   const formula = parser.parse(formulaText)
-  const expectedSyms = Set(symsTexts.map(symText => parser.getSym(symText)))
-  const syms = formula.getFreeSyms()
+  const expectedSyms = _.fromPairs(
+    symsTexts
+      .map(symText => parser.getSym(symText))
+      .map(sym => ([sym.id, sym]))
+  )
+  const syms = Expression.getFreeSyms(formula)
 
-  expect(syms.equals(expectedSyms)).toBe(true)
+  expect(syms).toEqual(expectedSyms)
 })
 
 test.each([
@@ -176,8 +189,12 @@ test.each([
 ])('#findBoundSymsAtFreeOccurrencesOfSym(%s) is %j', (formulaText, symText, symsTexts) => {
   const formula = parser.parse(formulaText)
   const sym = parser.getSym(symText)
-  const expectedSyms = Set(symsTexts.map(symText => parser.getSym(symText)))
-  const syms = formula.findBoundSymsAtFreeOccurrencesOfSym(sym)
+  const expectedSyms = _.fromPairs(
+    symsTexts
+      .map(symText => parser.getSym(symText))
+      .map(sym => [sym.id, sym])
+  )
+  const syms = Expression.findBoundSymsAtFreeOccurrencesOfSym(formula, sym)
 
-  expect(syms.equals(expectedSyms)).toBe(true)
+  expect(syms).toEqual(expectedSyms)
 })

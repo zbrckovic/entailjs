@@ -121,7 +121,7 @@ export const GeneralizationRuleInterface = (deduction, stepIndex, concreteApply)
   const apply = (newTerm, oldTerm) => {
     const substitutionRequired = !Sym.equals(newTerm, oldTerm)
     if (substitutionRequired) {
-      if (premise.getFreeSyms().contains(newTerm)) {
+      if (Expression.getFreeSyms(premise)[newTerm.id] !== undefined) {
         throw createError(ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS)
       }
 

@@ -1,4 +1,4 @@
-import { Rule } from '../../deduction-structure'
+import { Deduction, Rule } from '../../deduction-structure'
 import { existentialQuantifier, universalQuantifier } from '../../primitive-syms'
 import { DeductionRuleInterface } from './deduction-rule-interface'
 import { PremiseRuleInterface } from './premise-rule-interface'
@@ -10,6 +10,7 @@ import {
 } from './quantification'
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
 import { TheoremRuleInterface } from './theorem-rule-interface'
+import { Sym } from '../../abstract-structures/sym'
 
 // Accept deduction and selected steps (step indexes), determine possible rules which could be
 // applied and return interfaces for their application.
@@ -24,11 +25,11 @@ export const RulesInterface = (deduction, ...steps) => {
   } else if (steps.length === 1) {
     const [step] = steps
 
-    const premise = deduction.getStep(step).formula
+    const premise = Deduction.getStep(deduction, step).formula
 
-    if (premise.sym.equals(universalQuantifier)) {
+    if (Sym.equals(premise.sym, universalQuantifier)) {
       result[Rule.UniversalInstantiation] = UniversalInstantiationRuleInterface(deduction, step)
-    } else if (premise.sym.equals(existentialQuantifier)) {
+    } else if (Sym.equals(premise.sym, existentialQuantifier)) {
       result[Rule.ExistentialInstantiation] = ExistentialInstantiationRuleInterface(deduction, step)
     }
 
@@ -36,7 +37,7 @@ export const RulesInterface = (deduction, ...steps) => {
     result[Rule.ExistentialGeneralization] = ExistentialGeneralizationRuleInterface(deduction, step)
   } else if (steps.length === 2) {
     const [firstStepIndex, secondStepIndex] = steps
-    const [firstStep, secondStep] = steps.map(i => deduction.getStep(i))
+    const [firstStep, secondStep] = steps.map(i => Deduction.getStep(deduction, i))
 
     const firstStepIsPremise = firstStep.ruleApplicationSummary.rule === Rule.Premise
     const firstIsAssumptionForSecond = secondStep.assumptions.has(firstStepIndex)

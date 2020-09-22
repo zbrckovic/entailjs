@@ -1,136 +1,139 @@
-import { List, OrderedSet, Record } from 'immutable'
 import { Expression } from '../../abstract-structures/expression'
 import { existentialQuantifier, implication, universalQuantifier } from '../../primitive-syms'
 import { Rule } from '../rule'
-import { TermDependencies } from '../term-dependency-graph/term-dependencies'
 
-/**
- * Contains all information necessary to apply a regular rule (not theorem rule) against a
- * deduction.
- *
- * Notes:
- * - Deduction to which the rule will be applied we will call 'target deduction'.
- * - In the following lines we sometimes refer to formulas by numbers. Number in such contexts is
- *   the index of the target deduction's step which introduced the formula in question (as a result
- *   of the premise rule or theorem rule).
- *
- * All rules (except theorem) are reduced to this object. It contains all data necessary to
- * construct the next step of the target deduction. This object can be considered as some sort of a
- * common denominator of all regular rules.
- *
- * Note: static factory methods don't validate data!
- */
-export class RegularRuleApplicationSpec extends Record({
+// Contains all information necessary to apply a regular rule (not theorem rule) against a
+// deduction.
+//
+// Notes:
+// - Deduction to which the rule will be applied we will call 'target deduction'.
+// - In the following lines we sometimes refer to formulas by numbers. Number in such contexts is
+//   the index of the target deduction's step which introduced the formula in question (as a result
+//   of the premise rule or theorem rule).
+//
+// All rules (except theorem) are reduced to this object. It contains all data necessary to
+// construct the next step of the target deduction. This object can be considered as some sort of a
+// common denominator of all regular rules.
+//
+// Note: static factory methods don't validate data!
+const RegularRuleApplicationSpec = ({
+  rule = Rule.Premise,
+
+  // Formulas which will serve as the premises of this rule.
+  premises = [],
+
+  // Resulting formula which will be introduced in the next target deduction's step.
+  conclusion,
+
+  // Term dependencies with which to extend target deduction's term dependency graph.
+  termDependencies,
+
+  // Assumptions to remove from the inherited set of assumptions.
+  assumptionToRemove
+}) => ({ rule, premises, conclusion, termDependencies, assumptionToRemove })
+
+RegularRuleApplicationSpec.premise = premise => RegularRuleApplicationSpec({
   rule: Rule.Premise,
-  /** Formulas which will serve as the premises of this rule. */
-  premises: OrderedSet(),
-  /** Resulting formula which will be introduced in the next target deduction's step. */
-  conclusion: new Expression(),
-  /** Term dependencies with which to extend target deduction's term dependency graph. **/
-  termDependencies: undefined,
-  /** Assumptions to remove from the inherited set of assumptions. **/
-  assumptionToRemove: undefined
-}, 'RegularRuleApplicationSpec') {
-  static premise(premise) {
-    return new RegularRuleApplicationSpec({
-      rule: Rule.Premise,
-      conclusion: premise
-    })
+  conclusion: premise
+})
+
+RegularRuleApplicationSpec.deduction = (
+  antecedent, antecedentIndex, consequent, consequentIndex
+) =>
+  RegularRuleApplicationSpec({
+    rule: Rule.Deduction,
+    premises: [antecedentIndex, consequentIndex],
+    conclusion: Expression({
+      sym: implication,
+      children: [antecedent, consequent]
+    }),
+    assumptionToRemove: antecedentIndex
+  })
+
+RegularRuleApplicationSpec.tautologicalImplication = (premises, conclusion) =>
+  RegularRuleApplicationSpec({ rule: Rule.TautologicalImplication, premises, conclusion })
+
+RegularRuleApplicationSpec.universalInstantiation = (
+  { boundSym, children }, premiseIndex, newTerm
+) => {
+  const [child] = children
+
+  const conclusion = newTerm !== undefined
+    ? Expression.replaceFreeOccurrences(child, boundSym, newTerm)
+    : child
+
+  return RegularRuleApplicationSpec({
+    rule: Rule.UniversalInstantiation,
+    premises: [premiseIndex],
+    conclusion
+  })
+}
+
+RegularRuleApplicationSpec.universalGeneralization = (premise, premiseIndex, newTerm, oldTerm) => {
+  const child = oldTerm !== undefined
+    ? Expression.replaceFreeOccurrences(premise, oldTerm, newTerm)
+    : premise
+
+  let termDependencies
+  if (oldTerm !== undefined) {
+    const freeSyms = { ...Expression.getFreeTerms(premise) }
+    delete freeSyms[oldTerm.id]
+
+    const freeSymsIds = Object.keys(freeSyms).map(freeSym => parseInt(freeSym.id, 10))
+
+    termDependencies = { dependent: oldTerm.id, dependencies: new Set(freeSymsIds) }
   }
 
-  static deduction(antecedent, antecedentIndex, consequent, consequentIndex) {
-    return new RegularRuleApplicationSpec({
-      rule: Rule.Deduction,
-      premises: OrderedSet.of(antecedentIndex, consequentIndex),
-      conclusion: new Expression({
-        sym: implication,
-        children: List.of(antecedent, consequent)
-      }),
-      assumptionToRemove: antecedentIndex
-    })
+  return RegularRuleApplicationSpec({
+    rule: Rule.UniversalGeneralization,
+    premises: [premiseIndex],
+    conclusion: Expression({
+      sym: universalQuantifier,
+      boundSym: newTerm,
+      children: [child]
+    }),
+    termDependencies
+  })
+}
+
+RegularRuleApplicationSpec.existentialInstantiation = (premise, premiseIndex, newTerm) => {
+  const [child] = premise.children
+  const conclusion = newTerm !== undefined
+    ? Expression.replaceFreeOccurrences(child, premise.boundSym, newTerm)
+    : child
+
+  let termDependencies
+  if (newTerm !== undefined) {
+    const freeSyms = { ...Expression.getFreeSyms(conclusion) }
+    delete freeSyms[newTerm.id]
+
+    const freeSymsIds = Object.keys(freeSyms).map(freeSym => parseInt(freeSym.id, 10))
+
+    termDependencies = { dependent: newTerm.id, dependencies: new Set(freeSymsIds) }
   }
 
-  static tautologicalImplication(premises, conclusion) {
-    return new RegularRuleApplicationSpec({
-      rule: Rule.TautologicalImplication,
-      premises,
-      conclusion
+  return RegularRuleApplicationSpec({
+    rule: Rule.ExistentialInstantiation,
+    premises: [premiseIndex],
+    conclusion,
+    termDependencies
+  })
+}
+
+RegularRuleApplicationSpec.existentialGeneralization = (
+  premise, premiseIndex, newTerm, oldTerm
+) => {
+  const child = oldTerm !== undefined
+    ? Expression.replaceFreeOccurrences(premise, oldTerm, newTerm)
+    : premise
+
+  return RegularRuleApplicationSpec({
+    rule: Rule.ExistentialGeneralization,
+    premises: [premiseIndex],
+    conclusion: Expression({
+      sym: existentialQuantifier,
+      boundSym: newTerm,
+      children: [child]
     })
-  }
-
-  static universalInstantiation({ boundSym, children }, premiseIndex, newTerm) {
-    const child = children.get(0)
-    const conclusion = newTerm !== undefined
-      ? child.replaceFreeOccurrences(boundSym, newTerm)
-      : child
-
-    return new RegularRuleApplicationSpec({
-      rule: Rule.UniversalInstantiation,
-      premises: OrderedSet.of(premiseIndex),
-      conclusion
-    })
-  }
-
-  static universalGeneralization(premise, premiseIndex, newTerm, oldTerm) {
-    const child = oldTerm !== undefined
-      ? premise.replaceFreeOccurrences(oldTerm, newTerm)
-      : premise
-
-    return new RegularRuleApplicationSpec({
-      rule: Rule.UniversalGeneralization,
-      premises: OrderedSet.of(premiseIndex),
-      conclusion: new Expression({
-        sym: universalQuantifier,
-        boundSym: newTerm,
-        children: List.of(child)
-      }),
-      termDependencies: oldTerm !== undefined
-        ? premise
-          .getFreeTerms()
-          .remove(oldTerm)
-          .reduce(
-            (acc, dependencyTerm) => acc.addDependency(dependencyTerm),
-            new TermDependencies({ dependent: oldTerm })
-          )
-        : undefined
-    })
-  }
-
-  static existentialInstantiation({ boundSym, children }, premiseIndex, newTerm) {
-    const child = children.get(0)
-    const conclusion = newTerm !== undefined
-      ? child.replaceFreeOccurrences(boundSym, newTerm)
-      : child
-
-    return new RegularRuleApplicationSpec({
-      rule: Rule.ExistentialInstantiation,
-      premises: OrderedSet.of(premiseIndex),
-      conclusion,
-      termDependencies: newTerm !== undefined
-        ? conclusion
-          .getFreeTerms()
-          .remove(newTerm)
-          .reduce(
-            (acc, dependencyTerm) => acc.addDependency(dependencyTerm),
-            new TermDependencies({ dependent: newTerm })
-          )
-        : undefined
-    })
-  }
-
-  static existentialGeneralization(premise, premiseIndex, newTerm, oldTerm) {
-    const child = oldTerm !== undefined
-      ? premise.replaceFreeOccurrences(oldTerm, newTerm)
-      : premise
-
-    return new RegularRuleApplicationSpec({
-      rule: Rule.ExistentialGeneralization,
-      premises: OrderedSet.of(premiseIndex),
-      conclusion: new Expression({
-        sym: existentialQuantifier,
-        boundSym: newTerm,
-        children: List.of(child)
-      })
-    })
-  }
+  })
 }

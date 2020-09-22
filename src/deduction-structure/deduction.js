@@ -1,4 +1,3 @@
-import { List, Record } from 'immutable'
 import { Rule } from './rule'
 import {
   RegularRuleApplicationSummary,
@@ -7,123 +6,98 @@ import {
 import { Step } from './step'
 import { TermDependencyGraph } from './term-dependency-graph'
 
-/**
- * Structure containing all relevant information about some deduction (proof) carried out as a
- * sequence of steps.
- */
-export class Deduction extends Record({
-  steps: List(),
-  termDependencyGraph: new TermDependencyGraph()
-}, 'Deduction') {
-  get size() { return this.steps.size }
+// Structure containing all relevant information about some deduction (proof) carried out as a
+// sequence of steps.
+const Deduction = ({ steps = [], termDependencyGraph = TermDependencyGraph() }) => ({
+  steps, termDependencyGraph
+})
 
-  /**
-   * Derive new deduction by applying rule.
-   *
-   * @param ruleApplicationSpec - Specification of the rule to apply.
-   */
-  applyRule(ruleApplicationSpec) {
-    return ruleApplicationSpec.rule === Rule.Theorem
-      ? this._applyTheoremRule(ruleApplicationSpec)
-      : this._applyRegularRule(ruleApplicationSpec)
+Deduction.getSize = deduction => deduction.steps.length
+
+// Get step by its ordinal number. From regular user's perspective steps are referenced by positive
+// integers starting from 1. Internally we use list indexes which start from 0.
+Deduction.getStepByOrdinal = (deduction, ordinal) => Deduction.getStep(deduction, ordinal - 1)
+
+Deduction.getStep = (deduction, stepIndex) => {
+  const step = deduction.steps[stepIndex]
+  if (step === undefined) throw new Error(`no step at index ${stepIndex}`)
+  return step
+}
+
+Deduction.getLastStep = deduction => {
+  const step = deduction.steps.last(undefined)
+  if (step === undefined) throw new Error('no last step')
+  return step
+}
+
+// Derive new deduction by applying rule specified by `ruleApplicationSpec`.
+Deduction.applyRule = (deduction, ruleApplicationSpec) => {
+  return ruleApplicationSpec.rule === Rule.Theorem
+    ? applyTheoremRule(deduction, ruleApplicationSpec)
+    : applyRegularRule(deduction, ruleApplicationSpec)
+}
+
+const applyTheoremRule = (deduction, { theorem: formula, theoremId }) => {
+  const ruleApplicationSummary = TheoremRuleApplicationSummary({ theoremId })
+  const step = Step({ formula, ruleApplicationSummary })
+  return addStep(deduction, step)
+}
+
+const applyRegularRule = (deduction, {
+  rule,
+  premises,
+  conclusion,
+  termDependencies,
+  assumptionToRemove
+}) => {
+  const assumptions = calculateAssumptions(deduction, premises, assumptionToRemove)
+
+  const ruleApplicationSummary = RegularRuleApplicationSummary({ rule, premises, termDependencies })
+
+  const step = Step({ assumptions, formula: conclusion, ruleApplicationSummary })
+
+  const graph = termDependencies === undefined
+    ? deduction.termDependencyGraph
+    : updateGraph(deduction, termDependencies)
+
+  let result = addStep(deduction, step)
+  result = setGraph(result, graph)
+
+  return result
+}
+
+// Calculate new graph according to changes required by the rule.
+const updateGraph = (deduction, { dependent, dependencies }) =>
+  TermDependencyGraph.addDependencies(deduction.termDependencyGraph, dependent, ...dependencies)
+
+const setGraph = (deduction, termDependencyGraph) => ({ ...deduction, termDependencyGraph })
+
+const addStep = (deduction, step) => {
+  const newSteps = [...deduction.steps, step]
+  return { ...deduction, steps: newSteps }
+}
+
+// Calculate which assumptions must be added according to the specified rule premises. Assumptions
+// are inherited from all premises. In addition to that if premise was introduced by `Premise` or
+// `Theorem` rule, its index is also added as an assumption.
+const calculateAssumptions = (deduction, premises, toRemove) => {
+  const result = new Set()
+
+  premises.forEach((premise, i) => {
+    const step = Deduction.getStep(deduction, premise)
+
+    const { assumptions, ruleApplicationSummary: { rule } } = step
+
+    if (rule === Rule.Premise || rule === Rule.Theorem) {
+      result.add(i)
+    }
+
+    assumptions.forEach(assumption => { result.add(assumption) })
+  })
+
+  if (toRemove !== undefined) {
+    toRemove.forEach(assumption => { result.delete(assumption) })
   }
 
-  _applyTheoremRule({ theorem: formula, theoremId }) {
-    const ruleApplicationSummary = new TheoremRuleApplicationSummary({
-      rule: Rule.Theorem,
-      theoremId
-    })
-    const step = new Step({ formula, ruleApplicationSummary })
-    return this.addStep(step)
-  }
-
-  _applyRegularRule({
-    rule,
-    premises,
-    conclusion,
-    termDependencies,
-    assumptionToRemove
-  }) {
-    const assumptions = this._calculateAssumptions(
-      premises,
-      assumptionToRemove
-    )
-
-    const ruleApplicationSummary = new RegularRuleApplicationSummary({
-      rule,
-      premises,
-      termDependencies
-    })
-
-    const step = new Step({
-      assumptions,
-      formula: conclusion,
-      ruleApplicationSummary
-    })
-
-    const graph = termDependencies === undefined
-      ? this.termDependencyGraph
-      : this._updateGraph(termDependencies)
-
-    return this.addStep(step)._setGraph(graph)
-  }
-
-  /**
-   * Get step by its ordinal number.
-   *
-   * From regular user's perspective steps are referenced by positive integers starting from 1.
-   * Internally we use list indexes which start from 0.
-   */
-  getStepByOrdinal(ordinal) {
-    return this.getStep(ordinal - 1)
-  }
-
-  getStep(stepIndex) {
-    const step = this.steps.get(stepIndex)
-    if (step === undefined) throw new Error(`no step at index ${stepIndex}`)
-    return step
-  }
-
-  getLastStep() {
-    const step = this.steps.last(undefined)
-    if (step === undefined) throw new Error('no last step')
-    return step
-  }
-
-  /**
-   * Calculate which assumptions must be added according to the specified rule premises.
-   *
-   * Assumptions are inherited from all premises. In addition to that if premise was introduced
-   * by `Premise` or `Theorem` rule, its index is also added as an assumption.
-   */
-  _calculateAssumptions(premises, toRemove) {
-    let assumptions = premises
-      .toIndexedSeq()
-      .flatMap(premise => {
-        const step = this.getStep(premise)
-
-        let { assumptions } = step
-        const { ruleApplicationSummary: { rule } } = step
-
-        if (rule === Rule.Premise || rule === Rule.Theorem) {
-          assumptions = assumptions.add(premise)
-        }
-
-        return assumptions
-      })
-      .toSet()
-
-    if (toRemove !== undefined) assumptions = assumptions.remove(toRemove)
-
-    return assumptions
-  }
-
-  /** Calculate new graph according to changes required by the rule. */
-  _updateGraph({ dependent, dependencies }) {
-    return this.termDependencyGraph.addDependencies(dependent, ...dependencies.toArray())
-  }
-
-  addStep(step) { return this.update('steps', steps => steps.push(step)) }
-
-  _setGraph(graph) { return this.set('termDependencyGraph', graph) }
+  return result
 }

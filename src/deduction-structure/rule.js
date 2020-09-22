@@ -1,6 +1,4 @@
-/**
- * Fixed set of rule names/identifiers available in deduction.
- */
+// Fixed set of rule names/identifiers available in deduction.
 export const Rule = {
   Premise: 'Premise',
   Deduction: 'Deduction',

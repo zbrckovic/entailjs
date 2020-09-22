@@ -1,7 +1,3 @@
-import { Record } from 'immutable'
 import { Rule } from '../rule'
 
-export class TheoremRuleApplicationSummary extends Record({
-  rule: Rule.Theorem,
-  theoremId: ''
-}, 'TheoremRuleApplicationSummary') {}
+export const TheoremRuleApplicationSummary = ({ theoremId }) => ({ rule: Rule.Theorem, theoremId })

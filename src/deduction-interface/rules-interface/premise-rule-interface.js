@@ -1,14 +1,13 @@
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
-import { DeductionInterface } from '../deduction-interface'
+import { startDeduction } from '../deduction-interface'
+import { Deduction } from '../../deduction-structure'
 
-export class PremiseRuleInterface {
-  constructor(deduction) {
-    this.deduction = deduction
-  }
-
-  apply(formula) {
+export const PremiseRuleInterface = deduction => {
+  const apply = formula => {
     const ruleApplicationSpec = RegularRuleApplicationSpec.premise(formula)
-    const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
-    return new DeductionInterface(newDeduction)
+    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+    return startDeduction(newDeduction)
   }
+
+  return ({ apply })
 }

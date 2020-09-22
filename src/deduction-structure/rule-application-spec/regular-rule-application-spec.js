@@ -16,7 +16,7 @@ import { Rule } from '../rule'
 // common denominator of all regular rules.
 //
 // Note: static factory methods don't validate data!
-const RegularRuleApplicationSpec = ({
+export const RegularRuleApplicationSpec = ({
   rule = Rule.Premise,
 
   // Formulas which will serve as the premises of this rule.

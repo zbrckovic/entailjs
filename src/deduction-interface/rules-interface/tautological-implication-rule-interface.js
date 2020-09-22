@@ -1,17 +1,12 @@
-import { OrderedSet } from 'immutable'
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
 import { createError, ErrorName } from '../../error'
 import { isLogicalConsequence } from '../../propositional-logic/propositional-logic'
-import { DeductionInterface } from '../deduction-interface'
+import { Deduction } from '../../deduction-structure'
+import { startDeduction } from '../deduction-interface'
 
-export class TautologicalImplicationRuleInterface {
-  constructor(deduction, stepIndexes = []) {
-    this.deduction = deduction
-    this.stepIndexes = stepIndexes
-  }
-
-  apply(formula) {
-    const assumptions = this.stepIndexes.map(i => this.deduction.getStep(i).formula)
+export const TautologicalImplicationRuleInterface = (deduction, stepIndexes = []) => {
+  const apply = formula => {
+    const assumptions = stepIndexes.map(i => Deduction.getStep(deduction, i).formula)
 
     if (!isLogicalConsequence(assumptions, formula)) {
       throw createError(
@@ -22,10 +17,12 @@ export class TautologicalImplicationRuleInterface {
     }
 
     const ruleApplicationSpec = RegularRuleApplicationSpec.tautologicalImplication(
-      OrderedSet(this.stepIndexes),
+      stepIndexes,
       formula
     )
-    const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
-    return new DeductionInterface(newDeduction)
+    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+    return startDeduction(newDeduction)
   }
+
+  return ({ apply })
 }

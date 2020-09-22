@@ -1,9 +1,3 @@
-import { DeductionInterface } from '../deduction-interface'
+import { startDeduction } from '../deduction-interface'
 
-export class TheoremRuleInterface {
-  constructor(deduction) {
-    this.deduction = deduction
-  }
-
-  apply() { return new DeductionInterface(this.deduction) }
-}
+export const TheoremRuleInterface = deduction => ({ apply: () => startDeduction(deduction) })

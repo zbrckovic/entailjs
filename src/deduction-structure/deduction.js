@@ -8,7 +8,7 @@ import { TermDependencyGraph } from './term-dependency-graph'
 
 // Structure containing all relevant information about some deduction (proof) carried out as a
 // sequence of steps.
-const Deduction = ({ steps = [], termDependencyGraph = TermDependencyGraph() }) => ({
+export const Deduction = ({ steps = [], termDependencyGraph = TermDependencyGraph() }) => ({
   steps, termDependencyGraph
 })
 

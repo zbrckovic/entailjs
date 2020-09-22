@@ -1,21 +1,18 @@
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
-import { DeductionInterface } from '../deduction-interface'
+import { startDeduction } from '../deduction-interface'
+import { Deduction } from '../../deduction-structure'
 
-export class DeductionRuleInterface {
-  constructor(deduction, firstStepIndex, secondStepIndex) {
-    this.deduction = deduction
-    this.firstStepIndex = firstStepIndex
-    this.secondStepIndex = secondStepIndex
-  }
-
-  apply() {
+export const DeductionRuleInterface = (deduction, firstStepIndex, secondStepIndex) => {
+  const apply = () => {
     const ruleApplicationSpec = RegularRuleApplicationSpec.deduction(
-      this.deduction.getStep(this.firstStepIndex).formula,
-      this.firstStepIndex,
-      this.deduction.getStep(this.secondStepIndex).formula,
-      this.secondStepIndex
+      Deduction.getStep(deduction, firstStepIndex).formula,
+      firstStepIndex,
+      Deduction.getStep(deduction, secondStepIndex).formula,
+      secondStepIndex
     )
     const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
-    return new DeductionInterface(newDeduction)
+    return startDeduction(newDeduction)
   }
+
+  return ({ apply })
 }

@@ -7,23 +7,21 @@ import { Rule } from '../deduction-structure'
 
 let parser
 beforeEach(() => {
-  parser = DeductionParser({
-    syms: primitiveSyms, presentationCtx: primitivePresentationCtx
-  })
+  parser = DeductionParser({ syms: primitiveSyms, presentationCtx: primitivePresentationCtx })
 })
 
-test(`throws ${ErrorName.TERM_ALREADY_USED}`, () => {
-  const deduction = parser.parse(`
-        (1) E[x] F(x) / P;
-    1   (2) F(a)      / EI 1;
-    `)
-
-  expect(() => {
-    startDeduction(deduction)
-      .selectSteps(2)[Rule.UniversalGeneralization]
-      .apply(parser.getSym('x'), parser.getSym('a'))
-  }).toThrow(ErrorName.TERM_ALREADY_USED)
-})
+// test(`throws ${ErrorName.TERM_ALREADY_USED}`, () => {
+//   const deduction = parser.parse(`
+//         (1) E[x] F(x) / P;
+//     1   (2) F(a)      / EI 1;
+//     `)
+//
+//   expect(() => {
+//     startDeduction(deduction)
+//       .selectSteps(2)[Rule.UniversalGeneralization]
+//       .apply(parser.getSym('x'), parser.getSym('a'))
+//   }).toThrow(ErrorName.TERM_ALREADY_USED)
+// })
 
 test(`throws ${ErrorName.CYCLIC_DEPENDENCIES}`, () => {
   const deduction = parser.parse(`

@@ -4,11 +4,11 @@ import { RulesInterface } from './rules-interface'
 
 // Interface which can be used to perform deduction by repeatedly applying available rules. Validity
 // of deduction is ensured on each step. Validity of the resulting deduction is guaranteed if
-// initial deduction (if any) provided at the start os valid.
-export const startDeduction = deduction => {
+// initial deduction (if any) provided at the start was valid.
+export const startDeduction = (deduction = Deduction()) => {
   const createIndexes = (...ordinals) => {
     const stepOrdinalOutOfRange = ordinals.find(ordinal => !(
-      Number.isInteger(ordinal) && ordinal >= 1 && ordinal <= this.deduction.size
+      Number.isInteger(ordinal) && ordinal >= 1 && ordinal <= Deduction.getSize(deduction)
     ))
 
     if (stepOrdinalOutOfRange !== undefined) {
@@ -18,13 +18,15 @@ export const startDeduction = deduction => {
         { stepOrdinalOutOfRange, size: Deduction.getSize(deduction) }
       )
     }
+
+    return ordinals.map(ordinal => ordinal - 1)
   }
 
   // Select steps (formulas) to use as premises in the next rule.
   const selectSteps = (...ordinals) => {
     const indexes = createIndexes(...ordinals)
-    return RulesInterface(this.deduction, ...indexes)
+    return RulesInterface(deduction, ...indexes)
   }
 
-  return ({ selectSteps })
+  return ({ deduction, selectSteps })
 }

@@ -3,25 +3,30 @@ import { Step } from '../../deduction-structure/step'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
 import { primitiveSyms } from '../../primitive-syms'
-import { DeductionInterface } from '../deduction-interface'
-import { Rule } from '../../deduction-structure'
+import { startDeduction } from '../deduction-interface'
+import { Deduction, Rule } from '../../deduction-structure'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
+beforeEach(() => {
+  parser = FormulaParser({
+    syms: primitiveSyms, presentationCtx: primitivePresentationCtx
+  })
+})
 
 test('premise', () => {
   const premise = parser.parse('p')
-  const actual = DeductionInterface
-    .start()
+
+  const newDeduction = startDeduction()
     .selectSteps()[Rule.Premise]
     .apply(premise)
     .deduction
-    .getLastStep()
 
-  const expected = new Step({
+  const actual = Deduction.getLastStep(newDeduction)
+
+  const expected = Step({
     formula: premise,
-    ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
+    ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
   })
 
-  expect(actual.equals(expected)).toBe(true)
+  expect(actual).toEqual(expected)
 })

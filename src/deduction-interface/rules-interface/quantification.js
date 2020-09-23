@@ -6,11 +6,11 @@ import { Expression } from '../../abstract-structures/expression'
 import { Sym } from '../../abstract-structures/sym'
 
 export const ExistentialGeneralizationRuleInterface = (deduction, stepIndex) => {
-  const { getPremise } = QuantificationRuleInterface(deduction, stepIndex)
+  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
 
   return GeneralizationRuleInterface(deduction, stepIndex, (newTerm, oldTerm) => {
     const ruleApplicationSpec = RegularRuleApplicationSpec.existentialGeneralization(
-      getPremise(), stepIndex, newTerm, oldTerm
+      premise, stepIndex, newTerm, oldTerm
     )
     const newDeduction = Deduction.apply(deduction, ruleApplicationSpec)
 
@@ -19,14 +19,14 @@ export const ExistentialGeneralizationRuleInterface = (deduction, stepIndex) => 
 }
 
 export const ExistentialInstantiationRuleInterface = (deduction, stepIndex) => {
-  const { getPremise } = QuantificationRuleInterface(deduction, stepIndex)
+  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
 
   return InstantiationRuleInterface(
     deduction,
     stepIndex,
     newTerm => {
       const ruleApplicationSpec = RegularRuleApplicationSpec.existentialInstantiation(
-        getPremise(), stepIndex, newTerm
+        premise, stepIndex, newTerm
       )
       const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
 
@@ -36,11 +36,10 @@ export const ExistentialInstantiationRuleInterface = (deduction, stepIndex) => {
 }
 
 export const InstantiationRuleInterface = (deduction, stepIndex, concreteApply) => {
-  const { getPremise } = QuantificationRuleInterface(deduction, stepIndex)
-  const premise = getPremise()
+  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
 
-  // @param newTerm - Instance term which if provided will be the substituendum of the
-  // substitution. If instantiation is vacuous newTerm doesn't need to be provided.
+  // `newTerm` is an instance term which if provided will be the substituted. If instantiation is
+  // vacuous `newTerm` doesn't need to be provided.
   const apply = newTerm => {
     if (newTerm === undefined) {
       if (Expression.findBoundOccurrences(premise).length > 0) {
@@ -49,9 +48,8 @@ export const InstantiationRuleInterface = (deduction, stepIndex, concreteApply) 
     } else {
       const oldTerm = premise.boundSym
       const [child] = premise.children
-      if (
-        Expression.findBoundSymsAtFreeOccurrencesOfSym(child, oldTerm)[newTerm.id] !== undefined
-      ) {
+      const boundSyms = Expression.findBoundSymsAtFreeOccurrencesOfSym(child, oldTerm)
+      if (boundSyms[newTerm.id] !== undefined) {
         throw createError(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
       }
     }
@@ -65,10 +63,8 @@ export const InstantiationRuleInterface = (deduction, stepIndex, concreteApply) 
     const [firstOccurrence] = Expression.findBoundOccurrences(premise)
     if (firstOccurrence === undefined) return undefined
 
-    const [firstIndex] = firstOccurrence
-
     try {
-      return formula.getSubexpression(firstIndex).sym
+      return Expression.getSubexpression(formula, firstOccurrence.slice(1)).sym
     } catch (e) {
       if (e.name === ErrorName.NO_CHILD_AT_INDEX) {
         throw createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
@@ -81,43 +77,42 @@ export const InstantiationRuleInterface = (deduction, stepIndex, concreteApply) 
 }
 
 export const UniversalGeneralizationRuleInterface = (deduction, stepIndex) => {
-  const { getPremise } = QuantificationRuleInterface(deduction, stepIndex)
+  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
 
   return GeneralizationRuleInterface(deduction, stepIndex, (newTerm, oldTerm) => {
     const ruleApplicationSpec = RegularRuleApplicationSpec.universalGeneralization(
-      getPremise(),
+      premise,
       stepIndex,
       newTerm,
       oldTerm
     )
-
     const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+
     return startDeduction(newDeduction)
   })
 }
 
 export const UniversalInstantiationRuleInterface = (deduction, stepIndex) => {
-  const { getPremise } = QuantificationRuleInterface(deduction, stepIndex)
+  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
 
   return InstantiationRuleInterface(deduction, stepIndex, newTerm => {
     const ruleApplicationSpec = RegularRuleApplicationSpec.universalInstantiation(
-      getPremise(),
+      premise,
       stepIndex,
       newTerm
     )
     const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+
     return startDeduction(newDeduction)
   })
 }
 
 export const GeneralizationRuleInterface = (deduction, stepIndex, concreteApply) => {
-  const { getPremise } = QuantificationRuleInterface(deduction, stepIndex)
+  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
 
-  const premise = getPremise()
-
-  // @param newTerm - Generalized term which will be the substituent of the substitution.
-  // @param oldTerm - Instance term which if provided will be the substituendum of the
-  // substitution. If it's not provided generalization will be is vacuous.
+  // `newTerm` is the generalized term which will be the substitute and `oldTerm` is the instance
+  // term which if provided will be substituted with `newTerm`. If `oldTerm` is not provided
+  // generalization will be is vacuous.
   const apply = (newTerm, oldTerm) => {
     const substitutionRequired = !Sym.equals(newTerm, oldTerm)
     if (substitutionRequired) {
@@ -125,11 +120,11 @@ export const GeneralizationRuleInterface = (deduction, stepIndex, concreteApply)
         throw createError(ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS)
       }
 
-      if (
-        oldTerm !== undefined &&
-        Expression.findBoundSymsAtFreeOccurrencesOfSym(premise, oldTerm)[newTerm.id] !== undefined
-      ) {
-        throw createError(ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND)
+      if (oldTerm !== undefined) {
+        const boundSyms = Expression.findBoundSymsAtFreeOccurrencesOfSym(premise, oldTerm)
+        if (boundSyms[newTerm.id] !== undefined) {
+          throw createError(ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND)
+        }
       }
     }
 

@@ -8,7 +8,7 @@ import { TermDependencyGraph } from './term-dependency-graph'
 
 // Structure containing all relevant information about some deduction (proof) carried out as a
 // sequence of steps.
-export const Deduction = ({ steps = [], termDependencyGraph = TermDependencyGraph() }) => ({
+export const Deduction = ({ steps = [], termDependencyGraph = TermDependencyGraph() } = {}) => ({
   steps, termDependencyGraph
 })
 
@@ -25,7 +25,7 @@ Deduction.getStep = (deduction, stepIndex) => {
 }
 
 Deduction.getLastStep = deduction => {
-  const step = deduction.steps.last(undefined)
+  const step = deduction.steps[deduction.steps.length - 1]
   if (step === undefined) throw new Error('no last step')
   return step
 }

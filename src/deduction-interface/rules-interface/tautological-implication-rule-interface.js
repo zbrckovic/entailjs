@@ -21,6 +21,7 @@ export const TautologicalImplicationRuleInterface = (deduction, stepIndexes = []
       formula
     )
     const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+
     return startDeduction(newDeduction)
   }
 

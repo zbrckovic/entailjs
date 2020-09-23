@@ -1,9 +1,10 @@
-import { DeductionInterface } from '../../deduction-interface'
+import { startDeduction } from '../../deduction-interface'
 import { getRule, Rule } from '../../deduction-structure/rule'
 import { createError, ErrorName } from '../../error'
 import { findDuplicates } from '../../utils'
 import { AstProcessor as FormulaAstProcessor } from '../formula-parser/ast-processor'
 import _ from 'lodash'
+import { Deduction } from '../../deduction-structure'
 
 export const AstProcessor = ({ syms, presentationCtx }) => {
   const formulaAstProcessor = FormulaAstProcessor({ syms, presentationCtx })
@@ -11,7 +12,7 @@ export const AstProcessor = ({ syms, presentationCtx }) => {
   const { getSym, getSyms, getPresentationCtx, getTextToSymMap, getMaxSymId } = formulaAstProcessor
 
   const process = ({ steps }) => {
-    let deductionInterface = DeductionInterface.start()
+    let deductionInterface = startDeduction()
 
     deductionInterface = steps.reduce(
       (deductionInterface, step, i) => processStep(deductionInterface, step, i + 1),
@@ -100,7 +101,7 @@ export const AstProcessor = ({ syms, presentationCtx }) => {
       }
     }
 
-    const newStep = deductionInterface.deduction.getLastStep()
+    const newStep = Deduction.getLastStep(deductionInterface.deduction)
 
     const assumptionIndexes = new Set(assumptionsOrdinals.map(ordinal => ordinal - 1))
     if (!_.isEqual(newStep.assumptions, assumptionIndexes)) {
@@ -140,7 +141,7 @@ const validateStepOrdinal = (actualStepOrdinal, encounteredStepOrdinal) => {
 }
 
 const validateAssumptionsOrdinals = (deduction, assumptionsOrdinalsArray) => {
-  const assumptionsOrdinals = Set.of(...assumptionsOrdinalsArray)
+  const assumptionsOrdinals = new Set(assumptionsOrdinalsArray)
 
   if (assumptionsOrdinalsArray.length > assumptionsOrdinals.size) {
     throw createError(
@@ -150,9 +151,9 @@ const validateAssumptionsOrdinals = (deduction, assumptionsOrdinalsArray) => {
     )
   }
 
-  const maxStepOrdinal = deduction.size
+  const maxStepOrdinal = Deduction.getSize(deduction)
 
-  for (const assumptionOrdinal of assumptionsOrdinals.toArray()) {
+  for (const assumptionOrdinal of assumptionsOrdinals) {
     if (assumptionOrdinal > maxStepOrdinal) {
       throw createError(
         ErrorName.ASSUMPTION_ORDINAL_OUT_OF_RANGE,
@@ -161,8 +162,8 @@ const validateAssumptionsOrdinals = (deduction, assumptionsOrdinalsArray) => {
       )
     }
 
-    const assumptionRule = deduction
-      .getStepByOrdinal(assumptionOrdinal)
+    const assumptionRule = Deduction
+      .getStepByOrdinal(deduction, assumptionOrdinal)
       .ruleApplicationSummary
       .rule
 
@@ -170,10 +171,7 @@ const validateAssumptionsOrdinals = (deduction, assumptionsOrdinalsArray) => {
       throw createError(
         ErrorName.ASSUMPTION_INVALID_RULE,
         undefined,
-        {
-          assumptionOrdinal,
-          assumptionRule
-        }
+        { assumptionOrdinal, assumptionRule }
       )
     }
   }

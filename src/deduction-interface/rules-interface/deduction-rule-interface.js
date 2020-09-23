@@ -11,6 +11,7 @@ export const DeductionRuleInterface = (deduction, firstStepIndex, secondStepInde
       secondStepIndex
     )
     const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
+
     return startDeduction(newDeduction)
   }
 

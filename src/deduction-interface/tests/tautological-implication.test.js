@@ -1,11 +1,10 @@
-import { List, OrderedSet, Set } from 'immutable'
 import { Deduction, Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
 import { Step } from '../../deduction-structure/step'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
 import { primitiveSyms } from '../../primitive-syms'
-import { DeductionInterface } from '../deduction-interface'
+import { startDeduction } from '../deduction-interface'
 
 let parser
 beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
@@ -14,29 +13,30 @@ test('tautological implication', () => {
   const formula0 = parser.parse('~~p')
   const formula1 = parser.parse('p')
 
-  const deduction = new Deduction({
-    steps: List.of(
-      new Step({
+  const deduction = Deduction({
+    steps: [
+      Step({
         formula: formula0,
-        ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
+        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
       })
-    )
+    ]
   })
 
-  const actual = new DeductionInterface(deduction)
+  const newDeduction = startDeduction(deduction)
     .selectSteps(1)[Rule.TautologicalImplication]
     .apply(formula1)
     .deduction
-    .getLastStep()
 
-  const expected = new Step({
-    assumptions: Set.of(0),
+  const actual = Deduction.getLastStep(newDeduction)
+
+  const expected = Step({
+    assumptions: new Set([0]),
     formula: formula1,
-    ruleApplicationSummary: new RegularRuleApplicationSummary({
+    ruleApplicationSummary: RegularRuleApplicationSummary({
       rule: Rule.TautologicalImplication,
-      premises: OrderedSet.of(0)
+      premises: [0]
     })
   })
 
-  expect(actual.equals(expected)).toBe(true)
+  expect(actual).toEqual(expected)
 })

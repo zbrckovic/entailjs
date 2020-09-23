@@ -1,16 +1,18 @@
-import { is, List, Map, OrderedSet, Set } from 'immutable'
 import { Deduction, Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
 import { Step } from '../../deduction-structure/step'
 import { TermDependencyGraph } from '../../deduction-structure/term-dependency-graph'
-import { TermDependencies } from '../../deduction-structure/term-dependency-graph/term-dependencies'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
 import { primitiveSyms } from '../../primitive-syms'
 import { FormulaParser } from '../formula-parser'
 import { DeductionParser } from './deduction-parser'
 
 let parser
-beforeEach(() => { parser = new DeductionParser(primitiveSyms, primitivePresentationCtx) })
+beforeEach(() => {
+  parser = DeductionParser({
+    syms: primitiveSyms, presentationCtx: primitivePresentationCtx
+  })
+})
 
 test('parse()', () => {
   const text = `
@@ -24,72 +26,69 @@ test('parse()', () => {
 
   const actual = parser.parse(text)
 
-  const formulaParser = new FormulaParser(parser.syms, parser.presentationCtx)
+  const formulaParser = FormulaParser({
+    syms: parser.syms,
+    presentationCtx: parser.presentationCtx
+  })
 
-  const expected = new Deduction({
-    steps: List.of(
-      new Step({
+  const expected = Deduction({
+    steps: [
+      Step({
         formula: formulaParser.parse('E[y] A[x] F(x, y)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
-          rule: Rule.Premise
-        })
+        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
       }),
-      new Step({
-        assumptions: Set.of(0),
+      Step({
+        assumptions: new Set([0]),
         formula: formulaParser.parse('A[x] F(x, a)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.ExistentialInstantiation,
-          premises: OrderedSet.of(0),
-          termDependencies: new TermDependencies({
-            dependent: formulaParser.getSym('a')
-          })
+          premises: [0],
+          termDependencies: {
+            dependent: formulaParser.getSym('a').id
+          }
         })
       }),
-      new Step({
-        assumptions: Set.of(0),
+      Step({
+        assumptions: new Set([0]),
         formula: formulaParser.parse('F(b, a)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.UniversalInstantiation,
-          premises: OrderedSet.of(1)
+          premises: [1]
         })
       }),
-      new Step({
-        assumptions: Set.of(0),
+      Step({
+        assumptions: new Set([0]),
         formula: formulaParser.parse('E[y] F(b, y) '),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.ExistentialGeneralization,
-          premises: OrderedSet.of(2)
+          premises: [2]
         })
       }),
-      new Step({
-        assumptions: Set.of(0),
+      Step({
+        assumptions: new Set([0]),
         formula: formulaParser.parse('A[x] E[y] F(x, y) '),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.UniversalGeneralization,
-          premises: OrderedSet.of(3),
-          termDependencies: new TermDependencies({
-            dependent: formulaParser.getSym('b')
-          })
+          premises: [3],
+          termDependencies: { dependent: formulaParser.getSym('b').id }
         })
       }),
-      new Step({
-        assumptions: Set.of(),
+      Step({
+        assumptions: new Set(),
         formula: formulaParser.parse('E[y] A[x] F(x, y) -> A[x] E[y] F(x, y)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.Deduction,
-          premises: OrderedSet.of(0, 4)
+          premises: [0, 4]
         })
       })
-    ),
-    termDependencyGraph: new TermDependencyGraph({
-      dependencies: Map([
-        [formulaParser.getSym('a'), Set()],
-        [formulaParser.getSym('b'), Set()]
-      ])
+    ],
+    termDependencyGraph: TermDependencyGraph({
+      [formulaParser.getSym('a').id]: new Set(),
+      [formulaParser.getSym('b').id]: new Set()
     })
   })
 
-  expect(is(actual, expected)).toBe(true)
+  expect(actual).toEqual(expected)
 })
 
 test('parse()', () => {
@@ -109,103 +108,96 @@ test('parse()', () => {
 
   const actual = parser.parse(text)
 
-  const formulaParser = new FormulaParser(parser.syms, parser.presentationCtx)
+  const formulaParser = FormulaParser({
+    syms: parser.syms,
+    presentationCtx: parser.presentationCtx
+  })
 
-  const expected = new Deduction({
-    steps: List.of(
-      new Step({
+  const expected = Deduction({
+    steps: [
+      Step({
         formula: formulaParser.parse('A[x] (F(x) -> G(x))'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
-          rule: Rule.Premise
-        })
+        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
       }),
-      new Step({
+      Step({
         formula: formulaParser.parse('A[x] (G(x) -> H(x))'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
-          rule: Rule.Premise
-        })
+        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
       }),
-      new Step({
+      Step({
         formula: formulaParser.parse('E[x] F(x)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
-          rule: Rule.Premise
-        })
+        ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
       }),
-      new Step({
+      Step({
         formula: formulaParser.parse('F(a)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.ExistentialInstantiation,
-          premises: OrderedSet.of(2),
-          termDependencies: new TermDependencies({
-            dependent: formulaParser.getSym('a')
-          })
+          premises: [2],
+          termDependencies: { dependent: formulaParser.getSym('a').id }
         }),
-        assumptions: Set.of(2)
+        assumptions: new Set([2])
       }),
-      new Step({
+      Step({
         formula: formulaParser.parse('F(a) -> G(a)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.UniversalInstantiation,
-          premises: OrderedSet.of(0)
+          premises: [0]
         }),
-        assumptions: Set.of(0)
+        assumptions: new Set([0])
       }),
-      new Step({
+      Step({
         formula: formulaParser.parse('G(a) -> H(a)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.UniversalInstantiation,
-          premises: OrderedSet.of(1)
+          premises: [1]
         }),
-        assumptions: Set.of(1)
+        assumptions: new Set([1])
       }),
-      new Step({
+      Step({
         formula: formulaParser.parse('H(a)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.TautologicalImplication,
-          premises: OrderedSet.of(3, 4, 5)
+          premises: [3, 4, 5]
         }),
-        assumptions: Set.of(0, 1, 2)
+        assumptions: new Set([0, 1, 2])
       }),
-      new Step({
+      Step({
         formula: formulaParser.parse('E[x] H(x)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.ExistentialGeneralization,
-          premises: OrderedSet.of(6)
+          premises: [6]
         }),
-        assumptions: Set.of(0, 1, 2)
+        assumptions: new Set([0, 1, 2])
       }),
-      new Step({
+      Step({
         formula: formulaParser.parse('E[x] F(x) -> E[x] H(x)'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.Deduction,
-          premises: OrderedSet.of(2, 7)
+          premises: [2, 7]
         }),
-        assumptions: Set.of(0, 1)
+        assumptions: new Set([0, 1])
       }),
-      new Step({
+      Step({
         formula: formulaParser.parse('A[x] (G(x) -> H(x)) -> (E[x] F(x) -> E[x] H(x))'),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.Deduction,
-          premises: OrderedSet.of(1, 8)
+          premises: [1, 8]
         }),
-        assumptions: Set.of(0)
+        assumptions: new Set([0])
       }),
-      new Step({
+      Step({
         formula: formulaParser.parse(
           'A[x] (F(x) -> G(x)) -> (A[x] (G(x) -> H(x)) -> (E[x] F(x) -> E[x] H(x)))'
         ),
-        ruleApplicationSummary: new RegularRuleApplicationSummary({
+        ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.Deduction,
-          premises: OrderedSet.of(0, 9)
+          premises: [0, 9]
         })
       })
-    ),
-    termDependencyGraph: new TermDependencyGraph({
-      dependencies: Map([
-        [formulaParser.getSym('a'), Set()]
-      ])
+    ],
+    termDependencyGraph: TermDependencyGraph({
+      [formulaParser.getSym('a').id]: new Set()
     })
   })
 
-  expect(is(actual, expected)).toBe(true)
+  expect(actual).toEqual(expected)
 })

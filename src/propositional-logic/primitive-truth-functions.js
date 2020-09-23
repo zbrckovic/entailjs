@@ -1,48 +1,21 @@
-import { List, Map } from 'immutable'
 import { conjunction, disjunction, equivalence, implication, negation } from '../primitive-syms'
+import _ from 'lodash'
 
-export const primitiveTruthFunctions = Map([
-  [
-    negation,
-    Map([
-      [List.of(true), false],
-      [List.of(false), true]
-    ])
-  ],
-  [
-    conjunction,
-    Map([
-      [List.of(true, true), true],
-      [List.of(true, false), false],
-      [List.of(false, true), false],
-      [List.of(false, false), false]
-    ])
-  ],
-  [
-    disjunction,
-    Map([
-      [List.of(true, true), true],
-      [List.of(true, false), true],
-      [List.of(false, true), true],
-      [List.of(false, false), false]
-    ])
-  ],
-  [
-    implication,
-    Map([
-      [List.of(true, true), true],
-      [List.of(true, false), false],
-      [List.of(false, true), true],
-      [List.of(false, false), true]
-    ])
-  ],
-  [
-    equivalence,
-    Map([
-      [List.of(true, true), true],
-      [List.of(true, false), false],
-      [List.of(false, true), false],
-      [List.of(false, false), true]
-    ])
-  ]
-])
+export const primitiveTruthFunctions = {
+  [negation.id]: t => !t,
+  [conjunction.id]: (a, b) => a && b,
+  [disjunction.id]: (a, b) => a || b,
+  [implication.id]: (a, b) => ~a || b,
+  [equivalence.id]: (a, b) => a === b
+}
+
+export const generateValuesPermutations = arity =>
+  _.range(
+    0,
+    Math.pow(2, arity)
+  ).map(
+    x => x.toString(2)
+      .padStart(arity, '0')
+      .split('')
+      .map(x => x === '1')
+  )

@@ -61,7 +61,6 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.10.4",
-    "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.20"
   }
 }

@@ -1,12 +1,17 @@
-import { Map, Set } from 'immutable'
 import { ErrorName } from '../error'
 import { FormulaParser } from '../parsers/formula-parser'
 import { primitivePresentationCtx } from '../presentation/sym-presentation'
 import { primitiveSyms } from '../primitive-syms'
 import { evaluate, findInterpretations } from './propositional-logic-util'
+import _ from 'lodash'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
+beforeEach(() => {
+  parser = FormulaParser({
+    syms: primitiveSyms,
+    presentationCtx: primitivePresentationCtx
+  })
+})
 
 test.each([
   ['p', { p: true }, true],
@@ -19,7 +24,7 @@ test.each([
   const assignments = createInterpretation(interpretationObj)
   const actual = evaluate(formula, assignments)
 
-  expect(expected).toBe(actual)
+  expect(actual).toBe(expected)
 })
 
 test.each([
@@ -42,14 +47,20 @@ test.each([
   ['p -> q', true, [{ p: true, q: true }, { p: false, q: true }, { p: false, q: false }]]
 ])('findInterpretations(%s, %s) is %j', (formulaText, value, interpretationObjs) => {
   const formula = parser.parse(formulaText)
-  const expected = Set(interpretationObjs.map(createInterpretation))
+  const expected = interpretationObjs.map(createInterpretation)
   const actual = findInterpretations(formula, value)
 
-  expect(actual.equals(expected)).toBe(true)
+  expect(actual).toEqual(expected)
 })
 
-const createInterpretation = interpretationObj => Map(
-  Object
-    .entries(interpretationObj)
-    .map(([formulaText, value]) => [parser.parse(formulaText).sym, value])
-)
+const createInterpretation = interpretationObj => {
+  const result = {}
+
+  _.toPairs(interpretationObj).forEach(([formulaText, value]) => {
+    const formula = parser.parse(formulaText)
+    const sym = formula.sym
+    result[sym.id] = value
+  })
+
+  return result
+}

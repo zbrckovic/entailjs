@@ -1,10 +1,15 @@
-import { primitiveSyms } from '../../lib'
 import { FormulaParser } from '../parsers/formula-parser'
 import { primitivePresentationCtx } from '../presentation/sym-presentation'
 import { isLogicalConsequence, isTautology } from './propositional-logic'
+import { primitiveSyms } from '../primitive-syms'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
+beforeEach(() => {
+  parser = FormulaParser({
+    syms: primitiveSyms,
+    presentationCtx: primitivePresentationCtx
+  })
+})
 
 test.each([
   ['p', false],
@@ -21,7 +26,7 @@ test.each([
 ])('isTautology(%s) is %s', (formulaText, expected) => {
   const formula = parser.parse(formulaText)
   const actual = isTautology(formula)
-  expect(expected).toBe(actual)
+  expect(actual).toBe(expected)
 })
 
 test.each([
@@ -41,5 +46,5 @@ test.each([
   const assumptions = assumptionsTexts.map(text => parser.parse(text))
   const consequence = parser.parse(consequenceText)
   const actual = isLogicalConsequence(assumptions, consequence)
-  expect(expected).toBe(actual)
+  expect(actual).toBe(expected)
 })

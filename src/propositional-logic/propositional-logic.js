@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { Expression } from '../abstract-structures/expression'
 import { createImplicationWithAntecedentsAsConjunction } from '../formula-construction-util'
 import { implication } from '../primitive-syms'
@@ -19,17 +18,16 @@ export const isLogicalConsequence = (assumptions, consequence) => {
   if (assumptions.length === 0) return isTautology(consequence)
   if (assumptions.length === 1) {
     return isTautology(
-      new Expression({
+      Expression({
         sym: implication,
-        children: List.of(assumptions[0], consequence)
+        children: [assumptions[0], consequence]
       })
     )
   }
   return isTautology(createImplicationWithAntecedentsAsConjunction(assumptions, consequence))
 }
 
-const hasInterpretations = (formula, value) =>
-  !findInterpretations(formula, value).isEmpty()
+const hasInterpretations = (formula, value) => findInterpretations(formula, value).length > 0
 
 const findInterpretations = (formula, value) => {
   const reducedFormula = reduceToTruthFunctional(formula)

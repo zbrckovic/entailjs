@@ -1,67 +1,75 @@
-import { Map, Set } from 'immutable'
-import { Category } from '../abstract-structures/sym'
+import { Category, Sym } from '../abstract-structures/sym'
 import { createError, ErrorName } from '../error'
-import { primitiveTruthFunctions } from './primitive-truth-functions'
+import { generateValuesPermutations, primitiveTruthFunctions } from './primitive-truth-functions'
 
-export const evaluate = ({ sym, children }, interpretation = Map()) => {
-  if (sym.getCategory() !== Category.FF) throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
+export const evaluate = (formula, interpretation = {}) => {
+  const { sym, children } = formula
+
+  if (Sym.getCategory(sym) !== Category.FF) throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
 
   if (sym.arity === 0) {
-    const value = interpretation.get(sym)
+    const value = interpretation[sym.id]
     if (value === undefined) throw createError(ErrorName.NO_ASSIGNED_VALUE_ERROR)
     return value
   }
 
   const childrenValues = children.map(child => evaluate(child, interpretation))
+  const truthFunction = getTruthFunction(sym)
 
-  return getTruthTable(sym).get(childrenValues)
+  return truthFunction(...childrenValues)
 }
 
-/** Find all interpretations of `formula` which make the value of formula equal to `value`. */
+// Find all interpretations of `formula` which make the value of formula equal to `value`.
 export const findInterpretations = (formula, value) =>
   findInterpretationsLimitedByBaseInterpretation(formula, value)
 
-/** Find interpretations which are extensions of `interpretation`. */
+// Find interpretations which are extensions of `interpretation`.
 const findInterpretationsLimitedByBaseInterpretation = (
-  { sym, children },
+  formula,
   value,
-  interpretation = Map()
+  interpretation = {}
 ) => {
-  if (sym.getCategory() !== Category.FF || sym.binds) {
+  const { sym, children } = formula
+
+  if (Sym.getCategory(sym) !== Category.FF || sym.binds) {
     throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
   }
 
   if (sym.arity === 0) {
-    const fixedValue = interpretation.get(sym)
-    if (fixedValue !== undefined) return fixedValue !== value ? Set() : Set.of(interpretation)
-    return Set.of(interpretation.set(sym, value))
+    const fixedValue = interpretation[sym.id]
+    if (fixedValue !== undefined) {
+      return fixedValue !== value ? [] : [interpretation]
+    }
+    return [{ ...interpretation, [sym.id]: value }]
   }
 
-  return getTruthTable(sym)
-    .entrySeq()
-    .filter(([, tableValue]) => tableValue === value)
-    .map(([tableArgs]) => tableArgs)
-    .map(tableArgs => children.reduce(
+  const truthFunction = getTruthFunction(sym)
+
+  return generateValuesPermutations(sym.arity)
+    .filter(args => truthFunction(...args) === value)
+    .map(args => children.reduce(
       (interpretations, child, i) => findInterpretationsLimitedByBaseInterpretations(
         child,
-        tableArgs.get(i),
+        args[i],
         interpretations
       ),
-      Set.of(interpretation)
+      [interpretation]
     ))
-    .reduce((result, interpretations) => result.union(interpretations), Set())
+    .reduce((intermediateResult, interpretations) => intermediateResult.concat(interpretations), [])
 }
 
-/** Find interpretations which are extensions of `interpretations`. */
+// Find interpretations which are extensions of `interpretations`.
 const findInterpretationsLimitedByBaseInterpretations = (formula, value, interpretations) =>
   interpretations.reduce(
-    (result, interpretation) =>
-      result.union(findInterpretationsLimitedByBaseInterpretation(formula, value, interpretation)),
-    Set()
+    (intermediateResult, interpretation) =>
+      intermediateResult.concat(
+        findInterpretationsLimitedByBaseInterpretation(formula, value, interpretation)
+      ),
+    []
   )
 
-const getTruthTable = sym => {
-  const truthFunction = primitiveTruthFunctions.get(sym)
+const getTruthFunction = sym => {
+  const truthFunction = primitiveTruthFunctions[sym.id]
   if (truthFunction === undefined) throw createError(ErrorName.NO_ASSIGNED_VALUE_ERROR)
   return truthFunction
 }

@@ -5,7 +5,7 @@ export const primitiveTruthFunctions = {
   [negation.id]: t => !t,
   [conjunction.id]: (a, b) => a && b,
   [disjunction.id]: (a, b) => a || b,
-  [implication.id]: (a, b) => ~a || b,
+  [implication.id]: (a, b) => !a || b,
   [equivalence.id]: (a, b) => a === b
 }
 

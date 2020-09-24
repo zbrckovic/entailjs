@@ -30,7 +30,7 @@ const reduceToTruthFunctionalWithSubstitutions = (formula, substitutions = {}) =
 
   let substitutedSym = substitutions[formulaKey]
   if (substitutedSym === undefined) {
-    substitutedSym = Sym.ff({ id: -assignmentsToReturn.size })
+    substitutedSym = Sym.ff({ id: -Object.keys(assignmentsToReturn).length })
     assignmentsToReturn = {
       ...assignmentsToReturn,
       [formulaKey]: substitutedSym

@@ -7,7 +7,12 @@ import { primitivePresentationCtx } from './presentation/sym-presentation'
 import { primitiveSyms } from './primitive-syms'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
+beforeEach(() => {
+  parser = FormulaParser({
+    syms: primitiveSyms,
+    presentationCtx: primitivePresentationCtx
+  })
+})
 
 test.each([
   [['p'], 'p'],

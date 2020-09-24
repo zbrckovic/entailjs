@@ -44,7 +44,7 @@ test.each([
   ['~p', false, [{ p: true }]],
   ['~p', true, [{ p: false }]],
   ['p & q', true, [{ p: true, q: true }]],
-  ['p -> q', true, [{ p: true, q: true }, { p: false, q: true }, { p: false, q: false }]]
+  ['p -> q', true, [{ p: false, q: false }, { p: false, q: true }, { p: true, q: true }]]
 ])('findInterpretations(%s, %s) is %j', (formulaText, value, interpretationObjs) => {
   const formula = parser.parse(formulaText)
   const expected = interpretationObjs.map(createInterpretation)

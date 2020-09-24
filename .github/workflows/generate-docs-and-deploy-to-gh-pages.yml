@@ -1,4 +1,4 @@
-name: CI
+name: Generate docs and deploy to gh-pages
 
 on:
   push:

@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build-storybook:
+  generate-docs-and-deploy-to-gh-pages:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

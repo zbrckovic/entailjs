@@ -1,10 +1,12 @@
 const glob = require('glob')
 const { exec } = require('child_process')
 
-glob('src/**/*.js', {}, (er, files) => {
+const cwd = 'src'
+
+glob('**/*.js', { cwd }, (er, files) => {
   const allFiles = files.join(' ')
 
-  exec(`npx docco ${allFiles}`, (error, stdout, stderr) => {
+  exec(`npx docco ${allFiles} --output ../docs`, { cwd }, (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`)
       return

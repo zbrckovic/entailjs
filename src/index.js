@@ -5,7 +5,7 @@ export { Category, Kind, Sym } from './abstract-structures/sym'
 export { Deduction, Rule, TermDependencyGraph } from './deduction-structure'
 export { FormulaParser, DeductionParser } from './parsers'
 export { ErrorName } from './error'
-export { DeductionInterface } from './deduction-interface'
+export { startDeduction } from './deduction-interface'
 export {
   SymPresentation, Placement, SyntacticInfo, primitivePresentationCtx
 } from './presentation/sym-presentation'
@@ -22,3 +22,5 @@ export {
   primitiveSyms,
   universalQuantifier
 } from './primitive-syms'
+
+// [Sym](./abstract-structures/sym)

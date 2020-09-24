@@ -76,12 +76,12 @@ RegularRuleApplicationSpec.universalGeneralization = (premise, premiseIndex, new
 
   let termDependencies
   if (oldTerm !== undefined) {
-    const freeSyms = { ...Expression.getFreeTerms(premise) }
-    delete freeSyms[oldTerm.id]
+    const freeTerms = { ...Expression.getFreeTerms(premise) }
+    delete freeTerms[oldTerm.id]
 
-    const freeSymsIds = Object.keys(freeSyms).map(freeSym => parseInt(freeSym.id, 10))
+    const freeTermIds = Object.keys(freeTerms).map(id => parseInt(id, 10))
 
-    termDependencies = { dependent: oldTerm.id, dependencies: new Set(freeSymsIds) }
+    termDependencies = { dependent: oldTerm.id, dependencies: new Set(freeTermIds) }
   }
 
   return RegularRuleApplicationSpec({
@@ -104,12 +104,12 @@ RegularRuleApplicationSpec.existentialInstantiation = (premise, premiseIndex, ne
 
   let termDependencies
   if (newTerm !== undefined) {
-    const freeSyms = { ...Expression.getFreeSyms(conclusion) }
-    delete freeSyms[newTerm.id]
+    const freeTerms = { ...Expression.getFreeTerms(conclusion) }
+    delete freeTerms[newTerm.id]
 
-    const freeSymsIds = Object.keys(freeSyms).map(freeSym => parseInt(freeSym.id, 10))
+    const freeTermIds = Object.keys(freeTerms).map(id => parseInt(id, 10))
 
-    termDependencies = { dependent: newTerm.id, dependencies: new Set(freeSymsIds) }
+    termDependencies = { dependent: newTerm.id, dependencies: new Set(freeTermIds) }
   }
 
   return RegularRuleApplicationSpec({

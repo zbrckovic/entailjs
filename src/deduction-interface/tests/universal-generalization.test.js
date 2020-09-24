@@ -69,7 +69,10 @@ test('simple', () => {
     ruleApplicationSummary: RegularRuleApplicationSummary({
       rule: Rule.UniversalGeneralization,
       premises: [0],
-      termDependencies: { dependent: parser.getSym('a').id }
+      termDependencies: {
+        dependent: parser.getSym('a').id,
+        dependencies: new Set()
+      }
     })
   })
 

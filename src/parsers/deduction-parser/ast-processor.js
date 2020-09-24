@@ -11,7 +11,9 @@ export const AstProcessor = ({ syms, presentationCtx }) => {
 
   const { getSym, getSyms, getPresentationCtx, getTextToSymMap, getMaxSymId } = formulaAstProcessor
 
-  const process = ({ steps }) => {
+  const process = ast => {
+    const { steps } = ast
+
     let deductionInterface = startDeduction()
 
     deductionInterface = steps.reduce(

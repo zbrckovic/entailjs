@@ -16,7 +16,7 @@ test('vacuous', () => {
   const formula0 = parser.parse('E[x] F(a)')
   const formula1 = parser.parse('F(a)')
 
-  const deduction = new Deduction({
+  const deduction = Deduction({
     steps: [
       Step({
         formula: formula0,
@@ -48,7 +48,7 @@ test('simple', () => {
   const formula0 = parser.parse('E[x] F(x)')
   const formula1 = parser.parse('F(a)')
 
-  const deduction = startDeduction({
+  const deduction = Deduction({
     steps: [
       Step({
         formula: formula0,
@@ -62,7 +62,7 @@ test('simple', () => {
     .apply(parser.getSym('a'))
     .deduction
 
-  const actual = Deduction.getStep(newDeduction)
+  const actual = Deduction.getLastStep(newDeduction)
 
   const expected = Step({
     assumptions: new Set([0]),
@@ -70,7 +70,10 @@ test('simple', () => {
     ruleApplicationSummary: RegularRuleApplicationSummary({
       rule: Rule.ExistentialInstantiation,
       premises: [0],
-      termDependencies: { dependent: parser.getSym('a').id }
+      termDependencies: {
+        dependent: parser.getSym('a').id,
+        dependencies: new Set()
+      }
     })
   })
 

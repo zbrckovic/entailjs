@@ -10,7 +10,7 @@ export const DeductionRuleInterface = (deduction, firstStepIndex, secondStepInde
       Deduction.getStep(deduction, secondStepIndex).formula,
       secondStepIndex
     )
-    const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
+    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   }

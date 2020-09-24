@@ -50,7 +50,7 @@ const applyRegularRule = (deduction, {
   termDependencies,
   assumptionToRemove
 }) => {
-  const assumptions = calculateAssumptions(deduction, premises, assumptionToRemove)
+  const assumptions = calculateAssumptions(deduction, premises, [assumptionToRemove])
 
   const ruleApplicationSummary = RegularRuleApplicationSummary({ rule, premises, termDependencies })
 
@@ -83,13 +83,13 @@ const addStep = (deduction, step) => {
 const calculateAssumptions = (deduction, premises, toRemove) => {
   const result = new Set()
 
-  premises.forEach((premise, i) => {
+  premises.forEach(premise => {
     const step = Deduction.getStep(deduction, premise)
 
     const { assumptions, ruleApplicationSummary: { rule } } = step
 
     if (rule === Rule.Premise || rule === Rule.Theorem) {
-      result.add(i)
+      result.add(premise)
     }
 
     assumptions.forEach(assumption => { result.add(assumption) })

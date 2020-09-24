@@ -10,7 +10,7 @@ export const reduceToTruthFunctional = formula =>
 const reduceToTruthFunctionalWithSubstitutions = (formula, substitutions = {}) => {
   const { sym, children } = formula
 
-  if (sym.getCategory() === Category.FF && !sym.binds) {
+  if (Sym.getCategory(sym) === Category.FF && !sym.binds) {
     const [newChildren, newAssignments] = children.reduce(
       ([currentChildren, currentAssignments], child) => {
         const [

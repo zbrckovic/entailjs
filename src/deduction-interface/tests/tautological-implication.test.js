@@ -7,7 +7,12 @@ import { primitiveSyms } from '../../primitive-syms'
 import { startDeduction } from '../deduction-interface'
 
 let parser
-beforeEach(() => { parser = new FormulaParser(primitiveSyms, primitivePresentationCtx) })
+beforeEach(() => {
+  parser = FormulaParser({
+    syms: primitiveSyms,
+    presentationCtx: primitivePresentationCtx
+  })
+})
 
 test('tautological implication', () => {
   const formula0 = parser.parse('~~p')

@@ -12,8 +12,6 @@ TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) => {
     throw createError(ErrorName.TERM_ALREADY_USED, undefined, dependent)
   }
 
-  if (dependencies.length === 0) return graph
-
   const cycleInducingDependency = dependencies.find(
     dependency => TermDependencyGraph.hasDependency(graph, dependency, dependent)
   )

@@ -12,7 +12,7 @@ export const ExistentialGeneralizationRuleInterface = (deduction, stepIndex) => 
     const ruleApplicationSpec = RegularRuleApplicationSpec.existentialGeneralization(
       premise, stepIndex, newTerm, oldTerm
     )
-    const newDeduction = Deduction.apply(deduction, ruleApplicationSpec)
+    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   })
@@ -112,9 +112,9 @@ export const GeneralizationRuleInterface = (deduction, stepIndex, concreteApply)
 
   // `newTerm` is the generalized term which will be the substitute and `oldTerm` is the instance
   // term which if provided will be substituted with `newTerm`. If `oldTerm` is not provided
-  // generalization will be is vacuous.
+  // generalization will be vacuous.
   const apply = (newTerm, oldTerm) => {
-    const substitutionRequired = !Sym.equals(newTerm, oldTerm)
+    const substitutionRequired = oldTerm !== undefined && !Sym.equals(newTerm, oldTerm)
     if (substitutionRequired) {
       if (Expression.getFreeSyms(premise)[newTerm.id] !== undefined) {
         throw createError(ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS)
@@ -140,8 +140,8 @@ export const GeneralizationRuleInterface = (deduction, stepIndex, concreteApply)
     try {
       const [firstBoundOccurrencePosition] = Expression.findBoundOccurrences(formula)
       if (firstBoundOccurrencePosition === undefined) return { newTerm }
-      const [firstIndex] = firstBoundOccurrencePosition
-      const oldTerm = Expression.getSubexpression(premise, firstIndex).sym
+      const [, ...restIndexes] = firstBoundOccurrencePosition
+      const oldTerm = Expression.getSubexpression(premise, restIndexes).sym
       return { oldTerm, newTerm }
     } catch (e) {
       if (e.name === ErrorName.NO_CHILD_AT_INDEX) {

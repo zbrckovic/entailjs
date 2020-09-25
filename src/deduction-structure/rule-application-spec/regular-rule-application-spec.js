@@ -1,4 +1,4 @@
-import { Expression } from '../../abstract-structures/expression'
+import { Expression } from '../../abstract-structures'
 import { existentialQuantifier, implication, universalQuantifier } from '../../primitive-syms'
 import { Rule } from '../rule'
 

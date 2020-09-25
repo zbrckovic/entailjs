@@ -1,12 +1,12 @@
 import { createError, ErrorName } from '../../error'
 
-// `TermDependencyGraph` is a mapping between symbol's id (dependent) and a set of symbol ids on
-// which it depends on (dependencies). It's important to note that `TermDependencyGraph` contains
-// only ids, not the actual symbols. Whenever we mention a symbol in this code or in comments,
-// it's the id, not the actual symbol object we are talking about.
+// `TermDependencyGraph` is a mapping between symbol's id (**dependent**) and a set of symbol ids on
+// which it depends on (**dependencies**). It's important to note that `TermDependencyGraph`
+// contains only ids, not the actual symbol objects. Whenever we mention a symbol in this context
+// it's the symbol's id - not the actual symbol object - we are talking about.
 export const TermDependencyGraph = ({ ...props } = {}) => ({ ...props })
 
-// Add direct dependency between `dependent` and `dependencies` and normalize the graph.
+// Adds direct dependency between `dependent` and `dependencies` and normalize the graph.
 TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) => {
   if (graph[dependent] !== undefined) {
     throw createError(ErrorName.TERM_ALREADY_USED, undefined, dependent)
@@ -29,7 +29,7 @@ TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) => {
   return result
 }
 
-// Check whether `graph` has direct or transitive dependency between `dependent` and `dependency`.
+// Checks whether `graph` has direct or transitive dependency between `dependent` and `dependency`.
 TermDependencyGraph.hasDependency = (graph, dependent, dependency, traversed = new Set()) => {
   if (traversed.has(dependent)) throw new Error('Infinite recursion error')
   traversed.add(dependent)
@@ -44,14 +44,14 @@ TermDependencyGraph.hasDependency = (graph, dependent, dependency, traversed = n
   )
 }
 
-// Find all direct dependents of `dependency` and return them as an array.
+// Finds all direct dependents of `dependency` and return them as an array.
 TermDependencyGraph.getDirectDependents = (graph, dependency) =>
   Object
     .entries(graph)
     .filter(([, dependencies]) => dependencies.has(dependency))
     .map(([dependent]) => parseInt(dependent, 10))
 
-// Find all direct or transitive dependencies of `dependent` and return them as an array.
+// Finds all direct or transitive dependencies of `dependent` and return them as an array.
 TermDependencyGraph.getDependencies = (graph, dependent, traversed = new Set()) => {
   if (traversed.has(dependent)) throw new Error('Infinite recursion error')
   traversed.add(dependent)
@@ -89,7 +89,7 @@ TermDependencyGraph.getDependents = (graph, dependency, traversed = new Set()) =
   return [...directDependents, ...transitiveDependents]
 }
 
-// Remove direct dependencies which would become redundant if direct dependency between `dependent`
+// Removes direct dependencies which would become redundant if direct dependency between `dependent`
 // and `dependency` was introduced to the `graph`.
 const normalize = (graph, dependent, dependency) => {
   const normalizedDownwards = normalizeDownwards(graph, dependent, dependency, true)
@@ -104,9 +104,9 @@ const normalize = (graph, dependent, dependency) => {
   )
 }
 
-// Remove direct dependencies which would become redundant if direct dependency between `dependent`
-// and `dependency` was introduced.
-// It looks only downstream from `dependent` (only its descendants are considered).
+// Removes direct dependencies which would become redundant if direct dependency between `dependent`
+// and `dependency` was introduced. It looks only downstream from `dependent` i.e. only its
+// descendants are considered.
 const normalizeDownwards = (graph, dependent, dependency, isRoot = false) => {
   if (!isRoot && TermDependencyGraph.hasDirectDependency(graph, dependent, dependency)) {
     return removeDirectDependency(graph, dependent, dependency)
@@ -123,7 +123,7 @@ const normalizeDownwards = (graph, dependent, dependency, isRoot = false) => {
   )
 }
 
-// Remove direct dependency between `dependent` and `dependency` if it exists.
+// Removes direct dependency between `dependent` and `dependency` if it exists.
 const removeDirectDependency = (graph, dependent, dependency) => {
   const dependencies = graph[dependent]
   if (dependencies === undefined) return graph

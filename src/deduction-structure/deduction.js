@@ -68,20 +68,24 @@ const applyRegularRule = (deduction, {
   return result
 }
 
-// Calculates new graph according to changes required by the rule.
-const updateGraph = (deduction, { dependent, dependencies }) =>
-  TermDependencyGraph.addDependencies(deduction.termDependencyGraph, dependent, ...dependencies)
+// Calculates new graph according to changes required by the rule's term dependencies.
+const updateGraph = (deduction, termDependencies) => {
+  const { dependent, dependencies } = termDependencies
+
+  return TermDependencyGraph.addDependencies(
+    deduction.termDependencyGraph,
+    dependent,
+    ...dependencies
+  )
+}
 
 const setGraph = (deduction, termDependencyGraph) => ({ ...deduction, termDependencyGraph })
 
-const addStep = (deduction, step) => {
-  const newSteps = [...deduction.steps, step]
-  return { ...deduction, steps: newSteps }
-}
+const addStep = (deduction, step) => ({ ...deduction, steps: [...deduction.steps, step] })
 
-// Calculates which assumptions must be added to the next step according to the specified rule
-// premises. Assumptions are inherited from all premises. In addition to that if premise was
-// introduced by `Premise` or `Theorem` rule, its index is also added as an assumption.
+// Calculates which assumptions must be added to the next step according to the specified rule's
+// premises. Assumptions are inherited from all premises of the rule. In addition to that if the
+// premise was introduced by `Premise` or `Theorem` rule, its index is also added as an assumption.
 const calculateAssumptions = (deduction, premises, toRemove) => {
   const result = new Set()
 

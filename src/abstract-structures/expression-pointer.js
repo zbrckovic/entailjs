@@ -1,4 +1,4 @@
-import { createError, ErrorName } from '../../error'
+import { createError, ErrorName } from '../error'
 import { Expression } from './expression'
 
 // Pointer to the specific subexpression of the base expression. Contains the base

@@ -1,4 +1,4 @@
-import { Category, Sym } from '../abstract-structures/sym'
+import { Category, Sym } from '../abstract-structures'
 import { createError, ErrorName } from '../error'
 import { generateValuesPermutations, primitiveTruthFunctions } from './primitive-truth-functions'
 

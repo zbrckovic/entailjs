@@ -1,4 +1,4 @@
-import { Expression } from '../abstract-structures/expression'
+import { Expression } from '../abstract-structures'
 import { createImplicationWithAntecedentsAsConjunction } from '../formula-construction-util'
 import { implication } from '../primitive-syms'
 import * as util from './propositional-logic-util'

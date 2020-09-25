@@ -2,8 +2,7 @@ import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-appli
 import { Deduction } from '../../deduction-structure'
 import { startDeduction } from '../deduction-interface'
 import { createError, ErrorName } from '../../error'
-import { Expression } from '../../abstract-structures/expression'
-import { Sym } from '../../abstract-structures/sym'
+import { Expression, Sym } from '../../abstract-structures'
 
 export const ExistentialGeneralizationRuleInterface = (deduction, stepIndex) => {
   const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
@@ -57,8 +56,8 @@ export const InstantiationRuleInterface = (deduction, stepIndex, concreteApply) 
     return concreteApply(newTerm)
   }
 
-  // Under assumption that `formula` is a result of an application of this rule determine which
-  // term was introduced in substitution. If instantiation was vacuous return `undefined`.
+  // Under assumption that `formula` is the result of an application of this rule determines which
+  // term was introduced in the substitution. If instantiation was vacuous returns `undefined`.
   const determineNewTermInPotentialResult = formula => {
     const [firstOccurrence] = Expression.findBoundOccurrences(premise)
     if (firstOccurrence === undefined) return undefined
@@ -131,8 +130,8 @@ export const GeneralizationRuleInterface = (deduction, stepIndex, concreteApply)
     return concreteApply(newTerm, oldTerm)
   }
 
-  // Under assumption that `formula` is a result of an application of this rule determine which
-  // term was introduced in substitution.
+  // Under assumption that `formula` is the result of an application of this rule determine which
+  // term was introduced in the substitution.
   const determineSubstitutionInPotentialResult = formula => {
     const newTerm = formula.boundSym
     if (newTerm === undefined) throw createError(ErrorName.INVALID_SUBSTITUTION_RESULT)

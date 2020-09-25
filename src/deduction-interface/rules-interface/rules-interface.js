@@ -10,9 +10,9 @@ import {
 } from './quantification'
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
 import { TheoremRuleInterface } from './theorem-rule-interface'
-import { Sym } from '../../abstract-structures/sym'
+import { Sym } from '../../abstract-structures'
 
-// Accept deduction and selected steps (step indexes), determine possible rules which could be
+// Accepts deduction and selected steps (step indexes), determines possible rules which could be
 // applied and return interfaces for their application.
 export const RulesInterface = (deduction, ...steps) => {
   const result = {}

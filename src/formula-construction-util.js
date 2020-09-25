@@ -1,4 +1,4 @@
-import { connectWithBinarySym, Expression } from './abstract-structures/expression'
+import { connectWithBinarySym, Expression } from './abstract-structures'
 import { conjunction, implication } from './primitive-syms'
 
 // Creates conjunction of `formulas`. If there's only one formula it returns it.

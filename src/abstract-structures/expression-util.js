@@ -1,4 +1,4 @@
-import { createError, ErrorName } from '../../error'
+import { createError, ErrorName } from '../error'
 import { Expression } from './expression'
 
 // Reduces `expressions` to a single expression using binary connective. Reduction is performed from

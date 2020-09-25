@@ -1,4 +1,4 @@
-import { Sym } from './abstract-structures/sym'
+import { Sym } from './abstract-structures'
 
 export const negation = Sym.ff({ id: 0, arity: 1 })
 export const conjunction = Sym.ff({ id: 1, arity: 2 })

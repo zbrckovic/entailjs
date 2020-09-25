@@ -1,5 +1,4 @@
-import { Expression } from '../abstract-structures/expression'
-import { Category, Sym } from '../abstract-structures/sym'
+import { Category, Expression, Sym } from '../abstract-structures'
 
 // Traverse `formula` and replace each non-truth-functional subformula with a generated
 // truth-functional symbol using successive negative ids (to avoid collision with existing symbols).

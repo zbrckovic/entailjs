@@ -1,8 +1,8 @@
 import _ from 'lodash'
-import { ErrorName } from '../../error'
-import { FormulaParser } from '../../parsers/formula-parser'
-import { primitivePresentationCtx } from '../../presentation/sym-presentation'
-import { primitiveSyms } from '../../primitive-syms'
+import { ErrorName } from '../error'
+import { FormulaParser } from '../parsers/formula-parser'
+import { primitivePresentationCtx } from '../presentation/sym-presentation'
+import { primitiveSyms } from '../primitive-syms'
 import { ExpressionPointer } from './expression-pointer'
 
 let parser

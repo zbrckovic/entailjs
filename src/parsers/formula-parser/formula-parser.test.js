@@ -1,6 +1,5 @@
 import _ from 'lodash'
-import { Expression } from '../../abstract-structures/expression'
-import { Sym } from '../../abstract-structures/sym'
+import { Expression, Sym } from '../../abstract-structures'
 import { ErrorName } from '../../error'
 import {
   primitivePresentationCtx,

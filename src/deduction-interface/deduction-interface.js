@@ -3,8 +3,8 @@ import { createError, ErrorName } from '../error'
 import { RulesInterface } from './rules-interface'
 
 // Interface which can be used to perform deduction by repeatedly applying available rules. Validity
-// of deduction is ensured on each step. Validity of the resulting deduction is guaranteed if
-// initial deduction (if any) provided at the start was valid.
+// of deduction is ensured on each step. Therefore validity of the resulting deduction is guaranteed
+// if initial deduction (if any) provided at the start was valid.
 export const startDeduction = (deduction = Deduction()) => {
   const createIndexes = (...ordinals) => {
     const stepOrdinalOutOfRange = ordinals.find(ordinal => !(
@@ -22,7 +22,7 @@ export const startDeduction = (deduction = Deduction()) => {
     return ordinals.map(ordinal => ordinal - 1)
   }
 
-  // Select steps (formulas) to use as premises in the next rule.
+  // Selects steps (formulas) to use as premises in the next rule.
   const selectSteps = (...ordinals) => {
     const indexes = createIndexes(...ordinals)
     return RulesInterface(deduction, ...indexes)

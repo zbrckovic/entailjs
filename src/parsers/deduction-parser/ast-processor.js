@@ -6,6 +6,9 @@ import { AstProcessor as FormulaAstProcessor } from '../formula-parser/ast-proce
 import _ from 'lodash'
 import { Deduction } from '../../deduction-structure'
 
+// `AstProcessor` can process deduction AST (the result of parsing formula) and creates a
+// `Deduction`. Internally it uses formula [`AstProcessor`](../formula-parser/ast-processor) for
+// parsing formula on each step.
 export const AstProcessor = ({ syms, presentationCtx }) => {
   const formulaAstProcessor = FormulaAstProcessor({ syms, presentationCtx })
 

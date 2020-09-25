@@ -1,5 +1,4 @@
-import { Expression } from '../../abstract-structures/expression'
-import { Category, Kind, Sym } from '../../abstract-structures/sym'
+import { Category, Expression, Kind, Sym } from '../../abstract-structures'
 import { createError, ErrorName } from '../../error'
 import {
   createTextToSymMap,
@@ -10,14 +9,17 @@ import {
 } from '../../presentation/sym-presentation'
 import { isBracketed } from '../peg/ast-formula'
 
+// `AstProcessor` can process formula AST (the result of parsing formula) and create an
+// `Expression`. As a side-effect of this processing it updates its internal state. Internal state
+// tracks information about processed symbols.
 export const AstProcessor = ({
   // All symbols by their ids.
   syms,
   // Presentations by symbol ids.
   presentationCtx,
-  // Symbols by their ascii representation texts (for optimization).
+  // Symbols by their ascii representation texts (used for optimization).
   textToSymMap = createTextToSymMap(presentationCtx, syms),
-  // Used when new symbol must be introduced to decide about its id (for optimization).
+  // Used when new symbol must be introduced to decide about its id (used for optimization).
   maxSymId = getMaxSymId(textToSymMap)
 }) => {
   // Processes formula AST (returned from peg parser) and tries to construct an expression (more
@@ -97,7 +99,7 @@ export const AstProcessor = ({
     maxSymId = Math.max(maxSymId, sym.id)
   }
 
-  // Creates new symbol, generates new id for it, updates internal state according to new symbol
+  // Creates new symbol, generates new id for it, updates internal state according to the new symbol
   // addition and returns newly created symbol.
   const createSym = (kind, arity, binds, text, placement) => {
     const argumentKind = determineArgumentKind(kind, text)

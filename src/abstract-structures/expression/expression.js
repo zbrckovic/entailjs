@@ -34,7 +34,7 @@ Expression.getSubexpression = (expression, position) => {
   return Expression.getSubexpression(child, restIndexes)
 }
 
-// Replace subexpression at the `position` with a `newSubexpression`.
+// Replaces subexpression at the `position` with a `newSubexpression`.
 Expression.replaceSubexpression = (expression, position, newSubexpression) => {
   if (position.length === 0) return newSubexpression
 
@@ -53,15 +53,15 @@ Expression.replaceSubexpression = (expression, position, newSubexpression) => {
   return { ...expression, children: newChildren }
 }
 
-// Replace subexpression at the `position` with the result of calling the function `update`.
-// `update` will receive existing subexpression as an argument.
+// Replaces subexpression at the `position` with the result of calling `update`. `update` receives
+// existing subexpression as an argument.
 Expression.updateSubexpression = (expression, position, update) => {
   const oldSubexpression = Expression.getSubexpression(expression, position)
   const newSubexpression = update(oldSubexpression)
   return Expression.replaceSubexpression(expression, position, newSubexpression)
 }
 
-// Get resisgin
+// Returns an array of subexpressions on path `position`.
 Expression.getSubexpressionsOnPath = (expression, position) => {
   const result = [expression]
 
@@ -74,13 +74,14 @@ Expression.getSubexpressionsOnPath = (expression, position) => {
   return result
 }
 
+// Replaces main symbol at `position` with `newSym`.
 Expression.replaceSymAt = (
   expression,
   position,
   newSym,
-  // This is called if new sym binds, but old one didnt.
+  // Called if `newSym` binds, but old one doesn't.
   getBoundSym,
-  // This called if new sym has larger arity from old one.
+  // Called if `newSym` has a larger arity than old one.
   getChild
 ) =>
   Expression.updateSubexpression(expression, position, subexpression => {
@@ -97,6 +98,7 @@ Expression.replaceSymAt = (
     }
   })
 
+// Returns an array of positions where `sym` occurs as free.
 Expression.findFreeOccurrences = (expression, sym) => {
   const result = []
 
@@ -113,6 +115,8 @@ Expression.findFreeOccurrences = (expression, sym) => {
   return result
 }
 
+// Returns a list of positions of bound occurrences of `boundSym`. Throws an error if `boundSym`
+// doesn't exist.
 Expression.findBoundOccurrences = expression => {
   const boundSym = expression.boundSym
   if (boundSym === undefined) {
@@ -128,7 +132,16 @@ Expression.findBoundOccurrences = expression => {
   )
 }
 
-Expression.replaceFreeOccurrences = (expression, sym, newSym, getBoundSym, getChild) =>
+// Replaces free occurrences of `sym` with `newSym`.
+Expression.replaceFreeOccurrences = (
+  expression,
+  sym,
+  newSym,
+  // Called if `newSym` binds, but old one doesn't.
+  getBoundSym,
+  // Called if `newSym` has a larger arity than old one.
+  getChild
+) =>
   Expression
     .findFreeOccurrences(expression, sym)
     .reduce(
@@ -142,6 +155,8 @@ Expression.replaceFreeOccurrences = (expression, sym, newSym, getBoundSym, getCh
       expression
     )
 
+// Replaces bound occurrences of `boundSym` with `newSym`. Also replaces `boundSym` property
+// in root expression.
 Expression.replaceBoundOccurrences = (expression, newSym) => {
   const expressionWithReplacedBoundOccurrences = Expression
     .findBoundOccurrences(expression)
@@ -150,6 +165,8 @@ Expression.replaceBoundOccurrences = (expression, newSym) => {
   return { ...expressionWithReplacedBoundOccurrences, boundSym: newSym }
 }
 
+// Finds subexpression at `position` and replaces all bound occurrences of it's `boundSym` with
+// `newSym`.
 Expression.replaceBoundOccurrencesAt = (expression, position, newSym) =>
   Expression.updateSubexpression(
     expression,
@@ -157,6 +174,8 @@ Expression.replaceBoundOccurrencesAt = (expression, position, newSym) =>
     subexpression => Expression.replaceBoundOccurrences(subexpression, newSym)
   )
 
+// Returns all symbols in an `expression` (both main and bound symbols). Result is an object
+// which contains symbols mapped by their ids.
 Expression.getSyms = expression => {
   const result = {}
   result[expression.sym.id] = expression.sym
@@ -172,6 +191,9 @@ Expression.getSyms = expression => {
   return result
 }
 
+// Returns free symbols in `expression`. `boundSyms` contains additional symbols which are
+// considered as bound. These symbols are omitted from the result. `boundSyms` primarily exists for
+// passing data in recursive calls.
 Expression.getFreeSyms = (expression, boundSyms = {}) => {
   const result = {}
 
@@ -190,25 +212,30 @@ Expression.getFreeSyms = (expression, boundSyms = {}) => {
   return result
 }
 
+// Returns free symbols of the kind `Term`.
 Expression.getFreeTerms = (expression, boundSyms = {}) =>
   _.pickBy(
     Expression.getFreeSyms(expression, boundSyms),
     sym => sym.kind === Kind.Term
   )
 
-Expression.findBoundSymsAtFreeOccurrencesOfSym = (expression, sym, bound = {}) => {
+// Finds all `boundSym`s which occur on the paths to free occurrences of `sym`. In other words
+// it looks for all symbols which are bound by subexpressions where `sym` appears as free, or by
+// some ancestors of these subexpressions. `boundSyms` are additional symbols which will be added
+// to the result. `boundSyms` exists primarily for passing data in recursive calls.
+Expression.findBoundSymsAtFreeOccurrencesOfSym = (expression, sym, boundSyms = {}) => {
   let result = {}
 
-  if (expression.sym.id === sym.id) result = bound
+  if (expression.sym.id === sym.id) result = boundSyms
 
   if (expression.boundSym !== undefined) {
     if (expression.boundSym.id === sym.id) return result
-    bound[expression.boundSym.id] = expression.boundSym
+    boundSyms[expression.boundSym.id] = expression.boundSym
   }
 
   expression.children.forEach(child => {
     const boundSymsAtFreeOccurrencesOfSym =
-      Expression.findBoundSymsAtFreeOccurrencesOfSym(child, sym, bound)
+      Expression.findBoundSymsAtFreeOccurrencesOfSym(child, sym, boundSyms)
 
     Object.assign(result, boundSymsAtFreeOccurrencesOfSym)
   })

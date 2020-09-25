@@ -1,5 +1,5 @@
 // `Sym` (short for symbol) is the main entity from which `Expression`s are built. Word `symbol` has
-// been avoided because it's a built-in type in ES6.
+// be en avoided because it's a built-in type in ES6.
 export const Sym = ({
   // Non-negative integer which must be the same throughout all of this symbol's occurrences in some
   // context (expression, deduction, etc...).

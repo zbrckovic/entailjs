@@ -22,5 +22,3 @@ export {
   primitiveSyms,
   universalQuantifier
 } from './primitive-syms'
-
-// [Sym](./abstract-structures/sym)

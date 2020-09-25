@@ -6,7 +6,6 @@ The system is based on the one presented by W. V. Quine in `Methods of Logic`.
 
 ## Api
 
-### Abstract Structures
 - [Symbol](https://zbrckovic.github.io/entail-core/annotated-src/abstract-structures/sym)
 - [Expression](https://zbrckovic.github.io/entail-core/annotated-src/abstract-structures/expression)
 - [Deduction](https://zbrckovic.github.io/entail-core/annotated-src/deduction-structure/deduction)

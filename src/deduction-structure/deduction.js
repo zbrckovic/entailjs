@@ -8,16 +8,22 @@ import { TermDependencyGraph } from './term-dependency-graph'
 
 // Structure containing all relevant information about some deduction (proof) carried out as a
 // sequence of steps.
-export const Deduction = ({ steps = [], termDependencyGraph = TermDependencyGraph() } = {}) => ({
+export const Deduction = ({
+  // Sequence of steps.
+  steps = [],
+  // Graph containing information about dependencies between terms.
+  termDependencyGraph = TermDependencyGraph()
+} = {}) => ({
   steps, termDependencyGraph
 })
 
 Deduction.getSize = deduction => deduction.steps.length
 
-// Get step by its ordinal number. From regular user's perspective steps are referenced by positive
-// integers starting from 1. Internally we use list indexes which start from 0.
+// Gets step by its ordinal number. From regular user's perspective steps are referenced by
+// positive integers starting from 1. Internally, zero-based indexes are used.
 Deduction.getStepByOrdinal = (deduction, ordinal) => Deduction.getStep(deduction, ordinal - 1)
 
+// Gets step by index or throws if there's no such step.
 Deduction.getStep = (deduction, stepIndex) => {
   const step = deduction.steps[stepIndex]
   if (step === undefined) throw new Error(`no step at index ${stepIndex}`)
@@ -30,7 +36,7 @@ Deduction.getLastStep = deduction => {
   return step
 }
 
-// Derive new deduction by applying rule specified by `ruleApplicationSpec`.
+// Derives new deduction by applying rule specified by `ruleApplicationSpec`.
 Deduction.applyRule = (deduction, ruleApplicationSpec) => {
   return ruleApplicationSpec.rule === Rule.Theorem
     ? applyTheoremRule(deduction, ruleApplicationSpec)
@@ -66,7 +72,7 @@ const applyRegularRule = (deduction, {
   return result
 }
 
-// Calculate new graph according to changes required by the rule.
+// Calculates new graph according to changes required by the rule.
 const updateGraph = (deduction, { dependent, dependencies }) =>
   TermDependencyGraph.addDependencies(deduction.termDependencyGraph, dependent, ...dependencies)
 
@@ -77,9 +83,9 @@ const addStep = (deduction, step) => {
   return { ...deduction, steps: newSteps }
 }
 
-// Calculate which assumptions must be added according to the specified rule premises. Assumptions
-// are inherited from all premises. In addition to that if premise was introduced by `Premise` or
-// `Theorem` rule, its index is also added as an assumption.
+// Calculates which assumptions must be added to the next step according to the specified rule
+// premises. Assumptions are inherited from all premises. In addition to that if premise was
+// introduced by `Premise` or `Theorem` rule, its index is also added as an assumption.
 const calculateAssumptions = (deduction, premises, toRemove) => {
   const result = new Set()
 

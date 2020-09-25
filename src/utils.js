@@ -1,3 +1,4 @@
+// Finds duplicates in `items` by using *same-value-zero* equality comparison.
 export const findDuplicates = items => {
   let traversed = new Set()
   let duplicates = new Set()

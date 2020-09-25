@@ -181,11 +181,3 @@ There are some points which are not apparent from the specified grammar:
     significant whether the actual whitespace character is space, tab or a newline. Multiple 
     whitespace characters in a row are also allowed and can be used freely to format an expression 
     in a more readable way.
-
-## Development
-
-### Notes on dependencies
-
-- `eslint` - Linter
-- `@typescript-eslint/parser` - Uses `typescript-estree` to replace `ESLint`'s default parser.
-- `@typescript-eslint/eslint-plugin` - Enables typescript-specific ESLint rules.

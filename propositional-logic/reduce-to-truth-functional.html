@@ -442,7 +442,7 @@ This is a mid-step before doing truth-functional operations on any formula.</p>
 
   <span class="hljs-keyword">let</span> substitutedSym = substitutions[formulaKey]
   <span class="hljs-keyword">if</span> (substitutedSym === <span class="hljs-literal">undefined</span>) {
-    substitutedSym = Sym.ff({ <span class="hljs-attr">id</span>: -<span class="hljs-built_in">Object</span>.keys(assignmentsToReturn).length })
+    substitutedSym = Sym.ff({ <span class="hljs-attr">id</span>: -<span class="hljs-built_in">Object</span>.keys(assignmentsToReturn).length - <span class="hljs-number">1</span> })
     assignmentsToReturn = {
       ...assignmentsToReturn,
       [formulaKey]: substitutedSym

@@ -4,7 +4,7 @@ import { RulesInterface } from './rules-interface'
 
 // Interface which can be used to perform deduction by repeatedly applying available rules. Validity
 // of deduction is ensured on each step. Therefore validity of the resulting deduction is guaranteed
-// if initial deduction (if any) provided at the start was valid.
+// if deduction provided at the start (if any) was valid.
 export const startDeduction = (deduction = Deduction()) => {
   const createIndexes = (...ordinals) => {
     const stepOrdinalOutOfRange = ordinals.find(ordinal => !(

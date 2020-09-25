@@ -6,8 +6,8 @@ The system is based on the one presented by W. V. Quine in `Methods of Logic`.
 
 ## Api
 
-- [Symbol](zbrckovic.github.io/entail-core/abstract-structures/sym)
-- [Expression](zbrckovic.github.io/entail-core/abstract-structures/expression)
+- [Symbol](https://zbrckovic.github.io/entail-core/abstract-structures/sym)
+- [Expression](https://zbrckovic.github.io/entail-core/abstract-structures/expression)
 
 ## Entail Expression Language (EEL)
 

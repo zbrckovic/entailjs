@@ -1,4 +1,4 @@
-import { RegularRuleApplicationSummary } from './rule-application-summary'
+import { Rule } from './rule'
 
 // Single step of a deduction
 export const Step = ({
@@ -12,3 +12,12 @@ export const Step = ({
   // - What change must be made to the term dependency graph?
   ruleApplicationSummary = RegularRuleApplicationSummary()
 }) => ({ assumptions, formula, ruleApplicationSummary })
+
+export const RegularRuleApplicationSummary = ({
+  rule = Rule.Premise,
+  premises = [],
+  // Term dependencies introduced by this rule.
+  termDependencies
+}) => ({ rule, premises, termDependencies })
+
+export const TheoremRuleApplicationSummary = ({ theoremId }) => ({ rule: Rule.Theorem, theoremId })

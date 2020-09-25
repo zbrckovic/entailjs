@@ -1,6 +1,5 @@
 import { Deduction, Rule } from '../../deduction-structure'
-import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
-import { Step } from '../../deduction-structure/step'
+import { RegularRuleApplicationSummary, Step } from '../../deduction-structure/step'
 import { ErrorName } from '../../error'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'

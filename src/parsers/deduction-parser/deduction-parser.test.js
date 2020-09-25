@@ -1,6 +1,5 @@
 import { Deduction, Rule } from '../../deduction-structure'
-import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
-import { Step } from '../../deduction-structure/step'
+import { RegularRuleApplicationSummary, Step } from '../../deduction-structure/step'
 import { TermDependencyGraph } from '../../deduction-structure/term-dependency-graph'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
 import { primitiveSyms } from '../../primitive-syms'
@@ -15,86 +14,86 @@ beforeEach(() => {
   })
 })
 
-// test('parse()', () => {
-//   const text = `
-//         (1) E[y] A[x] F(x, y)                           / P;
-//     1   (2) A[x] F(x, a)                                / EI 1;
-//     1   (3) F(b, a)                                     / UI 2;
-//     1   (4) E[y] F(b, y)                                / EG 3;
-//     1   (5) A[x] E[y] F(x, y)                           / UG 4;
-//         (6) E[y] A[x] F(x, y) -> A[x] E[y] F(x, y)      / D 1, 5;
-//     `
-//
-//   const actual = parser.parse(text)
-//
-//   const formulaParser = FormulaParser({
-//     syms: parser.getSyms(),
-//     presentationCtx: parser.getPresentationCtx()
-//   })
-//
-//   const expected = Deduction({
-//     steps: [
-//       Step({
-//         formula: formulaParser.parse('E[y] A[x] F(x, y)'),
-//         ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-//       }),
-//       Step({
-//         assumptions: new Set([0]),
-//         formula: formulaParser.parse('A[x] F(x, a)'),
-//         ruleApplicationSummary: RegularRuleApplicationSummary({
-//           rule: Rule.ExistentialInstantiation,
-//           premises: [0],
-//           termDependencies: {
-//             dependent: formulaParser.getSym('a').id,
-//             dependencies: new Set()
-//           }
-//         })
-//       }),
-//       Step({
-//         assumptions: new Set([0]),
-//         formula: formulaParser.parse('F(b, a)'),
-//         ruleApplicationSummary: RegularRuleApplicationSummary({
-//           rule: Rule.UniversalInstantiation,
-//           premises: [1]
-//         })
-//       }),
-//       Step({
-//         assumptions: new Set([0]),
-//         formula: formulaParser.parse('E[y] F(b, y) '),
-//         ruleApplicationSummary: RegularRuleApplicationSummary({
-//           rule: Rule.ExistentialGeneralization,
-//           premises: [2]
-//         })
-//       }),
-//       Step({
-//         assumptions: new Set([0]),
-//         formula: formulaParser.parse('A[x] E[y] F(x, y) '),
-//         ruleApplicationSummary: RegularRuleApplicationSummary({
-//           rule: Rule.UniversalGeneralization,
-//           premises: [3],
-//           termDependencies: {
-//             dependent: formulaParser.getSym('b').id,
-//             dependencies: new Set()
-//           }
-//         })
-//       }),
-//       Step({
-//         assumptions: new Set(),
-//         formula: formulaParser.parse('E[y] A[x] F(x, y) -> A[x] E[y] F(x, y)'),
-//         ruleApplicationSummary: RegularRuleApplicationSummary({
-//           rule: Rule.Deduction,
-//           premises: [0, 4]
-//         })
-//       })
-//     ],
-//     termDependencyGraph: TermDependencyGraph({
-//       [formulaParser.getSym('a').id]: new Set(),
-//       [formulaParser.getSym('b').id]: new Set()
-//     })
-//   })
-//
-//   expect(actual).toEqual(expected)
-// })
+test('parse()', () => {
+  const text = `
+        (1) E[y] A[x] F(x, y)                           / P;
+    1   (2) A[x] F(x, a)                                / EI 1;
+    1   (3) F(b, a)                                     / UI 2;
+    1   (4) E[y] F(b, y)                                / EG 3;
+    1   (5) A[x] E[y] F(x, y)                           / UG 4;
+        (6) E[y] A[x] F(x, y) -> A[x] E[y] F(x, y)      / D 1, 5;
+    `
+
+  const actual = parser.parse(text)
+
+  const formulaParser = FormulaParser({
+    syms: parser.getSyms(),
+    presentationCtx: parser.getPresentationCtx()
+  })
+
+  const expected = Deduction({
+    steps: [
+      Step({
+        formula: formulaParser.parse('E[y] A[x] F(x, y)'),
+        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+      }),
+      Step({
+        assumptions: new Set([0]),
+        formula: formulaParser.parse('A[x] F(x, a)'),
+        ruleApplicationSummary: RegularRuleApplicationSummary({
+          rule: Rule.ExistentialInstantiation,
+          premises: [0],
+          termDependencies: {
+            dependent: formulaParser.getSym('a').id,
+            dependencies: new Set()
+          }
+        })
+      }),
+      Step({
+        assumptions: new Set([0]),
+        formula: formulaParser.parse('F(b, a)'),
+        ruleApplicationSummary: RegularRuleApplicationSummary({
+          rule: Rule.UniversalInstantiation,
+          premises: [1]
+        })
+      }),
+      Step({
+        assumptions: new Set([0]),
+        formula: formulaParser.parse('E[y] F(b, y) '),
+        ruleApplicationSummary: RegularRuleApplicationSummary({
+          rule: Rule.ExistentialGeneralization,
+          premises: [2]
+        })
+      }),
+      Step({
+        assumptions: new Set([0]),
+        formula: formulaParser.parse('A[x] E[y] F(x, y) '),
+        ruleApplicationSummary: RegularRuleApplicationSummary({
+          rule: Rule.UniversalGeneralization,
+          premises: [3],
+          termDependencies: {
+            dependent: formulaParser.getSym('b').id,
+            dependencies: new Set()
+          }
+        })
+      }),
+      Step({
+        assumptions: new Set(),
+        formula: formulaParser.parse('E[y] A[x] F(x, y) -> A[x] E[y] F(x, y)'),
+        ruleApplicationSummary: RegularRuleApplicationSummary({
+          rule: Rule.Deduction,
+          premises: [0, 4]
+        })
+      })
+    ],
+    termDependencyGraph: TermDependencyGraph({
+      [formulaParser.getSym('a').id]: new Set(),
+      [formulaParser.getSym('b').id]: new Set()
+    })
+  })
+
+  expect(actual).toEqual(expected)
+})
 
 test('parse()', () => {
   const text = `

@@ -1,9 +1,5 @@
 import { Rule } from './rule'
-import {
-  RegularRuleApplicationSummary,
-  TheoremRuleApplicationSummary
-} from './rule-application-summary'
-import { Step } from './step'
+import { RegularRuleApplicationSummary, Step, TheoremRuleApplicationSummary } from './step'
 import { TermDependencyGraph } from './term-dependency-graph'
 
 // Structure containing all relevant information about some deduction (proof) carried out as a

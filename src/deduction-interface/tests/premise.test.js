@@ -1,10 +1,9 @@
-import { RegularRuleApplicationSummary } from '../../deduction-structure/rule-application-summary'
-import { Step } from '../../deduction-structure/step'
+import { Deduction, Rule } from '../../deduction-structure'
+import { RegularRuleApplicationSummary, Step } from '../../deduction-structure/step'
 import { FormulaParser } from '../../parsers/formula-parser'
 import { primitivePresentationCtx } from '../../presentation/sym-presentation'
 import { primitiveSyms } from '../../primitive-syms'
 import { startDeduction } from '../deduction-interface'
-import { Deduction, Rule } from '../../deduction-structure'
 
 let parser
 beforeEach(() => {

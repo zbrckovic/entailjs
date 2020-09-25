@@ -518,7 +518,7 @@ higher level of abstraction and don’t make this assumption.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Replace subexpression at the <code>position</code> with a <code>newSubexpression</code>.</p>
+              <p>Replaces subexpression at the <code>position</code> with a <code>newSubexpression</code>.</p>
 
             </div>
             
@@ -549,8 +549,8 @@ higher level of abstraction and don’t make this assumption.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Replace subexpression at the <code>position</code> with the result of calling the function <code>update</code>.
-<code>update</code> will receive existing subexpression as an argument.</p>
+              <p>Replaces subexpression at the <code>position</code> with the result of calling <code>update</code>. <code>update</code> receives
+existing subexpression as an argument.</p>
 
             </div>
             
@@ -569,7 +569,7 @@ higher level of abstraction and don’t make this assumption.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Get resisgin</p>
+              <p>Returns an array of subexpressions on path <code>position</code>.</p>
 
             </div>
             
@@ -583,12 +583,7 @@ higher level of abstraction and don’t make this assumption.</p>
   }
 
   <span class="hljs-keyword">return</span> result
-}
-
-Expression.replaceSymAt = (
-  expression,
-  position,
-  newSym,</pre></div></div>
+}</pre></div></div>
             
         </li>
         
@@ -599,11 +594,14 @@ Expression.replaceSymAt = (
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>This is called if new sym binds, but old one didnt.</p>
+              <p>Replaces main symbol at <code>position</code> with <code>newSym</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  getBoundSym,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>Expression.replaceSymAt = (
+  expression,
+  position,
+  newSym,</pre></div></div>
             
         </li>
         
@@ -614,7 +612,22 @@ Expression.replaceSymAt = (
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>This called if new sym has larger arity from old one.</p>
+              <p>Called if <code>newSym</code> binds, but old one doesn’t.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  getBoundSym,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Called if <code>newSym</code> has a larger arity than old one.</p>
 
             </div>
             
@@ -632,9 +645,22 @@ Expression.replaceSymAt = (
       <span class="hljs-attr">boundSym</span>: newBoundSym,
       <span class="hljs-attr">children</span>: newChildren
     }
-  })
+  })</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Returns an array of positions where <code>sym</code> occurs as free.</p>
 
-Expression.findFreeOccurrences = <span class="hljs-function">(<span class="hljs-params">expression, sym</span>) =&gt;</span> {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Expression.findFreeOccurrences = <span class="hljs-function">(<span class="hljs-params">expression, sym</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> result = []
 
   <span class="hljs-keyword">if</span> (expression.sym.id === sym.id) result.push([])
@@ -648,9 +674,23 @@ Expression.findFreeOccurrences = <span class="hljs-function">(<span class="hljs-
   }
 
   <span class="hljs-keyword">return</span> result
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Returns a list of positions of bound occurrences of <code>boundSym</code>. Throws an error if <code>boundSym</code>
+doesn’t exist.</p>
 
-Expression.findBoundOccurrences = <span class="hljs-function"><span class="hljs-params">expression</span> =&gt;</span> {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Expression.findBoundOccurrences = <span class="hljs-function"><span class="hljs-params">expression</span> =&gt;</span> {
   <span class="hljs-keyword">const</span> boundSym = expression.boundSym
   <span class="hljs-keyword">if</span> (boundSym === <span class="hljs-literal">undefined</span>) {
     <span class="hljs-keyword">throw</span> createError(ErrorName.EXPRESSION_DOESNT_BIND, <span class="hljs-literal">undefined</span>, <span class="hljs-built_in">this</span>)
@@ -663,9 +703,56 @@ Expression.findBoundOccurrences = <span class="hljs-function"><span class="hljs-
         .findFreeOccurrences(child, boundSym)
         .map(<span class="hljs-function"><span class="hljs-params">childResult</span> =&gt;</span> [i, ...childResult])
   )
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Replaces free occurrences of <code>sym</code> with <code>newSym</code>.</p>
 
-Expression.replaceFreeOccurrences = <span class="hljs-function">(<span class="hljs-params">expression, sym, newSym, getBoundSym, getChild</span>) =&gt;</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Expression.replaceFreeOccurrences = (
+  expression,
+  sym,
+  newSym,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Called if <code>newSym</code> binds, but old one doesn’t.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  getBoundSym,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Called if <code>newSym</code> has a larger arity than old one.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  getChild
+) =&gt;
   Expression
     .findFreeOccurrences(expression, sym)
     .reduce(
@@ -677,24 +764,66 @@ Expression.replaceFreeOccurrences = <span class="hljs-function">(<span class="hl
         getChild === <span class="hljs-literal">undefined</span> ? <span class="hljs-literal">undefined</span> : <span class="hljs-function">() =&gt;</span> getChild(position)
       ),
       expression
-    )
+    )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Replaces bound occurrences of <code>boundSym</code> with <code>newSym</code>. Also replaces <code>boundSym</code> property
+in root expression.</p>
 
-Expression.replaceBoundOccurrences = <span class="hljs-function">(<span class="hljs-params">expression, newSym</span>) =&gt;</span> {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Expression.replaceBoundOccurrences = <span class="hljs-function">(<span class="hljs-params">expression, newSym</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> expressionWithReplacedBoundOccurrences = Expression
     .findBoundOccurrences(expression)
     .reduce(<span class="hljs-function">(<span class="hljs-params">acc, position</span>) =&gt;</span> Expression.replaceSymAt(acc, position, newSym), expression)
 
   <span class="hljs-keyword">return</span> { ...expressionWithReplacedBoundOccurrences, <span class="hljs-attr">boundSym</span>: newSym }
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Finds subexpression at <code>position</code> and replaces all bound occurrences of it’s <code>boundSym</code> with
+<code>newSym</code>.</p>
 
-Expression.replaceBoundOccurrencesAt = <span class="hljs-function">(<span class="hljs-params">expression, position, newSym</span>) =&gt;</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Expression.replaceBoundOccurrencesAt = <span class="hljs-function">(<span class="hljs-params">expression, position, newSym</span>) =&gt;</span>
   Expression.updateSubexpression(
     expression,
     position,
     <span class="hljs-function"><span class="hljs-params">subexpression</span> =&gt;</span> Expression.replaceBoundOccurrences(subexpression, newSym)
-  )
+  )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Returns all symbols in an <code>expression</code> (both main and bound symbols). Result is an object
+which contains symbols mapped by their ids.</p>
 
-Expression.getSyms = <span class="hljs-function"><span class="hljs-params">expression</span> =&gt;</span> {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Expression.getSyms = <span class="hljs-function"><span class="hljs-params">expression</span> =&gt;</span> {
   <span class="hljs-keyword">const</span> result = {}
   result[expression.sym.id] = expression.sym
 
@@ -707,9 +836,24 @@ Expression.getSyms = <span class="hljs-function"><span class="hljs-params">expre
   })
 
   <span class="hljs-keyword">return</span> result
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Returns free symbols in <code>expression</code>. <code>boundSyms</code> contains additional symbols which are
+considered as bound. These symbols are omitted from the result. <code>boundSyms</code> primarily exists for
+passing data in recursive calls.</p>
 
-Expression.getFreeSyms = <span class="hljs-function">(<span class="hljs-params">expression, boundSyms = {}</span>) =&gt;</span> {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Expression.getFreeSyms = <span class="hljs-function">(<span class="hljs-params">expression, boundSyms = {}</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> result = {}
 
   <span class="hljs-keyword">if</span> (boundSyms[expression.sym.id] === <span class="hljs-literal">undefined</span>) {
@@ -725,27 +869,56 @@ Expression.getFreeSyms = <span class="hljs-function">(<span class="hljs-params">
   })
 
   <span class="hljs-keyword">return</span> result
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Returns free symbols of the kind <code>Term</code>.</p>
 
-Expression.getFreeTerms = <span class="hljs-function">(<span class="hljs-params">expression, boundSyms = {}</span>) =&gt;</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Expression.getFreeTerms = <span class="hljs-function">(<span class="hljs-params">expression, boundSyms = {}</span>) =&gt;</span>
   _.pickBy(
     Expression.getFreeSyms(expression, boundSyms),
     <span class="hljs-function"><span class="hljs-params">sym</span> =&gt;</span> sym.kind === Kind.Term
-  )
+  )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Finds all <code>boundSym</code>s which occur on the paths to free occurrences of <code>sym</code>. In other words
+it looks for all symbols which are bound by subexpressions where <code>sym</code> appears as free, or by
+some ancestors of these subexpressions. <code>boundSyms</code> are additional symbols which will be added
+to the result. <code>boundSyms</code> exists primarily for passing data in recursive calls.</p>
 
-Expression.findBoundSymsAtFreeOccurrencesOfSym = <span class="hljs-function">(<span class="hljs-params">expression, sym, bound = {}</span>) =&gt;</span> {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Expression.findBoundSymsAtFreeOccurrencesOfSym = <span class="hljs-function">(<span class="hljs-params">expression, sym, boundSyms = {}</span>) =&gt;</span> {
   <span class="hljs-keyword">let</span> result = {}
 
-  <span class="hljs-keyword">if</span> (expression.sym.id === sym.id) result = bound
+  <span class="hljs-keyword">if</span> (expression.sym.id === sym.id) result = boundSyms
 
   <span class="hljs-keyword">if</span> (expression.boundSym !== <span class="hljs-literal">undefined</span>) {
     <span class="hljs-keyword">if</span> (expression.boundSym.id === sym.id) <span class="hljs-keyword">return</span> result
-    bound[expression.boundSym.id] = expression.boundSym
+    boundSyms[expression.boundSym.id] = expression.boundSym
   }
 
   expression.children.forEach(<span class="hljs-function"><span class="hljs-params">child</span> =&gt;</span> {
     <span class="hljs-keyword">const</span> boundSymsAtFreeOccurrencesOfSym =
-      Expression.findBoundSymsAtFreeOccurrencesOfSym(child, sym, bound)
+      Expression.findBoundSymsAtFreeOccurrencesOfSym(child, sym, boundSyms)
 
     <span class="hljs-built_in">Object</span>.assign(result, boundSymsAtFreeOccurrencesOfSym)
   })

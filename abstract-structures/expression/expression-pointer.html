@@ -410,25 +410,18 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Pointer to the specific subexpression of the base expression.
-It contains the base <code>expression</code> and the <code>position</code> which is a path to some subexpression of
-<code>expression</code>. This subexpression is called a <strong>target</strong>.</p>
+              <p>Pointer to the specific subexpression of the base expression. Contains the base
+<code>expression</code> and the <code>position</code> which is a path to some subexpression of <code>expression</code>. This
+subexpression is called a <strong>target</strong>.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ExpressionPointer = <span class="hljs-function">(<span class="hljs-params">{ expression, position = [] }</span>) =&gt;</span> ({ expression, position })
 
-ExpressionPointer.create = <span class="hljs-function">(<span class="hljs-params">{ expression, position = [] }</span>) =&gt;</span> ({ expression, position })
-
 ExpressionPointer.isRoot = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> pointer.position.length === <span class="hljs-number">0</span>
 
 ExpressionPointer.getTarget = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span>
-  Expression.getSubexpression(pointer.expression, pointer.position)
-
-ExpressionPointer.getParent = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> {
-  <span class="hljs-keyword">if</span> (ExpressionPointer.isRoot(pointer)) <span class="hljs-keyword">throw</span> createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
-  <span class="hljs-keyword">return</span> { ...pointer, <span class="hljs-attr">position</span>: pointer.position.slice(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>) }
-}</pre></div></div>
+  Expression.getSubexpression(pointer.expression, pointer.position)</pre></div></div>
             
         </li>
         
@@ -438,6 +431,24 @@ ExpressionPointer.getParent = <span class="hljs-function"><span class="hljs-para
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Returns parent of the target or throws if there’s no parent.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>ExpressionPointer.getParent = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> {
+  <span class="hljs-keyword">if</span> (ExpressionPointer.isRoot(pointer)) <span class="hljs-keyword">throw</span> createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
+  <span class="hljs-keyword">return</span> { ...pointer, <span class="hljs-attr">position</span>: pointer.position.slice(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>) }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Returns a path to the ancestor subexpression which binds <code>sym</code> at the target position. In other
 words, find the closest target’s ancestor which has <code>sym</code> as its <code>boundSym</code>. If <code>sym</code> is not
@@ -456,25 +467,64 @@ specified, target’s <code>mainSym</code> is assumed.</p>
   <span class="hljs-keyword">return</span> boundSym?.id === sym.id
     ? parentPointer.position
     : ExpressionPointer.findBindingOccurrence(parentPointer, sym)
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Returns free occurrences of <code>sym</code> at target.</p>
 
-ExpressionPointer.findFreeOccurrences = <span class="hljs-function">(<span class="hljs-params">pointer, sym</span>) =&gt;</span> {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>ExpressionPointer.findFreeOccurrences = <span class="hljs-function">(<span class="hljs-params">pointer, sym</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> target = ExpressionPointer.getTarget(pointer)
 
   <span class="hljs-keyword">return</span> Expression
     .findFreeOccurrences(target, sym)
     .map(<span class="hljs-function"><span class="hljs-params">position</span> =&gt;</span> pointer.position.concat(position))
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Returns bound occurrences of target’s <code>boundSym</code> at target.</p>
 
-ExpressionPointer.findBoundOccurrences = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>ExpressionPointer.findBoundOccurrences = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> {
   <span class="hljs-keyword">const</span> target = ExpressionPointer.getTarget(pointer)
 
   <span class="hljs-keyword">return</span> Expression
     .findBoundOccurrences(target)
     .map(<span class="hljs-function"><span class="hljs-params">position</span> =&gt;</span> pointer.position.concat(position))
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Returns subexpression occurring on the path to <code>target</code>.</p>
 
-ExpressionPointer.getSubexpressionsOnPath = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>ExpressionPointer.getSubexpressionsOnPath = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> {
   <span class="hljs-keyword">const</span> target = ExpressionPointer.getTarget(pointer)
 
   <span class="hljs-keyword">return</span> Expression.getSubexpressionsOnPath(target.expression, pointer.position)
@@ -483,15 +533,16 @@ ExpressionPointer.getSubexpressionsOnPath = <span class="hljs-function"><span cl
         </li>
         
         
-        <li id="section-4">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Finds all symbols which are bound by ancestors. It doesn’t necessarily search for symbols which
-actually appear in the target. It searches for all symbols S which would be bound by some
-ancestor if we replaced the target with some formula containing S as free symbol.</p>
+              <p>Finds all symbols which are bound by target’s ancestors. It doesn’t necessarily search for
+symbols which actually appear in the target. It searches for all symbols S which would be
+bound by some ancestor if we replaced the target with some formula containing S as free symbol.
+In other words, it also returns vacuously bound symbols.</p>
 
             </div>
             

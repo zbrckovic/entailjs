@@ -1,8 +1,8 @@
 import { parseDeduction } from '../peg'
 import { AstProcessor } from './ast-processor'
 
-export const DeductionParser = ({ syms, presentationCtx }) => {
-  const astProcessor = AstProcessor({ syms, presentationCtx })
+export const DeductionParser = ({ syms, presentations }) => {
+  const astProcessor = AstProcessor({ syms, presentations })
 
   const parse = text => {
     const ast = parseDeduction(text)
@@ -14,7 +14,7 @@ export const DeductionParser = ({ syms, presentationCtx }) => {
     addPresentation,
     getSym,
     getSyms,
-    getPresentationCtx,
+    getPresentations,
     getTextToSymMap,
     getMaxSymId
   } = astProcessor
@@ -25,7 +25,7 @@ export const DeductionParser = ({ syms, presentationCtx }) => {
     addPresentation,
     getSym,
     getSyms,
-    getPresentationCtx,
+    getPresentations,
     getTextToSymMap,
     getMaxSymId
   })

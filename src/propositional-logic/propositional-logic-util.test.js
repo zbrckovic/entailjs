@@ -1,6 +1,6 @@
 import { ErrorName } from '../error'
 import { FormulaParser } from '../parsers/formula-parser'
-import { primitivePresentationCtx } from '../presentation/sym-presentation'
+import { primitivePresentations } from '../presentation/sym-presentation'
 import { primitiveSyms } from '../primitive-syms'
 import { evaluate, findInterpretations } from './propositional-logic-util'
 import _ from 'lodash'
@@ -9,7 +9,7 @@ let parser
 beforeEach(() => {
   parser = FormulaParser({
     syms: primitiveSyms,
-    presentationCtx: primitivePresentationCtx
+    presentations: primitivePresentations
   })
 })
 

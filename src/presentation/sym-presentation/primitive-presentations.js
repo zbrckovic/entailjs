@@ -10,7 +10,7 @@ import {
 import { SymPresentation, SyntacticInfo } from './sym-presentation'
 
 // Presentations for all primitive symbols organized by symbol ids.
-export const primitivePresentationCtx = {
+export const primitivePresentations = {
   [negation.id]: SymPresentation({
     ascii: SyntacticInfo.prefix('~'),
     unicode: SyntacticInfo.prefix('¬')

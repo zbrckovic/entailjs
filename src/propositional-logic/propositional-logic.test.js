@@ -1,5 +1,5 @@
 import { FormulaParser } from '../parsers/formula-parser'
-import { primitivePresentationCtx } from '../presentation/sym-presentation'
+import { primitivePresentations } from '../presentation/sym-presentation'
 import { isLogicalConsequence, isTautology } from './propositional-logic'
 import { primitiveSyms } from '../primitive-syms'
 
@@ -7,7 +7,7 @@ let parser
 beforeEach(() => {
   parser = FormulaParser({
     syms: primitiveSyms,
-    presentationCtx: primitivePresentationCtx
+    presentations: primitivePresentations
   })
 })
 

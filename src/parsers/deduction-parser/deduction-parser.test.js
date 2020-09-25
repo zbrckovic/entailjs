@@ -1,7 +1,7 @@
 import { Deduction, Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSummary, Step } from '../../deduction-structure/step'
 import { TermDependencyGraph } from '../../deduction-structure/term-dependency-graph'
-import { primitivePresentationCtx } from '../../presentation/sym-presentation'
+import { primitivePresentations } from '../../presentation/sym-presentation'
 import { primitiveSyms } from '../../primitive-syms'
 import { FormulaParser } from '../formula-parser'
 import { DeductionParser } from './deduction-parser'
@@ -10,7 +10,7 @@ let parser
 beforeEach(() => {
   parser = DeductionParser({
     syms: primitiveSyms,
-    presentationCtx: primitivePresentationCtx
+    presentations: primitivePresentations
   })
 })
 
@@ -28,7 +28,7 @@ test('parse()', () => {
 
   const formulaParser = FormulaParser({
     syms: parser.getSyms(),
-    presentationCtx: parser.getPresentationCtx()
+    presentations: parser.getPresentations()
   })
 
   const expected = Deduction({
@@ -114,7 +114,7 @@ test('parse()', () => {
 
   const formulaParser = FormulaParser({
     syms: parser.getSyms(),
-    presentationCtx: parser.getPresentationCtx()
+    presentations: parser.getPresentations()
   })
 
   const expected = Deduction({

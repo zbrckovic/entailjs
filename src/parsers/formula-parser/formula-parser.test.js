@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { Expression, Sym } from '../../abstract-structures'
 import { ErrorName } from '../../error'
 import {
-  primitivePresentationCtx,
+  primitivePresentations,
   SymPresentation,
   SyntacticInfo
 } from '../../presentation/sym-presentation'
@@ -17,7 +17,7 @@ import { FormulaParser } from './formula-parser'
 
 let parser
 beforeEach(() => {
-  parser = FormulaParser({ syms: primitiveSyms, presentationCtx: primitivePresentationCtx })
+  parser = FormulaParser({ syms: primitiveSyms, presentations: primitivePresentations })
 })
 
 test('parse(\'p\')', () => {

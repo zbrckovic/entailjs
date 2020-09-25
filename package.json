@@ -9,7 +9,8 @@
     "README.md"
   ],
   "scripts": {
-    "docs:generate": "node ./generate-docs.js",
+    "docs:generate": "npm run docco && npm run test:coverage && cp docs-index.html docs/index.html",
+    "docco": "node ./generate-annotated-src.js",
     "test:clear-cache": "jest --clearCache",
     "test:coverage": "jest --coverage",
     "test": "jest",

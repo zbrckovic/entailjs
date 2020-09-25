@@ -9,10 +9,10 @@ import { Deduction } from '../../deduction-structure'
 // `AstProcessor` can process deduction AST (the result of parsing formula) and creates a
 // `Deduction`. Internally it uses formula [`AstProcessor`](../formula-parser/ast-processor) for
 // parsing formula on each step.
-export const AstProcessor = ({ syms, presentationCtx }) => {
-  const formulaAstProcessor = FormulaAstProcessor({ syms, presentationCtx })
+export const AstProcessor = ({ syms, presentations }) => {
+  const formulaAstProcessor = FormulaAstProcessor({ syms, presentations })
 
-  const { getSym, getSyms, getPresentationCtx, getTextToSymMap, getMaxSymId } = formulaAstProcessor
+  const { getSym, getSyms, getPresentations, getTextToSymMap, getMaxSymId } = formulaAstProcessor
 
   const process = ast => {
     const { steps } = ast
@@ -126,7 +126,7 @@ export const AstProcessor = ({ syms, presentationCtx }) => {
     process,
     getSym,
     getSyms,
-    getPresentationCtx,
+    getPresentations,
     getTextToSymMap,
     getMaxSymId
   }

@@ -1,3 +1,3 @@
 export { SymPresentation, SyntacticInfo, Placement } from './sym-presentation'
-export { primitivePresentationCtx } from './primitive-presentation-ctx'
-export { createTextToSymMap, getMaxSymId } from './presentation-ctx'
+export { primitivePresentations } from './primitive-presentations'
+export { createTextToSymMap, getMaxSymId } from './presentations'

@@ -3,13 +3,13 @@ import _ from 'lodash'
 // **Presentation context** or is a mapping between symbol ids and their presentations.
 
 // Organizes symbols by their ASCII text presentations. It's assumed that each presentation in
-// `presentationCtx` will have a unique ASCII text. `syms` is a mapping between ids and symbols and
-// it should contain all symbols whose ids appear in `presentationCtx`. The result is useful to the
+// `presentations` will have a unique ASCII text. `syms` is a mapping between ids and symbols and
+// it should contain all symbols whose ids appear in `presentations`. The result is useful to the
 // parser which needs a quick access to the symbol represented by some text it encountered.
-export const createTextToSymMap = (presentationCtx, syms) =>
+export const createTextToSymMap = (presentations, syms) =>
   _.fromPairs(
     Object
-      .entries(presentationCtx)
+      .entries(presentations)
       .map(([id, { ascii: { text } }]) => [text, syms[id]])
   )
 

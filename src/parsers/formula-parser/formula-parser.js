@@ -1,8 +1,8 @@
 import { parseFormula } from '../peg'
 import { AstProcessor } from './ast-processor'
 
-export const FormulaParser = ({ syms, presentationCtx }) => {
-  const astProcessor = AstProcessor({ syms, presentationCtx })
+export const FormulaParser = ({ syms, presentations }) => {
+  const astProcessor = AstProcessor({ syms, presentations })
 
   const parse = text => {
     const ast = parseFormula(text)
@@ -14,7 +14,7 @@ export const FormulaParser = ({ syms, presentationCtx }) => {
     addPresentation,
     getSym,
     getSyms,
-    getPresentationCtx,
+    getPresentations,
     getTextToSymMap,
     getMaxSymId
   } = astProcessor
@@ -25,7 +25,7 @@ export const FormulaParser = ({ syms, presentationCtx }) => {
     addPresentation,
     getSym,
     getSyms,
-    getPresentationCtx,
+    getPresentations,
     getTextToSymMap,
     getMaxSymId
   })

@@ -5,5 +5,6 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '/node_modules/',
     './src/parsers/peg/grammar.js'
-  ]
+  ],
+  coverageDirectory: '../docs/coverage'
 }

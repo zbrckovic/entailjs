@@ -1,12 +1,12 @@
 import { ErrorName } from '../error'
 import { FormulaParser } from '../parsers/formula-parser'
-import { primitivePresentationCtx } from '../presentation/sym-presentation'
+import { primitivePresentations } from '../presentation/sym-presentation'
 import { conjunction, primitiveSyms } from '../primitive-syms'
 import { connectWithBinarySym } from './expression-util'
 
 let parser
 beforeEach(() => {
-  parser = FormulaParser({ syms: primitiveSyms, presentationCtx: primitivePresentationCtx })
+  parser = FormulaParser({ syms: primitiveSyms, presentations: primitivePresentations })
 })
 
 test.each([

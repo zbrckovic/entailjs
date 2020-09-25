@@ -16,9 +16,9 @@ export const AstProcessor = ({
   // All symbols by their ids.
   syms,
   // Presentations by symbol ids.
-  presentationCtx,
+  presentations,
   // Symbols by their ascii representation texts (used for optimization).
-  textToSymMap = createTextToSymMap(presentationCtx, syms),
+  textToSymMap = createTextToSymMap(presentations, syms),
   // Used when new symbol must be introduced to decide about its id (used for optimization).
   maxSymId = getMaxSymId(textToSymMap)
 }) => {
@@ -34,7 +34,7 @@ export const AstProcessor = ({
     const mainSym = textToSymMap[ast.sym] ??
       createSym(kind, arity, ast.boundSym !== undefined, ast.sym, ast.symPlacement)
 
-    const mainSymPresentation = presentationCtx[mainSym.id]
+    const mainSymPresentation = presentations[mainSym.id]
 
     if (mainSymPresentation.ascii.placement !== ast.symPlacement) {
       throw createError(
@@ -68,7 +68,7 @@ export const AstProcessor = ({
           throw createError(
             ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
             undefined,
-            { sym: boundSym, presentation: presentationCtx[boundSym.id] }
+            { sym: boundSym, presentation: presentations[boundSym.id] }
           )
         }
 
@@ -76,7 +76,7 @@ export const AstProcessor = ({
           throw createError(
             ErrorName.INVALID_BOUND_SYMBOL_ARITY,
             undefined,
-            { sym: boundSym, presentation: presentationCtx[boundSym.id] }
+            { sym: boundSym, presentation: presentations[boundSym.id] }
           )
         }
       } else {
@@ -94,7 +94,7 @@ export const AstProcessor = ({
   // Updates internal state by adding new association between symbol and its presentation.
   const addPresentation = (sym, presentation) => {
     syms = { ...syms, [sym.id]: sym }
-    presentationCtx = { ...presentationCtx, [sym.id]: presentation }
+    presentations = { ...presentations, [sym.id]: presentation }
     textToSymMap = { ...textToSymMap, [presentation.ascii.text]: sym }
     maxSymId = Math.max(maxSymId, sym.id)
   }
@@ -119,7 +119,7 @@ export const AstProcessor = ({
     // Gets symbol associated with `text`.
     getSym: text => textToSymMap[text],
     getSyms: () => syms,
-    getPresentationCtx: () => presentationCtx,
+    getPresentations: () => presentations,
     getTextToSymMap: () => textToSymMap,
     getMaxSymId: () => maxSymId
   }

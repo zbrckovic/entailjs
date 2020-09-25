@@ -6,7 +6,7 @@ export { FormulaParser, DeductionParser } from './parsers'
 export { ErrorName } from './error'
 export { startDeduction } from './deduction-interface'
 export {
-  SymPresentation, Placement, SyntacticInfo, primitivePresentationCtx
+  SymPresentation, Placement, SyntacticInfo, primitivePresentations
 } from './presentation/sym-presentation'
 export {
   isContingent, isContradiction, isFalsifiable, isSatisfiable, isTautology

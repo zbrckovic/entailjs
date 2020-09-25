@@ -20,53 +20,48 @@
             <div id="jump_page">
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression-pointer.html">
-                  abstract-structures/expression/expression-pointer.js
+                <a class="source" href="../../abstract-structures/expression-pointer.html">
+                  abstract-structures/expression-pointer.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression-pointer.test.html">
-                  abstract-structures/expression/expression-pointer.test.js
+                <a class="source" href="../../abstract-structures/expression-pointer.test.html">
+                  abstract-structures/expression-pointer.test.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression-util.html">
-                  abstract-structures/expression/expression-util.js
+                <a class="source" href="../../abstract-structures/expression-util.html">
+                  abstract-structures/expression-util.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression-util.test.html">
-                  abstract-structures/expression/expression-util.test.js
+                <a class="source" href="../../abstract-structures/expression-util.test.html">
+                  abstract-structures/expression-util.test.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression.html">
-                  abstract-structures/expression/expression.js
+                <a class="source" href="../../abstract-structures/expression.html">
+                  abstract-structures/expression.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression.test.html">
-                  abstract-structures/expression/expression.test.js
+                <a class="source" href="../../abstract-structures/expression.test.html">
+                  abstract-structures/expression.test.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/index.html">
-                  abstract-structures/expression/index.js
+                <a class="source" href="../../abstract-structures/index.html">
+                  abstract-structures/index.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/sym/index.html">
-                  abstract-structures/sym/index.js
+                <a class="source" href="../../abstract-structures/sym.html">
+                  abstract-structures/sym.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/sym/sym.html">
-                  abstract-structures/sym/sym.js
-                </a>
-              
-                
-                <a class="source" href="../../abstract-structures/sym/sym.test.html">
-                  abstract-structures/sym/sym.test.js
+                <a class="source" href="../../abstract-structures/sym.test.html">
+                  abstract-structures/sym.test.js
                 </a>
               
                 
@@ -394,10 +389,10 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p><code>TermDependencyGraph</code> is a mapping between symbol’s id (dependent) and a set of symbol ids on
-which it depends on (dependencies). It’s important to note that <code>TermDependencyGraph</code> contains
-only ids, not the actual symbols. Whenever we mention a symbol in this code or in comments,
-it’s the id, not the actual symbol object we are talking about.</p>
+              <p><code>TermDependencyGraph</code> is a mapping between symbol’s id (<strong>dependent</strong>) and a set of symbol ids on
+which it depends on (<strong>dependencies</strong>). It’s important to note that <code>TermDependencyGraph</code>
+contains only ids, not the actual symbol objects. Whenever we mention a symbol in this context
+it’s the symbol’s id - not the actual symbol object - we are talking about.</p>
 
             </div>
             
@@ -412,7 +407,7 @@ it’s the id, not the actual symbol object we are talking about.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Add direct dependency between <code>dependent</code> and <code>dependencies</code> and normalize the graph.</p>
+              <p>Adds direct dependency between <code>dependent</code> and <code>dependencies</code> and normalize the graph.</p>
 
             </div>
             
@@ -447,7 +442,7 @@ it’s the id, not the actual symbol object we are talking about.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Check whether <code>graph</code> has direct or transitive dependency between <code>dependent</code> and <code>dependency</code>.</p>
+              <p>Checks whether <code>graph</code> has direct or transitive dependency between <code>dependent</code> and <code>dependency</code>.</p>
 
             </div>
             
@@ -474,7 +469,7 @@ it’s the id, not the actual symbol object we are talking about.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Find all direct dependents of <code>dependency</code> and return them as an array.</p>
+              <p>Finds all direct dependents of <code>dependency</code> and return them as an array.</p>
 
             </div>
             
@@ -493,7 +488,7 @@ it’s the id, not the actual symbol object we are talking about.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Find all direct or transitive dependencies of <code>dependent</code> and return them as an array.</p>
+              <p>Finds all direct or transitive dependencies of <code>dependent</code> and return them as an array.</p>
 
             </div>
             
@@ -543,7 +538,7 @@ TermDependencyGraph.getDependents = <span class="hljs-function">(<span class="hl
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Remove direct dependencies which would become redundant if direct dependency between <code>dependent</code>
+              <p>Removes direct dependencies which would become redundant if direct dependency between <code>dependent</code>
 and <code>dependency</code> was introduced to the <code>graph</code>.</p>
 
             </div>
@@ -570,9 +565,9 @@ and <code>dependency</code> was introduced to the <code>graph</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Remove direct dependencies which would become redundant if direct dependency between <code>dependent</code>
-and <code>dependency</code> was introduced.
-It looks only downstream from <code>dependent</code> (only its descendants are considered).</p>
+              <p>Removes direct dependencies which would become redundant if direct dependency between <code>dependent</code>
+and <code>dependency</code> was introduced. It looks only downstream from <code>dependent</code> i.e. only its
+descendants are considered.</p>
 
             </div>
             
@@ -601,7 +596,7 @@ It looks only downstream from <code>dependent</code> (only its descendants are c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Remove direct dependency between <code>dependent</code> and <code>dependency</code> if it exists.</p>
+              <p>Removes direct dependency between <code>dependent</code> and <code>dependency</code> if it exists.</p>
 
             </div>
             

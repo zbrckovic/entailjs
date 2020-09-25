@@ -20,53 +20,48 @@
             <div id="jump_page">
               
                 
-                <a class="source" href="../abstract-structures/expression/expression-pointer.html">
-                  abstract-structures/expression/expression-pointer.js
+                <a class="source" href="../abstract-structures/expression-pointer.html">
+                  abstract-structures/expression-pointer.js
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression/expression-pointer.test.html">
-                  abstract-structures/expression/expression-pointer.test.js
+                <a class="source" href="../abstract-structures/expression-pointer.test.html">
+                  abstract-structures/expression-pointer.test.js
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression/expression-util.html">
-                  abstract-structures/expression/expression-util.js
+                <a class="source" href="../abstract-structures/expression-util.html">
+                  abstract-structures/expression-util.js
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression/expression-util.test.html">
-                  abstract-structures/expression/expression-util.test.js
+                <a class="source" href="../abstract-structures/expression-util.test.html">
+                  abstract-structures/expression-util.test.js
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression/expression.html">
-                  abstract-structures/expression/expression.js
+                <a class="source" href="../abstract-structures/expression.html">
+                  abstract-structures/expression.js
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression/expression.test.html">
-                  abstract-structures/expression/expression.test.js
+                <a class="source" href="../abstract-structures/expression.test.html">
+                  abstract-structures/expression.test.js
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression/index.html">
-                  abstract-structures/expression/index.js
+                <a class="source" href="../abstract-structures/index.html">
+                  abstract-structures/index.js
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/sym/index.html">
-                  abstract-structures/sym/index.js
+                <a class="source" href="../abstract-structures/sym.html">
+                  abstract-structures/sym.js
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/sym/sym.html">
-                  abstract-structures/sym/sym.js
-                </a>
-              
-                
-                <a class="source" href="../abstract-structures/sym/sym.test.html">
-                  abstract-structures/sym/sym.test.js
+                <a class="source" href="../abstract-structures/sym.test.html">
+                  abstract-structures/sym.test.js
                 </a>
               
                 
@@ -536,19 +531,23 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Calculates new graph according to changes required by the rule.</p>
+              <p>Calculates new graph according to changes required by the rule’s term dependencies.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> updateGraph = <span class="hljs-function">(<span class="hljs-params">deduction, { dependent, dependencies }</span>) =&gt;</span>
-  TermDependencyGraph.addDependencies(deduction.termDependencyGraph, dependent, ...dependencies)
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> updateGraph = <span class="hljs-function">(<span class="hljs-params">deduction, termDependencies</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> { dependent, dependencies } = termDependencies
+
+  <span class="hljs-keyword">return</span> TermDependencyGraph.addDependencies(
+    deduction.termDependencyGraph,
+    dependent,
+    ...dependencies
+  )
+}
 
 <span class="hljs-keyword">const</span> setGraph = <span class="hljs-function">(<span class="hljs-params">deduction, termDependencyGraph</span>) =&gt;</span> ({ ...deduction, termDependencyGraph })
 
-<span class="hljs-keyword">const</span> addStep = <span class="hljs-function">(<span class="hljs-params">deduction, step</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> newSteps = [...deduction.steps, step]
-  <span class="hljs-keyword">return</span> { ...deduction, <span class="hljs-attr">steps</span>: newSteps }
-}</pre></div></div>
+<span class="hljs-keyword">const</span> addStep = <span class="hljs-function">(<span class="hljs-params">deduction, step</span>) =&gt;</span> ({ ...deduction, <span class="hljs-attr">steps</span>: [...deduction.steps, step] })</pre></div></div>
             
         </li>
         
@@ -559,9 +558,9 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Calculates which assumptions must be added to the next step according to the specified rule
-premises. Assumptions are inherited from all premises. In addition to that if premise was
-introduced by <code>Premise</code> or <code>Theorem</code> rule, its index is also added as an assumption.</p>
+              <p>Calculates which assumptions must be added to the next step according to the specified rule’s
+premises. Assumptions are inherited from all premises of the rule. In addition to that if the
+premise was introduced by <code>Premise</code> or <code>Theorem</code> rule, its index is also added as an assumption.</p>
 
             </div>
             

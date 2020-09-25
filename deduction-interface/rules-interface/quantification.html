@@ -20,53 +20,48 @@
             <div id="jump_page">
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression-pointer.html">
-                  abstract-structures/expression/expression-pointer.js
+                <a class="source" href="../../abstract-structures/expression-pointer.html">
+                  abstract-structures/expression-pointer.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression-pointer.test.html">
-                  abstract-structures/expression/expression-pointer.test.js
+                <a class="source" href="../../abstract-structures/expression-pointer.test.html">
+                  abstract-structures/expression-pointer.test.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression-util.html">
-                  abstract-structures/expression/expression-util.js
+                <a class="source" href="../../abstract-structures/expression-util.html">
+                  abstract-structures/expression-util.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression-util.test.html">
-                  abstract-structures/expression/expression-util.test.js
+                <a class="source" href="../../abstract-structures/expression-util.test.html">
+                  abstract-structures/expression-util.test.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression.html">
-                  abstract-structures/expression/expression.js
+                <a class="source" href="../../abstract-structures/expression.html">
+                  abstract-structures/expression.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/expression.test.html">
-                  abstract-structures/expression/expression.test.js
+                <a class="source" href="../../abstract-structures/expression.test.html">
+                  abstract-structures/expression.test.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression/index.html">
-                  abstract-structures/expression/index.js
+                <a class="source" href="../../abstract-structures/index.html">
+                  abstract-structures/index.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/sym/index.html">
-                  abstract-structures/sym/index.js
+                <a class="source" href="../../abstract-structures/sym.html">
+                  abstract-structures/sym.js
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/sym/sym.html">
-                  abstract-structures/sym/sym.js
-                </a>
-              
-                
-                <a class="source" href="../../abstract-structures/sym/sym.test.html">
-                  abstract-structures/sym/sym.test.js
+                <a class="source" href="../../abstract-structures/sym.test.html">
+                  abstract-structures/sym.test.js
                 </a>
               
                 
@@ -387,8 +382,7 @@
 <span class="hljs-keyword">import</span> { Deduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
-<span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures/expression&#x27;</span>
-<span class="hljs-keyword">import</span> { Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures/sym&#x27;</span>
+<span class="hljs-keyword">import</span> { Expression, Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ExistentialGeneralizationRuleInterface = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndex</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
@@ -463,8 +457,8 @@ vacuous <code>newTerm</code> doesn’t need to be provided.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Under assumption that <code>formula</code> is a result of an application of this rule determine which
-term was introduced in substitution. If instantiation was vacuous return <code>undefined</code>.</p>
+              <p>Under assumption that <code>formula</code> is the result of an application of this rule determines which
+term was introduced in the substitution. If instantiation was vacuous returns <code>undefined</code>.</p>
 
             </div>
             
@@ -561,8 +555,8 @@ generalization will be vacuous.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Under assumption that <code>formula</code> is a result of an application of this rule determine which
-term was introduced in substitution.</p>
+              <p>Under assumption that <code>formula</code> is the result of an application of this rule determine which
+term was introduced in the substitution.</p>
 
             </div>
             

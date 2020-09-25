@@ -6,11 +6,10 @@ The system is based on the one presented by W. V. Quine in `Methods of Logic`.
 
 ## Api
 
-### Abstract Structures
-- [Symbol](https://zbrckovic.github.io/entail-core/abstract-structures/sym)
-- [Expression](https://zbrckovic.github.io/entail-core/abstract-structures/expression)
-- [Deduction](https://zbrckovic.github.io/entail-core/deduction-structure/deduction)
-- [Deduction Interface](https://zbrckovic.github.io/entail-core/deduction-interface/deduction-interface)
+- [Symbol](https://zbrckovic.github.io/entail-core/annotated-src/abstract-structures/sym)
+- [Expression](https://zbrckovic.github.io/entail-core/annotated-src/abstract-structures/expression)
+- [Deduction](https://zbrckovic.github.io/entail-core/annotated-src/deduction-structure/deduction)
+- [Deduction Interface](https://zbrckovic.github.io/entail-core/annotated-src/deduction-interface/deduction-interface)
 
 ## Entail Expression Language (EEL)
 
@@ -181,3 +180,6 @@ There are some points which are not apparent from the specified grammar:
     significant whether the actual whitespace character is space, tab or a newline. Multiple 
     whitespace characters in a row are also allowed and can be used freely to format an expression 
     in a more readable way.
+  
+## [Coverage](https://zbrckovic.github.io/entail-core/coverage/lcov-report)
+  

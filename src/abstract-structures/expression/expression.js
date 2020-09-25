@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { createError, ErrorName } from '../../error'
 import { Kind } from '../sym'
 
+// Expression is a recursive tree structure built from symbols.
 export const Expression = ({
   // Main symbol of this expression.
   sym,
@@ -14,6 +15,7 @@ export const Expression = ({
   children = []
 }) => ({ sym, boundSym, children })
 
+// Returns the child of an `expression` at the index `i` or throws an error.
 Expression.getChild = (expression, i) => {
   const child = expression.children[i]
   if (child === undefined) {
@@ -22,6 +24,7 @@ Expression.getChild = (expression, i) => {
   return child
 }
 
+// Returns the subexpression at the `position` where position is an array of indexes.
 Expression.getSubexpression = (expression, position) => {
   if (position.length === 0) return expression
 
@@ -31,6 +34,7 @@ Expression.getSubexpression = (expression, position) => {
   return Expression.getSubexpression(child, restIndexes)
 }
 
+// Replace subexpression at the `position` with a `newSubexpression`.
 Expression.replaceSubexpression = (expression, position, newSubexpression) => {
   if (position.length === 0) return newSubexpression
 
@@ -49,12 +53,15 @@ Expression.replaceSubexpression = (expression, position, newSubexpression) => {
   return { ...expression, children: newChildren }
 }
 
+// Replace subexpression at the `position` with the result of calling the function `update`.
+// `update` will receive existing subexpression as an argument.
 Expression.updateSubexpression = (expression, position, update) => {
   const oldSubexpression = Expression.getSubexpression(expression, position)
   const newSubexpression = update(oldSubexpression)
   return Expression.replaceSubexpression(expression, position, newSubexpression)
 }
 
+// Get resisgin
 Expression.getSubexpressionsOnPath = (expression, position) => {
   const result = [expression]
 

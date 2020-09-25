@@ -180,21 +180,6 @@
                 </a>
               
                 
-                <a class="source" href="../rule-application-summary/index.html">
-                  deduction-structure/rule-application-summary/index.js
-                </a>
-              
-                
-                <a class="source" href="../rule-application-summary/regular-rule-application-summary.html">
-                  deduction-structure/rule-application-summary/regular-rule-application-summary.js
-                </a>
-              
-                
-                <a class="source" href="../rule-application-summary/theorem-rule-application-summary.html">
-                  deduction-structure/rule-application-summary/theorem-rule-application-summary.js
-                </a>
-              
-                
                 <a class="source" href="../rule.html">
                   deduction-structure/rule.js
                 </a>
@@ -415,15 +400,16 @@
 deduction.</p>
 <p>Notes:</p>
 <ul>
-<li>Deduction to which the rule will be applied we will call ‘target deduction’.</li>
+<li>Deduction to which the rule will be applied we will call a <strong>target deduction</strong>.</li>
 <li>In the following lines we sometimes refer to formulas by numbers. Number in such contexts is
 the index of the target deduction’s step which introduced the formula in question (as a result
 of the premise rule or theorem rule).</li>
 </ul>
-<p>All rules (except theorem) are reduced to this object. It contains all data necessary to
-construct the next step of the target deduction. This object can be considered as some sort of a
-common denominator of all regular rules.</p>
-<p>Note: static factory methods don’t validate data!</p>
+<p>All regular rules (excluding theorem) are reduced to this object. It contains all data
+necessary to construct the next step of the target deduction. This object can be considered
+as a sort of common denominator of all regular rules.</p>
+<p>Note: these functions don’t validate data. Data validation is performed at the earlier step where
+these functions are called. Here we assume that functions are passed valid arguments.</p>
 
             </div>
             

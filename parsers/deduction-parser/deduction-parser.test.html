@@ -180,21 +180,6 @@
                 </a>
               
                 
-                <a class="source" href="../../deduction-structure/rule-application-summary/index.html">
-                  deduction-structure/rule-application-summary/index.js
-                </a>
-              
-                
-                <a class="source" href="../../deduction-structure/rule-application-summary/regular-rule-application-summary.html">
-                  deduction-structure/rule-application-summary/regular-rule-application-summary.js
-                </a>
-              
-                
-                <a class="source" href="../../deduction-structure/rule-application-summary/theorem-rule-application-summary.html">
-                  deduction-structure/rule-application-summary/theorem-rule-application-summary.js
-                </a>
-              
-                
                 <a class="source" href="../../deduction-structure/rule.html">
                   deduction-structure/rule.js
                 </a>
@@ -399,8 +384,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Deduction, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
-<span class="hljs-keyword">import</span> { RegularRuleApplicationSummary } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/rule-application-summary&#x27;</span>
-<span class="hljs-keyword">import</span> { Step } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/step&#x27;</span>
+<span class="hljs-keyword">import</span> { RegularRuleApplicationSummary, Step } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/step&#x27;</span>
 <span class="hljs-keyword">import</span> { TermDependencyGraph } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/term-dependency-graph&#x27;</span>
 <span class="hljs-keyword">import</span> { primitivePresentationCtx } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../presentation/sym-presentation&#x27;</span>
 <span class="hljs-keyword">import</span> { primitiveSyms } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
@@ -413,90 +397,89 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
     <span class="hljs-attr">syms</span>: primitiveSyms,
     <span class="hljs-attr">presentationCtx</span>: primitivePresentationCtx
   })
-})</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>test(‘parse()’, () =&gt; {
-  const text = <code>        (1) E[y] A[x] F(x, y)                           / P;     1   (2) A[x] F(x, a)                                / EI 1;     1   (3) F(b, a)                                     / UI 2;     1   (4) E[y] F(b, y)                                / EG 3;     1   (5) A[x] E[y] F(x, y)                           / UG 4;         (6) E[y] A[x] F(x, y) -&gt; A[x] E[y] F(x, y)      / D 1, 5;    </code></p>
-<p>  const actual = parser.parse(text)</p>
-<p>  const formulaParser = FormulaParser({
-    syms: parser.getSyms(),
-    presentationCtx: parser.getPresentationCtx()
-  })</p>
-<p>  const expected = Deduction({
-    steps: [
+})
+
+test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> text = <span class="hljs-string">`
+        (1) E[y] A[x] F(x, y)                           / P;
+    1   (2) A[x] F(x, a)                                / EI 1;
+    1   (3) F(b, a)                                     / UI 2;
+    1   (4) E[y] F(b, y)                                / EG 3;
+    1   (5) A[x] E[y] F(x, y)                           / UG 4;
+        (6) E[y] A[x] F(x, y) -&gt; A[x] E[y] F(x, y)      / D 1, 5;
+    `</span>
+
+  <span class="hljs-keyword">const</span> actual = parser.parse(text)
+
+  <span class="hljs-keyword">const</span> formulaParser = FormulaParser({
+    <span class="hljs-attr">syms</span>: parser.getSyms(),
+    <span class="hljs-attr">presentationCtx</span>: parser.getPresentationCtx()
+  })
+
+  <span class="hljs-keyword">const</span> expected = Deduction({
+    <span class="hljs-attr">steps</span>: [
       Step({
-        formula: formulaParser.parse(‘E[y] A[x] F(x, y)’),
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;E[y] A[x] F(x, y)&#x27;</span>),
+        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
       }),
       Step({
-        assumptions: new Set([0]),
-        formula: formulaParser.parse(‘A[x] F(x, a)’),
-        ruleApplicationSummary: RegularRuleApplicationSummary({
-          rule: Rule.ExistentialInstantiation,
-          premises: [0],
-          termDependencies: {
-            dependent: formulaParser.getSym(‘a’).id,
-            dependencies: new Set()
+        <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;A[x] F(x, a)&#x27;</span>),
+        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+          <span class="hljs-attr">rule</span>: Rule.ExistentialInstantiation,
+          <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>],
+          <span class="hljs-attr">termDependencies</span>: {
+            <span class="hljs-attr">dependent</span>: formulaParser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>).id,
+            <span class="hljs-attr">dependencies</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
           }
         })
       }),
       Step({
-        assumptions: new Set([0]),
-        formula: formulaParser.parse(‘F(b, a)’),
-        ruleApplicationSummary: RegularRuleApplicationSummary({
-          rule: Rule.UniversalInstantiation,
-          premises: [1]
+        <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;F(b, a)&#x27;</span>),
+        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+          <span class="hljs-attr">rule</span>: Rule.UniversalInstantiation,
+          <span class="hljs-attr">premises</span>: [<span class="hljs-number">1</span>]
         })
       }),
       Step({
-        assumptions: new Set([0]),
-        formula: formulaParser.parse(‘E[y] F(b, y) ‘),
-        ruleApplicationSummary: RegularRuleApplicationSummary({
-          rule: Rule.ExistentialGeneralization,
-          premises: [2]
+        <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;E[y] F(b, y) &#x27;</span>),
+        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+          <span class="hljs-attr">rule</span>: Rule.ExistentialGeneralization,
+          <span class="hljs-attr">premises</span>: [<span class="hljs-number">2</span>]
         })
       }),
       Step({
-        assumptions: new Set([0]),
-        formula: formulaParser.parse(‘A[x] E[y] F(x, y) ‘),
-        ruleApplicationSummary: RegularRuleApplicationSummary({
-          rule: Rule.UniversalGeneralization,
-          premises: [3],
-          termDependencies: {
-            dependent: formulaParser.getSym(‘b’).id,
-            dependencies: new Set()
+        <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;A[x] E[y] F(x, y) &#x27;</span>),
+        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+          <span class="hljs-attr">rule</span>: Rule.UniversalGeneralization,
+          <span class="hljs-attr">premises</span>: [<span class="hljs-number">3</span>],
+          <span class="hljs-attr">termDependencies</span>: {
+            <span class="hljs-attr">dependent</span>: formulaParser.getSym(<span class="hljs-string">&#x27;b&#x27;</span>).id,
+            <span class="hljs-attr">dependencies</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
           }
         })
       }),
       Step({
-        assumptions: new Set(),
-        formula: formulaParser.parse(‘E[y] A[x] F(x, y) -&gt; A[x] E[y] F(x, y)’),
-        ruleApplicationSummary: RegularRuleApplicationSummary({
-          rule: Rule.Deduction,
-          premises: [0, 4]
+        <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;E[y] A[x] F(x, y) -&gt; A[x] E[y] F(x, y)&#x27;</span>),
+        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+          <span class="hljs-attr">rule</span>: Rule.Deduction,
+          <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">4</span>]
         })
       })
     ],
-    termDependencyGraph: TermDependencyGraph({
-      [formulaParser.getSym(‘a’).id]: new Set(),
-      [formulaParser.getSym(‘b’).id]: new Set()
+    <span class="hljs-attr">termDependencyGraph</span>: TermDependencyGraph({
+      [formulaParser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>).id]: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(),
+      [formulaParser.getSym(<span class="hljs-string">&#x27;b&#x27;</span>).id]: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
     })
-  })</p>
-<p>  expect(actual).toEqual(expected)
-})</p>
+  })
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>
+  expect(actual).toEqual(expected)
+})
+
 test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> text = <span class="hljs-string">`
           (1)  A[x] (F(x) -&gt; G(x))                                                      / P;

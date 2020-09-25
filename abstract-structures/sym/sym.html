@@ -412,7 +412,7 @@ be en avoided because it’s a built-in type in ES6.</p>
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
               <p>Non-negative integer which must be the same throughout all of this symbol’s occurrences in some
-context (expression, deduction, etc…).</p>
+context (expression, deduction, etc…). Symbol identity is also established by comparing id.</p>
 
             </div>
             
@@ -428,7 +428,8 @@ context (expression, deduction, etc…).</p>
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>When this symbol is the main symbol of an expression <code>kind</code> determines which of two possible
-‘roles’ this expression has - it can be either a formula or a term.</p>
+‘roles’ this expression has - it can be either a formula or a term. We will say that expression
+is of a kind K when it’s main symbol is of a kind K.</p>
 
             </div>
             
@@ -459,7 +460,7 @@ expressions are accepted as children.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>When this symbol is the main symbol of an expression <code>arity</code> determines how many children an
+              <p>When this symbol is the main symbol of an expression <code>arity</code> determines how many children this
 expression must have.</p>
 
             </div>
@@ -598,7 +599,7 @@ connectives when arity is positive.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Correspond to predicate variables/constants.</p>
+              <p>Corresponds to predicate variables/constants.</p>
 
             </div>
             
@@ -630,7 +631,7 @@ function variables/constants when arity is positive.</p>
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>This is meant for constructs which behave as terms because they denote a thing, but accept
-a proposition as an argument. One such example are definitive descriptions: “x such that …”.</p>
+a proposition as an argument. One such example is definitive description: “x such that …”.</p>
 
             </div>
             
@@ -646,14 +647,16 @@ a proposition as an argument. One such example are definitive descriptions: “x
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>We didn’t mention the cases of nullary <code>FT</code> and <code>TF</code> symbols. From the standpoint of symbolic
-logic system it seems that there’s no need to allow for nullary predicates when we already
-have propositional variables. The same goes for nullary <code>TF</code> symbols. From the standpoint the
-way this code is organized, when symbol is nullary <code>argumentKind</code> doesn’t have significance
-since expression with such a symbol will never have children. However, <code>argumentKind</code> will
-always be defined because we’d like to associate definite category to each symbol. In order
-we enforce the following rule: nullary symbol’s <code>kind</code> and <code>argumentKind</code> must always be the
-same. In other words: nullary symbol’s category can either be <code>FF</code> or <code>TT</code>, never <code>FT</code> or <code>TF</code>.</p>
+              <p>We didn’t mention the cases of nullary <code>FT</code> and <code>TF</code> symbols. Nullary <code>FT</code> symbols would
+correspond to nullary predicates. From the standpoint of symbolic logic system it seems that
+there’s no need to allow for nullary predicates when we already
+have propositional variables i.e. nullary <code>FF</code> symbols. The same goes for nullary <code>TF</code> symbols.</p>
+<p>On the other hand, if we look at the way this code is organized, when symbol is nullary
+<code>argumentKind</code> doesn’t have significance since expression with such a symbol will never have
+children. However, <code>argumentKind</code> will always be defined because we’d like to associate
+definite category to each symbol. In order to conserve simplicity and consistency we enforce the
+following rule: nullary symbol’s <code>kind</code> and <code>argumentKind</code> must always be the same. In other
+words: nullary symbol’s category can either be <code>FF</code> or <code>TT</code>, never <code>FT</code> nor <code>TF</code>.</p>
 
             </div>
             

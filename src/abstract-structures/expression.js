@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { createError, ErrorName } from '../error'
 import { Kind } from './sym'
 
-// Expression is a recursive tree structure built from (`Symbols`)[./sym].
+// Expression is a recursive tree structure built from [`Symbols`](./sym).
 export const Expression = ({
   // Main symbol of this expression.
   sym,

@@ -6,40 +6,8 @@ The system is based on the one presented by W. V. Quine in `Methods of Logic`.
 
 ## Api
 
-### Symbol
-
-Symbol (represented in code as `sym` because `symbol` is a builtin type in ES6) represents the 
-smallest syntactic entity from which bigger ones (expressions and deductions) are built. Symbol 
-contains the following properties:
--   `id` - non-negative number unique for this symbol throughout all its occurrences in some context
-    (expression and deduction for example)
--   `kind` - one of two possible kinds a symbol can be: Formula or Term
--   `argumentKind` - what kind of arguments this symbol accepts as children (when it occurs in an 
-    expression)
--   `arity` - how many children this symbol accepts when it occurs in an expression
-
-#### Category
-
-Given that `kind` and `argumentKind` can have two values each, there are 4 possibilities. We 
-classify symbols in four *categories*: `FF`, `FT`, `TT`, `TF` (`F` is for 'formula' and `T` is for 
-'term'). So we have two possible `F` symbols (`FF` and `FT`) and two possible `T` symbols (`TT` and 
-`TF`). In the context of traditional symbolic logic vocabulary `FF` would correspond to 
-propositional variables/constants when arity is zero and to propositional connectives when arity is 
-positive. `FT` would correspond to predicates. `TT` would be terms which could be either individual 
-variables/names when arity is zero or function names when arity is positive. `TF` is meant  for 
-constructs which behave as terms because they denote a thing, but accept as argument a proposition. 
-One such example are definitive descriptions (`x` such that ...). 
-
-We didn't mention the cases of nullary `FT` and `TF` symbols. From the standpoint of symbolic logic 
-system it seems that there's no need to allow for nullary predicates when we already have 
-propositional variables. The same goes for nullary `TF` symbols.
-
-From the standpoint of code, when symbol is nullary `argumentKind` doesn't have significance since 
-expression with such a symbol will never have children. However, `argumentKind` will always be 
-defined because we'd like to associate definite category to each symbol. In order to avoid 
-redundancies and confusion we enforce the remark from previous paragraph as a rule: nullary symbol's 
-`kind` and `argumentKind` must always be the same. In other words: nullary symbol's category can 
-either be `FF` or `TT`, never `FT` or `TF`.
+- [Symbol](zbrckovic.github.io/entail-core/abstract-structures/sym)
+- [Expression](zbrckovic.github.io/entail-core/abstract-structures/expression)
 
 ## Entail Expression Language (EEL)
 

@@ -420,11 +420,7 @@ sequence of steps.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Deduction = ({ steps = [], termDependencyGraph = TermDependencyGraph() } = {}) =&gt; ({
-  steps, termDependencyGraph
-})
-
-Deduction.getSize = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span> deduction.steps.length</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Deduction = ({</pre></div></div>
             
         </li>
         
@@ -435,14 +431,62 @@ Deduction.getSize = <span class="hljs-function"><span class="hljs-params">deduct
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Get step by its ordinal number. From regular user’s perspective steps are referenced by positive
-integers starting from 1. Internally we use list indexes which start from 0.</p>
+              <p>Sequence of steps.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Deduction.getStepByOrdinal = <span class="hljs-function">(<span class="hljs-params">deduction, ordinal</span>) =&gt;</span> Deduction.getStep(deduction, ordinal - <span class="hljs-number">1</span>)
+            <div class="content"><div class='highlight'><pre>  steps = [],</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Graph containing information about dependencies between terms.</p>
 
-Deduction.getStep = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndex</span>) =&gt;</span> {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  termDependencyGraph = TermDependencyGraph()
+} = {}) =&gt; ({
+  steps, termDependencyGraph
+})
+
+Deduction.getSize = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span> deduction.steps.length</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Gets step by its ordinal number. From regular user’s perspective steps are referenced by
+positive integers starting from 1. Internally, zero-based indexes are used.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Deduction.getStepByOrdinal = <span class="hljs-function">(<span class="hljs-params">deduction, ordinal</span>) =&gt;</span> Deduction.getStep(deduction, ordinal - <span class="hljs-number">1</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Gets step by index or throws if there’s no such step.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Deduction.getStep = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndex</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> step = deduction.steps[stepIndex]
   <span class="hljs-keyword">if</span> (step === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`no step at index <span class="hljs-subst">${stepIndex}</span>`</span>)
   <span class="hljs-keyword">return</span> step
@@ -457,13 +501,13 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
         </li>
         
         
-        <li id="section-4">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Derive new deduction by applying rule specified by <code>ruleApplicationSpec</code>.</p>
+              <p>Derives new deduction by applying rule specified by <code>ruleApplicationSpec</code>.</p>
 
             </div>
             
@@ -505,13 +549,13 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
         </li>
         
         
-        <li id="section-5">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Calculate new graph according to changes required by the rule.</p>
+              <p>Calculates new graph according to changes required by the rule.</p>
 
             </div>
             
@@ -528,15 +572,15 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
         </li>
         
         
-        <li id="section-6">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Calculate which assumptions must be added according to the specified rule premises. Assumptions
-are inherited from all premises. In addition to that if premise was introduced by <code>Premise</code> or
-<code>Theorem</code> rule, its index is also added as an assumption.</p>
+              <p>Calculates which assumptions must be added to the next step according to the specified rule
+premises. Assumptions are inherited from all premises. In addition to that if premise was
+introduced by <code>Premise</code> or <code>Theorem</code> rule, its index is also added as an assumption.</p>
 
             </div>
             

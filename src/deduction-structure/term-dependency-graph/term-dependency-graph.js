@@ -23,6 +23,11 @@ TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) => {
 
   dependencies.forEach(dependency => {
     result = normalize(result, dependent, dependency)
+
+    if (result[dependent] === undefined) {
+      result[dependent] = new Set()
+    }
+
     result[dependent].add(dependency)
   })
 

@@ -427,6 +427,11 @@ it’s the symbol’s id - not the actual symbol object - we are talking about.<
 
   dependencies.forEach(<span class="hljs-function"><span class="hljs-params">dependency</span> =&gt;</span> {
     result = normalize(result, dependent, dependency)
+
+    <span class="hljs-keyword">if</span> (result[dependent] === <span class="hljs-literal">undefined</span>) {
+      result[dependent] = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
+    }
+
     result[dependent].add(dependency)
   })
 

@@ -8,44 +8,70 @@ import {
   UniversalGeneralizationRuleInterface,
   UniversalInstantiationRuleInterface
 } from './quantification'
-import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
 import { TheoremRuleInterface } from './theorem-rule-interface'
 import { Sym } from '../../abstract-structures'
+import { createError, ErrorName } from '../../error'
+import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
 
-// Accepts deduction and selected steps (step indexes), determines possible rules which could be
-// applied and return interfaces for their application.
-export const RulesInterface = (deduction, ...steps) => {
-  const result = {}
+// Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
+export const RulesInterface = (deduction, ...steps) => ({
+  chooseRule(rule) {
+    switch (rule) {
+      case Rule.Premise:
+        if (steps.length === 0) return PremiseRuleInterface(deduction)
+        break
+      case Rule.Deduction:
+        if (steps.length === 2) {
+          const [firstStepIndex, secondStepIndex] = steps
+          const [firstStep, secondStep] = steps.map(i => Deduction.getStep(deduction, i))
 
-  result[Rule.TautologicalImplication] = TautologicalImplicationRuleInterface(deduction, steps)
+          const firstStepIsPremise = firstStep.ruleApplicationSummary.rule === Rule.Premise
+          const firstIsAssumptionForSecond = secondStep.assumptions.has(firstStepIndex)
 
-  if (steps.length === 0) {
-    result[Rule.Premise] = PremiseRuleInterface(deduction)
-    result[Rule.Theorem] = TheoremRuleInterface(deduction)
-  } else if (steps.length === 1) {
-    const [step] = steps
+          if (firstStepIsPremise && firstIsAssumptionForSecond) {
+            return DeductionRuleInterface(deduction, firstStepIndex, secondStepIndex)
+          }
+        }
+        break
+      case Rule.TautologicalImplication:
+        return TautologicalImplicationRuleInterface(deduction, steps)
+      case Rule.UniversalInstantiation:
+        if (steps.length === 1) {
+          const [step] = steps
+          const premise = Deduction.getStep(deduction, step).formula
 
-    const premise = Deduction.getStep(deduction, step).formula
+          if (Sym.equals(premise.sym, universalQuantifier)) {
+            return UniversalInstantiationRuleInterface(deduction, step)
+          }
+        }
+        break
+      case Rule.UniversalGeneralization:
+        if (steps.length === 1) {
+          const [step] = steps
+          return UniversalGeneralizationRuleInterface(deduction, step)
+        }
+        break
+      case Rule.ExistentialInstantiation:
+        if (steps.length === 1) {
+          const [step] = steps
+          const premise = Deduction.getStep(deduction, step).formula
 
-    if (Sym.equals(premise.sym, universalQuantifier)) {
-      result[Rule.UniversalInstantiation] = UniversalInstantiationRuleInterface(deduction, step)
-    } else if (Sym.equals(premise.sym, existentialQuantifier)) {
-      result[Rule.ExistentialInstantiation] = ExistentialInstantiationRuleInterface(deduction, step)
+          if (Sym.equals(premise.sym, existentialQuantifier)) {
+            return ExistentialInstantiationRuleInterface(deduction, step)
+          }
+        }
+        break
+      case Rule.ExistentialGeneralization:
+        if (steps.length === 1) {
+          const [step] = steps
+          return ExistentialGeneralizationRuleInterface(deduction, step)
+        }
+        break
+      case Rule.Theorem:
+        if (steps.length === 0) return TheoremRuleInterface(deduction)
+        break
     }
 
-    result[Rule.UniversalGeneralization] = UniversalGeneralizationRuleInterface(deduction, step)
-    result[Rule.ExistentialGeneralization] = ExistentialGeneralizationRuleInterface(deduction, step)
-  } else if (steps.length === 2) {
-    const [firstStepIndex, secondStepIndex] = steps
-    const [firstStep, secondStep] = steps.map(i => Deduction.getStep(deduction, i))
-
-    const firstStepIsPremise = firstStep.ruleApplicationSummary.rule === Rule.Premise
-    const firstIsAssumptionForSecond = secondStep.assumptions.has(firstStepIndex)
-
-    if (firstStepIsPremise && firstIsAssumptionForSecond) {
-      result[Rule.Deduction] = DeductionRuleInterface(deduction, firstStepIndex, secondStepIndex)
-    }
+    throw createError(ErrorName.RULE_NOT_ALLOWED, `Rule ${rule} is not allowed.`, rule)
   }
-
-  return result
-}
+})

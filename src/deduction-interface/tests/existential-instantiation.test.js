@@ -25,7 +25,8 @@ test('vacuous', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1)[Rule.ExistentialInstantiation]
+    .selectSteps(1)
+    .chooseRule(Rule.ExistentialInstantiation)
     .apply()
     .deduction
 
@@ -57,7 +58,8 @@ test('simple', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1)[Rule.ExistentialInstantiation]
+    .selectSteps(1)
+    .chooseRule(Rule.ExistentialInstantiation)
     .apply(parser.getSym('a'))
     .deduction
 
@@ -93,7 +95,8 @@ test('with dependency terms', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1)[Rule.ExistentialInstantiation]
+    .selectSteps(1)
+    .chooseRule(Rule.ExistentialInstantiation)
     .apply(parser.getSym('a'))
     .deduction
 
@@ -129,7 +132,8 @@ test(`throws ${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}`, () 
 
   expect(() => {
     startDeduction(deduction)
-      .selectSteps(1)[Rule.ExistentialInstantiation]
+      .selectSteps(1)
+      .chooseRule(Rule.ExistentialInstantiation)
       .apply()
   }).toThrow(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
 })
@@ -148,7 +152,8 @@ test(`throws ${ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
 
   expect(() => {
     startDeduction(deduction)
-      .selectSteps(1)[Rule.ExistentialInstantiation]
+      .selectSteps(1)
+      .chooseRule(Rule.ExistentialInstantiation)
       .apply(parser.getSym('y'))
   }).toThrow(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
 })

@@ -27,7 +27,8 @@ test('tautological implication', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1)[Rule.TautologicalImplication]
+    .selectSteps(1)
+    .chooseRule(Rule.TautologicalImplication)
     .apply(formula1)
     .deduction
 

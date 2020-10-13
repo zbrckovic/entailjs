@@ -16,7 +16,8 @@ test('premise', () => {
   const premise = parser.parse('p')
 
   const newDeduction = startDeduction()
-    .selectSteps()[Rule.Premise]
+    .selectSteps()
+    .chooseRule(Rule.Premise)
     .apply(premise)
     .deduction
 

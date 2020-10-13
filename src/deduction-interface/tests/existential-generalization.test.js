@@ -25,7 +25,8 @@ test('vacuous', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1)[Rule.ExistentialGeneralization]
+    .selectSteps(1)
+    .chooseRule(Rule.ExistentialGeneralization)
     .apply(parser.getSym('x'))
     .deduction
 
@@ -57,7 +58,8 @@ test('simple', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1)[Rule.ExistentialGeneralization]
+    .selectSteps(1)
+    .chooseRule(Rule.ExistentialGeneralization)
     .apply(parser.getSym('x'), parser.getSym('a'))
     .deduction
 
@@ -89,7 +91,8 @@ test(`throws ${ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS}`, () => {
 
   expect(() => {
     startDeduction(deduction)
-      .selectSteps(1)[Rule.ExistentialGeneralization]
+      .selectSteps(1)
+      .chooseRule(Rule.ExistentialGeneralization)
       .apply(parser.getSym('x'), parser.getSym('a'))
   }).toThrow(ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS)
 })
@@ -108,7 +111,8 @@ test(`throws ${ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
 
   expect(() => {
     startDeduction(deduction)
-      .selectSteps(1)[Rule.ExistentialGeneralization]
+      .selectSteps(1)
+      .chooseRule(Rule.ExistentialGeneralization)
       .apply(parser.getSym('x'), parser.getSym('a'))
   }).toThrow(ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND)
 })

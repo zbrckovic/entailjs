@@ -32,7 +32,8 @@ test(`throws ${ErrorName.CYCLIC_DEPENDENCIES}`, () => {
 
   expect(() => {
     startDeduction(deduction)
-      .selectSteps(3)[Rule.UniversalGeneralization]
+      .selectSteps(3)
+      .chooseRule(Rule.UniversalGeneralization)
       .apply(parser.getSym('x'), parser.getSym('a'))
   }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
 })

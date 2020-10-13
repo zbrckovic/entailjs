@@ -37,9 +37,10 @@ export const AstProcessor = ({ syms, presentations }) => {
     const rule = getRule(astStep.ruleApplicationSummary.rule)
     const premisesOrdinals = astStep.ruleApplicationSummary.premises
     const formula = formulaAstProcessor.process(astStep.formula)
-    const availableRules = deductionInterface.selectSteps(...premisesOrdinals)
 
-    const ruleInterface = availableRules[rule]
+    const ruleInterface = deductionInterface
+      .selectSteps(...premisesOrdinals)
+      .chooseRule(rule)
 
     let oldTerm
     let newTerm

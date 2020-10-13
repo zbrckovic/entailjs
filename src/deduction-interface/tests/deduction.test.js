@@ -36,7 +36,8 @@ test('deduction', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1, 2)[Rule.Deduction]
+    .selectSteps(1, 2)
+    .chooseRule(Rule.Deduction)
     .apply()
     .deduction
 

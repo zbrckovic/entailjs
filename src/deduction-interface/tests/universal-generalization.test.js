@@ -24,7 +24,8 @@ test('vacuous', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1)[Rule.UniversalGeneralization]
+    .selectSteps(1)
+    .chooseRule(Rule.UniversalGeneralization)
     .apply(parser.getSym('x'))
     .deduction
 
@@ -56,7 +57,8 @@ test('simple', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1)[Rule.UniversalGeneralization]
+    .selectSteps(1)
+    .chooseRule(Rule.UniversalGeneralization)
     .apply(parser.getSym('x'), parser.getSym('a'))
     .deduction
 
@@ -92,7 +94,8 @@ test('with dependency terms', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1)[Rule.UniversalGeneralization]
+    .selectSteps(1)
+    .chooseRule(Rule.UniversalGeneralization)
     .apply(parser.getSym('x'), parser.getSym('a'))
     .deduction
 

@@ -420,7 +420,8 @@ test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.CYCL
 
   expect(<span class="hljs-function">() =&gt;</span> {
     startDeduction(deduction)
-      .selectSteps(<span class="hljs-number">3</span>)[Rule.UniversalGeneralization]
+      .selectSteps(<span class="hljs-number">3</span>)
+      .chooseRule(Rule.UniversalGeneralization)
       .apply(parser.getSym(<span class="hljs-string">&#x27;x&#x27;</span>), parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>))
   }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
 })</pre></div></div>

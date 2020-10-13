@@ -429,9 +429,10 @@ parsing formula on each step.</p>
     <span class="hljs-keyword">const</span> rule = getRule(astStep.ruleApplicationSummary.rule)
     <span class="hljs-keyword">const</span> premisesOrdinals = astStep.ruleApplicationSummary.premises
     <span class="hljs-keyword">const</span> formula = formulaAstProcessor.process(astStep.formula)
-    <span class="hljs-keyword">const</span> availableRules = deductionInterface.selectSteps(...premisesOrdinals)
 
-    <span class="hljs-keyword">const</span> ruleInterface = availableRules[rule]
+    <span class="hljs-keyword">const</span> ruleInterface = deductionInterface
+      .selectSteps(...premisesOrdinals)
+      .chooseRule(rule)
 
     <span class="hljs-keyword">let</span> oldTerm
     <span class="hljs-keyword">let</span> newTerm

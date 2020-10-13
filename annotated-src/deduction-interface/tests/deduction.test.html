@@ -416,7 +416,8 @@ test(<span class="hljs-string">&#x27;deduction&#x27;</span>, <span class="hljs-f
   })
 
   <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-    .selectSteps(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)[Rule.Deduction]
+    .selectSteps(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+    .chooseRule(Rule.Deduction)
     .apply()
     .deduction
 

@@ -405,7 +405,8 @@ test(<span class="hljs-string">&#x27;vacuous&#x27;</span>, <span class="hljs-fun
   })
 
   <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-    .selectSteps(<span class="hljs-number">1</span>)[Rule.UniversalInstantiation]
+    .selectSteps(<span class="hljs-number">1</span>)
+    .chooseRule(Rule.UniversalInstantiation)
     .apply()
     .deduction
 
@@ -437,7 +438,8 @@ test(<span class="hljs-string">&#x27;simple&#x27;</span>, <span class="hljs-func
   })
 
   <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-    .selectSteps(<span class="hljs-number">1</span>)[Rule.UniversalInstantiation]
+    .selectSteps(<span class="hljs-number">1</span>)
+    .chooseRule(Rule.UniversalInstantiation)
     .apply(parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>))
     .deduction
 
@@ -469,7 +471,8 @@ test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.TERM
 
   expect(<span class="hljs-function">() =&gt;</span> {
     startDeduction(deduction)
-      .selectSteps(<span class="hljs-number">1</span>)[Rule.UniversalInstantiation]
+      .selectSteps(<span class="hljs-number">1</span>)
+      .chooseRule(Rule.UniversalInstantiation)
       .apply()
   }).toThrow(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
 })
@@ -488,7 +491,8 @@ test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.INST
 
   expect(<span class="hljs-function">() =&gt;</span> {
     startDeduction(deduction)
-      .selectSteps(<span class="hljs-number">1</span>)[Rule.UniversalInstantiation]
+      .selectSteps(<span class="hljs-number">1</span>)
+      .chooseRule(Rule.UniversalInstantiation)
       .apply(parser.getSym(<span class="hljs-string">&#x27;y&#x27;</span>))
   }).toThrow(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
 })</pre></div></div>

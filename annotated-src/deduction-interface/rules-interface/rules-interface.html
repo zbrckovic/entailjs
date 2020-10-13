@@ -388,9 +388,10 @@
   UniversalGeneralizationRuleInterface,
   UniversalInstantiationRuleInterface
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./quantification&#x27;</span>
-<span class="hljs-keyword">import</span> { TautologicalImplicationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./tautological-implication-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { TheoremRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./theorem-rule-interface&#x27;</span>
-<span class="hljs-keyword">import</span> { Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span></pre></div></div>
+<span class="hljs-keyword">import</span> { Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
+<span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
+<span class="hljs-keyword">import</span> { TautologicalImplicationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./tautological-implication-rule-interface&#x27;</span></pre></div></div>
             
         </li>
         
@@ -401,46 +402,71 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Accepts deduction and selected steps (step indexes), determines possible rules which could be
-applied and return interfaces for their application.</p>
+              <p>Accepts deduction and selected steps (step indexes), returns interface for choosing rule.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RulesInterface = <span class="hljs-function">(<span class="hljs-params">deduction, ...steps</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> result = {}
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RulesInterface = <span class="hljs-function">(<span class="hljs-params">deduction, ...steps</span>) =&gt;</span> ({
+  chooseRule(rule) {
+    <span class="hljs-keyword">switch</span> (rule) {
+      <span class="hljs-keyword">case</span> Rule.Premise:
+        <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> PremiseRuleInterface(deduction)
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.Deduction:
+        <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">2</span>) {
+          <span class="hljs-keyword">const</span> [firstStepIndex, secondStepIndex] = steps
+          <span class="hljs-keyword">const</span> [firstStep, secondStep] = steps.map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> Deduction.getStep(deduction, i))
 
-  result[Rule.TautologicalImplication] = TautologicalImplicationRuleInterface(deduction, steps)
+          <span class="hljs-keyword">const</span> firstStepIsPremise = firstStep.ruleApplicationSummary.rule === Rule.Premise
+          <span class="hljs-keyword">const</span> firstIsAssumptionForSecond = secondStep.assumptions.has(firstStepIndex)
 
-  <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">0</span>) {
-    result[Rule.Premise] = PremiseRuleInterface(deduction)
-    result[Rule.Theorem] = TheoremRuleInterface(deduction)
-  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
-    <span class="hljs-keyword">const</span> [step] = steps
+          <span class="hljs-keyword">if</span> (firstStepIsPremise &amp;&amp; firstIsAssumptionForSecond) {
+            <span class="hljs-keyword">return</span> DeductionRuleInterface(deduction, firstStepIndex, secondStepIndex)
+          }
+        }
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.TautologicalImplication:
+        <span class="hljs-keyword">return</span> TautologicalImplicationRuleInterface(deduction, steps)
+      <span class="hljs-keyword">case</span> Rule.UniversalInstantiation:
+        <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
+          <span class="hljs-keyword">const</span> [step] = steps
+          <span class="hljs-keyword">const</span> premise = Deduction.getStep(deduction, step).formula
 
-    <span class="hljs-keyword">const</span> premise = Deduction.getStep(deduction, step).formula
+          <span class="hljs-keyword">if</span> (Sym.equals(premise.sym, universalQuantifier)) {
+            <span class="hljs-keyword">return</span> UniversalInstantiationRuleInterface(deduction, step)
+          }
+        }
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.UniversalGeneralization:
+        <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
+          <span class="hljs-keyword">const</span> [step] = steps
+          <span class="hljs-keyword">return</span> UniversalGeneralizationRuleInterface(deduction, step)
+        }
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.ExistentialInstantiation:
+        <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
+          <span class="hljs-keyword">const</span> [step] = steps
+          <span class="hljs-keyword">const</span> premise = Deduction.getStep(deduction, step).formula
 
-    <span class="hljs-keyword">if</span> (Sym.equals(premise.sym, universalQuantifier)) {
-      result[Rule.UniversalInstantiation] = UniversalInstantiationRuleInterface(deduction, step)
-    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Sym.equals(premise.sym, existentialQuantifier)) {
-      result[Rule.ExistentialInstantiation] = ExistentialInstantiationRuleInterface(deduction, step)
+          <span class="hljs-keyword">if</span> (Sym.equals(premise.sym, existentialQuantifier)) {
+            <span class="hljs-keyword">return</span> ExistentialInstantiationRuleInterface(deduction, step)
+          }
+        }
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.ExistentialGeneralization:
+        <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
+          <span class="hljs-keyword">const</span> [step] = steps
+          <span class="hljs-keyword">return</span> ExistentialGeneralizationRuleInterface(deduction, step)
+        }
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.Theorem:
+        <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> TheoremRuleInterface(deduction)
+        <span class="hljs-keyword">break</span>
     }
 
-    result[Rule.UniversalGeneralization] = UniversalGeneralizationRuleInterface(deduction, step)
-    result[Rule.ExistentialGeneralization] = ExistentialGeneralizationRuleInterface(deduction, step)
-  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">2</span>) {
-    <span class="hljs-keyword">const</span> [firstStepIndex, secondStepIndex] = steps
-    <span class="hljs-keyword">const</span> [firstStep, secondStep] = steps.map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> Deduction.getStep(deduction, i))
-
-    <span class="hljs-keyword">const</span> firstStepIsPremise = firstStep.ruleApplicationSummary.rule === Rule.Premise
-    <span class="hljs-keyword">const</span> firstIsAssumptionForSecond = secondStep.assumptions.has(firstStepIndex)
-
-    <span class="hljs-keyword">if</span> (firstStepIsPremise &amp;&amp; firstIsAssumptionForSecond) {
-      result[Rule.Deduction] = DeductionRuleInterface(deduction, firstStepIndex, secondStepIndex)
-    }
+    <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-string">`Rule <span class="hljs-subst">${rule}</span> is not allowed.`</span>, rule)
   }
-
-  <span class="hljs-keyword">return</span> result
-}</pre></div></div>
+})</pre></div></div>
             
         </li>
         

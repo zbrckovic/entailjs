@@ -65,6 +65,16 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-compress.html">
+                  deduction-compress.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-compress.test.html">
+                  deduction-compress.test.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-interface.html">
                   deduction-interface/deduction-interface.js
                 </a>
@@ -383,6 +393,7 @@
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
 <span class="hljs-keyword">import</span> { Expression, Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
+<span class="hljs-keyword">import</span> { determineNewTermInInstantiationResult } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/deduction&#x27;</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ExistentialGeneralizationRuleInterface = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndex</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
@@ -446,37 +457,13 @@ vacuous <code>newTerm</code> doesn’t need to be provided.</p>
     }
 
     <span class="hljs-keyword">return</span> concreteApply(newTerm)
-  }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>Under assumption that <code>formula</code> is the result of an application of this rule determines which
-term was introduced in the substitution. If instantiation was vacuous returns <code>undefined</code>.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> determineNewTermInPotentialResult = <span class="hljs-function"><span class="hljs-params">formula</span> =&gt;</span> {
-    <span class="hljs-keyword">const</span> [firstOccurrence] = Expression.findBoundOccurrences(premise)
-    <span class="hljs-keyword">if</span> (firstOccurrence === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
-
-    <span class="hljs-keyword">try</span> {
-      <span class="hljs-keyword">return</span> Expression.getSubexpression(formula, firstOccurrence.slice(<span class="hljs-number">1</span>)).sym
-    } <span class="hljs-keyword">catch</span> (e) {
-      <span class="hljs-keyword">if</span> (e.name === ErrorName.NO_CHILD_AT_INDEX) {
-        <span class="hljs-keyword">throw</span> createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
-      }
-      <span class="hljs-keyword">throw</span> e
-    }
   }
 
-  <span class="hljs-keyword">return</span> ({ apply, determineNewTermInPotentialResult })
+  <span class="hljs-keyword">return</span> ({
+    apply,
+    <span class="hljs-attr">determineNewTermInPotentialResult</span>: <span class="hljs-function"><span class="hljs-params">formula</span> =&gt;</span>
+      determineNewTermInInstantiationResult(formula, premise)
+  })
 }
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> UniversalGeneralizationRuleInterface = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndex</span>) =&gt;</span> {
@@ -516,11 +503,11 @@ term was introduced in the substitution. If instantiation was vacuous returns <c
         </li>
         
         
-        <li id="section-4">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p><code>newTerm</code> is the generalized term which will be the substitute and <code>oldTerm</code> is the instance
 term which if provided will be substituted with <code>newTerm</code>. If <code>oldTerm</code> is not provided
@@ -549,11 +536,11 @@ generalization will be vacuous.</p>
         </li>
         
         
-        <li id="section-5">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Under assumption that <code>formula</code> is the result of an application of this rule determine which
 term was introduced in the substitution.</p>

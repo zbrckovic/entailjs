@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>formula-construction-util.test.js</title>
+  <title>deduction-compress.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -373,7 +373,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>formula-construction-util.test.js</h1>
+                  <h1>deduction-compress.js</h1>
               </div>
           </li>
         
@@ -385,48 +385,90 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              
+              <p>Minimal information necessary to reconstruct this deduction using deduction interface.</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> {
-  createConjunction,
-  createImplicationWithAntecedentsAsConjunction
-} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./formula-construction-util&#x27;</span>
-<span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./parsers/formula-parser&#x27;</span>
-<span class="hljs-keyword">import</span> { primitivePresentations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./presentation/sym-presentation&#x27;</span>
-<span class="hljs-keyword">import</span> { primitiveSyms } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./primitive-syms&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-structure&#x27;</span>
+<span class="hljs-keyword">import</span> { determineNewTermInInstantiationResult } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-structure/deduction&#x27;</span>
+<span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-interface&#x27;</span>
 
-<span class="hljs-keyword">let</span> parser
-beforeEach(<span class="hljs-function">() =&gt;</span> {
-  parser = FormulaParser({
-    <span class="hljs-attr">syms</span>: primitiveSyms,
-    <span class="hljs-attr">presentations</span>: primitivePresentations
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> compress = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span>
+  deduction.steps.map(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> {
+    <span class="hljs-keyword">const</span> { formula, <span class="hljs-attr">ruleApplicationSummary</span>: { rule, premises } } = step
+
+    <span class="hljs-keyword">const</span> result = { <span class="hljs-attr">steps</span>: premises, rule }
+
+    <span class="hljs-keyword">switch</span> (rule) {
+      <span class="hljs-keyword">case</span> Rule.Premise:
+        result.formula = formula
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.Theorem:
+        result.formula = formula
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.TautologicalImplication:
+        result.formula = formula
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.Deduction:
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.UniversalGeneralization:
+        result.newTerm = formula.boundSym
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.ExistentialGeneralization:
+        result.newTerm = formula.boundSym
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.UniversalInstantiation:
+        result.newTerm = determineNewTermInInstantiationResult(
+          formula,
+          deduction.steps[premises[<span class="hljs-number">0</span>]].formula
+        )
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.ExistentialInstantiation:
+        result.newTerm = determineNewTermInInstantiationResult(
+          formula,
+          deduction.steps[premises[<span class="hljs-number">0</span>]].formula
+        )
+        <span class="hljs-keyword">break</span>
+    }
+
+    <span class="hljs-keyword">return</span> result
   })
-})
 
-test.each([
-  [[<span class="hljs-string">&#x27;p&#x27;</span>], <span class="hljs-string">&#x27;p&#x27;</span>],
-  [[<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>], <span class="hljs-string">&#x27;p &amp; q&#x27;</span>],
-  [[<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;r&#x27;</span>], <span class="hljs-string">&#x27;(p &amp; q) &amp; r&#x27;</span>]
-])(<span class="hljs-string">&#x27;connectWithConjunction(%s) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaTexts, expectedFormulaText</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> expressions = formulaTexts.map(<span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> parser.parse(text))
-  <span class="hljs-keyword">const</span> expected = parser.parse(expectedFormulaText)
-  <span class="hljs-keyword">const</span> actual = createConjunction(expressions)
-  expect(actual).toEqual(expected)
-})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> decompress = <span class="hljs-function"><span class="hljs-params">steps</span> =&gt;</span> {
+  <span class="hljs-keyword">let</span> deductionInterface = startDeduction()
 
-test(<span class="hljs-string">&#x27;createImplicationWithAntecedentsAsConjunction()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> antecedentTexts = [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;r&#x27;</span>]
-  <span class="hljs-keyword">const</span> consequentText = <span class="hljs-string">&#x27;s&#x27;</span>
+  steps.forEach(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> {
+    <span class="hljs-keyword">const</span> ruleInterface = deductionInterface.selectSteps(...steps).chooseRule(step.rule)
+    <span class="hljs-keyword">switch</span> (step.rule) {
+      <span class="hljs-keyword">case</span> Rule.Premise:
+        deductionInterface = ruleInterface.apply(step.formula)
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.Theorem:
+        deductionInterface = ruleInterface.apply(step.formula)
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.TautologicalImplication:
+        deductionInterface = ruleInterface.apply(step.formula)
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.Deduction:
+        deductionInterface = ruleInterface.apply()
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.UniversalGeneralization:
+        deductionInterface = ruleInterface.apply(step.newTerm)
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.ExistentialGeneralization:
+        deductionInterface = ruleInterface.apply(step.newTerm)
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.UniversalInstantiation:
+        deductionInterface = ruleInterface.apply(step.newTerm)
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.ExistentialInstantiation:
+        deductionInterface = ruleInterface.apply(step.newTerm)
+        <span class="hljs-keyword">break</span>
+    }
+  })
 
-  <span class="hljs-keyword">const</span> antecedents = antecedentTexts.map(<span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> parser.parse(text))
-  <span class="hljs-keyword">const</span> consequent = parser.parse(consequentText)
-
-  <span class="hljs-keyword">const</span> expected = parser.parse(<span class="hljs-string">&#x27;((p &amp; q) &amp; r) -&gt; s&#x27;</span>)
-  <span class="hljs-keyword">const</span> actual = createImplicationWithAntecedentsAsConjunction(antecedents, consequent)
-
-  expect(actual).toEqual(expected)
-})</pre></div></div>
+  <span class="hljs-keyword">return</span> deductionInterface.deduction
+}</pre></div></div>
             
         </li>
         

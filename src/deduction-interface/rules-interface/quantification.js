@@ -3,6 +3,7 @@ import { Deduction } from '../../deduction-structure'
 import { startDeduction } from '../deduction-interface'
 import { createError, ErrorName } from '../../error'
 import { Expression, Sym } from '../../abstract-structures'
+import { determineNewTermInInstantiationResult } from '../../deduction-structure/deduction'
 
 export const ExistentialGeneralizationRuleInterface = (deduction, stepIndex) => {
   const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
@@ -56,23 +57,11 @@ export const InstantiationRuleInterface = (deduction, stepIndex, concreteApply) 
     return concreteApply(newTerm)
   }
 
-  // Under assumption that `formula` is the result of an application of this rule determines which
-  // term was introduced in the substitution. If instantiation was vacuous returns `undefined`.
-  const determineNewTermInPotentialResult = formula => {
-    const [firstOccurrence] = Expression.findBoundOccurrences(premise)
-    if (firstOccurrence === undefined) return undefined
-
-    try {
-      return Expression.getSubexpression(formula, firstOccurrence.slice(1)).sym
-    } catch (e) {
-      if (e.name === ErrorName.NO_CHILD_AT_INDEX) {
-        throw createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
-      }
-      throw e
-    }
-  }
-
-  return ({ apply, determineNewTermInPotentialResult })
+  return ({
+    apply,
+    determineNewTermInPotentialResult: formula =>
+      determineNewTermInInstantiationResult(formula, premise)
+  })
 }
 
 export const UniversalGeneralizationRuleInterface = (deduction, stepIndex) => {

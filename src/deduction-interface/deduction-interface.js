@@ -30,3 +30,7 @@ export const startDeduction = (deduction = Deduction()) => {
 
   return ({ deduction, selectSteps })
 }
+
+const condenseDeduction = deduction => {
+
+}

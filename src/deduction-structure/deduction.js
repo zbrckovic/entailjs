@@ -1,6 +1,8 @@
 import { Rule } from './rule'
 import { RegularRuleApplicationSummary, Step, TheoremRuleApplicationSummary } from './step'
 import { TermDependencyGraph } from './term-dependency-graph'
+import { Expression } from '../abstract-structures'
+import { createError, ErrorName } from '../error'
 
 // Structure containing all relevant information about some deduction (proof) carried out as a
 // sequence of steps.
@@ -37,6 +39,23 @@ Deduction.applyRule = (deduction, ruleApplicationSpec) => {
   return ruleApplicationSpec.rule === Rule.Theorem
     ? applyTheoremRule(deduction, ruleApplicationSpec)
     : applyRegularRule(deduction, ruleApplicationSpec)
+}
+
+// Under the assumption that `formula` is the result of an application of instantiation rule to
+// `premise` determines which term was introduced in the substitution. If instantiation was vacuous
+// returns `undefined`.
+export const determineNewTermInInstantiationResult = (formula, premise) => {
+  const [firstOccurrence] = Expression.findBoundOccurrences(premise)
+  if (firstOccurrence === undefined) return undefined
+
+  try {
+    return Expression.getSubexpression(formula, firstOccurrence.slice(1)).sym
+  } catch (e) {
+    if (e.name === ErrorName.NO_CHILD_AT_INDEX) {
+      throw createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
+    }
+    throw e
+  }
 }
 
 const applyTheoremRule = (deduction, { theorem: formula, theoremId }) => {

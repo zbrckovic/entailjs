@@ -65,13 +65,18 @@
                 </a>
               
                 
-                <a class="source" href="../../deduction-compress.html">
-                  deduction-compress.js
+                <a class="source" href="../../deduction-inflate-deflate.html">
+                  deduction-inflate-deflate.js
                 </a>
               
                 
-                <a class="source" href="../../deduction-compress.test.html">
-                  deduction-compress.test.js
+                <a class="source" href="../../deduction-inflate-deflate.test.html">
+                  deduction-inflate-deflate.test.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface-util.html">
+                  deduction-interface/deduction-interface-util.js
                 </a>
               
                 
@@ -393,7 +398,8 @@
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
 <span class="hljs-keyword">import</span> { Expression, Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
-<span class="hljs-keyword">import</span> { determineNewTermInInstantiationResult } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/deduction&#x27;</span>
+<span class="hljs-keyword">import</span> { determineNewTermInInstantiationResult } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-interface&#x27;</span>
+<span class="hljs-keyword">import</span> { determineSubstitutionInGeneralizationResult } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface-util&#x27;</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ExistentialGeneralizationRuleInterface = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndex</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
@@ -531,41 +537,13 @@ generalization will be vacuous.</p>
     }
 
     <span class="hljs-keyword">return</span> concreteApply(newTerm, oldTerm)
-  }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>Under assumption that <code>formula</code> is the result of an application of this rule determine which
-term was introduced in the substitution.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> determineSubstitutionInPotentialResult = <span class="hljs-function"><span class="hljs-params">formula</span> =&gt;</span> {
-    <span class="hljs-keyword">const</span> newTerm = formula.boundSym
-    <span class="hljs-keyword">if</span> (newTerm === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">throw</span> createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
-
-    <span class="hljs-keyword">try</span> {
-      <span class="hljs-keyword">const</span> [firstBoundOccurrencePosition] = Expression.findBoundOccurrences(formula)
-      <span class="hljs-keyword">if</span> (firstBoundOccurrencePosition === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> { newTerm }
-      <span class="hljs-keyword">const</span> [, ...restIndexes] = firstBoundOccurrencePosition
-      <span class="hljs-keyword">const</span> oldTerm = Expression.getSubexpression(premise, restIndexes).sym
-      <span class="hljs-keyword">return</span> { oldTerm, newTerm }
-    } <span class="hljs-keyword">catch</span> (e) {
-      <span class="hljs-keyword">if</span> (e.name === ErrorName.NO_CHILD_AT_INDEX) {
-        <span class="hljs-keyword">throw</span> createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
-      }
-      <span class="hljs-keyword">throw</span> e
-    }
   }
 
-  <span class="hljs-keyword">return</span> { apply, determineSubstitutionInPotentialResult }
+  <span class="hljs-keyword">return</span> {
+    apply,
+    <span class="hljs-attr">determineSubstitutionInPotentialResult</span>: <span class="hljs-function"><span class="hljs-params">formula</span> =&gt;</span>
+      determineSubstitutionInGeneralizationResult(formula, premise)
+  }
 }
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> QuantificationRuleInterface = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndex</span>) =&gt;</span> ({

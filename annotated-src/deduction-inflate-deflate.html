@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>deduction-compress.js</title>
+  <title>deduction-inflate-deflate.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -65,13 +65,18 @@
                 </a>
               
                 
-                <a class="source" href="deduction-compress.html">
-                  deduction-compress.js
+                <a class="source" href="deduction-inflate-deflate.html">
+                  deduction-inflate-deflate.js
                 </a>
               
                 
-                <a class="source" href="deduction-compress.test.html">
-                  deduction-compress.test.js
+                <a class="source" href="deduction-inflate-deflate.test.html">
+                  deduction-inflate-deflate.test.js
+                </a>
+              
+                
+                <a class="source" href="deduction-interface/deduction-interface-util.html">
+                  deduction-interface/deduction-interface-util.js
                 </a>
               
                 
@@ -373,7 +378,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>deduction-compress.js</h1>
+                  <h1>deduction-inflate-deflate.js</h1>
               </div>
           </li>
         
@@ -385,60 +390,97 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p>Minimal information necessary to reconstruct this deduction using deduction interface.</p>
-
+              
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-structure&#x27;</span>
-<span class="hljs-keyword">import</span> { determineNewTermInInstantiationResult } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-structure/deduction&#x27;</span>
-<span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-interface&#x27;</span>
+<span class="hljs-keyword">import</span> {
+  determineNewTermInInstantiationResult,
+  determineSubstitutionInGeneralizationResult,
+  startDeduction
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-interface&#x27;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Produce minimal information necessary to reconstruct this deduction using deduction interface.</p>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> compress = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> deflate = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span>
   deduction.steps.map(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> {
     <span class="hljs-keyword">const</span> { formula, <span class="hljs-attr">ruleApplicationSummary</span>: { rule, premises } } = step
 
-    <span class="hljs-keyword">const</span> result = { <span class="hljs-attr">steps</span>: premises, rule }
+    <span class="hljs-keyword">const</span> result = { <span class="hljs-attr">steps</span>: premises.map(<span class="hljs-function"><span class="hljs-params">premise</span> =&gt;</span> premise + <span class="hljs-number">1</span>), rule }
 
     <span class="hljs-keyword">switch</span> (rule) {
-      <span class="hljs-keyword">case</span> Rule.Premise:
+      <span class="hljs-keyword">case</span> Rule.Premise: {
         result.formula = formula
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.Theorem:
+      }
+      <span class="hljs-keyword">case</span> Rule.Theorem: {
         result.formula = formula
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.TautologicalImplication:
+      }
+      <span class="hljs-keyword">case</span> Rule.TautologicalImplication: {
         result.formula = formula
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.Deduction:
+      }
+      <span class="hljs-keyword">case</span> Rule.Deduction: {
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.UniversalGeneralization:
+      }
+      <span class="hljs-keyword">case</span> Rule.UniversalGeneralization: {
+        <span class="hljs-keyword">const</span> { oldTerm, newTerm } = determineSubstitutionInGeneralizationResult(
+          formula,
+          deduction.steps[premises[<span class="hljs-number">0</span>]].formula
+        )
+
         result.newTerm = formula.boundSym
+        result.oldTerm = oldTerm
+        result.newTerm = newTerm
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.ExistentialGeneralization:
-        result.newTerm = formula.boundSym
+      }
+      <span class="hljs-keyword">case</span> Rule.ExistentialGeneralization: {
+        <span class="hljs-keyword">const</span> { oldTerm, newTerm } = determineSubstitutionInGeneralizationResult(
+          formula,
+          deduction.steps[premises[<span class="hljs-number">0</span>]].formula
+        )
+
+        result.oldTerm = oldTerm
+        result.newTerm = newTerm
+
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.UniversalInstantiation:
+      }
+      <span class="hljs-keyword">case</span> Rule.UniversalInstantiation: {
         result.newTerm = determineNewTermInInstantiationResult(
           formula,
           deduction.steps[premises[<span class="hljs-number">0</span>]].formula
         )
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.ExistentialInstantiation:
+      }
+      <span class="hljs-keyword">case</span> Rule.ExistentialInstantiation: {
         result.newTerm = determineNewTermInInstantiationResult(
           formula,
           deduction.steps[premises[<span class="hljs-number">0</span>]].formula
         )
         <span class="hljs-keyword">break</span>
+      }
     }
 
     <span class="hljs-keyword">return</span> result
   })
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> decompress = <span class="hljs-function"><span class="hljs-params">steps</span> =&gt;</span> {
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> inflate = <span class="hljs-function"><span class="hljs-params">steps</span> =&gt;</span> {
   <span class="hljs-keyword">let</span> deductionInterface = startDeduction()
 
   steps.forEach(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> {
-    <span class="hljs-keyword">const</span> ruleInterface = deductionInterface.selectSteps(...steps).chooseRule(step.rule)
+    <span class="hljs-keyword">const</span> ruleInterface = deductionInterface.selectSteps(...step.steps).chooseRule(step.rule)
     <span class="hljs-keyword">switch</span> (step.rule) {
       <span class="hljs-keyword">case</span> Rule.Premise:
         deductionInterface = ruleInterface.apply(step.formula)

@@ -65,13 +65,18 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-compress.html">
-                  deduction-compress.js
+                <a class="source" href="../deduction-inflate-deflate.html">
+                  deduction-inflate-deflate.js
                 </a>
               
                 
-                <a class="source" href="../deduction-compress.test.html">
-                  deduction-compress.test.js
+                <a class="source" href="../deduction-inflate-deflate.test.html">
+                  deduction-inflate-deflate.test.js
+                </a>
+              
+                
+                <a class="source" href="deduction-interface-util.html">
+                  deduction-interface/deduction-interface-util.js
                 </a>
               
                 
@@ -398,29 +403,22 @@
 <span class="hljs-keyword">let</span> parser
 beforeEach(<span class="hljs-function">() =&gt;</span> {
   parser = DeductionParser({ <span class="hljs-attr">syms</span>: primitiveSyms, <span class="hljs-attr">presentations</span>: primitivePresentations })
-})</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>test(<code>throws ${ErrorName.TERM_ALREADY_USED}</code>, () =&gt; {
-  const deduction = parser.parse(<code>        (1) E[x] F(x) / P;     1   (2) F(a)      / EI 1;    </code>)</p>
-<p>  expect(() =&gt; {
-    startDeduction(deduction)
-      .selectSteps(2)[Rule.UniversalGeneralization]
-      .apply(parser.getSym(‘x’), parser.getSym(‘a’))
-  }).toThrow(ErrorName.TERM_ALREADY_USED)
-})</p>
+})
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>
+test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.TERM_ALREADY_USED}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> deduction = parser.parse(<span class="hljs-string">`
+        (1) E[x] F(x) / P;
+    1   (2) F(a)      / EI 1;
+    `</span>)
+
+  expect(<span class="hljs-function">() =&gt;</span> {
+    startDeduction(deduction)
+      .selectSteps(<span class="hljs-number">2</span>)
+      .chooseRule(Rule.UniversalGeneralization)
+      .apply(parser.getSym(<span class="hljs-string">&#x27;x&#x27;</span>), parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>))
+  }).toThrow(ErrorName.TERM_ALREADY_USED)
+})
+
 test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.CYCLIC_DEPENDENCIES}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> deduction = parser.parse(<span class="hljs-string">`
         (1) A[x] E[y] F(x, y) / P;

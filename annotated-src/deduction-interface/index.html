@@ -65,13 +65,18 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-compress.html">
-                  deduction-compress.js
+                <a class="source" href="../deduction-inflate-deflate.html">
+                  deduction-inflate-deflate.js
                 </a>
               
                 
-                <a class="source" href="../deduction-compress.test.html">
-                  deduction-compress.test.js
+                <a class="source" href="../deduction-inflate-deflate.test.html">
+                  deduction-inflate-deflate.test.js
+                </a>
+              
+                
+                <a class="source" href="deduction-interface-util.html">
+                  deduction-interface/deduction-interface-util.js
                 </a>
               
                 
@@ -389,7 +394,11 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-interface&#x27;</span>
-<span class="hljs-keyword">export</span> { RulesInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./rules-interface&#x27;</span></pre></div></div>
+<span class="hljs-keyword">export</span> { RulesInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./rules-interface&#x27;</span>
+<span class="hljs-keyword">export</span> {
+  determineNewTermInInstantiationResult,
+  determineSubstitutionInGeneralizationResult
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-interface-util&#x27;</span></pre></div></div>
             
         </li>
         

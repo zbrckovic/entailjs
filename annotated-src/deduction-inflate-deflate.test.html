@@ -429,7 +429,7 @@ test.each([
     1,2,3 (8)  E[x] H(x)                                                                / EG 7;
       1,2 (9)  E[x] F(x) -&gt; E[x] H(x)                                                   / D 3, 8;
         1 (10) A[x] (G(x) -&gt; H(x)) -&gt; (E[x] F(x) -&gt; E[x] H(x))                          / D 2, 9;
-          (11) A[x] (F(x) -&gt; G(x)) -&gt; (A[x] (G(x) -&gt; H(x)) -&gt; (E[x] F(x) -&gt; E[x] H(x))) / D 1, 10; 
+          (11) A[x] (F(x) -&gt; G(x)) -&gt; (A[x] (G(x) -&gt; H(x)) -&gt; (E[x] F(x) -&gt; E[x] H(x))) / D 1, 10;
     `</span>
   ]
 ])(<span class="hljs-string">&#x27;deflate and inflate&#x27;</span>, <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> {
@@ -438,7 +438,7 @@ test.each([
   <span class="hljs-keyword">const</span> deflated = deflate(deduction)
   <span class="hljs-keyword">const</span> inflated = inflate(deflated)
 
-  <span class="hljs-built_in">console</span>.log(inflated)
+  expect(deduction).toEqual(inflated)
 })</pre></div></div>
             
         </li>

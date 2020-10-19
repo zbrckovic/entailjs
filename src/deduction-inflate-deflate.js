@@ -88,10 +88,10 @@ export const inflate = steps => {
         deductionInterface = ruleInterface.apply()
         break
       case Rule.UniversalGeneralization:
-        deductionInterface = ruleInterface.apply(step.newTerm)
+        deductionInterface = ruleInterface.apply(step.newTerm, step.oldTerm)
         break
       case Rule.ExistentialGeneralization:
-        deductionInterface = ruleInterface.apply(step.newTerm)
+        deductionInterface = ruleInterface.apply(step.newTerm, step.oldTerm)
         break
       case Rule.UniversalInstantiation:
         deductionInterface = ruleInterface.apply(step.newTerm)

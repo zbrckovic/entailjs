@@ -34,7 +34,7 @@ test.each([
     1,2,3 (8)  E[x] H(x)                                                                / EG 7;
       1,2 (9)  E[x] F(x) -> E[x] H(x)                                                   / D 3, 8;
         1 (10) A[x] (G(x) -> H(x)) -> (E[x] F(x) -> E[x] H(x))                          / D 2, 9;
-          (11) A[x] (F(x) -> G(x)) -> (A[x] (G(x) -> H(x)) -> (E[x] F(x) -> E[x] H(x))) / D 1, 10; 
+          (11) A[x] (F(x) -> G(x)) -> (A[x] (G(x) -> H(x)) -> (E[x] F(x) -> E[x] H(x))) / D 1, 10;
     `
   ]
 ])('deflate and inflate', text => {
@@ -43,5 +43,5 @@ test.each([
   const deflated = deflate(deduction)
   const inflated = inflate(deflated)
 
-  console.log(inflated)
+  expect(deduction).toEqual(inflated)
 })

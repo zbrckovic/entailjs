@@ -1,7 +1,7 @@
-import { DeductionParser } from './parsers/deduction-parser'
-import { primitiveSyms } from './primitive-syms'
-import { primitivePresentations } from './presentation/sym-presentation'
-import { deflate, inflate } from './deduction-inflate-deflate'
+import { DeductionParser } from '../parsers/deduction-parser'
+import { primitiveSyms } from '../primitive-syms'
+import { primitivePresentations } from '../presentation/sym-presentation'
+import { deflateDeduction, inflateDeduction } from './deduction-inflate-deflate'
 
 let parser
 beforeEach(() => {
@@ -37,11 +37,11 @@ test.each([
           (11) A[x] (F(x) -> G(x)) -> (A[x] (G(x) -> H(x)) -> (E[x] F(x) -> E[x] H(x))) / D 1, 10;
     `
   ]
-])('deflate and inflate', text => {
+])('deflateDeduction and inflateDeduction', text => {
   const deduction = parser.parse(text)
 
-  const deflated = deflate(deduction)
-  const inflated = inflate(deflated)
+  const deflated = deflateDeduction(deduction)
+  const inflated = inflateDeduction(deflated)
 
   expect(deduction).toEqual(inflated)
 })

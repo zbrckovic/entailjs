@@ -1,12 +1,12 @@
-import { Rule } from './deduction-structure'
+import { Rule } from '../deduction-structure'
 import {
   determineNewTermInInstantiationResult,
   determineSubstitutionInGeneralizationResult,
   startDeduction
-} from './deduction-interface'
+} from '../deduction-interface'
 
 // Produce minimal information necessary to reconstruct this deduction using deduction interface.
-export const deflate = deduction =>
+export const deflateDeduction = deduction =>
   deduction.steps.map(step => {
     const { formula, ruleApplicationSummary: { rule, premises } } = step
 
@@ -69,7 +69,7 @@ export const deflate = deduction =>
     return result
   })
 
-export const inflate = steps => {
+export const inflateDeduction = steps => {
   let deductionInterface = startDeduction()
 
   steps.forEach(step => {

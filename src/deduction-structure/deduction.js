@@ -55,12 +55,17 @@ const applyRegularRule = (deduction, {
   const ruleApplicationSummary = RegularRuleApplicationSummary({ rule, premises, termDependencies })
 
   let graph = deduction.termDependencyGraph
-  let graphDiff
+  let removedDependencyGraph
   if (termDependencies !== undefined) {
-    ([graph, graphDiff] = updateGraph(deduction, termDependencies))
+    ([graph, removedDependencyGraph] = updateGraph(deduction, termDependencies))
   }
 
-  const step = Step({ assumptions, formula: conclusion, ruleApplicationSummary, graphDiff })
+  const step = Step({
+    assumptions,
+    formula: conclusion,
+    ruleApplicationSummary,
+    removedDependencyGraph
+  })
 
   let result = addStep(deduction, step)
   result = setGraph(result, graph)
@@ -69,18 +74,18 @@ const applyRegularRule = (deduction, {
 }
 
 // Calculates new graph according to changes required by the rule's term dependencies. Also creates
-// a second difference graph which contains removed dependencies. Returns both graphs as a result.
+// a second graph which contains removed dependencies. Returns both graphs as a result.
 const updateGraph = (deduction, termDependencies) => {
   const { dependent, dependencies } = termDependencies
 
-  const graphDiff = {}
+  const removedDependencyGraph = {}
 
   const graph = TermDependencyGraph.addDependencies(
     deduction.termDependencyGraph,
     dependent,
     [...dependencies],
     (dependent, dependency) => {
-      let dependencies = graphDiff[dependent]
+      let dependencies = removedDependencyGraph[dependent]
       if (dependencies === undefined) {
         dependencies = new Set()
       }
@@ -88,7 +93,7 @@ const updateGraph = (deduction, termDependencies) => {
     }
   )
 
-  return [graph, graphDiff]
+  return [graph, removedDependencyGraph]
 }
 
 const setGraph = (deduction, termDependencyGraph) => ({ ...deduction, termDependencyGraph })

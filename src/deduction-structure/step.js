@@ -12,7 +12,7 @@ export const Step = ({
   // - How was the rule applied?
   // - What change must be made to the term dependency graph?
   ruleApplicationSummary = RegularRuleApplicationSummary(),
-  graphDiff = TermDependencyGraph()
+  removedDependencyGraph = TermDependencyGraph()
 } = {}) => ({ assumptions, formula, ruleApplicationSummary })
 
 export const RegularRuleApplicationSummary = ({

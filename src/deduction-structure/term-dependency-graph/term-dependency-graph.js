@@ -6,8 +6,9 @@ import { createError, ErrorName } from '../../error'
 // it's the symbol's id - not the actual symbol object - we are talking about.
 export const TermDependencyGraph = ({ ...props } = {}) => ({ ...props })
 
-// Adds direct dependency between `dependent` and `dependencies` and normalize the graph.
-TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) => {
+// Adds direct dependency between `dependent` and `dependencies` and normalizes the graph. Calls
+// `onRemove` whenever dependencies are removed on normalization.
+TermDependencyGraph.addDependencies = (graph, dependent, dependencies = [], onRemove) => {
   if (graph[dependent] !== undefined) {
     throw createError(ErrorName.TERM_ALREADY_USED, undefined, dependent)
   }
@@ -22,7 +23,7 @@ TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) => {
   let result = { ...graph, [dependent]: new Set() }
 
   dependencies.forEach(dependency => {
-    result = normalize(result, dependent, dependency)
+    result = normalize(result, dependent, dependency, onRemove)
 
     if (result[dependent] === undefined) {
       result[dependent] = new Set()
@@ -96,24 +97,25 @@ TermDependencyGraph.getDependents = (graph, dependency, traversed = new Set()) =
 
 // Removes direct dependencies which would become redundant if direct dependency between `dependent`
 // and `dependency` was introduced to the `graph`.
-const normalize = (graph, dependent, dependency) => {
-  const normalizedDownwards = normalizeDownwards(graph, dependent, dependency, true)
+const normalize = (graph, dependent, dependency, onRemove) => {
+  const normalizedDownwards = normalizeDownwards(graph, dependent, dependency, onRemove, true)
 
   const furtherDependents =
     TermDependencyGraph.getDirectDependents(normalizedDownwards, dependent)
 
   return furtherDependents.reduce(
     (intermediateGraph, furtherDependent) =>
-      normalizeDownwards(intermediateGraph, furtherDependent, dependency),
+      normalizeDownwards(intermediateGraph, furtherDependent, dependency, onRemove),
     normalizedDownwards
   )
 }
 
 // Removes direct dependencies which would become redundant if direct dependency between `dependent`
 // and `dependency` was introduced. It looks only downstream from `dependent` i.e. only its
-// descendants are considered.
-const normalizeDownwards = (graph, dependent, dependency, isRoot = false) => {
+// descendants are considered. Calls `onRemove` whenever dependency is removed.
+const normalizeDownwards = (graph, dependent, dependency, onRemove, isRoot = false) => {
   if (!isRoot && TermDependencyGraph.hasDirectDependency(graph, dependent, dependency)) {
+    onRemove?.(dependent, dependency)
     return removeDirectDependency(graph, dependent, dependency)
   }
 
@@ -123,7 +125,7 @@ const normalizeDownwards = (graph, dependent, dependency, isRoot = false) => {
 
   return [...transitiveDependencies].reduce(
     (intermediateGraph, transitiveDependency) =>
-      normalizeDownwards(intermediateGraph, dependent, transitiveDependency),
+      normalizeDownwards(intermediateGraph, dependent, transitiveDependency, onRemove),
     graph
   )
 }

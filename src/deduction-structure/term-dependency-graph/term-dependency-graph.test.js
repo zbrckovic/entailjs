@@ -6,7 +6,7 @@ describe('#addDirectDependency()', () => {
     const graph = TermDependencyGraph({ 0: new Set() })
 
     expect(() => {
-      TermDependencyGraph.addDependencies(graph, 0, 1)
+      TermDependencyGraph.addDependencies(graph, 0, [1])
     }).toThrow(ErrorName.TERM_ALREADY_USED)
   })
 
@@ -17,18 +17,18 @@ describe('#addDirectDependency()', () => {
     })
 
     expect(() => {
-      TermDependencyGraph.addDependencies(graph, 1, 0)
+      TermDependencyGraph.addDependencies(graph, 1, [0])
     }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
 
     expect(() => {
-      TermDependencyGraph.addDependencies(graph, 3, 0)
+      TermDependencyGraph.addDependencies(graph, 3, [0])
     }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
   })
 
   test('basic case', () => {
     let actual = TermDependencyGraph()
-    actual = TermDependencyGraph.addDependencies(actual, 0, 1, 2)
-    actual = TermDependencyGraph.addDependencies(actual, 2, 3)
+    actual = TermDependencyGraph.addDependencies(actual, 0, [1, 2])
+    actual = TermDependencyGraph.addDependencies(actual, 2, [3])
 
     const expected = TermDependencyGraph({
       0: new Set([1, 2]),
@@ -46,7 +46,8 @@ describe('#addDirectDependency()', () => {
         1: new Set([2])
       }),
       1,
-      2
+      2,
+      [0, 2]
     ],
     [
       TermDependencyGraph({
@@ -59,12 +60,15 @@ describe('#addDirectDependency()', () => {
         2: new Set([3])
       }),
       1,
-      2
+      2,
+      [0, 3]
     ]
-  ])('normalization', (graph, expected, dependent, dependency) => {
-    const actual = TermDependencyGraph.addDependencies(graph, dependent, dependency)
+  ])('normalization', (graph, expected, dependent, dependency, expectedRemovedDependency) => {
+    const onRemove = jest.fn()
+    const actual = TermDependencyGraph.addDependencies(graph, dependent, [dependency], onRemove)
 
     expect(actual).toEqual(expected)
+    expect(onRemove).toHaveBeenCalledWith(...expectedRemovedDependency)
   })
 })
 

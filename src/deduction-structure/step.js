@@ -1,4 +1,5 @@
 import { Rule } from './rule'
+import { TermDependencyGraph } from './term-dependency-graph'
 
 // Single step of a deduction
 export const Step = ({
@@ -10,14 +11,15 @@ export const Step = ({
   // - Which rule was used?
   // - How was the rule applied?
   // - What change must be made to the term dependency graph?
-  ruleApplicationSummary = RegularRuleApplicationSummary()
-}) => ({ assumptions, formula, ruleApplicationSummary })
+  ruleApplicationSummary = RegularRuleApplicationSummary(),
+  graphDiff = TermDependencyGraph()
+} = {}) => ({ assumptions, formula, ruleApplicationSummary })
 
 export const RegularRuleApplicationSummary = ({
   rule = Rule.Premise,
   premises = [],
   // Term dependencies introduced by this rule.
   termDependencies
-}) => ({ rule, premises, termDependencies })
+} = {}) => ({ rule, premises, termDependencies })
 
 export const TheoremRuleApplicationSummary = ({ theoremId }) => ({ rule: Rule.Theorem, theoremId })

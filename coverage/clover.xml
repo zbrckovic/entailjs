@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1603219938451" clover="3.2.0">
-  <project timestamp="1603219938451" name="All files">
-    <metrics statements="783" coveredstatements="712" conditionals="357" coveredconditionals="272" methods="218" coveredmethods="200" elements="1358" coveredelements="1184" complexity="0" loc="783" ncloc="783" packages="13" files="45" classes="45"/>
+<coverage generated="1603223636976" clover="3.2.0">
+  <project timestamp="1603223636976" name="All files">
+    <metrics statements="792" coveredstatements="717" conditionals="363" coveredconditionals="273" methods="219" coveredmethods="200" elements="1374" coveredelements="1190" complexity="0" loc="792" ncloc="792" packages="13" files="45" classes="45"/>
     <package name="src">
       <metrics statements="26" coveredstatements="19" conditionals="5" coveredconditionals="3" methods="4" coveredmethods="3"/>
       <file name="error.js" path="/home/runner/work/entail-core/entail-core/src/error.js">
@@ -414,9 +414,9 @@
       </file>
     </package>
     <package name="src.deduction-structure">
-      <metrics statements="53" coveredstatements="50" conditionals="21" coveredconditionals="15" methods="20" coveredmethods="17"/>
+      <metrics statements="61" coveredstatements="54" conditionals="26" coveredconditionals="16" methods="21" coveredmethods="17"/>
       <file name="deduction.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/deduction.js">
-        <metrics statements="42" coveredstatements="39" conditionals="17" coveredconditionals="13" methods="15" coveredmethods="14"/>
+        <metrics statements="50" coveredstatements="43" conditionals="19" coveredconditionals="13" methods="16" coveredmethods="14"/>
         <line num="7" count="10" type="cond" truecount="1" falsecount="0"/>
         <line num="12" count="29" type="stmt"/>
         <line num="14" count="120" type="stmt"/>
@@ -440,25 +440,33 @@
         <line num="55" count="71" type="stmt"/>
         <line num="57" count="71" type="stmt"/>
         <line num="59" count="71" type="cond" truecount="2" falsecount="0"/>
+        <line num="60" count="17" type="stmt"/>
         <line num="63" count="69" type="stmt"/>
-        <line num="64" count="69" type="stmt"/>
+        <line num="65" count="69" type="stmt"/>
         <line num="66" count="69" type="stmt"/>
-        <line num="70" count="10" type="stmt"/>
-        <line num="71" count="17" type="stmt"/>
-        <line num="73" count="17" type="stmt"/>
-        <line num="80" count="69" type="stmt"/>
-        <line num="82" count="69" type="stmt"/>
-        <line num="87" count="10" type="stmt"/>
-        <line num="88" count="71" type="stmt"/>
-        <line num="90" count="71" type="stmt"/>
-        <line num="91" count="75" type="stmt"/>
-        <line num="93" count="75" type="stmt"/>
-        <line num="95" count="75" type="cond" truecount="4" falsecount="0"/>
-        <line num="96" count="38" type="stmt"/>
-        <line num="99" count="75" type="stmt"/>
-        <line num="102" count="71" type="cond" truecount="1" falsecount="1"/>
-        <line num="103" count="71" type="stmt"/>
-        <line num="106" count="71" type="stmt"/>
+        <line num="68" count="69" type="stmt"/>
+        <line num="73" count="10" type="stmt"/>
+        <line num="74" count="17" type="stmt"/>
+        <line num="76" count="17" type="stmt"/>
+        <line num="78" count="17" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="84" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="91" count="15" type="stmt"/>
+        <line num="94" count="69" type="stmt"/>
+        <line num="96" count="69" type="stmt"/>
+        <line num="101" count="10" type="stmt"/>
+        <line num="102" count="71" type="stmt"/>
+        <line num="104" count="71" type="stmt"/>
+        <line num="105" count="75" type="stmt"/>
+        <line num="107" count="75" type="stmt"/>
+        <line num="109" count="75" type="cond" truecount="4" falsecount="0"/>
+        <line num="110" count="38" type="stmt"/>
+        <line num="113" count="75" type="stmt"/>
+        <line num="116" count="71" type="cond" truecount="1" falsecount="1"/>
+        <line num="117" count="71" type="stmt"/>
+        <line num="120" count="71" type="stmt"/>
       </file>
       <file name="index.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/index.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -473,12 +481,12 @@
         <line num="38" count="11" type="stmt"/>
       </file>
       <file name="step.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/step.js">
-        <metrics statements="5" coveredstatements="5" conditionals="4" coveredconditionals="2" methods="3" coveredmethods="2"/>
-        <line num="4" count="10" type="stmt"/>
-        <line num="14" count="120" type="stmt"/>
-        <line num="16" count="10" type="stmt"/>
-        <line num="21" count="120" type="stmt"/>
-        <line num="23" count="10" type="stmt"/>
+        <metrics statements="5" coveredstatements="5" conditionals="7" coveredconditionals="3" methods="3" coveredmethods="2"/>
+        <line num="5" count="10" type="cond" truecount="0" falsecount="1"/>
+        <line num="16" count="118" type="stmt"/>
+        <line num="18" count="10" type="cond" truecount="0" falsecount="1"/>
+        <line num="23" count="120" type="stmt"/>
+        <line num="25" count="10" type="stmt"/>
       </file>
     </package>
     <package name="src.deduction-structure.rule-application-spec">
@@ -527,82 +535,83 @@
       </file>
     </package>
     <package name="src.deduction-structure.term-dependency-graph">
-      <metrics statements="70" coveredstatements="68" conditionals="35" coveredconditionals="28" methods="19" coveredmethods="19"/>
+      <metrics statements="71" coveredstatements="69" conditionals="36" coveredconditionals="28" methods="19" coveredmethods="19"/>
       <file name="index.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/term-dependency-graph/index.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
       <file name="term-dependency-graph.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/term-dependency-graph/term-dependency-graph.js">
-        <metrics statements="70" coveredstatements="68" conditionals="35" coveredconditionals="28" methods="19" coveredmethods="19"/>
-        <line num="7" count="42" type="cond" truecount="1" falsecount="0"/>
-        <line num="10" count="11" type="stmt"/>
-        <line num="11" count="24" type="cond" truecount="2" falsecount="0"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="15" count="22" type="stmt"/>
-        <line num="16" count="11" type="stmt"/>
-        <line num="18" count="22" type="cond" truecount="2" falsecount="0"/>
-        <line num="19" count="3" type="stmt"/>
-        <line num="22" count="19" type="stmt"/>
-        <line num="24" count="19" type="stmt"/>
-        <line num="25" count="8" type="stmt"/>
-        <line num="27" count="8" type="cond" truecount="1" falsecount="1"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="31" count="8" type="stmt"/>
-        <line num="34" count="19" type="stmt"/>
-        <line num="38" count="11" type="cond" truecount="1" falsecount="0"/>
-        <line num="39" count="24" type="cond" truecount="1" falsecount="1"/>
-        <line num="40" count="24" type="stmt"/>
-        <line num="42" count="24" type="stmt"/>
-        <line num="43" count="24" type="cond" truecount="2" falsecount="0"/>
-        <line num="44" count="12" type="cond" truecount="2" falsecount="0"/>
-        <line num="46" count="5" type="stmt"/>
-        <line num="48" count="8" type="stmt"/>
-        <line num="53" count="11" type="stmt"/>
-        <line num="54" count="16" type="stmt"/>
-        <line num="56" count="34" type="stmt"/>
-        <line num="57" count="9" type="stmt"/>
-        <line num="60" count="11" type="cond" truecount="1" falsecount="0"/>
-        <line num="61" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="62" count="6" type="stmt"/>
-        <line num="64" count="6" type="stmt"/>
-        <line num="65" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="67" count="3" type="stmt"/>
+        <metrics statements="71" coveredstatements="69" conditionals="36" coveredconditionals="28" methods="19" coveredmethods="19"/>
+        <line num="7" count="145" type="cond" truecount="1" falsecount="0"/>
+        <line num="11" count="11" type="cond" truecount="0" falsecount="1"/>
+        <line num="12" count="24" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="16" count="22" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="19" count="22" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="23" count="19" type="stmt"/>
+        <line num="25" count="19" type="stmt"/>
+        <line num="26" count="8" type="stmt"/>
+        <line num="28" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="32" count="8" type="stmt"/>
+        <line num="35" count="19" type="stmt"/>
+        <line num="39" count="11" type="cond" truecount="1" falsecount="0"/>
+        <line num="40" count="24" type="cond" truecount="1" falsecount="1"/>
+        <line num="41" count="24" type="stmt"/>
+        <line num="43" count="24" type="stmt"/>
+        <line num="44" count="24" type="cond" truecount="2" falsecount="0"/>
+        <line num="45" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="47" count="5" type="stmt"/>
+        <line num="49" count="8" type="stmt"/>
+        <line num="54" count="11" type="stmt"/>
+        <line num="55" count="16" type="stmt"/>
+        <line num="57" count="34" type="stmt"/>
+        <line num="58" count="9" type="stmt"/>
+        <line num="61" count="11" type="cond" truecount="1" falsecount="0"/>
+        <line num="62" count="6" type="cond" truecount="1" falsecount="1"/>
+        <line num="63" count="6" type="stmt"/>
+        <line num="65" count="6" type="stmt"/>
+        <line num="66" count="6" type="cond" truecount="2" falsecount="0"/>
         <line num="68" count="3" type="stmt"/>
-        <line num="69" count="4" type="stmt"/>
-        <line num="74" count="3" type="stmt"/>
-        <line num="77" count="11" type="stmt"/>
-        <line num="78" count="7" type="stmt"/>
-        <line num="79" count="7" type="cond" truecount="1" falsecount="1"/>
-        <line num="80" count="7" type="stmt"/>
-        <line num="83" count="11" type="cond" truecount="1" falsecount="0"/>
-        <line num="84" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="85" count="6" type="stmt"/>
-        <line num="87" count="6" type="stmt"/>
-        <line num="89" count="6" type="stmt"/>
+        <line num="69" count="3" type="stmt"/>
+        <line num="70" count="4" type="stmt"/>
+        <line num="75" count="3" type="stmt"/>
+        <line num="78" count="11" type="stmt"/>
+        <line num="79" count="7" type="stmt"/>
+        <line num="80" count="7" type="cond" truecount="1" falsecount="1"/>
+        <line num="81" count="7" type="stmt"/>
+        <line num="84" count="11" type="cond" truecount="1" falsecount="0"/>
+        <line num="85" count="6" type="cond" truecount="1" falsecount="1"/>
+        <line num="86" count="6" type="stmt"/>
+        <line num="88" count="6" type="stmt"/>
         <line num="90" count="6" type="stmt"/>
-        <line num="91" count="4" type="stmt"/>
-        <line num="94" count="6" type="stmt"/>
-        <line num="99" count="11" type="stmt"/>
-        <line num="100" count="8" type="stmt"/>
-        <line num="103" count="8" type="stmt"/>
-        <line num="105" count="8" type="stmt"/>
-        <line num="107" count="3" type="stmt"/>
-        <line num="115" count="11" type="cond" truecount="1" falsecount="0"/>
-        <line num="116" count="13" type="cond" truecount="4" falsecount="0"/>
-        <line num="117" count="2" type="stmt"/>
-        <line num="120" count="11" type="stmt"/>
-        <line num="122" count="11" type="cond" truecount="2" falsecount="0"/>
-        <line num="124" count="2" type="stmt"/>
+        <line num="91" count="6" type="stmt"/>
+        <line num="92" count="4" type="stmt"/>
+        <line num="95" count="6" type="stmt"/>
+        <line num="100" count="11" type="stmt"/>
+        <line num="101" count="8" type="stmt"/>
+        <line num="104" count="8" type="stmt"/>
+        <line num="106" count="8" type="stmt"/>
+        <line num="108" count="3" type="stmt"/>
+        <line num="116" count="11" type="cond" truecount="1" falsecount="0"/>
+        <line num="117" count="13" type="cond" truecount="4" falsecount="0"/>
+        <line num="118" count="2" type="stmt"/>
+        <line num="119" count="2" type="stmt"/>
+        <line num="122" count="11" type="stmt"/>
+        <line num="124" count="11" type="cond" truecount="2" falsecount="0"/>
         <line num="126" count="2" type="stmt"/>
-        <line num="132" count="11" type="stmt"/>
-        <line num="133" count="2" type="stmt"/>
-        <line num="134" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="136" count="2" type="stmt"/>
-        <line num="137" count="2" type="stmt"/>
+        <line num="128" count="2" type="stmt"/>
+        <line num="134" count="11" type="stmt"/>
+        <line num="135" count="2" type="stmt"/>
+        <line num="136" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="138" count="2" type="stmt"/>
         <line num="139" count="2" type="stmt"/>
-        <line num="141" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="142" count="0" type="stmt"/>
-        <line num="144" count="2" type="stmt"/>
-        <line num="147" count="2" type="stmt"/>
+        <line num="141" count="2" type="stmt"/>
+        <line num="143" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="146" count="2" type="stmt"/>
+        <line num="149" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.deduction-util">

@@ -406,7 +406,7 @@ describe(<span class="hljs-string">&#x27;#addDirectDependency()&#x27;</span>, <s
     <span class="hljs-keyword">const</span> graph = TermDependencyGraph({ <span class="hljs-number">0</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>() })
 
     expect(<span class="hljs-function">() =&gt;</span> {
-      TermDependencyGraph.addDependencies(graph, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>)
+      TermDependencyGraph.addDependencies(graph, <span class="hljs-number">0</span>, [<span class="hljs-number">1</span>])
     }).toThrow(ErrorName.TERM_ALREADY_USED)
   })
 
@@ -417,18 +417,18 @@ describe(<span class="hljs-string">&#x27;#addDirectDependency()&#x27;</span>, <s
     })
 
     expect(<span class="hljs-function">() =&gt;</span> {
-      TermDependencyGraph.addDependencies(graph, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>)
+      TermDependencyGraph.addDependencies(graph, <span class="hljs-number">1</span>, [<span class="hljs-number">0</span>])
     }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
 
     expect(<span class="hljs-function">() =&gt;</span> {
-      TermDependencyGraph.addDependencies(graph, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>)
+      TermDependencyGraph.addDependencies(graph, <span class="hljs-number">3</span>, [<span class="hljs-number">0</span>])
     }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
   })
 
   test(<span class="hljs-string">&#x27;basic case&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
     <span class="hljs-keyword">let</span> actual = TermDependencyGraph()
-    actual = TermDependencyGraph.addDependencies(actual, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
-    actual = TermDependencyGraph.addDependencies(actual, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+    actual = TermDependencyGraph.addDependencies(actual, <span class="hljs-number">0</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>])
+    actual = TermDependencyGraph.addDependencies(actual, <span class="hljs-number">2</span>, [<span class="hljs-number">3</span>])
 
     <span class="hljs-keyword">const</span> expected = TermDependencyGraph({
       <span class="hljs-number">0</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]),
@@ -446,7 +446,8 @@ describe(<span class="hljs-string">&#x27;#addDirectDependency()&#x27;</span>, <s
         <span class="hljs-number">1</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">2</span>])
       }),
       <span class="hljs-number">1</span>,
-      <span class="hljs-number">2</span>
+      <span class="hljs-number">2</span>,
+      [<span class="hljs-number">0</span>, <span class="hljs-number">2</span>]
     ],
     [
       TermDependencyGraph({
@@ -459,12 +460,15 @@ describe(<span class="hljs-string">&#x27;#addDirectDependency()&#x27;</span>, <s
         <span class="hljs-number">2</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">3</span>])
       }),
       <span class="hljs-number">1</span>,
-      <span class="hljs-number">2</span>
+      <span class="hljs-number">2</span>,
+      [<span class="hljs-number">0</span>, <span class="hljs-number">3</span>]
     ]
-  ])(<span class="hljs-string">&#x27;normalization&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">graph, expected, dependent, dependency</span>) =&gt;</span> {
-    <span class="hljs-keyword">const</span> actual = TermDependencyGraph.addDependencies(graph, dependent, dependency)
+  ])(<span class="hljs-string">&#x27;normalization&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">graph, expected, dependent, dependency, expectedRemovedDependency</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> onRemove = jest.fn()
+    <span class="hljs-keyword">const</span> actual = TermDependencyGraph.addDependencies(graph, dependent, [dependency], onRemove)
 
     expect(actual).toEqual(expected)
+    expect(onRemove).toHaveBeenCalledWith(...expectedRemovedDependency)
   })
 })
 

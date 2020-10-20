@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.25% </span>
+                <span class="strong">91.36% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>73/80</span>
+                <span class='fraction'>74/81</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">77.78% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>28/35</span>
+                <span class='fraction'>28/36</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.14% </span>
+                <span class="strong">97.18% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>68/70</span>
+                <span class='fraction'>69/71</span>
             </div>
         
             
@@ -205,13 +205,16 @@
 <a name='L146'></a><a href='#L146'>146</a>
 <a name='L147'></a><a href='#L147'>147</a>
 <a name='L148'></a><a href='#L148'>148</a>
-<a name='L149'></a><a href='#L149'>149</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">42x</span>
+<span class="cline-any cline-yes">145x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
@@ -322,6 +325,7 @@
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
@@ -361,8 +365,9 @@
 // it's the symbol's id - not the actual symbol object - we are talking about.
 export const TermDependencyGraph = ({ ...props } = {}) =&gt; ({ ...props })
 &nbsp;
-// Adds direct dependency between `dependent` and `dependencies` and normalize the graph.
-TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) =&gt; {
+// Adds direct dependency between `dependent` and `dependencies` and normalizes the graph. Calls
+// `onRemove` whenever dependencies are removed on normalization.
+TermDependencyGraph.addDependencies = (graph, dependent, dependencies = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span> onRemove) =&gt; {
   if (graph[dependent] !== undefined) {
     throw createError(ErrorName.TERM_ALREADY_USED, undefined, dependent)
   }
@@ -377,7 +382,7 @@ TermDependencyGraph.addDependencies = (graph, dependent, ...dependencies) =&gt; 
   let result = { ...graph, [dependent]: new Set() }
 &nbsp;
   dependencies.forEach(dependency =&gt; {
-    result = normalize(result, dependent, dependency)
+    result = normalize(result, dependent, dependency, onRemove)
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (result[dependent] === undefined) {
 <span class="cstat-no" title="statement not covered" >      result[dependent] = new Set()</span>
@@ -451,24 +456,25 @@ TermDependencyGraph.getDependents = (graph, dependency, traversed = new Set()) =
 &nbsp;
 // Removes direct dependencies which would become redundant if direct dependency between `dependent`
 // and `dependency` was introduced to the `graph`.
-const normalize = (graph, dependent, dependency) =&gt; {
-  const normalizedDownwards = normalizeDownwards(graph, dependent, dependency, true)
+const normalize = (graph, dependent, dependency, onRemove) =&gt; {
+  const normalizedDownwards = normalizeDownwards(graph, dependent, dependency, onRemove, true)
 &nbsp;
   const furtherDependents =
     TermDependencyGraph.getDirectDependents(normalizedDownwards, dependent)
 &nbsp;
   return furtherDependents.reduce(
     (intermediateGraph, furtherDependent) =&gt;
-      normalizeDownwards(intermediateGraph, furtherDependent, dependency),
+      normalizeDownwards(intermediateGraph, furtherDependent, dependency, onRemove),
     normalizedDownwards
   )
 }
 &nbsp;
 // Removes direct dependencies which would become redundant if direct dependency between `dependent`
 // and `dependency` was introduced. It looks only downstream from `dependent` i.e. only its
-// descendants are considered.
-const normalizeDownwards = (graph, dependent, dependency, isRoot = false) =&gt; {
+// descendants are considered. Calls `onRemove` whenever dependency is removed.
+const normalizeDownwards = (graph, dependent, dependency, onRemove, isRoot = false) =&gt; {
   if (!isRoot &amp;&amp; TermDependencyGraph.hasDirectDependency(graph, dependent, dependency)) {
+    onRemove?.(dependent, dependency)
     return removeDirectDependency(graph, dependent, dependency)
   }
 &nbsp;
@@ -478,7 +484,7 @@ const normalizeDownwards = (graph, dependent, dependency, isRoot = false) =&gt; 
 &nbsp;
   return [...transitiveDependencies].reduce(
     (intermediateGraph, transitiveDependency) =&gt;
-      normalizeDownwards(intermediateGraph, dependent, transitiveDependency),
+      normalizeDownwards(intermediateGraph, dependent, transitiveDependency, onRemove),
     graph
   )
 }
@@ -508,7 +514,7 @@ const removeDirectDependency = (graph, dependent, dependency) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Oct 20 2020 18:52:18 GMT+0000 (Coordinated Universal Time)
+                at Tue Oct 20 2020 19:53:56 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

@@ -427,11 +427,12 @@ it’s the symbol’s id - not the actual symbol object - we are talking about.<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Adds direct dependency between <code>dependent</code> and <code>dependencies</code> and normalize the graph.</p>
+              <p>Adds direct dependency between <code>dependent</code> and <code>dependencies</code> and normalizes the graph. Calls
+<code>onRemove</code> whenever dependencies are removed on normalization.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>TermDependencyGraph.addDependencies = <span class="hljs-function">(<span class="hljs-params">graph, dependent, ...dependencies</span>) =&gt;</span> {
+            <div class="content"><div class='highlight'><pre>TermDependencyGraph.addDependencies = <span class="hljs-function">(<span class="hljs-params">graph, dependent, dependencies = [], onRemove</span>) =&gt;</span> {
   <span class="hljs-keyword">if</span> (graph[dependent] !== <span class="hljs-literal">undefined</span>) {
     <span class="hljs-keyword">throw</span> createError(ErrorName.TERM_ALREADY_USED, <span class="hljs-literal">undefined</span>, dependent)
   }
@@ -446,7 +447,7 @@ it’s the symbol’s id - not the actual symbol object - we are talking about.<
   <span class="hljs-keyword">let</span> result = { ...graph, [dependent]: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>() }
 
   dependencies.forEach(<span class="hljs-function"><span class="hljs-params">dependency</span> =&gt;</span> {
-    result = normalize(result, dependent, dependency)
+    result = normalize(result, dependent, dependency, onRemove)
 
     <span class="hljs-keyword">if</span> (result[dependent] === <span class="hljs-literal">undefined</span>) {
       result[dependent] = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
@@ -568,15 +569,15 @@ and <code>dependency</code> was introduced to the <code>graph</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> normalize = <span class="hljs-function">(<span class="hljs-params">graph, dependent, dependency</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> normalizedDownwards = normalizeDownwards(graph, dependent, dependency, <span class="hljs-literal">true</span>)
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> normalize = <span class="hljs-function">(<span class="hljs-params">graph, dependent, dependency, onRemove</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> normalizedDownwards = normalizeDownwards(graph, dependent, dependency, onRemove, <span class="hljs-literal">true</span>)
 
   <span class="hljs-keyword">const</span> furtherDependents =
     TermDependencyGraph.getDirectDependents(normalizedDownwards, dependent)
 
   <span class="hljs-keyword">return</span> furtherDependents.reduce(
     <span class="hljs-function">(<span class="hljs-params">intermediateGraph, furtherDependent</span>) =&gt;</span>
-      normalizeDownwards(intermediateGraph, furtherDependent, dependency),
+      normalizeDownwards(intermediateGraph, furtherDependent, dependency, onRemove),
     normalizedDownwards
   )
 }</pre></div></div>
@@ -592,12 +593,13 @@ and <code>dependency</code> was introduced to the <code>graph</code>.</p>
               </div>
               <p>Removes direct dependencies which would become redundant if direct dependency between <code>dependent</code>
 and <code>dependency</code> was introduced. It looks only downstream from <code>dependent</code> i.e. only its
-descendants are considered.</p>
+descendants are considered. Calls <code>onRemove</code> whenever dependency is removed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> normalizeDownwards = <span class="hljs-function">(<span class="hljs-params">graph, dependent, dependency, isRoot = <span class="hljs-literal">false</span></span>) =&gt;</span> {
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> normalizeDownwards = <span class="hljs-function">(<span class="hljs-params">graph, dependent, dependency, onRemove, isRoot = <span class="hljs-literal">false</span></span>) =&gt;</span> {
   <span class="hljs-keyword">if</span> (!isRoot &amp;&amp; TermDependencyGraph.hasDirectDependency(graph, dependent, dependency)) {
+    onRemove?.(dependent, dependency)
     <span class="hljs-keyword">return</span> removeDirectDependency(graph, dependent, dependency)
   }
 
@@ -607,7 +609,7 @@ descendants are considered.</p>
 
   <span class="hljs-keyword">return</span> [...transitiveDependencies].reduce(
     <span class="hljs-function">(<span class="hljs-params">intermediateGraph, transitiveDependency</span>) =&gt;</span>
-      normalizeDownwards(intermediateGraph, dependent, transitiveDependency),
+      normalizeDownwards(intermediateGraph, dependent, transitiveDependency, onRemove),
     graph
   )
 }</pre></div></div>

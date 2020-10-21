@@ -39,7 +39,7 @@ test(`throws ${ErrorName.CYCLIC_DEPENDENCIES}`, () => {
   }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
 })
 
-test('deleteLastStep1', () => {
+test('#deleteLastStep() case 1', () => {
   const expectedDeduction = parser.parse(`
     (1) E[x] E[y] E[z] F(x, y, z) / P;
   1 (2) E[y] E[z] F(a, y, z)      / EI 1;
@@ -58,7 +58,7 @@ test('deleteLastStep1', () => {
   expect(expectedDeduction).toEqual(actualDeduction)
 })
 
-test('deleteLastStep2', () => {
+test('#deleteLastStep() case 2', () => {
   const expectedDeduction = parser.parse(`
     (1) E[x] F(x, b, c) / P;
     (2) E[x] G(x, c)    / P;

@@ -38,3 +38,22 @@ test(`throws ${ErrorName.CYCLIC_DEPENDENCIES}`, () => {
       .apply(parser.getSym('x'), parser.getSym('a'))
   }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
 })
+
+test('deleteLastStep', () => {
+  const expectedDeduction = parser.parse(`
+        (1) E[x] E[y] E[z] F(x, y, z) / P;
+    1   (2) E[y] E[z] F(a, y, z)      / EI 1;
+    1   (3) E[z] F(a, b, z)           / EI 2;
+  `)
+
+  const deductionWithAddedStep = parser.parse(`
+        (1) E[x] E[y] E[z] F(x, y, z) / P;
+    1   (2) E[y] E[z] F(a, y, z)      / EI 1;
+    1   (3) E[z] F(a, b, z)           / EI 2;
+    1   (4) F(a, b, c)                / EI 3;
+  `)
+
+  const actualDeduction = startDeduction(deductionWithAddedStep).deleteLastStep().deduction
+
+  expect(expectedDeduction).toEqual(actualDeduction)
+})

@@ -11,15 +11,15 @@ export const Step = ({
   // - Which rule was used?
   // - How was the rule applied?
   // - What change must be made to the term dependency graph?
-  ruleApplicationSummary = RegularRuleApplicationSummary(),
-  removedDependencyGraph = TermDependencyGraph()
+  ruleApplicationSummary = RegularRuleApplicationSummary()
 } = {}) => ({ assumptions, formula, ruleApplicationSummary })
 
 export const RegularRuleApplicationSummary = ({
   rule = Rule.Premise,
   premises = [],
   // Term dependencies introduced by this rule.
-  termDependencies
-} = {}) => ({ rule, premises, termDependencies })
+  termDependencies,
+  removedTermDependencies = TermDependencyGraph()
+} = {}) => ({ rule, premises, termDependencies, removedTermDependencies })
 
 export const TheoremRuleApplicationSummary = ({ theoremId }) => ({ rule: Rule.Theorem, theoremId })

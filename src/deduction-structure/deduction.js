@@ -52,19 +52,23 @@ const applyRegularRule = (deduction, {
 }) => {
   const assumptions = calculateAssumptions(deduction, premises, [assumptionToRemove])
 
-  const ruleApplicationSummary = RegularRuleApplicationSummary({ rule, premises, termDependencies })
-
   let graph = deduction.termDependencyGraph
-  let removedDependencyGraph
+  let removedTermDependencies
   if (termDependencies !== undefined) {
-    ([graph, removedDependencyGraph] = updateGraph(deduction, termDependencies))
+    ([graph, removedTermDependencies] = updateGraph(deduction, termDependencies))
   }
+
+  const ruleApplicationSummary = RegularRuleApplicationSummary({
+    rule,
+    premises,
+    termDependencies,
+    removedTermDependencies
+  })
 
   const step = Step({
     assumptions,
     formula: conclusion,
-    ruleApplicationSummary,
-    removedDependencyGraph
+    ruleApplicationSummary
   })
 
   let result = addStep(deduction, step)
@@ -74,18 +78,18 @@ const applyRegularRule = (deduction, {
 }
 
 // Calculates new graph according to changes required by the rule's term dependencies. Also creates
-// a second graph which contains removed dependencies. Returns both graphs as a result.
+// a second graph which contains removed term dependencies. Returns both graphs as a result.
 const updateGraph = (deduction, termDependencies) => {
   const { dependent, dependencies } = termDependencies
 
-  const removedDependencyGraph = {}
+  const removedTermDependencies = {}
 
   const graph = TermDependencyGraph.addDependencies(
     deduction.termDependencyGraph,
     dependent,
     [...dependencies],
     (dependent, dependency) => {
-      let dependencies = removedDependencyGraph[dependent]
+      let dependencies = removedTermDependencies[dependent]
       if (dependencies === undefined) {
         dependencies = new Set()
       }
@@ -93,7 +97,7 @@ const updateGraph = (deduction, termDependencies) => {
     }
   )
 
-  return [graph, removedDependencyGraph]
+  return [graph, removedTermDependencies]
 }
 
 const setGraph = (deduction, termDependencyGraph) => ({ ...deduction, termDependencyGraph })

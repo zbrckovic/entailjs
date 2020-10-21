@@ -61,7 +61,7 @@ const applyRegularRule = (deduction, {
   const ruleApplicationSummary = RegularRuleApplicationSummary({
     rule,
     premises,
-    termDependencies,
+    addedTermDependencies: termDependencies,
     removedTermDependencies
   })
 

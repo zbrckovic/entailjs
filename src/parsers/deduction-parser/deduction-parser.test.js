@@ -43,7 +43,7 @@ test('parse()', () => {
         ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.ExistentialInstantiation,
           premises: [0],
-          termDependencies: {
+          addedTermDependencies: {
             dependent: formulaParser.getSym('a').id,
             dependencies: new Set()
           }
@@ -71,7 +71,7 @@ test('parse()', () => {
         ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.UniversalGeneralization,
           premises: [3],
-          termDependencies: {
+          addedTermDependencies: {
             dependent: formulaParser.getSym('b').id,
             dependencies: new Set()
           }
@@ -136,7 +136,7 @@ test('parse()', () => {
         ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.ExistentialInstantiation,
           premises: [2],
-          termDependencies: {
+          addedTermDependencies: {
             dependent: formulaParser.getSym('a').id,
             dependencies: new Set()
           }

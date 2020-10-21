@@ -71,7 +71,7 @@ test('simple', () => {
     ruleApplicationSummary: RegularRuleApplicationSummary({
       rule: Rule.ExistentialInstantiation,
       premises: [0],
-      termDependencies: {
+      addedTermDependencies: {
         dependent: parser.getSym('a').id,
         dependencies: new Set()
       }
@@ -108,7 +108,7 @@ test('with dependency terms', () => {
     ruleApplicationSummary: RegularRuleApplicationSummary({
       rule: Rule.ExistentialInstantiation,
       premises: [0],
-      termDependencies: {
+      addedTermDependencies: {
         dependent: parser.getSym('a').id,
         dependencies: new Set([parser.getSym('b').id])
       }

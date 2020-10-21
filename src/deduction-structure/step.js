@@ -18,8 +18,9 @@ export const RegularRuleApplicationSummary = ({
   rule = Rule.Premise,
   premises = [],
   // Term dependencies introduced by this rule.
-  termDependencies,
+  addedTermDependencies,
+  // Term dependencies removed as a consequence of normalization.
   removedTermDependencies = TermDependencyGraph()
-} = {}) => ({ rule, premises, termDependencies, removedTermDependencies })
+} = {}) => ({ rule, premises, addedTermDependencies, removedTermDependencies })
 
 export const TheoremRuleApplicationSummary = ({ theoremId }) => ({ rule: Rule.Theorem, theoremId })

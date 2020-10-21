@@ -34,19 +34,26 @@ export const startDeduction = (deduction = Deduction()) => {
 
     if (_.isEmpty(steps)) throw new Error('no step to remove')
 
-    const { ruleApplicationSummary: { termDependencies, removedTermDependencies } } = _.last(steps)
+    const {
+      ruleApplicationSummary: {
+        addedTermDependencies,
+        removedTermDependencies
+      }
+    } = _.last(steps)
 
     const newTermDependencyGraph = { ...termDependencyGraph }
 
     // Delete term dependencies which were added in last step.
-    if (termDependencies !== undefined) {
-      const newDependencies = new Set(newTermDependencyGraph[termDependencies.dependent])
-      termDependencies.dependencies.forEach(dependency => { newDependencies.delete(dependency) })
+    if (addedTermDependencies !== undefined) {
+      const newDependencies = new Set(newTermDependencyGraph[addedTermDependencies.dependent])
+      addedTermDependencies.dependencies.forEach(dependency => {
+        newDependencies.delete(dependency)
+      })
 
       if (newDependencies.size > 0) {
-        newTermDependencyGraph[termDependencies.dependent] = newDependencies
+        newTermDependencyGraph[addedTermDependencies.dependent] = newDependencies
       } else {
-        delete newTermDependencyGraph[termDependencies.dependent]
+        delete newTermDependencyGraph[addedTermDependencies.dependent]
       }
     }
 

@@ -43,6 +43,17 @@ export const startDeduction = (deduction = Deduction()) => {
 
     const newTermDependencyGraph = { ...termDependencyGraph }
 
+    // Add term dependencies which were deleted in last step.
+    Object
+      .entries(removedTermDependencies)
+      .forEach(([dependentTerm, removedDependencyTerms]) => {
+        const newDependencyTerms = new Set(newTermDependencyGraph[dependentTerm])
+        newTermDependencyGraph[dependentTerm] = newDependencyTerms
+        removedDependencyTerms.forEach(removedDependencyTerm => {
+          newDependencyTerms.add(removedDependencyTerm)
+        })
+      })
+
     // Delete term dependencies which were added in last step.
     if (addedTermDependencies !== undefined) {
       const newDependencyTerms = new Set(newTermDependencyGraph[addedTermDependencies.dependent])
@@ -56,17 +67,6 @@ export const startDeduction = (deduction = Deduction()) => {
         delete newTermDependencyGraph[addedTermDependencies.dependent]
       }
     }
-
-    // Add term dependencies which were deleted in last step.
-    Object
-      .entries(removedTermDependencies)
-      .forEach(([dependentTerm, removedDependencyTerms]) => {
-        const newDependencyTerms = new Set(newTermDependencyGraph[dependentTerm])
-        newTermDependencyGraph[dependentTerm] = newDependencyTerms
-        removedDependencyTerms.forEach(removedDependencyTerm => {
-          newDependencyTerms.add(removedDependencyTerm)
-        })
-      })
 
     const newDeduction = Deduction({
       ...deduction,

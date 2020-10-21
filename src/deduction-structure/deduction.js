@@ -88,12 +88,13 @@ const updateGraph = (deduction, termDependencies) => {
     deduction.termDependencyGraph,
     dependent,
     [...dependencies],
-    (dependent, dependency) => {
-      let dependencies = removedTermDependencies[dependent]
-      if (dependencies === undefined) {
-        dependencies = new Set()
+    (dependentTerm, dependencyTerm) => {
+      let dependencyTerms = removedTermDependencies[dependentTerm]
+      if (dependencyTerms === undefined) {
+        dependencyTerms = new Set()
+        removedTermDependencies[dependentTerm] = dependencyTerms
       }
-      dependencies.add(dependency)
+      dependencyTerms.add(dependencyTerm)
     }
   )
 

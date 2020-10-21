@@ -484,9 +484,23 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  termDependencies,
-  removedTermDependencies = TermDependencyGraph()
-} = {}) =&gt; ({ rule, premises, termDependencies, removedTermDependencies })
+            <div class="content"><div class='highlight'><pre>  addedTermDependencies,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Term dependencies removed as a consequence of normalization.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  removedTermDependencies = TermDependencyGraph()
+} = {}) =&gt; ({ rule, premises, addedTermDependencies, removedTermDependencies })
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TheoremRuleApplicationSummary = <span class="hljs-function">(<span class="hljs-params">{ theoremId }</span>) =&gt;</span> ({ <span class="hljs-attr">rule</span>: Rule.Theorem, theoremId })</pre></div></div>
             

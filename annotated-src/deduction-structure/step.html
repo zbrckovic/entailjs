@@ -220,11 +220,6 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-util/remove-last-deduction-step.html">
-                  deduction-util/remove-last-deduction-step.js
-                </a>
-              
-                
                 <a class="source" href="../error.html">
                   error.js
                 </a>
@@ -469,8 +464,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  ruleApplicationSummary = RegularRuleApplicationSummary(),
-  removedDependencyGraph = TermDependencyGraph()
+            <div class="content"><div class='highlight'><pre>  ruleApplicationSummary = RegularRuleApplicationSummary()
 } = {}) =&gt; ({ assumptions, formula, ruleApplicationSummary })
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RegularRuleApplicationSummary = ({
@@ -490,8 +484,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  termDependencies
-} = {}) =&gt; ({ rule, premises, termDependencies })
+            <div class="content"><div class='highlight'><pre>  termDependencies,
+  removedTermDependencies = TermDependencyGraph()
+} = {}) =&gt; ({ rule, premises, termDependencies, removedTermDependencies })
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TheoremRuleApplicationSummary = <span class="hljs-function">(<span class="hljs-params">{ theoremId }</span>) =&gt;</span> ({ <span class="hljs-attr">rule</span>: Rule.Theorem, theoremId })</pre></div></div>
             

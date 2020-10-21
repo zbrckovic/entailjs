@@ -220,11 +220,6 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-util/remove-last-deduction-step.html">
-                  deduction-util/remove-last-deduction-step.js
-                </a>
-              
-                
                 <a class="source" href="../error.html">
                   error.js
                 </a>
@@ -531,19 +526,23 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
 }</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> assumptions = calculateAssumptions(deduction, premises, [assumptionToRemove])
 
-  <span class="hljs-keyword">const</span> ruleApplicationSummary = RegularRuleApplicationSummary({ rule, premises, termDependencies })
-
   <span class="hljs-keyword">let</span> graph = deduction.termDependencyGraph
-  <span class="hljs-keyword">let</span> removedDependencyGraph
+  <span class="hljs-keyword">let</span> removedTermDependencies
   <span class="hljs-keyword">if</span> (termDependencies !== <span class="hljs-literal">undefined</span>) {
-    ([graph, removedDependencyGraph] = updateGraph(deduction, termDependencies))
+    ([graph, removedTermDependencies] = updateGraph(deduction, termDependencies))
   }
+
+  <span class="hljs-keyword">const</span> ruleApplicationSummary = RegularRuleApplicationSummary({
+    rule,
+    premises,
+    termDependencies,
+    removedTermDependencies
+  })
 
   <span class="hljs-keyword">const</span> step = Step({
     assumptions,
     <span class="hljs-attr">formula</span>: conclusion,
-    ruleApplicationSummary,
-    removedDependencyGraph
+    ruleApplicationSummary
   })
 
   <span class="hljs-keyword">let</span> result = addStep(deduction, step)
@@ -562,21 +561,21 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Calculates new graph according to changes required by the rule’s term dependencies. Also creates
-a second graph which contains removed dependencies. Returns both graphs as a result.</p>
+a second graph which contains removed term dependencies. Returns both graphs as a result.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> updateGraph = <span class="hljs-function">(<span class="hljs-params">deduction, termDependencies</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> { dependent, dependencies } = termDependencies
 
-  <span class="hljs-keyword">const</span> removedDependencyGraph = {}
+  <span class="hljs-keyword">const</span> removedTermDependencies = {}
 
   <span class="hljs-keyword">const</span> graph = TermDependencyGraph.addDependencies(
     deduction.termDependencyGraph,
     dependent,
     [...dependencies],
     <span class="hljs-function">(<span class="hljs-params">dependent, dependency</span>) =&gt;</span> {
-      <span class="hljs-keyword">let</span> dependencies = removedDependencyGraph[dependent]
+      <span class="hljs-keyword">let</span> dependencies = removedTermDependencies[dependent]
       <span class="hljs-keyword">if</span> (dependencies === <span class="hljs-literal">undefined</span>) {
         dependencies = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
       }
@@ -584,7 +583,7 @@ a second graph which contains removed dependencies. Returns both graphs as a res
     }
   )
 
-  <span class="hljs-keyword">return</span> [graph, removedDependencyGraph]
+  <span class="hljs-keyword">return</span> [graph, removedTermDependencies]
 }
 
 <span class="hljs-keyword">const</span> setGraph = <span class="hljs-function">(<span class="hljs-params">deduction, termDependencyGraph</span>) =&gt;</span> ({ ...deduction, termDependencyGraph })

@@ -220,11 +220,6 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-util/remove-last-deduction-step.html">
-                  deduction-util/remove-last-deduction-step.js
-                </a>
-              
-                
                 <a class="source" href="../error.html">
                   error.js
                 </a>
@@ -405,7 +400,8 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Deduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-structure&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../error&#x27;</span>
-<span class="hljs-keyword">import</span> { RulesInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./rules-interface&#x27;</span></pre></div></div>
+<span class="hljs-keyword">import</span> { RulesInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./rules-interface&#x27;</span>
+<span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span></pre></div></div>
             
         </li>
         
@@ -457,7 +453,70 @@ if deduction provided at the start (if any) was valid.</p>
     <span class="hljs-keyword">return</span> RulesInterface(deduction, ...indexes)
   }
 
-  <span class="hljs-keyword">return</span> ({ deduction, selectSteps })
+  <span class="hljs-keyword">const</span> deleteLastStep = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> { steps, termDependencyGraph } = deduction
+
+    <span class="hljs-keyword">if</span> (_.isEmpty(steps)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;no step to remove&#x27;</span>)
+
+    <span class="hljs-keyword">const</span> { <span class="hljs-attr">ruleApplicationSummary</span>: { termDependencies, removedTermDependencies } } = _.last(steps)
+
+    <span class="hljs-keyword">const</span> newTermDependencyGraph = { ...termDependencyGraph }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Delete term dependencies which were added in last step.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (termDependencies !== <span class="hljs-literal">undefined</span>) {
+      <span class="hljs-keyword">const</span> newDependencies = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(newTermDependencyGraph[termDependencies.dependent])
+      termDependencies.dependencies.forEach(<span class="hljs-function"><span class="hljs-params">dependency</span> =&gt;</span> { newDependencies.delete(dependency) })
+
+      <span class="hljs-keyword">if</span> (newDependencies.size &gt; <span class="hljs-number">0</span>) {
+        newTermDependencyGraph[termDependencies.dependent] = newDependencies
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">delete</span> newTermDependencyGraph[termDependencies.dependent]
+      }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Add term dependencies which were deleted in last step.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-built_in">Object</span>
+      .entries(removedTermDependencies)
+      .forEach(<span class="hljs-function">(<span class="hljs-params">[dependent, removedDependencies]</span>) =&gt;</span> {
+        <span class="hljs-keyword">const</span> dependencies = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(newTermDependencyGraph[dependent])
+        newTermDependencyGraph[dependent] = dependencies
+        removedDependencies.forEach(<span class="hljs-function"><span class="hljs-params">removedDependency</span> =&gt;</span> { dependencies.add(removedDependency) })
+      })
+
+    <span class="hljs-keyword">const</span> newDeduction = Deduction({
+      ...deduction,
+      <span class="hljs-attr">steps</span>: steps.slice(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>),
+      <span class="hljs-attr">termDependencyGraph</span>: newTermDependencyGraph
+    })
+
+    <span class="hljs-keyword">return</span> startDeduction(newDeduction)
+  }
+
+  <span class="hljs-keyword">return</span> ({ deduction, selectSteps, deleteLastStep })
 }</pre></div></div>
             
         </li>

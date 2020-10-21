@@ -220,11 +220,6 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-util/remove-last-deduction-step.html">
-                  deduction-util/remove-last-deduction-step.js
-                </a>
-              
-                
                 <a class="source" href="../error.html">
                   error.js
                 </a>
@@ -442,6 +437,25 @@ test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.CYCL
       .chooseRule(Rule.UniversalGeneralization)
       .apply(parser.getSym(<span class="hljs-string">&#x27;x&#x27;</span>), parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>))
   }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
+})
+
+test(<span class="hljs-string">&#x27;deleteLastStep&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> expectedDeduction = parser.parse(<span class="hljs-string">`
+        (1) E[x] E[y] E[z] F(x, y, z) / P;
+    1   (2) E[y] E[z] F(a, y, z)      / EI 1;
+    1   (3) E[z] F(a, b, z)           / EI 2;
+  `</span>)
+
+  <span class="hljs-keyword">const</span> deductionWithAddedStep = parser.parse(<span class="hljs-string">`
+        (1) E[x] E[y] E[z] F(x, y, z) / P;
+    1   (2) E[y] E[z] F(a, y, z)      / EI 1;
+    1   (3) E[z] F(a, b, z)           / EI 2;
+    1   (4) F(a, b, c)                / EI 3;
+  `</span>)
+
+  <span class="hljs-keyword">const</span> actualDeduction = startDeduction(deductionWithAddedStep).deleteLastStep().deduction
+
+  expect(expectedDeduction).toEqual(actualDeduction)
 })</pre></div></div>
             
         </li>

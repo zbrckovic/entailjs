@@ -1,6 +1,7 @@
 import { Rule } from './rule'
 import { RegularRuleApplicationSummary, Step, TheoremRuleApplicationSummary } from './step'
 import { TermDependencyGraph } from './term-dependency-graph'
+import { Expression } from '../abstract-structures'
 
 // Structure containing all relevant information about some deduction (proof) carried out as a
 // sequence of steps.
@@ -22,6 +23,14 @@ Deduction.getStep = (deduction, stepIndex) => {
   const step = deduction.steps[stepIndex]
   if (step === undefined) throw new Error(`no step at index ${stepIndex}`)
   return step
+}
+
+// Gets all symbols appearing in deduction (free or not).
+Deduction.getSyms = deduction => {
+  const syms = {}
+  deduction.steps.forEach(step => { Object.assign(syms, Expression.getSyms(step.formula)) })
+
+  return syms
 }
 
 Deduction.getLastStep = deduction => {

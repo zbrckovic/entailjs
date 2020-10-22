@@ -400,7 +400,8 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./rule&#x27;</span>
 <span class="hljs-keyword">import</span> { RegularRuleApplicationSummary, Step, TheoremRuleApplicationSummary } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./step&#x27;</span>
-<span class="hljs-keyword">import</span> { TermDependencyGraph } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./term-dependency-graph&#x27;</span></pre></div></div>
+<span class="hljs-keyword">import</span> { TermDependencyGraph } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./term-dependency-graph&#x27;</span>
+<span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../abstract-structures&#x27;</span></pre></div></div>
             
         </li>
         
@@ -484,6 +485,26 @@ positive integers starting from 1. Internally, zero-based indexes are used.</p>
   <span class="hljs-keyword">const</span> step = deduction.steps[stepIndex]
   <span class="hljs-keyword">if</span> (step === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`no step at index <span class="hljs-subst">${stepIndex}</span>`</span>)
   <span class="hljs-keyword">return</span> step
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Gets all symbols appearing in deduction (free or not).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Deduction.getSyms = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> syms = {}
+  deduction.steps.forEach(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> { <span class="hljs-built_in">Object</span>.assign(syms, Expression.getSyms(step.formula)) })
+
+  <span class="hljs-keyword">return</span> syms
 }
 
 Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span> {
@@ -495,11 +516,11 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Derives new deduction by applying rule specified by <code>ruleApplicationSpec</code>.</p>
 
@@ -554,11 +575,11 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Calculates new graph according to changes required by the rule’s term dependencies. Also creates
 a second graph which contains removed term dependencies. Returns both graphs as a result.</p>
@@ -594,11 +615,11 @@ a second graph which contains removed term dependencies. Returns both graphs as 
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Calculates which assumptions must be added to the next step according to the specified rule’s
 premises. Assumptions are inherited from all premises of the rule. In addition to that if the

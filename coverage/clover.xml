@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1603390837518" clover="3.2.0">
-  <project timestamp="1603390837518" name="All files">
-    <metrics statements="816" coveredstatements="743" conditionals="369" coveredconditionals="279" methods="225" coveredmethods="205" elements="1410" coveredelements="1227" complexity="0" loc="816" ncloc="816" packages="13" files="45" classes="45"/>
+<coverage generated="1603554183187" clover="3.2.0">
+  <project timestamp="1603554183187" name="All files">
+    <metrics statements="817" coveredstatements="744" conditionals="371" coveredconditionals="281" methods="226" coveredmethods="206" elements="1414" coveredelements="1231" complexity="0" loc="817" ncloc="817" packages="13" files="45" classes="45"/>
     <package name="src">
       <metrics statements="26" coveredstatements="19" conditionals="5" coveredconditionals="3" methods="4" coveredmethods="3"/>
       <file name="error.js" path="/home/runner/work/entail-core/entail-core/src/error.js">
@@ -44,7 +44,7 @@
       </file>
     </package>
     <package name="src.abstract-structures">
-      <metrics statements="174" coveredstatements="167" conditionals="84" coveredconditionals="75" methods="56" coveredmethods="53"/>
+      <metrics statements="175" coveredstatements="168" conditionals="86" coveredconditionals="77" methods="57" coveredmethods="54"/>
       <file name="expression-pointer.js" path="/home/runner/work/entail-core/entail-core/src/abstract-structures/expression-pointer.js">
         <metrics statements="33" coveredstatements="31" conditionals="13" coveredconditionals="12" methods="11" coveredmethods="10"/>
         <line num="7" count="24" type="cond" truecount="1" falsecount="0"/>
@@ -198,41 +198,42 @@
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
       <file name="sym.js" path="/home/runner/work/entail-core/entail-core/src/abstract-structures/sym.js">
-        <metrics statements="34" coveredstatements="32" conditionals="23" coveredconditionals="20" methods="12" coveredmethods="10"/>
+        <metrics statements="35" coveredstatements="33" conditionals="25" coveredconditionals="22" methods="13" coveredmethods="11"/>
         <line num="3" count="20" type="cond" truecount="0" falsecount="1"/>
-        <line num="20" count="549" type="stmt"/>
+        <line num="20" count="555" type="stmt"/>
         <line num="22" count="20" type="cond" truecount="1" falsecount="0"/>
-        <line num="23" count="179" type="stmt"/>
-        <line num="25" count="162" type="cond" truecount="1" falsecount="0"/>
+        <line num="23" count="185" type="stmt"/>
+        <line num="25" count="163" type="cond" truecount="1" falsecount="0"/>
         <line num="26" count="20" type="cond" truecount="1" falsecount="0"/>
         <line num="27" count="20" type="cond" truecount="1" falsecount="0"/>
         <line num="28" count="20" type="cond" truecount="1" falsecount="0"/>
         <line num="30" count="20" type="stmt"/>
-        <line num="31" count="631" type="cond" truecount="2" falsecount="0"/>
-        <line num="33" count="536" type="cond" truecount="2" falsecount="0"/>
-        <line num="35" count="498" type="stmt"/>
-        <line num="37" count="38" type="stmt"/>
+        <line num="31" count="637" type="cond" truecount="2" falsecount="0"/>
+        <line num="33" count="538" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="499" type="stmt"/>
+        <line num="37" count="39" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="41" count="95" type="cond" truecount="2" falsecount="0"/>
-        <line num="43" count="1" type="stmt"/>
-        <line num="45" count="94" type="stmt"/>
+        <line num="41" count="99" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="45" count="97" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="51" count="20" type="stmt"/>
         <line num="52" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="54" count="1" type="stmt"/>
         <line num="56" count="1" type="stmt"/>
         <line num="60" count="20" type="stmt"/>
-        <line num="61" count="183" type="cond" truecount="4" falsecount="0"/>
-        <line num="63" count="164" type="stmt"/>
-        <line num="68" count="7" type="stmt"/>
-        <line num="73" count="3" type="stmt"/>
-        <line num="78" count="9" type="stmt"/>
+        <line num="61" count="189" type="cond" truecount="4" falsecount="0"/>
+        <line num="63" count="165" type="stmt"/>
+        <line num="68" count="8" type="stmt"/>
+        <line num="73" count="4" type="stmt"/>
+        <line num="78" count="12" type="stmt"/>
         <line num="85" count="20" type="stmt"/>
         <line num="87" count="51" type="stmt"/>
         <line num="89" count="20" type="stmt"/>
         <line num="98" count="20" type="stmt"/>
         <line num="124" count="20" type="stmt"/>
-        <line num="131" count="20" type="stmt"/>
+        <line num="131" count="20" type="cond" truecount="2" falsecount="0"/>
+        <line num="133" count="20" type="stmt"/>
       </file>
     </package>
     <package name="src.deduction-interface">

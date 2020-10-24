@@ -445,6 +445,22 @@ test.each([
   [Category.TF, { <span class="hljs-attr">kind</span>: Kind.Term, <span class="hljs-attr">argumentKind</span>: Kind.Formula }]
 ])(<span class="hljs-string">&#x27;.getKindsFromCategory(%s) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">kind, expected</span>) =&gt;</span> {
   expect(Sym.getKindsFromCategory(kind)).toEqual(expected)
+})
+
+test.each([
+  [Sym.ff(), <span class="hljs-literal">false</span>],
+  [Sym.tf(), <span class="hljs-literal">false</span>],
+  [Sym.ft(), <span class="hljs-literal">false</span>],
+  [Sym.tt(), <span class="hljs-literal">true</span>]
+])(<span class="hljs-string">&#x27;.isBindable() only for TT&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">sym, expected</span>) =&gt;</span> {
+  expect(Sym.isBindable(sym)).toEqual(expected)
+})
+
+test.each([
+  [Sym.tt({ <span class="hljs-attr">arity</span>: <span class="hljs-number">1</span> }), <span class="hljs-literal">false</span>],
+  [Sym.tt({ <span class="hljs-attr">arity</span>: <span class="hljs-number">0</span> }), <span class="hljs-literal">true</span>]
+])(<span class="hljs-string">&#x27;.isBindable() only for nullary&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">sym, expected</span>) =&gt;</span> {
+  expect(Sym.isBindable(sym)).toEqual(expected)
 })</pre></div></div>
             
         </li>

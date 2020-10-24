@@ -668,6 +668,8 @@ words: nullary symbol’s category can either be <code>FF</code> or <code>TT</co
   [Category.TF]: <span class="hljs-number">3</span>
 }
 
+Sym.isBindable = <span class="hljs-function"><span class="hljs-params">sym</span> =&gt;</span> Sym.getCategory(sym) === Category.TT &amp;&amp; sym.arity === <span class="hljs-number">0</span>
+
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> order = <span class="hljs-function">(<span class="hljs-params">category1, category2</span>) =&gt;</span> precedence[category1] - precedence[category2]</pre></div></div>
             
         </li>

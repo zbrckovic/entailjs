@@ -128,4 +128,6 @@ const precedence = {
   [Category.TF]: 3
 }
 
+Sym.isBindable = sym => Sym.getCategory(sym) === Category.TT && sym.arity === 0
+
 export const order = (category1, category2) => precedence[category1] - precedence[category2]

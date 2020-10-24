@@ -46,3 +46,19 @@ test.each([
 ])('.getKindsFromCategory(%s) is %s', (kind, expected) => {
   expect(Sym.getKindsFromCategory(kind)).toEqual(expected)
 })
+
+test.each([
+  [Sym.ff(), false],
+  [Sym.tf(), false],
+  [Sym.ft(), false],
+  [Sym.tt(), true]
+])('.isBindable() only for TT', (sym, expected) => {
+  expect(Sym.isBindable(sym)).toEqual(expected)
+})
+
+test.each([
+  [Sym.tt({ arity: 1 }), false],
+  [Sym.tt({ arity: 0 }), true]
+])('.isBindable() only for nullary', (sym, expected) => {
+  expect(Sym.isBindable(sym)).toEqual(expected)
+})

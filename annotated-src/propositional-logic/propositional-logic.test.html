@@ -413,16 +413,16 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
 
 test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-literal">false</span>],
-  [<span class="hljs-string">&#x27;F(x)&#x27;</span>, <span class="hljs-literal">false</span>],
-  [<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>, <span class="hljs-literal">false</span>],
-  [<span class="hljs-string">&#x27;A[x] F(x) | ~A[x] F(x)&#x27;</span>, <span class="hljs-literal">true</span>],
-  [<span class="hljs-string">&#x27;A[x] F(x) | ~A[x] F(y)&#x27;</span>, <span class="hljs-literal">false</span>],
+  [<span class="hljs-string">&#x27;Fx&#x27;</span>, <span class="hljs-literal">false</span>],
+  [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, <span class="hljs-literal">false</span>],
+  [<span class="hljs-string">&#x27;Ax Fx | ~Ax Fx&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;Ax Fx | ~Ax Fy&#x27;</span>, <span class="hljs-literal">false</span>],
   [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, <span class="hljs-literal">false</span>],
   [<span class="hljs-string">&#x27;p -&gt; p&#x27;</span>, <span class="hljs-literal">true</span>],
-  [<span class="hljs-string">&#x27;F(x, y) -&gt; F(x, y)&#x27;</span>, <span class="hljs-literal">true</span>],
-  [<span class="hljs-string">&#x27;F(x, y) -&gt; F(y, x)&#x27;</span>, <span class="hljs-literal">false</span>],
-  [<span class="hljs-string">&#x27;((F(x) -&gt; F(y)) &amp; (F(y) -&gt; G(x))) -&gt; (F(x) -&gt; G(x))&#x27;</span>, <span class="hljs-literal">true</span>],
-  [<span class="hljs-string">&#x27;((F(x) -&gt; F(y)) &amp; (F(y) -&gt; G(x))) -&gt; (G(x) -&gt; F(y))&#x27;</span>, <span class="hljs-literal">false</span>]
+  [<span class="hljs-string">&#x27;Fxy -&gt; Fxy&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;Fxy -&gt; Fyx&#x27;</span>, <span class="hljs-literal">false</span>],
+  [<span class="hljs-string">&#x27;((Fx -&gt; Fy) &amp; (Fy -&gt; Gx)) -&gt; (Fx -&gt; Gx)&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;((Fx -&gt; Fy) &amp; (Fy -&gt; Gx)) -&gt; (Gx -&gt; Fy)&#x27;</span>, <span class="hljs-literal">false</span>]
 ])(<span class="hljs-string">&#x27;isTautology(%s) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, expected</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
   <span class="hljs-keyword">const</span> actual = isTautology(formula)

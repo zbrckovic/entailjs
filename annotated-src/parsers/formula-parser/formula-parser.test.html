@@ -458,7 +458,7 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;p -&gt; q\&#x27;)&#x27;</span>
   expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
-test(<span class="hljs-string">&#x27;parse(\&#x27;F(x, y)\&#x27;)&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;parse(\&#x27;Fxy\&#x27;)&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> maxSymId = parser.getMaxSymId()
 
   <span class="hljs-keyword">const</span> symF = Sym.ft({ <span class="hljs-attr">id</span>: maxSymId + <span class="hljs-number">1</span>, <span class="hljs-attr">arity</span>: <span class="hljs-number">2</span> })
@@ -476,14 +476,14 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;F(x, y)\&#x27;)&#x27;</span>, 
     [symY.id]: symY
   }
 
-  <span class="hljs-keyword">const</span> formula = parser.parse(<span class="hljs-string">&#x27;F(x, y)&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula = parser.parse(<span class="hljs-string">&#x27;Fxy&#x27;</span>)
   <span class="hljs-keyword">const</span> addedSyms = _.pickBy(parser.getSyms(), <span class="hljs-function">(<span class="hljs-params">sym, id</span>) =&gt;</span> primitiveSyms[id] === <span class="hljs-literal">undefined</span>)
 
   expect(formula).toEqual(expectedFormula)
   expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
-test(<span class="hljs-string">&#x27;parse(\&#x27;A[x] F(x)\&#x27;)&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;parse(\&#x27;Ax Fx\&#x27;)&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> maxSymId = parser.getMaxSymId()
 
   <span class="hljs-keyword">const</span> symX = Sym.tt({ <span class="hljs-attr">id</span>: maxSymId + <span class="hljs-number">1</span> })
@@ -505,14 +505,14 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;A[x] F(x)\&#x27;)&#x27;</span>
     [symX.id]: symX
   }
 
-  <span class="hljs-keyword">const</span> formula = parser.parse(<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula = parser.parse(<span class="hljs-string">&#x27;Ax Fx&#x27;</span>)
   <span class="hljs-keyword">const</span> addedSyms = _.pickBy(parser.getSyms(), <span class="hljs-function">(<span class="hljs-params">sym, id</span>) =&gt;</span> primitiveSyms[id] === <span class="hljs-literal">undefined</span>)
 
   expect(formula).toEqual(expectedFormula)
   expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
-test(<span class="hljs-string">&#x27;parse(\&#x27;A[x] E[y] (F(x, y) -&gt; ~G(y, x))\&#x27;&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;parse(\&#x27;Ax Ey (Fxy -&gt; ~Gyx)\&#x27;&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> maxSymId = parser.getMaxSymId()
 
   <span class="hljs-keyword">const</span> symX = Sym.tt({ <span class="hljs-attr">id</span>: maxSymId + <span class="hljs-number">1</span> })
@@ -564,7 +564,7 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;A[x] E[y] (F(x, y) -&gt; ~G(y,
     [symX.id]: symX
   }
 
-  <span class="hljs-keyword">const</span> formula = parser.parse(<span class="hljs-string">&#x27;A[x] E[y] (F(x, y) -&gt; ~G(y, x))&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula = parser.parse(<span class="hljs-string">&#x27;Ax Ey (Fxy -&gt; ~Gyx)&#x27;</span>)
   <span class="hljs-keyword">const</span> addedSyms = _.pickBy(parser.getSyms(), <span class="hljs-function">(<span class="hljs-params">sym, id</span>) =&gt;</span> primitiveSyms[id] === <span class="hljs-literal">undefined</span>)
 
   expect(formula).toEqual(expectedFormula)
@@ -580,8 +580,8 @@ test(<span class="hljs-string">`parse(&#x27;~x&#x27;) throws <span class="hljs-s
   expect(<span class="hljs-function">() =&gt;</span> parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
-test(<span class="hljs-string">`parse(&#x27;F(x)&#x27;) throws <span class="hljs-subst">${ErrorName.INVALID_SYMBOL_KIND}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> text = <span class="hljs-string">&#x27;F(x)&#x27;</span>
+test(<span class="hljs-string">`parse(&#x27;Fx&#x27;) throws <span class="hljs-subst">${ErrorName.INVALID_SYMBOL_KIND}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> text = <span class="hljs-string">&#x27;Fx&#x27;</span>
   <span class="hljs-keyword">const</span> symX = Sym.ff({ <span class="hljs-attr">id</span>: parser.getMaxSymId() + <span class="hljs-number">1</span> })
   <span class="hljs-keyword">const</span> presentationX = SymPresentation({ <span class="hljs-attr">ascii</span>: SyntacticInfo.prefix(<span class="hljs-string">&#x27;x&#x27;</span>) })
   parser.addPresentation(symX, presentationX)
@@ -589,8 +589,8 @@ test(<span class="hljs-string">`parse(&#x27;F(x)&#x27;) throws <span class="hljs
   expect(<span class="hljs-function">() =&gt;</span> parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
-test(<span class="hljs-string">`parse(&#x27;A[x] p&#x27;) throws <span class="hljs-subst">${ErrorName.INVALID_BOUND_SYMBOL_CATEGORY}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> text = <span class="hljs-string">&#x27;A[x] p&#x27;</span>
+test(<span class="hljs-string">`parse(&#x27;Ax p&#x27;) throws <span class="hljs-subst">${ErrorName.INVALID_BOUND_SYMBOL_CATEGORY}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> text = <span class="hljs-string">&#x27;Ax p&#x27;</span>
   <span class="hljs-keyword">const</span> symX = Sym.ff({ <span class="hljs-attr">id</span>: parser.getMaxSymId() + <span class="hljs-number">1</span> })
   <span class="hljs-keyword">const</span> presentationX = SymPresentation({ <span class="hljs-attr">ascii</span>: SyntacticInfo.prefix(<span class="hljs-string">&#x27;x&#x27;</span>) })
   parser.addPresentation(symX, presentationX)

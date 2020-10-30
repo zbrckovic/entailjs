@@ -417,7 +417,7 @@ test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>, [], <span class="hljs-string">&#x27;p&#x27;</span>],
   [<span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;p&#x27;</span>],
   [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, [<span class="hljs-number">1</span>], <span class="hljs-string">&#x27;q&#x27;</span>],
-  [<span class="hljs-string">&#x27;A[x] E[x] (F(x, y) -&gt; F(y, x))&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-string">&#x27;F(y, x)&#x27;</span>]
+  [<span class="hljs-string">&#x27;Ax Ex (Fxy -&gt; Fyx)&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-string">&#x27;Fyx&#x27;</span>]
 ])(<span class="hljs-string">&#x27;#getSubexpression(%s, %j) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, position, expectedSubformulaText</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
   <span class="hljs-keyword">const</span> expectedSubformula = parser.parse(expectedSubformulaText)
@@ -430,10 +430,10 @@ test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, [[]]],
   [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, [[<span class="hljs-number">1</span>]]],
   [<span class="hljs-string">&#x27;p -&gt; (q -&gt; p)&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, [[], [<span class="hljs-number">1</span>]]],
-  [<span class="hljs-string">&#x27;F(x) -&gt; ~G(x)&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]]],
-  [<span class="hljs-string">&#x27;A[x] F(y)&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]]],
-  [<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, []],
-  [<span class="hljs-string">&#x27;A[x] F(x, y) -&gt; E[y] F(y, x)&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, [[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]]
+  [<span class="hljs-string">&#x27;Fx -&gt; ~Gx&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]]],
+  [<span class="hljs-string">&#x27;Ax Fy&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]]],
+  [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, []],
+  [<span class="hljs-string">&#x27;Ax Fxy -&gt; Ey Fyx&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, [[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]]
 ])(<span class="hljs-string">&#x27;#findFreeOccurrences(%s, %s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text, symbol, expectedPositions</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(text)
   <span class="hljs-keyword">const</span> sym = parser.getSym(symbol)
@@ -444,7 +444,7 @@ test.each([
 
 test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>],
-  [<span class="hljs-string">&#x27;F(x)&#x27;</span>]
+  [<span class="hljs-string">&#x27;Fx&#x27;</span>]
 ])(<span class="hljs-string">`#findBoundOccurrences(%s) throws <span class="hljs-subst">${ErrorName.EXPRESSION_DOESNT_BIND}</span>`</span>, <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(text)
 
@@ -453,9 +453,9 @@ test.each([
 })
 
 test.each([
-  [<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]]],
-  [<span class="hljs-string">&#x27;A[x] E[x] F(x)&#x27;</span>, []],
-  [<span class="hljs-string">&#x27;A[x] (E[x] F(y, x) -&gt; F(y, x))&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>]]]
+  [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]]],
+  [<span class="hljs-string">&#x27;Ax Ex Fx&#x27;</span>, []],
+  [<span class="hljs-string">&#x27;Ax (Ex Fyx -&gt; Fyx)&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>]]]
 ])(<span class="hljs-string">&#x27;#findBoundOccurrences(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text, expectedPositions</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(text)
   <span class="hljs-keyword">const</span> positions = Expression.findBoundOccurrences(formula)
@@ -466,7 +466,7 @@ test.each([
 test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>, [], [<span class="hljs-string">&#x27;p&#x27;</span>]],
   [<span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]],
-  [<span class="hljs-string">&#x27;A[x] (F(x) -&gt; G(x))&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">&#x27;A[x] (F(x) -&gt; G(x))&#x27;</span>, <span class="hljs-string">&#x27;F(x) -&gt; G(x)&#x27;</span>, <span class="hljs-string">&#x27;G(x)&#x27;</span>]]
+  [<span class="hljs-string">&#x27;Ax (Fx -&gt; Gx)&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">&#x27;Ax (Fx -&gt; Gx)&#x27;</span>, <span class="hljs-string">&#x27;Fx -&gt; Gx&#x27;</span>, <span class="hljs-string">&#x27;Gx&#x27;</span>]]
 ])(<span class="hljs-string">&#x27;#getSubexpressionsOnPath(%s, %j) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text, path, expectedFormulasTexts</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(text)
   <span class="hljs-keyword">const</span> expectedFormulas = expectedFormulasTexts.map(
@@ -484,13 +484,13 @@ test.each([
   [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;~q&#x27;</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>],
   [<span class="hljs-string">&#x27;(p -&gt; q) &amp; (q -&gt; p)&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-string">&#x27;(r -&gt; q) &amp; (q -&gt; r)&#x27;</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>],
   [<span class="hljs-string">&#x27;p -&gt; (q -&gt; p)&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;q -&gt; (q -&gt; q)&#x27;</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>],
-  [<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>],
-  [<span class="hljs-string">&#x27;A[y] F(x)&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;A[y] F(y)&#x27;</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>],
-  [<span class="hljs-string">&#x27;(A[x] F(x)) -&gt; G(x)&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;(A[x] F(x)) -&gt; G(y)&#x27;</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>],
+  [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;Ax Fx&#x27;</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>],
+  [<span class="hljs-string">&#x27;Ay Fx&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;Ay Fy&#x27;</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>],
+  [<span class="hljs-string">&#x27;(Ax Fx) -&gt; Gx&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;(Ax Fx) -&gt; Gy&#x27;</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-literal">undefined</span>],
   [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;~&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, <span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;q&#x27;</span>],
-  [<span class="hljs-string">&#x27;~F(x)&#x27;</span>, <span class="hljs-string">&#x27;~&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;A[y] F(x)&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-literal">undefined</span>],
-  [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;A[x] p&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-literal">undefined</span>],
-  [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;A[x] q&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;q&#x27;</span>]
+  [<span class="hljs-string">&#x27;~Fx&#x27;</span>, <span class="hljs-string">&#x27;~&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;Ay Fx&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-literal">undefined</span>],
+  [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;Ax p&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-literal">undefined</span>],
+  [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;Ax q&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;q&#x27;</span>]
 ])(
   <span class="hljs-string">&#x27;#replaceFreeOccurrences(%s, %s, %s) is %s&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">
@@ -516,8 +516,8 @@ test.each([
 )
 
 test.each([
-  [<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;A[y] F(y)&#x27;</span>],
-  [<span class="hljs-string">&#x27;A[x] (E[x] F(x) -&gt; F(x))&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;A[y] (E[x] F(x) -&gt; F(y))&#x27;</span>]
+  [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;Ay Fy&#x27;</span>],
+  [<span class="hljs-string">&#x27;Ax (Ex Fx -&gt; Fx)&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;Ay (Ex Fx -&gt; Fy)&#x27;</span>]
 ])(
   <span class="hljs-string">&#x27;#replaceBoundOccurrences(%s, %s) is %s&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">oldFormulaText, symText, expectedNewFormulaText</span>) =&gt;</span> {
@@ -531,8 +531,8 @@ test.each([
 )
 
 test.each([
-  [<span class="hljs-string">&#x27;p -&gt; A[x] F(x)&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [<span class="hljs-number">1</span>], <span class="hljs-string">&#x27;p -&gt; A[y] F(y)&#x27;</span>],
-  [<span class="hljs-string">&#x27;A[x] (E[x] F(x) -&gt; F(x))&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-string">&#x27;A[x] (E[y] F(y) -&gt; F(x))&#x27;</span>]
+  [<span class="hljs-string">&#x27;p -&gt; Ax Fx&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [<span class="hljs-number">1</span>], <span class="hljs-string">&#x27;p -&gt; Ay Fy&#x27;</span>],
+  [<span class="hljs-string">&#x27;Ax (Ex Fx -&gt; Fx)&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-string">&#x27;Ax (Ey Fy -&gt; Fx)&#x27;</span>]
 ])(
   <span class="hljs-string">&#x27;#replaceBoundOccurrencesAt(%s, %s, %j) is %s&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">oldFormulaText, symbolText, position, expectedNewFormulaText</span>) =&gt;</span> {
@@ -549,8 +549,8 @@ test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>, [<span class="hljs-string">&#x27;p&#x27;</span>]],
   [<span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-string">&#x27;~&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]],
   [<span class="hljs-string">&#x27;~~p&#x27;</span>, [<span class="hljs-string">&#x27;~&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]],
-  [<span class="hljs-string">&#x27;A[x] p&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]],
-  [<span class="hljs-string">&#x27;A[x] F(x, y) -&gt; E[y] F(y, x)&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;E&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]]
+  [<span class="hljs-string">&#x27;Ax p&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]],
+  [<span class="hljs-string">&#x27;Ax Fxy -&gt; Ey Fyx&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;E&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]]
 ])(<span class="hljs-string">&#x27;#getSyms(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, symsTexts</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
   <span class="hljs-keyword">const</span> expectedSyms = _.fromPairs(
@@ -566,9 +566,9 @@ test.each([
 test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>, [<span class="hljs-string">&#x27;p&#x27;</span>]],
   [<span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-string">&#x27;~&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]],
-  [<span class="hljs-string">&#x27;A[x] F(x, y)&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]],
-  [<span class="hljs-string">&#x27;A[x] E[y] F(x, y)&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;E&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>]],
-  [<span class="hljs-string">&#x27;A[x] F(x) -&gt; E[y] G(y, x)&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;E&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>, <span class="hljs-string">&#x27;G&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>]]
+  [<span class="hljs-string">&#x27;Ax Fxy&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]],
+  [<span class="hljs-string">&#x27;Ax Ey Fxy&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;E&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>]],
+  [<span class="hljs-string">&#x27;Ax Fx -&gt; Ey Gyx&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;E&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>, <span class="hljs-string">&#x27;G&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>]]
 ])(<span class="hljs-string">&#x27;#getFreeSyms(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, symsTexts</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
   <span class="hljs-keyword">const</span> expectedSyms = _.fromPairs(
@@ -582,10 +582,10 @@ test.each([
 })
 
 test.each([
-  [<span class="hljs-string">&#x27;F(x, y)&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, []],
-  [<span class="hljs-string">&#x27;A[x] F(x, y)&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, []],
-  [<span class="hljs-string">&#x27;A[x] F(x, y)&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [<span class="hljs-string">&#x27;x&#x27;</span>]],
-  [<span class="hljs-string">&#x27;A[x] F(z, x) &amp; E[y] F(z, y)&#x27;</span>, <span class="hljs-string">&#x27;z&#x27;</span>, [<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]]
+  [<span class="hljs-string">&#x27;Fxy&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, []],
+  [<span class="hljs-string">&#x27;Ax Fxy&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, []],
+  [<span class="hljs-string">&#x27;Ax Fxy&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [<span class="hljs-string">&#x27;x&#x27;</span>]],
+  [<span class="hljs-string">&#x27;Ax Fzx &amp; Ey Fzy&#x27;</span>, <span class="hljs-string">&#x27;z&#x27;</span>, [<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]]
 ])(<span class="hljs-string">&#x27;#findBoundSymsAtFreeOccurrencesOfSym(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, symText, symsTexts</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
   <span class="hljs-keyword">const</span> sym = parser.getSym(symText)

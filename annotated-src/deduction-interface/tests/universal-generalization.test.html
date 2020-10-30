@@ -411,8 +411,8 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
 })
 
 test(<span class="hljs-string">&#x27;vacuous&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;F(a)&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;A[x] F(a)&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Fa&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Ax Fa&#x27;</span>)
 
   <span class="hljs-keyword">const</span> deduction = Deduction({
     <span class="hljs-attr">steps</span>: [
@@ -444,8 +444,8 @@ test(<span class="hljs-string">&#x27;vacuous&#x27;</span>, <span class="hljs-fun
 })
 
 test(<span class="hljs-string">&#x27;simple&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;F(a)&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Fa&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Ax Fx&#x27;</span>)
 
   <span class="hljs-keyword">const</span> deduction = Deduction({
     <span class="hljs-attr">steps</span>: [
@@ -481,8 +481,8 @@ test(<span class="hljs-string">&#x27;simple&#x27;</span>, <span class="hljs-func
 })
 
 test(<span class="hljs-string">&#x27;with dependency terms&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;F(a, b)&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;A[x] F(x, b)&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Fab&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Ax Fxb&#x27;</span>)
 
   <span class="hljs-keyword">const</span> deduction = Deduction({
     <span class="hljs-attr">steps</span>: [

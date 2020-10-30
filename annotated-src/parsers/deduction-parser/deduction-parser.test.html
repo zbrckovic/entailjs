@@ -416,12 +416,12 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
 
 test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> text = <span class="hljs-string">`
-        (1) E[y] A[x] F(x, y)                           / P;
-    1   (2) A[x] F(x, a)                                / EI 1;
-    1   (3) F(b, a)                                     / UI 2;
-    1   (4) E[y] F(b, y)                                / EG 3;
-    1   (5) A[x] E[y] F(x, y)                           / UG 4;
-        (6) E[y] A[x] F(x, y) -&gt; A[x] E[y] F(x, y)      / D 1, 5;
+        (1) Ey Ax Fxy              / P;
+    1   (2) Ax Fxa                 / EI 1;
+    1   (3) Fba                    / UI 2;
+    1   (4) Ey Fby                 / EG 3;
+    1   (5) Ax Ey Fxy              / UG 4;
+        (6) Ey Ax Fxy -&gt; Ax Ey Fxy / D 1, 5;
     `</span>
 
   <span class="hljs-keyword">const</span> actual = parser.parse(text)
@@ -434,12 +434,12 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
   <span class="hljs-keyword">const</span> expected = Deduction({
     <span class="hljs-attr">steps</span>: [
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;E[y] A[x] F(x, y)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ey Ax Fxy&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
       }),
       Step({
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;A[x] F(x, a)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ax Fxa&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.ExistentialInstantiation,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>],
@@ -451,7 +451,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
       }),
       Step({
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;F(b, a)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Fba&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.UniversalInstantiation,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">1</span>]
@@ -459,7 +459,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
       }),
       Step({
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;E[y] F(b, y) &#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ey Fby &#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.ExistentialGeneralization,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">2</span>]
@@ -467,7 +467,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
       }),
       Step({
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;A[x] E[y] F(x, y) &#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ax Ey Fxy &#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.UniversalGeneralization,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">3</span>],
@@ -479,7 +479,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
       }),
       Step({
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(),
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;E[y] A[x] F(x, y) -&gt; A[x] E[y] F(x, y)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ey Ax Fxy -&gt; Ax Ey Fxy&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.Deduction,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">4</span>]
@@ -497,17 +497,17 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
 
 test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> text = <span class="hljs-string">`
-          (1)  A[x] (F(x) -&gt; G(x))                                                      / P;
-          (2)  A[x] (G(x) -&gt; H(x))                                                      / P;
-          (3)  E[x] F(x)                                                                / P;
-        3 (4)  F(a)                                                                     / EI 3;
-        1 (5)  F(a) -&gt; G(a)                                                             / UI 1;
-        2 (6)  G(a) -&gt; H(a)                                                             / UI 2;
-    1,2,3 (7)  H(a)                                                                     / TI 4,5,6;
-    1,2,3 (8)  E[x] H(x)                                                                / EG 7;
-      1,2 (9)  E[x] F(x) -&gt; E[x] H(x)                                                   / D 3, 8;
-        1 (10) A[x] (G(x) -&gt; H(x)) -&gt; (E[x] F(x) -&gt; E[x] H(x))                          / D 2, 9;
-          (11) A[x] (F(x) -&gt; G(x)) -&gt; (A[x] (G(x) -&gt; H(x)) -&gt; (E[x] F(x) -&gt; E[x] H(x))) / D 1, 10; 
+          (1)  Ax (Fx -&gt; Gx)                                        / P;
+          (2)  Ax (Gx -&gt; Hx)                                        / P;
+          (3)  Ex F(x)                                              / P;
+        3 (4)  Fa                                                   / EI 3;
+        1 (5)  Fa -&gt; Ga                                             / UI 1;
+        2 (6)  Ga -&gt; Ha                                             / UI 2;
+    1,2,3 (7)  Ha                                                     / TI 4,5,6;
+    1,2,3 (8)  Ex Hx                                                / EG 7;
+      1,2 (9)  Ex Fx -&gt; Ex Hx                                       / D 3, 8;
+        1 (10) Ax (Gx -&gt; Hx) -&gt; (Ex Fx -&gt; Ex Hx)                    / D 2, 9;
+          (11) Ax (Fx -&gt; Gx) -&gt; (Ax (Gx -&gt; Hx) -&gt; (Ex Fx -&gt; Ex Hx)) / D 1, 10; 
     `</span>
 
   <span class="hljs-keyword">const</span> actual = parser.parse(text)
@@ -520,19 +520,19 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
   <span class="hljs-keyword">const</span> expected = Deduction({
     <span class="hljs-attr">steps</span>: [
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;A[x] (F(x) -&gt; G(x))&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ax (Fx -&gt; Gx)&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
       }),
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;A[x] (G(x) -&gt; H(x))&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ax (Gx -&gt; Hx)&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
       }),
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;E[x] F(x)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ex Fx&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: <span class="hljs-keyword">new</span> RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
       }),
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;F(a)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Fa&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.ExistentialInstantiation,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">2</span>],
@@ -544,7 +544,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">2</span>])
       }),
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;F(a) -&gt; G(a)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Fa -&gt; Ga&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.UniversalInstantiation,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>]
@@ -552,7 +552,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>])
       }),
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;G(a) -&gt; H(a)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ga -&gt; Ha&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.UniversalInstantiation,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">1</span>]
@@ -560,7 +560,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>])
       }),
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;H(a)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ha&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.TautologicalImplication,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
@@ -568,7 +568,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>])
       }),
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;E[x] H(x)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ex Hx&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.ExistentialGeneralization,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">6</span>]
@@ -576,7 +576,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>])
       }),
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;E[x] F(x) -&gt; E[x] H(x)&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ex Fx -&gt; Ex Hx&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.Deduction,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">7</span>]
@@ -584,7 +584,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>])
       }),
       Step({
-        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;A[x] (G(x) -&gt; H(x)) -&gt; (E[x] F(x) -&gt; E[x] H(x))&#x27;</span>),
+        <span class="hljs-attr">formula</span>: formulaParser.parse(<span class="hljs-string">&#x27;Ax (Gx -&gt; Hx) -&gt; (Ex Fx -&gt; Ex Hx)&#x27;</span>),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.Deduction,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">8</span>]
@@ -593,7 +593,7 @@ test(<span class="hljs-string">&#x27;parse()&#x27;</span>, <span class="hljs-fun
       }),
       Step({
         <span class="hljs-attr">formula</span>: formulaParser.parse(
-          <span class="hljs-string">&#x27;A[x] (F(x) -&gt; G(x)) -&gt; (A[x] (G(x) -&gt; H(x)) -&gt; (E[x] F(x) -&gt; E[x] H(x)))&#x27;</span>
+          <span class="hljs-string">&#x27;Ax (Fx -&gt; Gx) -&gt; (Ax (Gx -&gt; Hx) -&gt; (Ex Fx -&gt; Ex Hx))&#x27;</span>
         ),
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.Deduction,

@@ -412,8 +412,8 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
 })
 
 test(<span class="hljs-string">&#x27;vacuous&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;F(a)&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;E[x] F(a)&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Fa&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Ex Fa&#x27;</span>)
 
   <span class="hljs-keyword">const</span> deduction = Deduction({
     <span class="hljs-attr">steps</span>: [
@@ -445,8 +445,8 @@ test(<span class="hljs-string">&#x27;vacuous&#x27;</span>, <span class="hljs-fun
 })
 
 test(<span class="hljs-string">&#x27;simple&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;F(a)&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;E[x] F(x)&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Fa&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Ex Fx&#x27;</span>)
 
   <span class="hljs-keyword">const</span> deduction = Deduction({
     <span class="hljs-attr">steps</span>: [
@@ -478,7 +478,7 @@ test(<span class="hljs-string">&#x27;simple&#x27;</span>, <span class="hljs-func
 })
 
 test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;F(a, x)&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Fax&#x27;</span>)
 
   <span class="hljs-keyword">const</span> deduction = Deduction({
     <span class="hljs-attr">steps</span>: [
@@ -498,7 +498,7 @@ test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.GENE
 })
 
 test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;A[x] F(a)&#x27;</span>)
+  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ax Fa&#x27;</span>)
 
   <span class="hljs-keyword">const</span> deduction = Deduction({
     <span class="hljs-attr">steps</span>: [

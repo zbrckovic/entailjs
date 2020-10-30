@@ -432,11 +432,11 @@ test(<span class="hljs-string">&#x27;#getParentPointer({ p -&gt; q, [1] }) for i
 test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>, [], <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-literal">undefined</span>],
   [<span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-literal">undefined</span>],
-  [<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>, [], <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-literal">undefined</span>],
-  [<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>, [<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;x&#x27;</span>, []],
-  [<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-string">&#x27;x&#x27;</span>, []],
-  [<span class="hljs-string">&#x27;A[x] F(x, y)&#x27;</span>, [<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-literal">undefined</span>],
-  [<span class="hljs-string">&#x27;A[x] (p -&gt; E[x] F(x))&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-string">&#x27;x&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]
+  [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, [], <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-literal">undefined</span>],
+  [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, [<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;x&#x27;</span>, []],
+  [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-string">&#x27;x&#x27;</span>, []],
+  [<span class="hljs-string">&#x27;Ax Fxy&#x27;</span>, [<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-literal">undefined</span>],
+  [<span class="hljs-string">&#x27;Ax (p -&gt; Ex Fx)&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-string">&#x27;x&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]
 ])(
   <span class="hljs-string">&#x27;#findDefinition({ %s, %j }, %s) is %j&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">formulaStr, position, symbolText, expectedDefinitionPosition</span>) =&gt;</span> {
@@ -464,8 +464,8 @@ test.each([
 )
 
 test.each([
-  [<span class="hljs-string">&#x27;p -&gt; A[x] F(y, x)&#x27;</span>, [<span class="hljs-number">1</span>], [[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]],
-  [<span class="hljs-string">&#x27;p -&gt; A[x] F(y, y)&#x27;</span>, [<span class="hljs-number">1</span>], []]
+  [<span class="hljs-string">&#x27;p -&gt; Ax Fyx&#x27;</span>, [<span class="hljs-number">1</span>], [[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]],
+  [<span class="hljs-string">&#x27;p -&gt; Ax Fyy&#x27;</span>, [<span class="hljs-number">1</span>], []]
 ])(
   <span class="hljs-string">&#x27;#findBoundOccurrences({ %s %j }) is %j&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">formulaStr, position, expectedBoundOccurrences</span>) =&gt;</span> {
@@ -480,15 +480,15 @@ test.each([
 test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>, [], []],
   [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, [<span class="hljs-number">1</span>], []],
-  [<span class="hljs-string">&#x27;A[x] p&#x27;</span>, [], []],
-  [<span class="hljs-string">&#x27;A[x] p&#x27;</span>, [<span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>]],
-  [<span class="hljs-string">&#x27;A[x] ~p&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>]],
-  [<span class="hljs-string">&#x27;E[x] A[x] p&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>]],
-  [<span class="hljs-string">&#x27;p -&gt; A[x] F(y)&#x27;</span>, [<span class="hljs-number">1</span>], []],
-  [<span class="hljs-string">&#x27;p -&gt; A[x] F(y)&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>]],
-  [<span class="hljs-string">&#x27;E[y] F(y) -&gt; A[x] F(y)&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>]],
-  [<span class="hljs-string">&#x27;E[y] F(y) -&gt; A[x] F(y)&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;y&#x27;</span>]],
-  [<span class="hljs-string">&#x27;E[y] (F(y) -&gt; A[x] F(y))&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]]
+  [<span class="hljs-string">&#x27;Ax p&#x27;</span>, [], []],
+  [<span class="hljs-string">&#x27;Ax p&#x27;</span>, [<span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>]],
+  [<span class="hljs-string">&#x27;Ax ~p&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>]],
+  [<span class="hljs-string">&#x27;Ex Ax p&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>]],
+  [<span class="hljs-string">&#x27;p -&gt; Ax Fy&#x27;</span>, [<span class="hljs-number">1</span>], []],
+  [<span class="hljs-string">&#x27;p -&gt; Ax Fy&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>]],
+  [<span class="hljs-string">&#x27;Ey Fy -&gt; Ax Fy&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>]],
+  [<span class="hljs-string">&#x27;Ey Fy -&gt; Ax Fy&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;y&#x27;</span>]],
+  [<span class="hljs-string">&#x27;Ey (Fy -&gt; Ax Fy)&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]]
 ])(
   <span class="hljs-string">&#x27;#getBoundSyms({ %s %j }) is %j&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">formulaStr, position, expectedContextStr</span>) =&gt;</span> {

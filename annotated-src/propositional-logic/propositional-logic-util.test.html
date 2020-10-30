@@ -429,8 +429,8 @@ test.each([
 
 test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>, {}, ErrorName.NO_ASSIGNED_VALUE_ERROR],
-  [<span class="hljs-string">&#x27;F(x)&#x27;</span>, {}, ErrorName.NOT_TRUTH_FUNCTIONAL],
-  [<span class="hljs-string">&#x27;A[x] F(x)&#x27;</span>, {}, ErrorName.NOT_TRUTH_FUNCTIONAL]
+  [<span class="hljs-string">&#x27;Fx&#x27;</span>, {}, ErrorName.NOT_TRUTH_FUNCTIONAL],
+  [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, {}, ErrorName.NOT_TRUTH_FUNCTIONAL]
 ])(<span class="hljs-string">&#x27;%s for %j throws %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, interpretationObj, expected</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
   <span class="hljs-keyword">const</span> assignments = createInterpretation(interpretationObj)

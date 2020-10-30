@@ -403,7 +403,7 @@
 
 test.each([
   [
-    <span class="hljs-string">&#x27;E[x] F(x) -&gt; G(x)&#x27;</span>,
+    <span class="hljs-string">&#x27;Ex Fx -&gt; Gx&#x27;</span>,
     {
       <span class="hljs-attr">sym</span>: <span class="hljs-string">&#x27;-&gt;&#x27;</span>,
       <span class="hljs-attr">symPlacement</span>: Placement.Infix,
@@ -466,7 +466,7 @@ test.each([
     }
   ],
   [
-    <span class="hljs-string">&#x27;A[x] E[y] (F(x, y) -&gt; ~G(y, x))&#x27;</span>,
+    <span class="hljs-string">&#x27;Ax Ey (Fxy -&gt; ~Gyx)&#x27;</span>,
     {
       <span class="hljs-attr">sym</span>: <span class="hljs-string">&#x27;A&#x27;</span>,
       <span class="hljs-attr">boundSym</span>: <span class="hljs-string">&#x27;x&#x27;</span>,
@@ -529,6 +529,21 @@ test.each([
 ])(<span class="hljs-string">&#x27;parse(\&#x27;%s\&#x27;) is \&#x27;%j\&#x27;&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text, expected</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> actual = parseFormula(text)
   expect(actual).toEqual(expected)
+})
+
+test.each([
+  [
+    <span class="hljs-string">&#x27;Ex F(x) -&gt; G(x)&#x27;</span>,
+    <span class="hljs-string">&#x27;Ex Fx -&gt; Gx&#x27;</span>
+  ],
+  [
+    <span class="hljs-string">&#x27;Ax Ey (F(x, y) -&gt; ~G(y, x))&#x27;</span>,
+    <span class="hljs-string">&#x27;Ax Ey (Fxy -&gt; ~Gyx)&#x27;</span>
+  ]
+])(<span class="hljs-string">&#x27;\&#x27;%s\&#x27; is the same as \&#x27;%s\&#x27;&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text1, text2</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> formula1 = parseFormula(text1)
+  <span class="hljs-keyword">const</span> formula2 = parseFormula(text2)
+  expect(formula1).toEqual(formula2)
 })</pre></div></div>
             
         </li>

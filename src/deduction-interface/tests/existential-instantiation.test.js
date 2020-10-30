@@ -12,8 +12,8 @@ beforeEach(() => {
 })
 
 test('vacuous', () => {
-  const formula0 = parser.parse('E[x] F(a)')
-  const formula1 = parser.parse('F(a)')
+  const formula0 = parser.parse('Ex Fa')
+  const formula1 = parser.parse('Fa')
 
   const deduction = Deduction({
     steps: [
@@ -45,8 +45,8 @@ test('vacuous', () => {
 })
 
 test('simple', () => {
-  const formula0 = parser.parse('E[x] F(x)')
-  const formula1 = parser.parse('F(a)')
+  const formula0 = parser.parse('Ex Fx')
+  const formula1 = parser.parse('Fa')
 
   const deduction = Deduction({
     steps: [
@@ -82,8 +82,8 @@ test('simple', () => {
 })
 
 test('with dependency terms', () => {
-  const formula0 = parser.parse('E[x] F(x, b)')
-  const formula1 = parser.parse('F(a, b)')
+  const formula0 = parser.parse('Ex Fxb')
+  const formula1 = parser.parse('Fab')
 
   const deduction = Deduction({
     steps: [
@@ -119,7 +119,7 @@ test('with dependency terms', () => {
 })
 
 test(`throws ${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}`, () => {
-  const formula0 = parser.parse('E[x] F(x, a)')
+  const formula0 = parser.parse('Ex Fxa')
 
   const deduction = Deduction({
     steps: [
@@ -139,7 +139,7 @@ test(`throws ${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}`, () 
 })
 
 test(`throws ${ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
-  const formula0 = parser.parse('E[x] A[y] F(x, y)')
+  const formula0 = parser.parse('Ex Ay Fxy')
 
   const deduction = Deduction({
     steps: [

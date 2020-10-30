@@ -29,8 +29,8 @@ test.each([
 
 test.each([
   ['p', {}, ErrorName.NO_ASSIGNED_VALUE_ERROR],
-  ['F(x)', {}, ErrorName.NOT_TRUTH_FUNCTIONAL],
-  ['A[x] F(x)', {}, ErrorName.NOT_TRUTH_FUNCTIONAL]
+  ['Fx', {}, ErrorName.NOT_TRUTH_FUNCTIONAL],
+  ['Ax Fx', {}, ErrorName.NOT_TRUTH_FUNCTIONAL]
 ])('%s for %j throws %s', (formulaText, interpretationObj, expected) => {
   const formula = parser.parse(formulaText)
   const assignments = createInterpretation(interpretationObj)

@@ -58,7 +58,7 @@ test('parse(\'p -> q\')', () => {
   expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
-test('parse(\'F(x, y)\')', () => {
+test('parse(\'Fxy\')', () => {
   const maxSymId = parser.getMaxSymId()
 
   const symF = Sym.ft({ id: maxSymId + 1, arity: 2 })
@@ -76,14 +76,14 @@ test('parse(\'F(x, y)\')', () => {
     [symY.id]: symY
   }
 
-  const formula = parser.parse('F(x, y)')
+  const formula = parser.parse('Fxy')
   const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
   expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
-test('parse(\'A[x] F(x)\')', () => {
+test('parse(\'Ax Fx\')', () => {
   const maxSymId = parser.getMaxSymId()
 
   const symX = Sym.tt({ id: maxSymId + 1 })
@@ -105,14 +105,14 @@ test('parse(\'A[x] F(x)\')', () => {
     [symX.id]: symX
   }
 
-  const formula = parser.parse('A[x] F(x)')
+  const formula = parser.parse('Ax Fx')
   const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
   expect(addedSyms).toEqual(expectedAddedSyms)
 })
 
-test('parse(\'A[x] E[y] (F(x, y) -> ~G(y, x))\'', () => {
+test('parse(\'Ax Ey (Fxy -> ~Gyx)\'', () => {
   const maxSymId = parser.getMaxSymId()
 
   const symX = Sym.tt({ id: maxSymId + 1 })
@@ -164,7 +164,7 @@ test('parse(\'A[x] E[y] (F(x, y) -> ~G(y, x))\'', () => {
     [symX.id]: symX
   }
 
-  const formula = parser.parse('A[x] E[y] (F(x, y) -> ~G(y, x))')
+  const formula = parser.parse('Ax Ey (Fxy -> ~Gyx)')
   const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
   expect(formula).toEqual(expectedFormula)
@@ -180,8 +180,8 @@ test(`parse('~x') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
-test(`parse('F(x)') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
-  const text = 'F(x)'
+test(`parse('Fx') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
+  const text = 'Fx'
   const symX = Sym.ff({ id: parser.getMaxSymId() + 1 })
   const presentationX = SymPresentation({ ascii: SyntacticInfo.prefix('x') })
   parser.addPresentation(symX, presentationX)
@@ -189,8 +189,8 @@ test(`parse('F(x)') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {
   expect(() => parser.parse(text)).toThrow(ErrorName.INVALID_SYMBOL_KIND)
 })
 
-test(`parse('A[x] p') throws ${ErrorName.INVALID_BOUND_SYMBOL_CATEGORY}`, () => {
-  const text = 'A[x] p'
+test(`parse('Ax p') throws ${ErrorName.INVALID_BOUND_SYMBOL_CATEGORY}`, () => {
+  const text = 'Ax p'
   const symX = Sym.ff({ id: parser.getMaxSymId() + 1 })
   const presentationX = SymPresentation({ ascii: SyntacticInfo.prefix('x') })
   parser.addPresentation(symX, presentationX)

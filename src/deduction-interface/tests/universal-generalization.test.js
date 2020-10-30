@@ -11,8 +11,8 @@ beforeEach(() => {
 })
 
 test('vacuous', () => {
-  const formula0 = parser.parse('F(a)')
-  const formula1 = parser.parse('A[x] F(a)')
+  const formula0 = parser.parse('Fa')
+  const formula1 = parser.parse('Ax Fa')
 
   const deduction = Deduction({
     steps: [
@@ -44,8 +44,8 @@ test('vacuous', () => {
 })
 
 test('simple', () => {
-  const formula0 = parser.parse('F(a)')
-  const formula1 = parser.parse('A[x] F(x)')
+  const formula0 = parser.parse('Fa')
+  const formula1 = parser.parse('Ax Fx')
 
   const deduction = Deduction({
     steps: [
@@ -81,8 +81,8 @@ test('simple', () => {
 })
 
 test('with dependency terms', () => {
-  const formula0 = parser.parse('F(a, b)')
-  const formula1 = parser.parse('A[x] F(x, b)')
+  const formula0 = parser.parse('Fab')
+  const formula1 = parser.parse('Ax Fxb')
 
   const deduction = Deduction({
     steps: [

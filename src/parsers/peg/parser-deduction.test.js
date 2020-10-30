@@ -4,12 +4,12 @@ import { Placement } from '../../presentation/sym-presentation'
 
 test('parse()', () => {
   const text = `
-        (1) E[y] A[x] F(x, y)                           / P;
-    1   (2) A[x] F(x, a)                                / EI 1;
-    1   (3) F(b, a)                                     / UI 2;
-    1   (4) E[y] F(b, y)                                / EG 3;
-    1   (5) A[x] E[y] F(x, y)                           / UG 4;
-        (6) E[y] A[x] F(x, y) -> A[x] E[y] F(x, y)      / D 1, 5;
+        (1) Ey Ax Fxy              / P;
+    1   (2) Ax Fxa                 / EI 1;
+    1   (3) Fba                    / UI 2;
+    1   (4) Ey Fby                 / EG 3;
+    1   (5) Ax Ey Fxy              / UG 4;
+        (6) Ey Ax Fxy -> Ax Ey Fxy / D 1, 5;
     `
 
   const expected = {

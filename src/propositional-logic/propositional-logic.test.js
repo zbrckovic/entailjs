@@ -13,16 +13,16 @@ beforeEach(() => {
 
 test.each([
   ['p', false],
-  ['F(x)', false],
-  ['A[x] F(x)', false],
-  ['A[x] F(x) | ~A[x] F(x)', true],
-  ['A[x] F(x) | ~A[x] F(y)', false],
+  ['Fx', false],
+  ['Ax Fx', false],
+  ['Ax Fx | ~Ax Fx', true],
+  ['Ax Fx | ~Ax Fy', false],
   ['p -> q', false],
   ['p -> p', true],
-  ['F(x, y) -> F(x, y)', true],
-  ['F(x, y) -> F(y, x)', false],
-  ['((F(x) -> F(y)) & (F(y) -> G(x))) -> (F(x) -> G(x))', true],
-  ['((F(x) -> F(y)) & (F(y) -> G(x))) -> (G(x) -> F(y))', false]
+  ['Fxy -> Fxy', true],
+  ['Fxy -> Fyx', false],
+  ['((Fx -> Fy) & (Fy -> Gx)) -> (Fx -> Gx)', true],
+  ['((Fx -> Fy) & (Fy -> Gx)) -> (Gx -> Fy)', false]
 ])('isTautology(%s) is %s', (formulaText, expected) => {
   const formula = parser.parse(formulaText)
   const actual = isTautology(formula)

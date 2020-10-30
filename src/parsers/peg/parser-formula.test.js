@@ -3,7 +3,7 @@ import { Placement } from '../../presentation/sym-presentation'
 
 test.each([
   [
-    'E[x] F(x) -> G(x)',
+    'Ex Fx -> Gx',
     {
       sym: '->',
       symPlacement: Placement.Infix,
@@ -66,7 +66,7 @@ test.each([
     }
   ],
   [
-    'A[x] E[y] (F(x, y) -> ~G(y, x))',
+    'Ax Ey (Fxy -> ~Gyx)',
     {
       sym: 'A',
       boundSym: 'x',
@@ -129,4 +129,19 @@ test.each([
 ])('parse(\'%s\') is \'%j\'', (text, expected) => {
   const actual = parseFormula(text)
   expect(actual).toEqual(expected)
+})
+
+test.each([
+  [
+    'Ex F(x) -> G(x)',
+    'Ex Fx -> Gx'
+  ],
+  [
+    'Ax Ey (F(x, y) -> ~G(y, x))',
+    'Ax Ey (Fxy -> ~Gyx)'
+  ]
+])('\'%s\' is the same as \'%s\'', (text1, text2) => {
+  const formula1 = parseFormula(text1)
+  const formula2 = parseFormula(text2)
+  expect(formula1).toEqual(formula2)
 })

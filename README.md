@@ -17,20 +17,15 @@ Entail Expression Language is the language which we use to represent formulas of
 We designed it to be similar to modern 
 [first-order logic](https://en.wikipedia.org/wiki/First-order_logic) notation, but also practical 
 to type and read in plain text environments where usage of special non-ASCII characters is not 
-feasible. First we present informal description of the language with example. Then we present its
+feasible. First we present informal description of the language with examples. Then we present its
 formal grammar.
 
-**Propositional variable** starts with a small letter and is optionally followed by letters (small 
-or capital), numerals and underscores. Traditionally propositional variables are written as letters
-`p`, `q`, `r` with optional numeric suffixes:
+**Propositional variable** is a small letter optionally followed by a digit. Traditionally 
+propositional variables were written as letters `p`, `q`, `r` with optional numeric suffixes:
 
     p, q, r, p2, q2, r2, ...
-   
-Syntax allows for this, but it also allows for longer strings if more descriptive names are 
-necessary:
-
-    all_men_are_mortal
-    allMenAreMortal
+    
+We also allow for other small letters.
 
 There's one **propositional constant** `T` which represents a proposition true under all 
 circumstances. There's no corresponding propositional constant for falsehood. We can just use 
@@ -48,36 +43,43 @@ Sym      | Symbol          | Arity | Placement
 `->`     | **Implication** | 2     | Infix
 `<->`    | **Equivalence** | 2     | Infix
 
-*Examples of well-formed formulas with truth-functional connectives*:
+*Examples of well-formed formulas with truth-functional connectives:
     
     ~p
     p -> q
     ~(p & q)
 
-`~` is an unary operator and is written as prefix. The rest are binary and are written as infixes.
-`~` has the highest precedence so formula the `~p -> q` is actually the same as `(~p) -> q`, not 
+`~` is a unary operator and is written as prefix. The rest are binary and are written as infixes.
+`~` has the highest precedence so the formula `~p -> q` is actually the same as `(~p) -> q`, not 
 `~(p -> q)`. All binary operators have the same precedence so introduction of parentheses is 
 necessary in order to avoid ambiguities. For this reason `p & q -> r` is not a valid expression. We
 must rather write it as `(p & q) -> r` or `p & (q -> r)`. Parentheses can be used freely to wrap any
-formula: `~((~p) -> q)`
+formula even when there's no ambiguity: `~((~p) -> q)`
 
-**Predicate variable** starts with a capital letter and is optionally followed by letters (small 
-or capital), numerals and underscores. Exceptions are `A` and `E` which are reserved for quantifiers 
-and `T` which stands for propositional constant. `A`, `E` and `T` can never be used as predicate 
-variables. Traditionally predicate variables are written as letters `F`, `G`, `H` with optional 
-numeric suffixes:
+**Predicate variable** is a capital letter optionally followed by a digit. Exceptions are `A` and 
+`E` which are reserved for quantifiers and previously mentioned `T` which stands for propositional 
+constant. `A`, `E` and `T` can never be used as predicate variables. Traditionally predicate 
+variables are written as letters `F`, `G`, `H` with optional numeric suffixes:
 
     F, G, H, F2, G2, H2, ...
     
-and as with propositional variables, longer and more descriptive names are allowed.
-    
-    IsParentOf(x, y)
-    IsHuman(x)
+but as with propositional variables, other letters are also allowed.
 
-Predicate variable must be followed by a list of comma-separated *terms* enclosed in parentheses.
+Predicate variable must be followed by a list of *terms*. This can be written in two ways:
+
+If all terms are unary we can write them simply after the predicate without any separators between:
+
+    Fx
+    Gxy
+    Gx1y1
+
+Alternatively we can write them enclosed in parentheses and separated by a comma:
 
     F(x)
     G(x, y)
+    
+If at least one term is complex we must use the latter format:
+
     H(x, f(x, y))
     
 Resulting expression is usually called **atomic formula**.
@@ -104,30 +106,33 @@ application of rules of quantification).
 Traditionally individual variables are written as letters `x`, `y`, `z` and depending on context 
 also `a`, `b`, `c` with optional numeric suffixes (for example `x`, `y`, `z` might be used for 
 bound variables and `a`, `b`, `c` for free variables introduced as a result of the application of
-derivation rules). As with propositional and predicate variables, longer names are allowed.
+derivation rules). As with propositional and predicate variables, use of other letters is allowed.
 
 Compound terms are written with function variable followed by a comma-separated list of terms 
 enclosed in parentheses.
 
     f(x, y)
     f(g(x))
+    
+Here don't allow for a shorthand format used in atomic formulas (`Fxy`) because it would lead to
+ambiguities. 
 
 **Universal quantifier** and **existential quantifier** are written as `A` and `E` respectively.
-They must be followed by an individual variable enclosed in square brackets and a formula:
+They must be followed by an individual and a formula:
     
-    A[x] F(x)
-    E[y] p
+    Ax F(x)
+    Ey p
 
-Variable in square brackets is said to be **bound** by a quantifier.
+Variable after the quantifier is said to be **bound** by a quantifier.
 
 Quantifiers have a higher precedence than binary truth-functional operators. This means that 
-formula `A[x] F(x) -> G(x)` is actually `(A[x] F(x)) -> G(x)`, not `A[x] (F(x) -> G(x))`.
+formula `Ax Fx -> Gx` is actually `(Ax Fx) -> Gx`, not `Ax (Fx -> Gx)`.
 
 **Some examples of well-formed formulas**
     
     p
     ~p & (q -> p)
-    A[x] E[y] (F(x, y) <-> ~G(x, y))
+    Ax Ey (Fxy <-> ~Gxy)
 
 ### Formal Grammar
 
@@ -143,11 +148,12 @@ formula `A[x] F(x) -> G(x)` is actually `(A[x] F(x)) -> G(x)`, not `A[x] (F(x) -
         ( Formula <-> Formula )
         PropositionalVariable
         PropositionalCosntant
-        Quantifier [ TermVariable ] Formula
-        PredicateVariable ( Terms )
+        Quantifier TermVariable Formula
+        PredicateVariable ( CommaSeparatedTerms )
+        PredicateVariable TermVariable+
 
     PropositionalVariable 
-        [a-z][a-zA-Z0-9_]*
+        [a-z][0-9]?
     
     PropositionalConstant
         T
@@ -156,10 +162,9 @@ formula `A[x] F(x) -> G(x)` is actually `(A[x] F(x)) -> G(x)`, not `A[x] (F(x) -
         [AE]
 
     PredicateVariable
-        [A-Z][a-zA-Z0-9_]+
-        [BCDF-SU-Z]
+        [BCDF-SU-Z][0-9]?
     
-    Terms
+    CommaSeparatedTerms
         Term
         Term , Terms
 
@@ -168,7 +173,7 @@ formula `A[x] F(x) -> G(x)` is actually `(A[x] F(x)) -> G(x)`, not `A[x] (F(x) -
         TermVariable ( Terms )
 
     TermVariable:
-        [a-z][a-zA-Z0-9_]*
+        [a-z][0-9]?
 
 There are some points which are not apparent from the specified grammar:
   - Although grammar requires parentheses around compound expressions with binary infix operator, 
@@ -176,7 +181,7 @@ There are some points which are not apparent from the specified grammar:
     `p -> q` is also ok.  
 
   - Spaces are required between tokens where their omission would result in ambiguity (where two 
-    conjoined tokens can no longer be recognized as separate). Wherever whispace is used it's not 
+    conjoined tokens can no longer be recognized as separate). Wherever whitespace is used it's not 
     significant whether the actual whitespace character is space, tab or a newline. Multiple 
     whitespace characters in a row are also allowed and can be used freely to format an expression 
     in a more readable way.

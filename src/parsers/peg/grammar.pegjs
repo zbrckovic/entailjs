@@ -51,7 +51,7 @@ Formula
             children: []
         }
     }
-    / sym:Quantifier Sp "[" Sp boundSym:TermVariable Sp "]" Sp child:Formula
+    / sym:Quantifier boundSym:TermVariable Sp child:Formula
     {
         return {
             sym,
@@ -60,7 +60,7 @@ Formula
             children: [child]
         }
     }
-    / sym:PredicateVariable Sp "(" Sp children:TermList Sp ")"
+    / sym:PredicateVariable "(" Sp children:TermList Sp ")"
     {
         return {
             sym,
@@ -68,10 +68,22 @@ Formula
             children
         }
     }
+    / sym:PredicateVariable terms:TermVariable+
+    {
+        return {
+            sym,
+            symPlacement: 'Prefix',
+            children: terms.map(term => ({
+               sym: term,
+               symPlacement: 'Prefix',
+               children: []
+           }))
+        }
+    }
 
 PropositionalVariable
-    = first:[a-z] rest:[a-zA-Z0-9_]*
-    { return first + rest.join('') }
+    = letter:[a-z] number:[0-9]?
+    { return letter + (number === null ? '' : number) }
 
 PropositionalConstant
     = "T"
@@ -103,8 +115,8 @@ CommaAndTerm
     { return term }
 
 PredicateVariable
-    = first:[BCDF-SU-Z] rest:[a-zA-Z0-9_]*
-    { return first + rest.join('') }
+    = letter:[BCDF-SU-Z] number:[0-9]?
+    { return letter + (number === null ? '' : number) }
 
 Term
     = sym:TermVariable Sp "(" Sp children:TermList Sp ")"
@@ -125,8 +137,8 @@ Term
     }
 
 TermVariable
-    = first:[a-z] rest:[a-zA-Z0-9_]*
-    { return first + rest.join('') }
+    = letter:[a-z] number:[0-9]?
+    { return letter + (number === null ? '' : number) }
 
 /* ---------- Deduction ---------- */
 

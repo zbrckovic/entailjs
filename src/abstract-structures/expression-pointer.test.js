@@ -32,11 +32,11 @@ test('#getParentPointer({ p -> q, [1] }) for is { p -> q, [] }', () => {
 test.each([
   ['p', [], 'p', undefined],
   ['~p', [0], 'p', undefined],
-  ['A[x] F(x)', [], 'x', undefined],
-  ['A[x] F(x)', [0], 'x', []],
-  ['A[x] F(x)', [0, 0], 'x', []],
-  ['A[x] F(x, y)', [0], 'y', undefined],
-  ['A[x] (p -> E[x] F(x))', [0, 1, 0, 0], 'x', [0, 1]]
+  ['Ax Fx', [], 'x', undefined],
+  ['Ax Fx', [0], 'x', []],
+  ['Ax Fx', [0, 0], 'x', []],
+  ['Ax Fxy', [0], 'y', undefined],
+  ['Ax (p -> Ex Fx)', [0, 1, 0, 0], 'x', [0, 1]]
 ])(
   '#findDefinition({ %s, %j }, %s) is %j',
   (formulaStr, position, symbolText, expectedDefinitionPosition) => {
@@ -64,8 +64,8 @@ test.each([
 )
 
 test.each([
-  ['p -> A[x] F(y, x)', [1], [[1, 0, 1]]],
-  ['p -> A[x] F(y, y)', [1], []]
+  ['p -> Ax Fyx', [1], [[1, 0, 1]]],
+  ['p -> Ax Fyy', [1], []]
 ])(
   '#findBoundOccurrences({ %s %j }) is %j',
   (formulaStr, position, expectedBoundOccurrences) => {
@@ -80,15 +80,15 @@ test.each([
 test.each([
   ['p', [], []],
   ['p -> q', [1], []],
-  ['A[x] p', [], []],
-  ['A[x] p', [0], ['x']],
-  ['A[x] ~p', [0, 0], ['x']],
-  ['E[x] A[x] p', [0, 0], ['x']],
-  ['p -> A[x] F(y)', [1], []],
-  ['p -> A[x] F(y)', [1, 0], ['x']],
-  ['E[y] F(y) -> A[x] F(y)', [1, 0], ['x']],
-  ['E[y] F(y) -> A[x] F(y)', [0, 0], ['y']],
-  ['E[y] (F(y) -> A[x] F(y))', [0, 1, 0], ['x', 'y']]
+  ['Ax p', [], []],
+  ['Ax p', [0], ['x']],
+  ['Ax ~p', [0, 0], ['x']],
+  ['Ex Ax p', [0, 0], ['x']],
+  ['p -> Ax Fy', [1], []],
+  ['p -> Ax Fy', [1, 0], ['x']],
+  ['Ey Fy -> Ax Fy', [1, 0], ['x']],
+  ['Ey Fy -> Ax Fy', [0, 0], ['y']],
+  ['Ey (Fy -> Ax Fy)', [0, 1, 0], ['x', 'y']]
 ])(
   '#getBoundSyms({ %s %j }) is %j',
   (formulaStr, position, expectedContextStr) => {

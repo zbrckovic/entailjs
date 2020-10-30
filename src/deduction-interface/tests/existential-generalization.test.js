@@ -12,8 +12,8 @@ beforeEach(() => {
 })
 
 test('vacuous', () => {
-  const formula0 = parser.parse('F(a)')
-  const formula1 = parser.parse('E[x] F(a)')
+  const formula0 = parser.parse('Fa')
+  const formula1 = parser.parse('Ex Fa')
 
   const deduction = Deduction({
     steps: [
@@ -45,8 +45,8 @@ test('vacuous', () => {
 })
 
 test('simple', () => {
-  const formula0 = parser.parse('F(a)')
-  const formula1 = parser.parse('E[x] F(x)')
+  const formula0 = parser.parse('Fa')
+  const formula1 = parser.parse('Ex Fx')
 
   const deduction = Deduction({
     steps: [
@@ -78,7 +78,7 @@ test('simple', () => {
 })
 
 test(`throws ${ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS}`, () => {
-  const formula0 = parser.parse('F(a, x)')
+  const formula0 = parser.parse('Fax')
 
   const deduction = Deduction({
     steps: [
@@ -98,7 +98,7 @@ test(`throws ${ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS}`, () => {
 })
 
 test(`throws ${ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
-  const formula0 = parser.parse('A[x] F(a)')
+  const formula0 = parser.parse('Ax Fa')
 
   const deduction = Deduction({
     steps: [

@@ -404,8 +404,8 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../abstract-structures&#x27;</span>
-<span class="hljs-keyword">import</span> { createImplicationWithAntecedentsAsConjunction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../formula-construction-util&#x27;</span>
-<span class="hljs-keyword">import</span> { implication } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
+<span class="hljs-keyword">import</span> { createConditionalWithAntecedentsAsConjunction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../formula-construction-util&#x27;</span>
+<span class="hljs-keyword">import</span> { conditional } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
 <span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> util <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./propositional-logic-util&#x27;</span>
 <span class="hljs-keyword">import</span> { reduceToTruthFunctional } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./reduce-to-truth-functional&#x27;</span>
 
@@ -424,12 +424,12 @@
   <span class="hljs-keyword">if</span> (assumptions.length === <span class="hljs-number">1</span>) {
     <span class="hljs-keyword">return</span> isTautology(
       Expression({
-        <span class="hljs-attr">sym</span>: implication,
+        <span class="hljs-attr">sym</span>: conditional,
         <span class="hljs-attr">children</span>: [assumptions[<span class="hljs-number">0</span>], consequence]
       })
     )
   }
-  <span class="hljs-keyword">return</span> isTautology(createImplicationWithAntecedentsAsConjunction(assumptions, consequence))
+  <span class="hljs-keyword">return</span> isTautology(createConditionalWithAntecedentsAsConjunction(assumptions, consequence))
 }
 
 <span class="hljs-keyword">const</span> hasInterpretations = <span class="hljs-function">(<span class="hljs-params">formula, value</span>) =&gt;</span> findInterpretations(formula, value).length &gt; <span class="hljs-number">0</span>

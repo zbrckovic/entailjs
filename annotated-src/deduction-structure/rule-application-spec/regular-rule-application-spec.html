@@ -404,7 +404,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
-<span class="hljs-keyword">import</span> { existentialQuantifier, implication, universalQuantifier } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
+<span class="hljs-keyword">import</span> { existentialQuantifier, conditional, universalQuantifier } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
 <span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../rule&#x27;</span></pre></div></div>
             
         </li>
@@ -509,7 +509,7 @@ RegularRuleApplicationSpec.deduction = <span class="hljs-function">(<span class=
     <span class="hljs-attr">rule</span>: Rule.Deduction,
     <span class="hljs-attr">premises</span>: [antecedentIndex, consequentIndex],
     <span class="hljs-attr">conclusion</span>: Expression({
-      <span class="hljs-attr">sym</span>: implication,
+      <span class="hljs-attr">sym</span>: conditional,
       <span class="hljs-attr">children</span>: [antecedent, consequent]
     }),
     <span class="hljs-attr">assumptionToRemove</span>: antecedentIndex

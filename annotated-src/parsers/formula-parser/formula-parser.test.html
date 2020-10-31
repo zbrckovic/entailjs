@@ -413,7 +413,7 @@
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../presentation/sym-presentation&#x27;</span>
 <span class="hljs-keyword">import</span> {
   existentialQuantifier,
-  implication,
+  conditional,
   negation,
   primitiveSyms,
   universalQuantifier
@@ -446,7 +446,7 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;p -&gt; q\&#x27;)&#x27;</span>
   <span class="hljs-keyword">const</span> symQ = Sym.ff({ <span class="hljs-attr">id</span>: maxSymId + <span class="hljs-number">2</span> })
 
   <span class="hljs-keyword">const</span> expectedFormula = Expression({
-    <span class="hljs-attr">sym</span>: implication,
+    <span class="hljs-attr">sym</span>: conditional,
     <span class="hljs-attr">children</span>: [Expression({ <span class="hljs-attr">sym</span>: symP }), Expression({ <span class="hljs-attr">sym</span>: symQ })]
   })
 
@@ -534,7 +534,7 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;Ax Ey (Fxy -&gt; ~Gyx)\&#x27;&
         <span class="hljs-attr">boundSym</span>: symY,
         <span class="hljs-attr">children</span>: [
           Expression({
-            <span class="hljs-attr">sym</span>: implication,
+            <span class="hljs-attr">sym</span>: conditional,
             <span class="hljs-attr">children</span>: [
               Expression({
                 <span class="hljs-attr">sym</span>: symF,

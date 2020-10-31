@@ -405,7 +405,7 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> {
   createConjunction,
-  createImplicationWithAntecedentsAsConjunction
+  createConditionalWithAntecedentsAsConjunction
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./formula-construction-util&#x27;</span>
 <span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./parsers/formula-parser&#x27;</span>
 <span class="hljs-keyword">import</span> { primitivePresentations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./presentation/sym-presentation&#x27;</span>
@@ -430,7 +430,7 @@ test.each([
   expect(actual).toEqual(expected)
 })
 
-test(<span class="hljs-string">&#x27;createImplicationWithAntecedentsAsConjunction()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;createConditionalWithAntecedentsAsConjunction()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> antecedentTexts = [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;r&#x27;</span>]
   <span class="hljs-keyword">const</span> consequentText = <span class="hljs-string">&#x27;s&#x27;</span>
 
@@ -438,7 +438,7 @@ test(<span class="hljs-string">&#x27;createImplicationWithAntecedentsAsConjuncti
   <span class="hljs-keyword">const</span> consequent = parser.parse(consequentText)
 
   <span class="hljs-keyword">const</span> expected = parser.parse(<span class="hljs-string">&#x27;((p &amp; q) &amp; r) -&gt; s&#x27;</span>)
-  <span class="hljs-keyword">const</span> actual = createImplicationWithAntecedentsAsConjunction(antecedents, consequent)
+  <span class="hljs-keyword">const</span> actual = createConditionalWithAntecedentsAsConjunction(antecedents, consequent)
 
   expect(actual).toEqual(expected)
 })</pre></div></div>

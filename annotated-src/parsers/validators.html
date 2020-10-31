@@ -405,10 +405,10 @@ implementations.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> propositionalVariablePattern = <span class="hljs-regexp">/[a-z][0-9]?/</span>
-<span class="hljs-keyword">const</span> predicateVariablePattern = <span class="hljs-regexp">/[BCDF-SU-Z][0-9]?/</span>
-<span class="hljs-keyword">const</span> individualVariablePattern = <span class="hljs-regexp">/[a-z][0-9]?/</span>
-<span class="hljs-keyword">const</span> functionVariablePattern = <span class="hljs-regexp">/[a-z][0-9]?/</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> propositionalVariablePattern = <span class="hljs-regexp">/^[a-z][0-9]?$/</span>
+<span class="hljs-keyword">const</span> predicateVariablePattern = <span class="hljs-regexp">/^[BCDF-SU-Z][0-9]?$/</span>
+<span class="hljs-keyword">const</span> individualVariablePattern = <span class="hljs-regexp">/^[a-z][0-9]?$/</span>
+<span class="hljs-keyword">const</span> functionVariablePattern = <span class="hljs-regexp">/^[a-z][0-9]?$/</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isPropositionalVariable = <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> propositionalVariablePattern.test(text)
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isPredicateVariable = <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> predicateVariablePattern.test(text)

@@ -487,6 +487,26 @@
       <span class="hljs-keyword">case</span> Rule.Theorem:
         <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> TheoremRuleInterface(deduction)
         <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.NegationIntroduction:
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.DoubleNegationElimination:
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.WeakNegationElimination:
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.ConditionalElimination:
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.ConjunctionIntroduction:
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.ConjunctionElimination:
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.DisjunctionIntroduction:
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.DisjunctionElimination:
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.BiconditionalIntroduction:
+        <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">case</span> Rule.BiconditionalElimination:
+        <span class="hljs-keyword">break</span>
     }
 
     <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-string">`Rule <span class="hljs-subst">${rule}</span> is not allowed.`</span>, rule)

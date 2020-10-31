@@ -662,10 +662,28 @@ peg$SyntaxError.buildMessage = <span class="hljs-function"><span class="hljs-key
       peg$c60 = peg$literalExpectation(<span class="hljs-string">&quot;EI&quot;</span>, <span class="hljs-literal">false</span>),
       peg$c61 = <span class="hljs-string">&quot;EG&quot;</span>,
       peg$c62 = peg$literalExpectation(<span class="hljs-string">&quot;EG&quot;</span>, <span class="hljs-literal">false</span>),
-      peg$c63 = <span class="hljs-regexp">/^[ \n]/</span>,
-      peg$c64 = peg$classExpectation([<span class="hljs-string">&quot; &quot;</span>, <span class="hljs-string">&quot;\n&quot;</span>], <span class="hljs-literal">false</span>, <span class="hljs-literal">false</span>),
-      peg$c65 = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">chars</span>) </span>{ <span class="hljs-keyword">return</span> chars.join(<span class="hljs-string">&#x27;&#x27;</span>); },
-      peg$c66 = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">chars</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-built_in">parseInt</span>(chars.join(<span class="hljs-string">&#x27;&#x27;</span>), <span class="hljs-number">10</span>); },
+      peg$c63 = <span class="hljs-string">&quot;IF-&quot;</span>,
+      peg$c64 = peg$literalExpectation(<span class="hljs-string">&quot;IF-&quot;</span>, <span class="hljs-literal">false</span>),
+      peg$c65 = <span class="hljs-string">&quot;NEG+&quot;</span>,
+      peg$c66 = peg$literalExpectation(<span class="hljs-string">&quot;NEG+&quot;</span>, <span class="hljs-literal">false</span>),
+      peg$c67 = <span class="hljs-string">&quot;NEG-&quot;</span>,
+      peg$c68 = peg$literalExpectation(<span class="hljs-string">&quot;NEG-&quot;</span>, <span class="hljs-literal">false</span>),
+      peg$c69 = <span class="hljs-string">&quot;AND+&quot;</span>,
+      peg$c70 = peg$literalExpectation(<span class="hljs-string">&quot;AND+&quot;</span>, <span class="hljs-literal">false</span>),
+      peg$c71 = <span class="hljs-string">&quot;AND-&quot;</span>,
+      peg$c72 = peg$literalExpectation(<span class="hljs-string">&quot;AND-&quot;</span>, <span class="hljs-literal">false</span>),
+      peg$c73 = <span class="hljs-string">&quot;OR+&quot;</span>,
+      peg$c74 = peg$literalExpectation(<span class="hljs-string">&quot;OR+&quot;</span>, <span class="hljs-literal">false</span>),
+      peg$c75 = <span class="hljs-string">&quot;OR-&quot;</span>,
+      peg$c76 = peg$literalExpectation(<span class="hljs-string">&quot;OR-&quot;</span>, <span class="hljs-literal">false</span>),
+      peg$c77 = <span class="hljs-string">&quot;IFF+&quot;</span>,
+      peg$c78 = peg$literalExpectation(<span class="hljs-string">&quot;IFF+&quot;</span>, <span class="hljs-literal">false</span>),
+      peg$c79 = <span class="hljs-string">&quot;IFF-&quot;</span>,
+      peg$c80 = peg$literalExpectation(<span class="hljs-string">&quot;IFF-&quot;</span>, <span class="hljs-literal">false</span>),
+      peg$c81 = <span class="hljs-regexp">/^[ \n]/</span>,
+      peg$c82 = peg$classExpectation([<span class="hljs-string">&quot; &quot;</span>, <span class="hljs-string">&quot;\n&quot;</span>], <span class="hljs-literal">false</span>, <span class="hljs-literal">false</span>),
+      peg$c83 = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">chars</span>) </span>{ <span class="hljs-keyword">return</span> chars.join(<span class="hljs-string">&#x27;&#x27;</span>); },
+      peg$c84 = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">chars</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-built_in">parseInt</span>(chars.join(<span class="hljs-string">&#x27;&#x27;</span>), <span class="hljs-number">10</span>); },
 
       peg$currPos          = <span class="hljs-number">0</span>,
       peg$savedPos         = <span class="hljs-number">0</span>,
@@ -1830,6 +1848,96 @@ peg$SyntaxError.buildMessage = <span class="hljs-function"><span class="hljs-key
                     s0 = peg$FAILED;
                     <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c18); }
                   }
+                  <span class="hljs-keyword">if</span> (s0 === peg$FAILED) {
+                    <span class="hljs-keyword">if</span> (input.substr(peg$currPos, <span class="hljs-number">3</span>) === peg$c63) {
+                      s0 = peg$c63;
+                      peg$currPos += <span class="hljs-number">3</span>;
+                    } <span class="hljs-keyword">else</span> {
+                      s0 = peg$FAILED;
+                      <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c64); }
+                    }
+                    <span class="hljs-keyword">if</span> (s0 === peg$FAILED) {
+                      <span class="hljs-keyword">if</span> (input.substr(peg$currPos, <span class="hljs-number">4</span>) === peg$c65) {
+                        s0 = peg$c65;
+                        peg$currPos += <span class="hljs-number">4</span>;
+                      } <span class="hljs-keyword">else</span> {
+                        s0 = peg$FAILED;
+                        <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c66); }
+                      }
+                      <span class="hljs-keyword">if</span> (s0 === peg$FAILED) {
+                        <span class="hljs-keyword">if</span> (input.substr(peg$currPos, <span class="hljs-number">4</span>) === peg$c67) {
+                          s0 = peg$c67;
+                          peg$currPos += <span class="hljs-number">4</span>;
+                        } <span class="hljs-keyword">else</span> {
+                          s0 = peg$FAILED;
+                          <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c68); }
+                        }
+                        <span class="hljs-keyword">if</span> (s0 === peg$FAILED) {
+                          <span class="hljs-keyword">if</span> (input.substr(peg$currPos, <span class="hljs-number">4</span>) === peg$c67) {
+                            s0 = peg$c67;
+                            peg$currPos += <span class="hljs-number">4</span>;
+                          } <span class="hljs-keyword">else</span> {
+                            s0 = peg$FAILED;
+                            <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c68); }
+                          }
+                          <span class="hljs-keyword">if</span> (s0 === peg$FAILED) {
+                            <span class="hljs-keyword">if</span> (input.substr(peg$currPos, <span class="hljs-number">4</span>) === peg$c69) {
+                              s0 = peg$c69;
+                              peg$currPos += <span class="hljs-number">4</span>;
+                            } <span class="hljs-keyword">else</span> {
+                              s0 = peg$FAILED;
+                              <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c70); }
+                            }
+                            <span class="hljs-keyword">if</span> (s0 === peg$FAILED) {
+                              <span class="hljs-keyword">if</span> (input.substr(peg$currPos, <span class="hljs-number">4</span>) === peg$c71) {
+                                s0 = peg$c71;
+                                peg$currPos += <span class="hljs-number">4</span>;
+                              } <span class="hljs-keyword">else</span> {
+                                s0 = peg$FAILED;
+                                <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c72); }
+                              }
+                              <span class="hljs-keyword">if</span> (s0 === peg$FAILED) {
+                                <span class="hljs-keyword">if</span> (input.substr(peg$currPos, <span class="hljs-number">3</span>) === peg$c73) {
+                                  s0 = peg$c73;
+                                  peg$currPos += <span class="hljs-number">3</span>;
+                                } <span class="hljs-keyword">else</span> {
+                                  s0 = peg$FAILED;
+                                  <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c74); }
+                                }
+                                <span class="hljs-keyword">if</span> (s0 === peg$FAILED) {
+                                  <span class="hljs-keyword">if</span> (input.substr(peg$currPos, <span class="hljs-number">3</span>) === peg$c75) {
+                                    s0 = peg$c75;
+                                    peg$currPos += <span class="hljs-number">3</span>;
+                                  } <span class="hljs-keyword">else</span> {
+                                    s0 = peg$FAILED;
+                                    <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c76); }
+                                  }
+                                  <span class="hljs-keyword">if</span> (s0 === peg$FAILED) {
+                                    <span class="hljs-keyword">if</span> (input.substr(peg$currPos, <span class="hljs-number">4</span>) === peg$c77) {
+                                      s0 = peg$c77;
+                                      peg$currPos += <span class="hljs-number">4</span>;
+                                    } <span class="hljs-keyword">else</span> {
+                                      s0 = peg$FAILED;
+                                      <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c78); }
+                                    }
+                                    <span class="hljs-keyword">if</span> (s0 === peg$FAILED) {
+                                      <span class="hljs-keyword">if</span> (input.substr(peg$currPos, <span class="hljs-number">4</span>) === peg$c79) {
+                                        s0 = peg$c79;
+                                        peg$currPos += <span class="hljs-number">4</span>;
+                                      } <span class="hljs-keyword">else</span> {
+                                        s0 = peg$FAILED;
+                                        <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c80); }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -1846,26 +1954,26 @@ peg$SyntaxError.buildMessage = <span class="hljs-function"><span class="hljs-key
 
     s0 = peg$currPos;
     s1 = [];
-    <span class="hljs-keyword">if</span> (peg$c63.test(input.charAt(peg$currPos))) {
+    <span class="hljs-keyword">if</span> (peg$c81.test(input.charAt(peg$currPos))) {
       s2 = input.charAt(peg$currPos);
       peg$currPos++;
     } <span class="hljs-keyword">else</span> {
       s2 = peg$FAILED;
-      <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c64); }
+      <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c82); }
     }
     <span class="hljs-keyword">while</span> (s2 !== peg$FAILED) {
       s1.push(s2);
-      <span class="hljs-keyword">if</span> (peg$c63.test(input.charAt(peg$currPos))) {
+      <span class="hljs-keyword">if</span> (peg$c81.test(input.charAt(peg$currPos))) {
         s2 = input.charAt(peg$currPos);
         peg$currPos++;
       } <span class="hljs-keyword">else</span> {
         s2 = peg$FAILED;
-        <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c64); }
+        <span class="hljs-keyword">if</span> (peg$silentFails === <span class="hljs-number">0</span>) { peg$fail(peg$c82); }
       }
     }
     <span class="hljs-keyword">if</span> (s1 !== peg$FAILED) {
       peg$savedPos = s0;
-      s1 = peg$c65(s1);
+      s1 = peg$c83(s1);
     }
     s0 = s1;
 
@@ -1900,7 +2008,7 @@ peg$SyntaxError.buildMessage = <span class="hljs-function"><span class="hljs-key
     }
     <span class="hljs-keyword">if</span> (s1 !== peg$FAILED) {
       peg$savedPos = s0;
-      s1 = peg$c66(s1);
+      s1 = peg$c84(s1);
     }
     s0 = s1;
 

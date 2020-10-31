@@ -1,5 +1,10 @@
 import { Expression } from '../../abstract-structures'
-import { existentialQuantifier, conditional, universalQuantifier } from '../../primitive-syms'
+import {
+  existentialQuantifier,
+  conditional,
+  universalQuantifier,
+  negation
+} from '../../primitive-syms'
 import { Rule } from '../rule'
 
 // Contains all information necessary to apply a regular rule (not theorem rule) against a
@@ -134,3 +139,18 @@ RegularRuleApplicationSpec.existentialGeneralization = (
     })
   })
 }
+
+RegularRuleApplicationSpec.negationIntroduction = (
+  antecedent, antecedentIndex,
+  consequent1, consequent1Index,
+  consequent2, consequent2Index
+) =>
+  RegularRuleApplicationSpec({
+    rule: Rule.NegationIntroduction,
+    premises: [antecedentIndex, consequent1Index, consequent2Index],
+    conclusion: Expression({
+      sym: negation,
+      children: [antecedent]
+    }),
+    assumptionToRemove: antecedentIndex
+  })

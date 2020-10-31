@@ -1,6 +1,8 @@
 import { Category, Sym } from '../abstract-structures'
 import { createError, ErrorName } from '../error'
 import { generateValuesPermutations, primitiveTruthFunctions } from './primitive-truth-functions'
+import { conditional, conjunction, disjunction, negation } from '../primitive-syms'
+import _ from 'lodash'
 
 export const evaluate = (formula, interpretation = {}) => {
   const { sym, children } = formula
@@ -72,4 +74,64 @@ const getTruthFunction = sym => {
   const truthFunction = primitiveTruthFunctions[sym.id]
   if (truthFunction === undefined) throw createError(ErrorName.NO_ASSIGNED_VALUE_ERROR)
   return truthFunction
+}
+
+// Checks whether first formula is the negation of the second.
+export const isNegationOf = (first, second) => {
+  if (!Sym.equals(first.sym, negation)) return false
+  const [firstChild] = first.children
+  return _.isEqual(firstChild, second)
+}
+
+// Checks whether one formula is the negation of the other.
+export const areCanonicallyContradictory = (formula1, formula2) => {
+  return isNegationOf(formula1, formula2) || isNegationOf(formula2, formula1)
+}
+
+// Checks whether `formula` is of the form `A & ~A` or `~A & A`.
+export const isCanonicalContradiction = formula => {
+  const { sym, children } = formula
+  if (!Sym.equals(sym, conjunction)) return false
+
+  const [child1, child2] = children
+
+  return areCanonicallyContradictory(child1, child2)
+}
+
+export const isDoubleNegation = formula => {
+  const { sym, children } = formula
+
+  if (!Sym.equals(sym, negation)) return false
+
+  const [child] = children
+
+  return Sym.equals(child.sym, negation)
+}
+
+// Checks whether `formula1` is a conjunction containing `formula2` as one of its conjuncts.
+export const isConjunctionOf = (formula1, formula2) => {
+  if (!Sym.equals(formula1.sym, conjunction)) return false
+  const [conjunct1, conjunct2] = formula1.children
+  return _.isEqual(conjunct1, formula2) || _.isEqual(conjunct2, formula2)
+}
+
+// Checks whether `formula1` is a disjunction containing `formula2` as one of its disjuncts.
+export const isDisjunctionOf = (formula1, formula2) => {
+  if (!Sym.equals(formula1.sym, disjunction)) return false
+  const [disjunct1, disjunct2] = formula1.children
+  return _.isEqual(disjunct1, formula2) || _.isEqual(disjunct2, formula2)
+}
+
+// Checks whether `formula2` is an antecedent of `formula1`.
+export const isConditionalFrom = (formula1, formula2) => {
+  if (!Sym.equals(formula1.sym, conditional)) return false
+  const [antecedent] = formula1.children
+  return _.isEqual(antecedent, formula2)
+}
+
+// Checks whether `formula2` is a consequent of `formula1`.
+export const isConditionalTo = (formula1, formula2) => {
+  if (!Sym.equals(formula1.sym, conditional)) return false
+  const [, consequent] = formula1.children
+  return _.isEqual(consequent, formula2)
 }

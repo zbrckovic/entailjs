@@ -12,6 +12,8 @@ import { TheoremRuleInterface } from './theorem-rule-interface'
 import { Sym } from '../../abstract-structures'
 import { createError, ErrorName } from '../../error'
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
+import { areCanonicallyContradictory } from '../../propositional-logic/propositional-logic-util'
+import { NegationIntroductionRuleInterface } from './negation-introduction-rule-interface'
 
 // Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
 export const RulesInterface = (deduction, ...steps) => ({
@@ -22,14 +24,14 @@ export const RulesInterface = (deduction, ...steps) => ({
         break
       case Rule.Deduction:
         if (steps.length === 2) {
-          const [firstStepIndex, secondStepIndex] = steps
-          const [firstStep, secondStep] = steps.map(i => Deduction.getStep(deduction, i))
+          const [step1Index, step2Index] = steps
+          const [step1, step2] = steps.map(i => Deduction.getStep(deduction, i))
 
-          const firstStepIsPremise = firstStep.ruleApplicationSummary.rule === Rule.Premise
-          const firstIsAssumptionForSecond = secondStep.assumptions.has(firstStepIndex)
+          const step1IsPremise = step1.ruleApplicationSummary.rule === Rule.Premise
+          const step1IsAssumptionForStep2 = step2.assumptions.has(step1Index)
 
-          if (firstStepIsPremise && firstIsAssumptionForSecond) {
-            return DeductionRuleInterface(deduction, firstStepIndex, secondStepIndex)
+          if (step1IsPremise && step1IsAssumptionForStep2) {
+            return DeductionRuleInterface(deduction, step1Index, step2Index)
           }
         }
         break
@@ -71,6 +73,23 @@ export const RulesInterface = (deduction, ...steps) => ({
         if (steps.length === 0) return TheoremRuleInterface(deduction)
         break
       case Rule.NegationIntroduction:
+        if (steps.length === 3) {
+          const [step1Index, step2Index, step3Index] = steps
+          const [step1, step2, step3] = steps.map(i => Deduction.getStep(deduction, i))
+
+          const step1IsPremise = step1.ruleApplicationSummary.rule === Rule.Premise
+          if (!step1IsPremise) break
+
+          const step1IsAssumptionForStep2 = step2.assumptions.has(step1Index)
+          if (!step1IsAssumptionForStep2) break
+
+          const step1IsAssumptionForStep3 = step3.assumptions.has(step1Index)
+          if (!step1IsAssumptionForStep3) break
+
+          if (!areCanonicallyContradictory(step2.formula, step3.formula)) break
+
+          return NegationIntroductionRuleInterface(deduction, step1Index, step2Index, step3Index)
+        }
         break
       case Rule.DoubleNegationElimination:
         break

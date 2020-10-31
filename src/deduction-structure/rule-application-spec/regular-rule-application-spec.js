@@ -1,5 +1,5 @@
 import { Expression } from '../../abstract-structures'
-import { existentialQuantifier, implication, universalQuantifier } from '../../primitive-syms'
+import { existentialQuantifier, conditional, universalQuantifier } from '../../primitive-syms'
 import { Rule } from '../rule'
 
 // Contains all information necessary to apply a regular rule (not theorem rule) against a
@@ -41,7 +41,7 @@ RegularRuleApplicationSpec.deduction = (
     rule: Rule.Deduction,
     premises: [antecedentIndex, consequentIndex],
     conclusion: Expression({
-      sym: implication,
+      sym: conditional,
       children: [antecedent, consequent]
     }),
     assumptionToRemove: antecedentIndex

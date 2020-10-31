@@ -1,11 +1,11 @@
-import { conjunction, disjunction, equivalence, implication, negation } from '../primitive-syms'
+import { conjunction, disjunction, equivalence, conditional, negation } from '../primitive-syms'
 import _ from 'lodash'
 
 export const primitiveTruthFunctions = {
   [negation.id]: t => !t,
   [conjunction.id]: (a, b) => a && b,
   [disjunction.id]: (a, b) => a || b,
-  [implication.id]: (a, b) => !a || b,
+  [conditional.id]: (a, b) => !a || b,
   [equivalence.id]: (a, b) => a === b
 }
 

@@ -23,7 +23,7 @@ export {
   conjunction,
   disjunction,
   equivalence,
-  implication,
+  conditional,
   negation,
   primitiveSyms,
   universalQuantifier

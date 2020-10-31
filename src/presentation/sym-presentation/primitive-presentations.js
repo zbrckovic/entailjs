@@ -3,7 +3,7 @@ import {
   disjunction,
   equivalence,
   existentialQuantifier,
-  implication,
+  conditional,
   negation,
   universalQuantifier
 } from '../../primitive-syms'
@@ -26,7 +26,7 @@ export const primitivePresentations = {
     unicode: SyntacticInfo.infix('∨')
   }),
 
-  [implication.id]: SymPresentation({
+  [conditional.id]: SymPresentation({
     ascii: SyntacticInfo.infix('->'),
     unicode: SyntacticInfo.infix('→')
   }),

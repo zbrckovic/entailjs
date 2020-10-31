@@ -1,6 +1,6 @@
 import {
   createConjunction,
-  createImplicationWithAntecedentsAsConjunction
+  createConditionalWithAntecedentsAsConjunction
 } from './formula-construction-util'
 import { FormulaParser } from './parsers/formula-parser'
 import { primitivePresentations } from './presentation/sym-presentation'
@@ -25,7 +25,7 @@ test.each([
   expect(actual).toEqual(expected)
 })
 
-test('createImplicationWithAntecedentsAsConjunction()', () => {
+test('createConditionalWithAntecedentsAsConjunction()', () => {
   const antecedentTexts = ['p', 'q', 'r']
   const consequentText = 's'
 
@@ -33,7 +33,7 @@ test('createImplicationWithAntecedentsAsConjunction()', () => {
   const consequent = parser.parse(consequentText)
 
   const expected = parser.parse('((p & q) & r) -> s')
-  const actual = createImplicationWithAntecedentsAsConjunction(antecedents, consequent)
+  const actual = createConditionalWithAntecedentsAsConjunction(antecedents, consequent)
 
   expect(actual).toEqual(expected)
 })

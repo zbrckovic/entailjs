@@ -1,6 +1,6 @@
 import { Expression } from '../abstract-structures'
-import { createImplicationWithAntecedentsAsConjunction } from '../formula-construction-util'
-import { implication } from '../primitive-syms'
+import { createConditionalWithAntecedentsAsConjunction } from '../formula-construction-util'
+import { conditional } from '../primitive-syms'
 import * as util from './propositional-logic-util'
 import { reduceToTruthFunctional } from './reduce-to-truth-functional'
 
@@ -19,12 +19,12 @@ export const isLogicalConsequence = (assumptions, consequence) => {
   if (assumptions.length === 1) {
     return isTautology(
       Expression({
-        sym: implication,
+        sym: conditional,
         children: [assumptions[0], consequence]
       })
     )
   }
-  return isTautology(createImplicationWithAntecedentsAsConjunction(assumptions, consequence))
+  return isTautology(createConditionalWithAntecedentsAsConjunction(assumptions, consequence))
 }
 
 const hasInterpretations = (formula, value) => findInterpretations(formula, value).length > 0

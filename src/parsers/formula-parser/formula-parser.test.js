@@ -8,7 +8,7 @@ import {
 } from '../../presentation/sym-presentation'
 import {
   existentialQuantifier,
-  implication,
+  conditional,
   negation,
   primitiveSyms,
   universalQuantifier
@@ -41,7 +41,7 @@ test('parse(\'p -> q\')', () => {
   const symQ = Sym.ff({ id: maxSymId + 2 })
 
   const expectedFormula = Expression({
-    sym: implication,
+    sym: conditional,
     children: [Expression({ sym: symP }), Expression({ sym: symQ })]
   })
 
@@ -129,7 +129,7 @@ test('parse(\'Ax Ey (Fxy -> ~Gyx)\'', () => {
         boundSym: symY,
         children: [
           Expression({
-            sym: implication,
+            sym: conditional,
             children: [
               Expression({
                 sym: symF,

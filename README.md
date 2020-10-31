@@ -40,7 +40,7 @@ Sym      | Symbol          | Arity | Placement
 `~`      | **Negation**    | 1     | Prefix
 `&`      | **Conjunction** | 2     | Infix
 `v`      | **Disjunction** | 2     | Infix
-`->`     | **Implication** | 2     | Infix
+`->`     | **Conditional** | 2     | Infix
 `<->`    | **Equivalence** | 2     | Infix
 
 *Examples of well-formed formulas with truth-functional connectives:

@@ -1,6 +1,7 @@
 import { parseDeduction } from '.'
-import { RuleAbbreviation } from '../../deduction-structure/rule'
+import { getAbbreviation } from '../../deduction-structure/rule'
 import { Placement } from '../../presentation/sym-presentation'
+import { Rule } from '../../deduction-structure'
 
 test('parse()', () => {
   const text = `
@@ -51,7 +52,7 @@ test('parse()', () => {
         },
         ordinal: 1,
         ruleApplicationSummary: {
-          rule: RuleAbbreviation.P,
+          rule: getAbbreviation(Rule.Premise),
           premises: []
         }
       },
@@ -85,7 +86,7 @@ test('parse()', () => {
         },
         ordinal: 2,
         ruleApplicationSummary: {
-          rule: RuleAbbreviation.EI,
+          rule: getAbbreviation(Rule.ExistentialInstantiation),
           premises: [1]
         }
       },
@@ -112,7 +113,7 @@ test('parse()', () => {
         },
         ordinal: 3,
         ruleApplicationSummary: {
-          rule: RuleAbbreviation.UI,
+          rule: getAbbreviation(Rule.UniversalInstantiation),
           premises: [2]
         }
       },
@@ -146,7 +147,7 @@ test('parse()', () => {
         },
         ordinal: 4,
         ruleApplicationSummary: {
-          rule: RuleAbbreviation.EG,
+          rule: getAbbreviation(Rule.ExistentialGeneralization),
           premises: [3]
         }
       },
@@ -187,7 +188,7 @@ test('parse()', () => {
         },
         ordinal: 5,
         ruleApplicationSummary: {
-          rule: RuleAbbreviation.UG,
+          rule: getAbbreviation(Rule.UniversalGeneralization),
           premises: [4]
         }
       },
@@ -268,7 +269,7 @@ test('parse()', () => {
         },
         ordinal: 6,
         ruleApplicationSummary: {
-          rule: RuleAbbreviation.D,
+          rule: getAbbreviation(Rule.Deduction),
           premises: [1, 5]
         }
       }

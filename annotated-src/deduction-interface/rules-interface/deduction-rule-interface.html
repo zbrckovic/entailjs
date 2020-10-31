@@ -95,6 +95,11 @@
                 </a>
               
                 
+                <a class="source" href="negation-introduction-rule-interface.html">
+                  deduction-interface/rules-interface/negation-introduction-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="premise-rule-interface.html">
                   deduction-interface/rules-interface/premise-rule-interface.js
                 </a>
@@ -407,13 +412,13 @@
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { Deduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> DeductionRuleInterface = <span class="hljs-function">(<span class="hljs-params">deduction, firstStepIndex, secondStepIndex</span>) =&gt;</span> {
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> DeductionRuleInterface = <span class="hljs-function">(<span class="hljs-params">deduction, step1Index, step2Index</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> apply = <span class="hljs-function">() =&gt;</span> {
     <span class="hljs-keyword">const</span> ruleApplicationSpec = RegularRuleApplicationSpec.deduction(
-      Deduction.getStep(deduction, firstStepIndex).formula,
-      firstStepIndex,
-      Deduction.getStep(deduction, secondStepIndex).formula,
-      secondStepIndex
+      Deduction.getStep(deduction, step1Index).formula,
+      step1Index,
+      Deduction.getStep(deduction, step2Index).formula,
+      step2Index
     )
     <span class="hljs-keyword">const</span> newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
 

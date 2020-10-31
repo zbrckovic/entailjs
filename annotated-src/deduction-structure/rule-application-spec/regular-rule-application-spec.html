@@ -95,6 +95,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-interface/rules-interface/negation-introduction-rule-interface.html">
+                  deduction-interface/rules-interface/negation-introduction-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-interface/rules-interface/premise-rule-interface.html">
                   deduction-interface/rules-interface/premise-rule-interface.js
                 </a>
@@ -404,7 +409,12 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
-<span class="hljs-keyword">import</span> { existentialQuantifier, conditional, universalQuantifier } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
+<span class="hljs-keyword">import</span> {
+  existentialQuantifier,
+  conditional,
+  universalQuantifier,
+  negation
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
 <span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../rule&#x27;</span></pre></div></div>
             
         </li>
@@ -601,7 +611,22 @@ RegularRuleApplicationSpec.existentialGeneralization = <span class="hljs-functio
       <span class="hljs-attr">children</span>: [child]
     })
   })
-}</pre></div></div>
+}
+
+RegularRuleApplicationSpec.negationIntroduction = <span class="hljs-function">(<span class="hljs-params">
+  antecedent, antecedentIndex,
+  consequent1, consequent1Index,
+  consequent2, consequent2Index
+</span>) =&gt;</span>
+  RegularRuleApplicationSpec({
+    <span class="hljs-attr">rule</span>: Rule.NegationIntroduction,
+    <span class="hljs-attr">premises</span>: [antecedentIndex, consequent1Index, consequent2Index],
+    <span class="hljs-attr">conclusion</span>: Expression({
+      <span class="hljs-attr">sym</span>: negation,
+      <span class="hljs-attr">children</span>: [antecedent]
+    }),
+    <span class="hljs-attr">assumptionToRemove</span>: antecedentIndex
+  })</pre></div></div>
             
         </li>
         

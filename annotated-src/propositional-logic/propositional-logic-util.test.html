@@ -95,6 +95,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-interface/rules-interface/negation-introduction-rule-interface.html">
+                  deduction-interface/rules-interface/negation-introduction-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-interface/rules-interface/premise-rule-interface.html">
                   deduction-interface/rules-interface/premise-rule-interface.js
                 </a>
@@ -407,7 +412,13 @@
 <span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../parsers/formula-parser&#x27;</span>
 <span class="hljs-keyword">import</span> { primitivePresentations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../presentation/sym-presentation&#x27;</span>
 <span class="hljs-keyword">import</span> { primitiveSyms } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
-<span class="hljs-keyword">import</span> { evaluate, findInterpretations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./propositional-logic-util&#x27;</span>
+<span class="hljs-keyword">import</span> {
+  areCanonicallyContradictory,
+  evaluate,
+  findInterpretations,
+  isCanonicalContradiction, isConditionalFrom, isConditionalTo, isConjunctionOf, isDisjunctionOf,
+  isDoubleNegation
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./propositional-logic-util&#x27;</span>
 <span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
 
 <span class="hljs-keyword">let</span> parser
@@ -456,6 +467,97 @@ test.each([
   <span class="hljs-keyword">const</span> actual = findInterpretations(formula, value)
 
   expect(actual).toEqual(expected)
+})
+
+test.each([
+  [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;~a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;~a&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;~~a&#x27;</span>, <span class="hljs-string">&#x27;~a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;~a&#x27;</span>, <span class="hljs-string">&#x27;~~a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, <span class="hljs-string">&#x27;~Ax Fx&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">false</span>]
+])(<span class="hljs-string">&#x27;areCanonicallyContradictory(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formula1Text, formula2Text, expected</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(formula1Text)
+  <span class="hljs-keyword">const</span> formula2 = parser.parse(formula2Text)
+  <span class="hljs-keyword">const</span> actual = areCanonicallyContradictory(formula1, formula2)
+
+  expect(actual).toBe(expected)
+})
+
+test.each([
+  [<span class="hljs-string">&#x27;a &amp; ~a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;~a | a&#x27;</span>, <span class="hljs-literal">false</span>]
+])(<span class="hljs-string">&#x27;isCanonicalContradiction(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, expected</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
+  <span class="hljs-keyword">const</span> actual = isCanonicalContradiction(formula)
+
+  expect(actual).toBe(expected)
+})
+
+test.each([
+  [<span class="hljs-string">&#x27;~~a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;~a&#x27;</span>, <span class="hljs-literal">false</span>]
+])(<span class="hljs-string">&#x27;isDoubleNegation(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, expected</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
+  <span class="hljs-keyword">const</span> actual = isDoubleNegation(formula)
+
+  expect(actual).toBe(expected)
+})
+
+test.each([
+  [<span class="hljs-string">&#x27;a &amp; a&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a &amp; b&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a &amp; b&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a &amp; b&#x27;</span>, <span class="hljs-string">&#x27;~a&#x27;</span>, <span class="hljs-literal">false</span>],
+  [<span class="hljs-string">&#x27;a &amp; b&#x27;</span>, <span class="hljs-string">&#x27;a &amp; b&#x27;</span>, <span class="hljs-literal">false</span>],
+  [<span class="hljs-string">&#x27;a | b&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">false</span>]
+])(<span class="hljs-string">&#x27;isConjunctionOf(%s, %s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formula1Text, formula2Text, expected</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(formula1Text)
+  <span class="hljs-keyword">const</span> formula2 = parser.parse(formula2Text)
+  <span class="hljs-keyword">const</span> actual = isConjunctionOf(formula1, formula2)
+
+  expect(actual).toBe(expected)
+})
+
+test.each([
+  [<span class="hljs-string">&#x27;a | a&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a | b&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a | b&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a | b&#x27;</span>, <span class="hljs-string">&#x27;~a&#x27;</span>, <span class="hljs-literal">false</span>],
+  [<span class="hljs-string">&#x27;a | b&#x27;</span>, <span class="hljs-string">&#x27;a | b&#x27;</span>, <span class="hljs-literal">false</span>],
+  [<span class="hljs-string">&#x27;a &amp; b&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">false</span>]
+])(<span class="hljs-string">&#x27;isDisjunctionOf(%s, %s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formula1Text, formula2Text, expected</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(formula1Text)
+  <span class="hljs-keyword">const</span> formula2 = parser.parse(formula2Text)
+  <span class="hljs-keyword">const</span> actual = isDisjunctionOf(formula1, formula2)
+
+  expect(actual).toBe(expected)
+})
+
+test.each([
+  [<span class="hljs-string">&#x27;a -&gt; b&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a -&gt; a&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a -&gt; b&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-literal">false</span>],
+  [<span class="hljs-string">&#x27;a &amp; b&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">false</span>]
+])(<span class="hljs-string">&#x27;isConditionalFrom(%s, %s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formula1Text, formula2Text, expected</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(formula1Text)
+  <span class="hljs-keyword">const</span> formula2 = parser.parse(formula2Text)
+  <span class="hljs-keyword">const</span> actual = isConditionalFrom(formula1, formula2)
+
+  expect(actual).toBe(expected)
+})
+
+test.each([
+  [<span class="hljs-string">&#x27;a -&gt; b&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a -&gt; a&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">true</span>],
+  [<span class="hljs-string">&#x27;a -&gt; b&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-literal">false</span>],
+  [<span class="hljs-string">&#x27;a &amp; b&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-literal">false</span>]
+])(<span class="hljs-string">&#x27;isConditionalTo(%s, %s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formula1Text, formula2Text, expected</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(formula1Text)
+  <span class="hljs-keyword">const</span> formula2 = parser.parse(formula2Text)
+  <span class="hljs-keyword">const</span> actual = isConditionalTo(formula1, formula2)
+
+  expect(actual).toBe(expected)
 })
 
 <span class="hljs-keyword">const</span> createInterpretation = <span class="hljs-function"><span class="hljs-params">interpretationObj</span> =&gt;</span> {

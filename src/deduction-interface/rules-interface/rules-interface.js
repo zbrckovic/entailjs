@@ -70,6 +70,26 @@ export const RulesInterface = (deduction, ...steps) => ({
       case Rule.Theorem:
         if (steps.length === 0) return TheoremRuleInterface(deduction)
         break
+      case Rule.NegationIntroduction:
+        break
+      case Rule.DoubleNegationElimination:
+        break
+      case Rule.WeakNegationElimination:
+        break
+      case Rule.ConditionalElimination:
+        break
+      case Rule.ConjunctionIntroduction:
+        break
+      case Rule.ConjunctionElimination:
+        break
+      case Rule.DisjunctionIntroduction:
+        break
+      case Rule.DisjunctionElimination:
+        break
+      case Rule.BiconditionalIntroduction:
+        break
+      case Rule.BiconditionalElimination:
+        break
     }
 
     throw createError(ErrorName.RULE_NOT_ALLOWED, `Rule ${rule} is not allowed.`, rule)

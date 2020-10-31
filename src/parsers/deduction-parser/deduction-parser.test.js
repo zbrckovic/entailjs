@@ -103,7 +103,7 @@ test('parse()', () => {
         3 (4)  Fa                                                   / EI 3;
         1 (5)  Fa -> Ga                                             / UI 1;
         2 (6)  Ga -> Ha                                             / UI 2;
-    1,2,3 (7)  Ha                                                     / TI 4,5,6;
+    1,2,3 (7)  Ha                                                   / TI 4,5,6;
     1,2,3 (8)  Ex Hx                                                / EG 7;
       1,2 (9)  Ex Fx -> Ex Hx                                       / D 3, 8;
         1 (10) Ax (Gx -> Hx) -> (Ex Fx -> Ex Hx)                    / D 2, 9;

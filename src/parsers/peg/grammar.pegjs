@@ -177,7 +177,24 @@ RuleApplicationSummary
     }
 
 Rule
-    = "P" / "D" / "TI" / "UI" / "UG" / "EI" / "EG" / "T"
+    = "P"
+    / "D"
+    / "TI"
+    / "UI"
+    / "UG"
+    / "EI"
+    / "EG"
+    / "T"
+    / "IF-"
+    / "NEG+"
+    / "NEG-"
+    / "NEG-"
+    / "AND+"
+    / "AND-"
+    / "OR+"
+    / "OR-"
+    / "IFF+"
+    / "IFF-"
 
 /* ---------- Util ---------- */
 

@@ -310,6 +310,11 @@
                 </a>
               
                 
+                <a class="source" href="parsers/validators.html">
+                  parsers/validators.js
+                </a>
+              
+                
                 <a class="source" href="presentation/sym-presentation/index.html">
                   presentation/sym-presentation/index.js
                 </a>
@@ -402,7 +407,14 @@
   Expression, ExpressionPointer, connectWithBinarySym, Category, Kind, Sym
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./abstract-structures&#x27;</span>
 <span class="hljs-keyword">export</span> { Deduction, Rule, TermDependencyGraph } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-structure&#x27;</span>
-<span class="hljs-keyword">export</span> { FormulaParser, DeductionParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./parsers&#x27;</span>
+<span class="hljs-keyword">export</span> {
+  FormulaParser,
+  DeductionParser,
+  isPredicateVariable,
+  isPropositionalVariable,
+  isIndividualVariable,
+  isFunctionVariable
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./parsers&#x27;</span>
 <span class="hljs-keyword">export</span> { ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./error&#x27;</span>
 <span class="hljs-keyword">export</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-interface&#x27;</span>
 <span class="hljs-keyword">export</span> {

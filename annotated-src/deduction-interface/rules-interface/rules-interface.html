@@ -90,6 +90,11 @@
                 </a>
               
                 
+                <a class="source" href="double-negation-elimination.html">
+                  deduction-interface/rules-interface/double-negation-elimination.js
+                </a>
+              
+                
                 <a class="source" href="index.html">
                   deduction-interface/rules-interface/index.js
                 </a>
@@ -130,6 +135,11 @@
                 </a>
               
                 
+                <a class="source" href="../tests/double-negation-elimination.test.html">
+                  deduction-interface/tests/double-negation-elimination.test.js
+                </a>
+              
+                
                 <a class="source" href="../tests/existential-generalization.test.html">
                   deduction-interface/tests/existential-generalization.test.js
                 </a>
@@ -137,6 +147,11 @@
                 
                 <a class="source" href="../tests/existential-instantiation.test.html">
                   deduction-interface/tests/existential-instantiation.test.js
+                </a>
+              
+                
+                <a class="source" href="../tests/negation-introduction.test.html">
+                  deduction-interface/tests/negation-introduction.test.js
                 </a>
               
                 
@@ -422,8 +437,12 @@
 <span class="hljs-keyword">import</span> { Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
 <span class="hljs-keyword">import</span> { TautologicalImplicationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./tautological-implication-rule-interface&#x27;</span>
-<span class="hljs-keyword">import</span> { areCanonicallyContradictory } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../propositional-logic/propositional-logic-util&#x27;</span>
-<span class="hljs-keyword">import</span> { NegationIntroductionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./negation-introduction-rule-interface&#x27;</span></pre></div></div>
+<span class="hljs-keyword">import</span> {
+  areCanonicallyContradictory,
+  isDoubleNegation
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../propositional-logic/propositional-logic-util&#x27;</span>
+<span class="hljs-keyword">import</span> { NegationIntroductionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./negation-introduction-rule-interface&#x27;</span>
+<span class="hljs-keyword">import</span> { DoubleNegationElimination } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./double-negation-elimination&#x27;</span></pre></div></div>
             
         </li>
         
@@ -441,10 +460,11 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RulesInterface = <span class="hljs-function">(<span class="hljs-params">deduction, ...steps</span>) =&gt;</span> ({
   chooseRule(rule) {
     <span class="hljs-keyword">switch</span> (rule) {
-      <span class="hljs-keyword">case</span> Rule.Premise:
+      <span class="hljs-keyword">case</span> Rule.Premise: {
         <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> PremiseRuleInterface(deduction)
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.Deduction:
+      }
+      <span class="hljs-keyword">case</span> Rule.Deduction: {
         <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">2</span>) {
           <span class="hljs-keyword">const</span> [step1Index, step2Index] = steps
           <span class="hljs-keyword">const</span> [step1, step2] = steps.map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> Deduction.getStep(deduction, i))
@@ -457,9 +477,11 @@
           }
         }
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.TautologicalImplication:
+      }
+      <span class="hljs-keyword">case</span> Rule.TautologicalImplication: {
         <span class="hljs-keyword">return</span> TautologicalImplicationRuleInterface(deduction, steps)
-      <span class="hljs-keyword">case</span> Rule.UniversalInstantiation:
+      }
+      <span class="hljs-keyword">case</span> Rule.UniversalInstantiation: {
         <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
           <span class="hljs-keyword">const</span> [step] = steps
           <span class="hljs-keyword">const</span> premise = Deduction.getStep(deduction, step).formula
@@ -469,13 +491,15 @@
           }
         }
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.UniversalGeneralization:
+      }
+      <span class="hljs-keyword">case</span> Rule.UniversalGeneralization: {
         <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
           <span class="hljs-keyword">const</span> [step] = steps
           <span class="hljs-keyword">return</span> UniversalGeneralizationRuleInterface(deduction, step)
         }
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.ExistentialInstantiation:
+      }
+      <span class="hljs-keyword">case</span> Rule.ExistentialInstantiation: {
         <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
           <span class="hljs-keyword">const</span> [step] = steps
           <span class="hljs-keyword">const</span> premise = Deduction.getStep(deduction, step).formula
@@ -485,16 +509,19 @@
           }
         }
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.ExistentialGeneralization:
+      }
+      <span class="hljs-keyword">case</span> Rule.ExistentialGeneralization: {
         <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
           <span class="hljs-keyword">const</span> [step] = steps
           <span class="hljs-keyword">return</span> ExistentialGeneralizationRuleInterface(deduction, step)
         }
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.Theorem:
+      }
+      <span class="hljs-keyword">case</span> Rule.Theorem: {
         <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> TheoremRuleInterface(deduction)
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.NegationIntroduction:
+      }
+      <span class="hljs-keyword">case</span> Rule.NegationIntroduction: {
         <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">3</span>) {
           <span class="hljs-keyword">const</span> [step1Index, step2Index, step3Index] = steps
           <span class="hljs-keyword">const</span> [step1, step2, step3] = steps.map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> Deduction.getStep(deduction, i))
@@ -513,8 +540,16 @@
           <span class="hljs-keyword">return</span> NegationIntroductionRuleInterface(deduction, step1Index, step2Index, step3Index)
         }
         <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.DoubleNegationElimination:
+      }
+      <span class="hljs-keyword">case</span> Rule.DoubleNegationElimination: {
+        <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
+          <span class="hljs-keyword">const</span> [stepIndex] = steps
+          <span class="hljs-keyword">const</span> { formula } = Deduction.getStep(deduction, stepIndex)
+
+          <span class="hljs-keyword">if</span> (isDoubleNegation(formula)) <span class="hljs-keyword">return</span> DoubleNegationElimination(deduction, stepIndex)
+        }
         <span class="hljs-keyword">break</span>
+      }
       <span class="hljs-keyword">case</span> Rule.WeakNegationElimination:
         <span class="hljs-keyword">break</span>
       <span class="hljs-keyword">case</span> Rule.ConditionalElimination:

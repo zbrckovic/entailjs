@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>tautological-implication.test.js</title>
+  <title>double-negation-elimination.test.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="../../docco.css" />
@@ -408,7 +408,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>tautological-implication.test.js</h1>
+                  <h1>double-negation-elimination.test.js</h1>
               </div>
           </li>
         
@@ -423,11 +423,11 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Deduction, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
-<span class="hljs-keyword">import</span> { RegularRuleApplicationSummary, Step } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/step&#x27;</span>
-<span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../parsers/formula-parser&#x27;</span>
-<span class="hljs-keyword">import</span> { primitivePresentations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../presentation/sym-presentation&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../parsers/formula-parser&#x27;</span>
 <span class="hljs-keyword">import</span> { primitiveSyms } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
+<span class="hljs-keyword">import</span> { primitivePresentations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../presentation/sym-presentation&#x27;</span>
+<span class="hljs-keyword">import</span> { Deduction, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
+<span class="hljs-keyword">import</span> { RegularRuleApplicationSummary, Step } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/step&#x27;</span>
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 
 <span class="hljs-keyword">let</span> parser
@@ -438,7 +438,7 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
   })
 })
 
-test(<span class="hljs-string">&#x27;tautological implication&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;double negation&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;~~p&#x27;</span>)
   <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;p&#x27;</span>)
 
@@ -453,8 +453,8 @@ test(<span class="hljs-string">&#x27;tautological implication&#x27;</span>, <spa
 
   <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
     .selectSteps(<span class="hljs-number">1</span>)
-    .chooseRule(Rule.TautologicalImplication)
-    .apply(formula1)
+    .chooseRule(Rule.DoubleNegationElimination)
+    .apply()
     .deduction
 
   <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
@@ -463,7 +463,7 @@ test(<span class="hljs-string">&#x27;tautological implication&#x27;</span>, <spa
     <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
     <span class="hljs-attr">formula</span>: formula1,
     <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
-      <span class="hljs-attr">rule</span>: Rule.TautologicalImplication,
+      <span class="hljs-attr">rule</span>: Rule.DoubleNegationElimination,
       <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>]
     })
   })

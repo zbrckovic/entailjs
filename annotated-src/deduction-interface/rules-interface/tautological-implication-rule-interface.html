@@ -90,6 +90,11 @@
                 </a>
               
                 
+                <a class="source" href="double-negation-elimination.html">
+                  deduction-interface/rules-interface/double-negation-elimination.js
+                </a>
+              
+                
                 <a class="source" href="index.html">
                   deduction-interface/rules-interface/index.js
                 </a>
@@ -130,6 +135,11 @@
                 </a>
               
                 
+                <a class="source" href="../tests/double-negation-elimination.test.html">
+                  deduction-interface/tests/double-negation-elimination.test.js
+                </a>
+              
+                
                 <a class="source" href="../tests/existential-generalization.test.html">
                   deduction-interface/tests/existential-generalization.test.js
                 </a>
@@ -137,6 +147,11 @@
                 
                 <a class="source" href="../tests/existential-instantiation.test.html">
                   deduction-interface/tests/existential-instantiation.test.js
+                </a>
+              
+                
+                <a class="source" href="../tests/negation-introduction.test.html">
+                  deduction-interface/tests/negation-introduction.test.js
                 </a>
               
                 
@@ -411,7 +426,7 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { RegularRuleApplicationSpec } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/rule-application-spec&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
 <span class="hljs-keyword">import</span> { isLogicalConsequence } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../propositional-logic/propositional-logic&#x27;</span>
-<span class="hljs-keyword">import</span> { Deduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
+<span class="hljs-keyword">import</span> { Deduction, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TautologicalImplicationRuleInterface = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndexes = []</span>) =&gt;</span> {
@@ -426,10 +441,12 @@
       )
     }
 
-    <span class="hljs-keyword">const</span> ruleApplicationSpec = RegularRuleApplicationSpec.tautologicalImplication(
-      stepIndexes,
-      formula
-    )
+    <span class="hljs-keyword">const</span> ruleApplicationSpec = RegularRuleApplicationSpec({
+      <span class="hljs-attr">rule</span>: Rule.TautologicalImplication,
+      <span class="hljs-attr">premises</span>: stepIndexes,
+      <span class="hljs-attr">conclusion</span>: formula
+    })
+
     <span class="hljs-keyword">const</span> newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
 
     <span class="hljs-keyword">return</span> startDeduction(newDeduction)

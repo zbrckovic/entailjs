@@ -90,6 +90,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-interface/rules-interface/double-negation-elimination.html">
+                  deduction-interface/rules-interface/double-negation-elimination.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-interface/rules-interface/index.html">
                   deduction-interface/rules-interface/index.js
                 </a>
@@ -130,6 +135,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-interface/tests/double-negation-elimination.test.html">
+                  deduction-interface/tests/double-negation-elimination.test.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-interface/tests/existential-generalization.test.html">
                   deduction-interface/tests/existential-generalization.test.js
                 </a>
@@ -137,6 +147,11 @@
                 
                 <a class="source" href="../../deduction-interface/tests/existential-instantiation.test.html">
                   deduction-interface/tests/existential-instantiation.test.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/tests/negation-introduction.test.html">
+                  deduction-interface/tests/negation-introduction.test.js
                 </a>
               
                 
@@ -408,14 +423,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
-<span class="hljs-keyword">import</span> {
-  existentialQuantifier,
-  conditional,
-  universalQuantifier,
-  negation
-} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
-<span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../rule&#x27;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../rule&#x27;</span></pre></div></div>
             
         </li>
         
@@ -438,8 +446,6 @@ of the premise rule or theorem rule).</li>
 <p>All regular rules (excluding theorem) are reduced to this object. It contains all data
 necessary to construct the next step of the target deduction. This object can be considered
 as a sort of common denominator of all regular rules.</p>
-<p>Note: these functions don’t validate data. Data validation is performed at the earlier step where
-these functions are called. Here we assume that functions are passed valid arguments.</p>
 
             </div>
             
@@ -505,128 +511,7 @@ these functions are called. Here we assume that functions are passed valid argum
             </div>
             
             <div class="content"><div class='highlight'><pre>  assumptionToRemove
-}) =&gt; ({ rule, premises, conclusion, termDependencies, assumptionToRemove })
-
-RegularRuleApplicationSpec.premise = <span class="hljs-function"><span class="hljs-params">premise</span> =&gt;</span> RegularRuleApplicationSpec({
-  <span class="hljs-attr">rule</span>: Rule.Premise,
-  <span class="hljs-attr">conclusion</span>: premise
-})
-
-RegularRuleApplicationSpec.deduction = <span class="hljs-function">(<span class="hljs-params">
-  antecedent, antecedentIndex, consequent, consequentIndex
-</span>) =&gt;</span>
-  RegularRuleApplicationSpec({
-    <span class="hljs-attr">rule</span>: Rule.Deduction,
-    <span class="hljs-attr">premises</span>: [antecedentIndex, consequentIndex],
-    <span class="hljs-attr">conclusion</span>: Expression({
-      <span class="hljs-attr">sym</span>: conditional,
-      <span class="hljs-attr">children</span>: [antecedent, consequent]
-    }),
-    <span class="hljs-attr">assumptionToRemove</span>: antecedentIndex
-  })
-
-RegularRuleApplicationSpec.tautologicalImplication = <span class="hljs-function">(<span class="hljs-params">premises, conclusion</span>) =&gt;</span>
-  RegularRuleApplicationSpec({ <span class="hljs-attr">rule</span>: Rule.TautologicalImplication, premises, conclusion })
-
-RegularRuleApplicationSpec.universalInstantiation = <span class="hljs-function">(<span class="hljs-params">
-  { boundSym, children }, premiseIndex, newTerm
-</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> [child] = children
-
-  <span class="hljs-keyword">const</span> conclusion = newTerm !== <span class="hljs-literal">undefined</span>
-    ? Expression.replaceFreeOccurrences(child, boundSym, newTerm)
-    : child
-
-  <span class="hljs-keyword">return</span> RegularRuleApplicationSpec({
-    <span class="hljs-attr">rule</span>: Rule.UniversalInstantiation,
-    <span class="hljs-attr">premises</span>: [premiseIndex],
-    conclusion
-  })
-}
-
-RegularRuleApplicationSpec.universalGeneralization = <span class="hljs-function">(<span class="hljs-params">premise, premiseIndex, newTerm, oldTerm</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> child = oldTerm !== <span class="hljs-literal">undefined</span>
-    ? Expression.replaceFreeOccurrences(premise, oldTerm, newTerm)
-    : premise
-
-  <span class="hljs-keyword">let</span> termDependencies
-  <span class="hljs-keyword">if</span> (oldTerm !== <span class="hljs-literal">undefined</span>) {
-    <span class="hljs-keyword">const</span> freeTerms = { ...Expression.getFreeTerms(premise) }
-    <span class="hljs-keyword">delete</span> freeTerms[oldTerm.id]
-
-    <span class="hljs-keyword">const</span> freeTermIds = <span class="hljs-built_in">Object</span>.keys(freeTerms).map(<span class="hljs-function"><span class="hljs-params">id</span> =&gt;</span> <span class="hljs-built_in">parseInt</span>(id, <span class="hljs-number">10</span>))
-
-    termDependencies = { <span class="hljs-attr">dependent</span>: oldTerm.id, <span class="hljs-attr">dependencies</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(freeTermIds) }
-  }
-
-  <span class="hljs-keyword">return</span> RegularRuleApplicationSpec({
-    <span class="hljs-attr">rule</span>: Rule.UniversalGeneralization,
-    <span class="hljs-attr">premises</span>: [premiseIndex],
-    <span class="hljs-attr">conclusion</span>: Expression({
-      <span class="hljs-attr">sym</span>: universalQuantifier,
-      <span class="hljs-attr">boundSym</span>: newTerm,
-      <span class="hljs-attr">children</span>: [child]
-    }),
-    termDependencies
-  })
-}
-
-RegularRuleApplicationSpec.existentialInstantiation = <span class="hljs-function">(<span class="hljs-params">premise, premiseIndex, newTerm</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> [child] = premise.children
-  <span class="hljs-keyword">const</span> conclusion = newTerm !== <span class="hljs-literal">undefined</span>
-    ? Expression.replaceFreeOccurrences(child, premise.boundSym, newTerm)
-    : child
-
-  <span class="hljs-keyword">let</span> termDependencies
-  <span class="hljs-keyword">if</span> (newTerm !== <span class="hljs-literal">undefined</span>) {
-    <span class="hljs-keyword">const</span> freeTerms = { ...Expression.getFreeTerms(conclusion) }
-    <span class="hljs-keyword">delete</span> freeTerms[newTerm.id]
-
-    <span class="hljs-keyword">const</span> freeTermIds = <span class="hljs-built_in">Object</span>.keys(freeTerms).map(<span class="hljs-function"><span class="hljs-params">id</span> =&gt;</span> <span class="hljs-built_in">parseInt</span>(id, <span class="hljs-number">10</span>))
-
-    termDependencies = { <span class="hljs-attr">dependent</span>: newTerm.id, <span class="hljs-attr">dependencies</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(freeTermIds) }
-  }
-
-  <span class="hljs-keyword">return</span> RegularRuleApplicationSpec({
-    <span class="hljs-attr">rule</span>: Rule.ExistentialInstantiation,
-    <span class="hljs-attr">premises</span>: [premiseIndex],
-    conclusion,
-    termDependencies
-  })
-}
-
-RegularRuleApplicationSpec.existentialGeneralization = <span class="hljs-function">(<span class="hljs-params">
-  premise, premiseIndex, newTerm, oldTerm
-</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> child = oldTerm !== <span class="hljs-literal">undefined</span>
-    ? Expression.replaceFreeOccurrences(premise, oldTerm, newTerm)
-    : premise
-
-  <span class="hljs-keyword">return</span> RegularRuleApplicationSpec({
-    <span class="hljs-attr">rule</span>: Rule.ExistentialGeneralization,
-    <span class="hljs-attr">premises</span>: [premiseIndex],
-    <span class="hljs-attr">conclusion</span>: Expression({
-      <span class="hljs-attr">sym</span>: existentialQuantifier,
-      <span class="hljs-attr">boundSym</span>: newTerm,
-      <span class="hljs-attr">children</span>: [child]
-    })
-  })
-}
-
-RegularRuleApplicationSpec.negationIntroduction = <span class="hljs-function">(<span class="hljs-params">
-  antecedent, antecedentIndex,
-  consequent1, consequent1Index,
-  consequent2, consequent2Index
-</span>) =&gt;</span>
-  RegularRuleApplicationSpec({
-    <span class="hljs-attr">rule</span>: Rule.NegationIntroduction,
-    <span class="hljs-attr">premises</span>: [antecedentIndex, consequent1Index, consequent2Index],
-    <span class="hljs-attr">conclusion</span>: Expression({
-      <span class="hljs-attr">sym</span>: negation,
-      <span class="hljs-attr">children</span>: [antecedent]
-    }),
-    <span class="hljs-attr">assumptionToRemove</span>: antecedentIndex
-  })</pre></div></div>
+}) =&gt; ({ rule, premises, conclusion, termDependencies, assumptionToRemove })</pre></div></div>
             
         </li>
         

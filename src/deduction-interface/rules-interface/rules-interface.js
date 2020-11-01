@@ -17,8 +17,8 @@ import {
   isDoubleNegation
 } from '../../propositional-logic/propositional-logic-util'
 import { NegationIntroductionRuleInterface } from './negation-introduction-rule-interface'
-import { DoubleNegationElimination } from './double-negation-elimination'
-import { WeakNegationElimination } from './weak-negation-elimination'
+import { DoubleNegationEliminationRuleInterface } from './double-negation-elimination-rule-interface'
+import { WeakNegationEliminationRuleInterface } from './weak-negation-elimination-rule-interface'
 
 // Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
 export const RulesInterface = (deduction, ...steps) => ({
@@ -110,7 +110,9 @@ export const RulesInterface = (deduction, ...steps) => ({
           const [stepIndex] = steps
           const { formula } = Deduction.getStep(deduction, stepIndex)
 
-          if (isDoubleNegation(formula)) return DoubleNegationElimination(deduction, stepIndex)
+          if (isDoubleNegation(formula)) {
+            return DoubleNegationEliminationRuleInterface(deduction, stepIndex)
+          }
         }
         break
       }
@@ -120,7 +122,7 @@ export const RulesInterface = (deduction, ...steps) => ({
           const [step1, step2] = steps.map(i => Deduction.getStep(deduction, i))
 
           if (areCanonicallyContradictory(step1.formula, step2.formula)) {
-            return WeakNegationElimination(deduction, step1Index, step2Index)
+            return WeakNegationEliminationRuleInterface(deduction, step1Index, step2Index)
           }
         }
         break

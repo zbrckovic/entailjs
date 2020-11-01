@@ -2,7 +2,7 @@ import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-appli
 import { Deduction, Rule } from '../../deduction-structure'
 import { startDeduction } from '../deduction-interface'
 
-export const DoubleNegationElimination = (deduction, stepIndex) => {
+export const DoubleNegationEliminationRuleInterface = (deduction, stepIndex) => {
   const apply = () => {
     const { formula } = Deduction.getStep(deduction, stepIndex)
 

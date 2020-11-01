@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>tautological-implication-rule-interface.js</title>
+  <title>conditional-elimination-rule-interface.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="../../docco.css" />
@@ -428,7 +428,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>tautological-implication-rule-interface.js</h1>
+                  <h1>conditional-elimination-rule-interface.js</h1>
               </div>
           </li>
         
@@ -444,35 +444,29 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { RegularRuleApplicationSpec } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/rule-application-spec&#x27;</span>
-<span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
-<span class="hljs-keyword">import</span> { isLogicalConsequence } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../propositional-logic/propositional-logic&#x27;</span>
 <span class="hljs-keyword">import</span> { Deduction, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TautologicalImplicationRuleInterface = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndexes = []</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> apply = <span class="hljs-function"><span class="hljs-params">formula</span> =&gt;</span> {
-    <span class="hljs-keyword">const</span> assumptions = stepIndexes.map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> Deduction.getStep(deduction, i).formula)
-
-    <span class="hljs-keyword">if</span> (!isLogicalConsequence(assumptions, formula)) {
-      <span class="hljs-keyword">throw</span> createError(
-        ErrorName.INVALID_TAUTOLOGICAL_IMPLICATION,
-        <span class="hljs-literal">undefined</span>,
-        { assumptions, formula }
-      )
-    }
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ConditionalEliminationRuleInterface = <span class="hljs-function">(<span class="hljs-params">
+  deduction,
+  conditionalStepIndex,
+  antecedentStepIndex
+</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> apply = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> conditional = Deduction.getStep(deduction, conditionalStepIndex).formula
+    <span class="hljs-keyword">const</span> [, consequent] = conditional.children
 
     <span class="hljs-keyword">const</span> ruleApplicationSpec = RegularRuleApplicationSpec({
-      <span class="hljs-attr">rule</span>: Rule.TautologicalImplication,
-      <span class="hljs-attr">premises</span>: stepIndexes,
-      <span class="hljs-attr">conclusion</span>: formula
+      <span class="hljs-attr">rule</span>: Rule.ConditionalElimination,
+      <span class="hljs-attr">premises</span>: [conditionalStepIndex, antecedentStepIndex],
+      <span class="hljs-attr">conclusion</span>: consequent
     })
-
     <span class="hljs-keyword">const</span> newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
 
     <span class="hljs-keyword">return</span> startDeduction(newDeduction)
   }
 
-  <span class="hljs-keyword">return</span> ({ apply })
+  <span class="hljs-keyword">return</span> { apply }
 }</pre></div></div>
             
         </li>

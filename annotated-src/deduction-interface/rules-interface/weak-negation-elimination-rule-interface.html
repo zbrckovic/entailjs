@@ -85,6 +85,11 @@
                 </a>
               
                 
+                <a class="source" href="conditional-elimination-rule-interface.html">
+                  deduction-interface/rules-interface/conditional-elimination-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="deduction-rule-interface.html">
                   deduction-interface/rules-interface/deduction-rule-interface.js
                 </a>
@@ -132,6 +137,11 @@
                 
                 <a class="source" href="weak-negation-elimination-rule-interface.html">
                   deduction-interface/rules-interface/weak-negation-elimination-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../tests/conditional-elimination.test.html">
+                  deduction-interface/tests/conditional-elimination.test.js
                 </a>
               
                 
@@ -437,11 +447,15 @@
 <span class="hljs-keyword">import</span> { RegularRuleApplicationSpec } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/rule-application-spec&#x27;</span>
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> WeakNegationEliminationRuleInterface = <span class="hljs-function">(<span class="hljs-params">deduction, step1Index, step2Index</span>) =&gt;</span> {
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> WeakNegationEliminationRuleInterface = <span class="hljs-function">(<span class="hljs-params">
+  deduction,
+  affirmativeStepIndex,
+  negativeStepIndex
+</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> apply = <span class="hljs-function"><span class="hljs-params">formula</span> =&gt;</span> {
     <span class="hljs-keyword">const</span> ruleApplicationSpec = RegularRuleApplicationSpec({
       <span class="hljs-attr">rule</span>: Rule.WeakNegationElimination,
-      <span class="hljs-attr">premises</span>: [step1Index, step2Index],
+      <span class="hljs-attr">premises</span>: [affirmativeStepIndex, negativeStepIndex],
       <span class="hljs-attr">conclusion</span>: formula
     })
     <span class="hljs-keyword">const</span> newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)

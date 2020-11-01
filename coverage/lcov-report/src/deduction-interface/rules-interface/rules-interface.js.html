@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.83% </span>
+                <span class="strong">72.41% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>53/77</span>
+                <span class='fraction'>63/87</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.72% </span>
+                <span class="strong">56.06% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>30/58</span>
+                <span class='fraction'>37/66</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.64% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>48/67</span>
+                <span class='fraction'>57/76</span>
             </div>
         
             
@@ -204,7 +204,24 @@
 <a name='L145'></a><a href='#L145'>145</a>
 <a name='L146'></a><a href='#L146'>146</a>
 <a name='L147'></a><a href='#L147'>147</a>
-<a name='L148'></a><a href='#L148'>148</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -227,9 +244,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">98x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">98x</span>
+<span class="cline-any cline-yes">100x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">100x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -328,10 +346,26 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -366,12 +400,13 @@ import { Sym } from '../../abstract-structures'
 import { createError, ErrorName } from '../../error'
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
 import {
-  areCanonicallyContradictory,
-  isDoubleNegation
+  areCanonicallyContradictory, isConditionalFrom,
+  isDoubleNegation, isNegationOf
 } from '../../propositional-logic/propositional-logic-util'
 import { NegationIntroductionRuleInterface } from './negation-introduction-rule-interface'
 import { DoubleNegationEliminationRuleInterface } from './double-negation-elimination-rule-interface'
 import { WeakNegationEliminationRuleInterface } from './weak-negation-elimination-rule-interface'
+import { ConditionalEliminationRuleInterface } from './conditional-elimination-rule-interface'
 &nbsp;
 // Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
 export const RulesInterface = (deduction, ...steps) =&gt; ({
@@ -474,12 +509,28 @@ export const RulesInterface = (deduction, ...steps) =&gt; ({
           const [step1Index, step2Index] = steps
           const [step1, step2] = steps.map(i =&gt; Deduction.getStep(deduction, i))
 &nbsp;
-          <span class="missing-if-branch" title="else path not taken" >E</span>if (areCanonicallyContradictory(step1.formula, step2.formula)) {
+          if (isNegationOf(step1.formula, step2.formula)) {
+            return WeakNegationEliminationRuleInterface(deduction, step2Index, step1Index)
+          }
+&nbsp;
+          <span class="missing-if-branch" title="else path not taken" >E</span>if (isNegationOf(step2.formula, step1.formula)) {
             return WeakNegationEliminationRuleInterface(deduction, step1Index, step2Index)
           }
         }
 <span class="cstat-no" title="statement not covered" >        break</span>
-<span class="branch-11 cbranch-no" title="branch not covered" >      case Rule.ConditionalElimination:</span>
+      case Rule.ConditionalElimination:
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (steps.length === 2) {
+          const [premise1Index, premise2Index] = steps
+          const [premise1, premise2] = steps.map(i =&gt; Deduction.getStep(deduction, i).formula)
+&nbsp;
+          if (isConditionalFrom(premise1, premise2)) {
+            return ConditionalEliminationRuleInterface(deduction, premise1Index, premise2Index)
+          }
+&nbsp;
+          <span class="missing-if-branch" title="else path not taken" >E</span>if (isConditionalFrom(premise2, premise1)) {
+            return ConditionalEliminationRuleInterface(deduction, premise2Index, premise1Index)
+          }
+        }
 <span class="cstat-no" title="statement not covered" >        break</span>
 <span class="branch-12 cbranch-no" title="branch not covered" >      case Rule.ConjunctionIntroduction:</span>
 <span class="cstat-no" title="statement not covered" >        break</span>
@@ -505,7 +556,7 @@ export const RulesInterface = (deduction, ...steps) =&gt; ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Nov 01 2020 17:48:49 GMT+0000 (Coordinated Universal Time)
+                at Sun Nov 01 2020 23:08:09 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

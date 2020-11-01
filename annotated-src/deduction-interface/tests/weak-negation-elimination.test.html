@@ -85,6 +85,11 @@
                 </a>
               
                 
+                <a class="source" href="../rules-interface/conditional-elimination-rule-interface.html">
+                  deduction-interface/rules-interface/conditional-elimination-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="../rules-interface/deduction-rule-interface.html">
                   deduction-interface/rules-interface/deduction-rule-interface.js
                 </a>
@@ -132,6 +137,11 @@
                 
                 <a class="source" href="../rules-interface/weak-negation-elimination-rule-interface.html">
                   deduction-interface/rules-interface/weak-negation-elimination-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="conditional-elimination.test.html">
+                  deduction-interface/tests/conditional-elimination.test.js
                 </a>
               
                 
@@ -449,21 +459,21 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
 })
 
 test.each([
-  [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>],
-  [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]
-])(<span class="hljs-string">&#x27;weak negation elimination&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formula0Text, formula1Text</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(formula0Text)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(formula1Text)
-  <span class="hljs-keyword">const</span> formula2 = parser.parse(<span class="hljs-string">&#x27;q&#x27;</span>)
+  [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
+  [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]]
+])(<span class="hljs-string">&#x27;weak negation elimination&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">premise1Text, premise2Text, premises</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> premise1 = parser.parse(premise1Text)
+  <span class="hljs-keyword">const</span> premise2 = parser.parse(premise2Text)
+  <span class="hljs-keyword">const</span> conclusion = parser.parse(<span class="hljs-string">&#x27;q&#x27;</span>)
 
   <span class="hljs-keyword">const</span> deduction = Deduction({
     <span class="hljs-attr">steps</span>: [
       Step({
-        <span class="hljs-attr">formula</span>: formula0,
+        <span class="hljs-attr">formula</span>: premise1,
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
       }),
       Step({
-        <span class="hljs-attr">formula</span>: formula1,
+        <span class="hljs-attr">formula</span>: premise2,
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
       })
     ]
@@ -472,17 +482,17 @@ test.each([
   <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
     .selectSteps(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
     .chooseRule(Rule.WeakNegationElimination)
-    .apply(formula2)
+    .apply(conclusion)
     .deduction
 
   <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
 
   <span class="hljs-keyword">const</span> expected = Step({
     <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]),
-    <span class="hljs-attr">formula</span>: formula2,
+    <span class="hljs-attr">formula</span>: conclusion,
     <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
       <span class="hljs-attr">rule</span>: Rule.WeakNegationElimination,
-      <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]
+      premises
     })
   })
 

@@ -154,3 +154,10 @@ RegularRuleApplicationSpec.negationIntroduction = (
     }),
     assumptionToRemove: antecedentIndex
   })
+
+RegularRuleApplicationSpec.doubleNegationElimination = (premise, conclusion) =>
+  RegularRuleApplicationSpec({
+    rule: Rule.DoubleNegationElimination,
+    premises: [premise],
+    conclusion
+  })

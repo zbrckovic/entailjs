@@ -6,6 +6,7 @@ export const PremiseRuleInterface = deduction => {
   const apply = formula => {
     const ruleApplicationSpec = RegularRuleApplicationSpec.premise(formula)
     const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+
     return startDeduction(newDeduction)
   }
 

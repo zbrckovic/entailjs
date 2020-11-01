@@ -12,17 +12,22 @@ import { TheoremRuleInterface } from './theorem-rule-interface'
 import { Sym } from '../../abstract-structures'
 import { createError, ErrorName } from '../../error'
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
-import { areCanonicallyContradictory } from '../../propositional-logic/propositional-logic-util'
+import {
+  areCanonicallyContradictory,
+  isDoubleNegation
+} from '../../propositional-logic/propositional-logic-util'
 import { NegationIntroductionRuleInterface } from './negation-introduction-rule-interface'
+import { DoubleNegationElimination } from './double-negation-elimination'
 
 // Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
 export const RulesInterface = (deduction, ...steps) => ({
   chooseRule(rule) {
     switch (rule) {
-      case Rule.Premise:
+      case Rule.Premise: {
         if (steps.length === 0) return PremiseRuleInterface(deduction)
         break
-      case Rule.Deduction:
+      }
+      case Rule.Deduction: {
         if (steps.length === 2) {
           const [step1Index, step2Index] = steps
           const [step1, step2] = steps.map(i => Deduction.getStep(deduction, i))
@@ -35,9 +40,11 @@ export const RulesInterface = (deduction, ...steps) => ({
           }
         }
         break
-      case Rule.TautologicalImplication:
+      }
+      case Rule.TautologicalImplication: {
         return TautologicalImplicationRuleInterface(deduction, steps)
-      case Rule.UniversalInstantiation:
+      }
+      case Rule.UniversalInstantiation: {
         if (steps.length === 1) {
           const [step] = steps
           const premise = Deduction.getStep(deduction, step).formula
@@ -47,13 +54,15 @@ export const RulesInterface = (deduction, ...steps) => ({
           }
         }
         break
-      case Rule.UniversalGeneralization:
+      }
+      case Rule.UniversalGeneralization: {
         if (steps.length === 1) {
           const [step] = steps
           return UniversalGeneralizationRuleInterface(deduction, step)
         }
         break
-      case Rule.ExistentialInstantiation:
+      }
+      case Rule.ExistentialInstantiation: {
         if (steps.length === 1) {
           const [step] = steps
           const premise = Deduction.getStep(deduction, step).formula
@@ -63,16 +72,19 @@ export const RulesInterface = (deduction, ...steps) => ({
           }
         }
         break
-      case Rule.ExistentialGeneralization:
+      }
+      case Rule.ExistentialGeneralization: {
         if (steps.length === 1) {
           const [step] = steps
           return ExistentialGeneralizationRuleInterface(deduction, step)
         }
         break
-      case Rule.Theorem:
+      }
+      case Rule.Theorem: {
         if (steps.length === 0) return TheoremRuleInterface(deduction)
         break
-      case Rule.NegationIntroduction:
+      }
+      case Rule.NegationIntroduction: {
         if (steps.length === 3) {
           const [step1Index, step2Index, step3Index] = steps
           const [step1, step2, step3] = steps.map(i => Deduction.getStep(deduction, i))
@@ -91,8 +103,16 @@ export const RulesInterface = (deduction, ...steps) => ({
           return NegationIntroductionRuleInterface(deduction, step1Index, step2Index, step3Index)
         }
         break
-      case Rule.DoubleNegationElimination:
+      }
+      case Rule.DoubleNegationElimination: {
+        if (steps.length === 1) {
+          const [stepIndex] = steps
+          const { formula } = Deduction.getStep(deduction, stepIndex)
+
+          if (isDoubleNegation(formula)) return DoubleNegationElimination(deduction, stepIndex)
+        }
         break
+      }
       case Rule.WeakNegationElimination:
         break
       case Rule.ConditionalElimination:

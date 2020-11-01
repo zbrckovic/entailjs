@@ -13,12 +13,13 @@ import { Sym } from '../../abstract-structures'
 import { createError, ErrorName } from '../../error'
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
 import {
-  areCanonicallyContradictory,
-  isDoubleNegation
+  areCanonicallyContradictory, isConditionalFrom,
+  isDoubleNegation, isNegationOf
 } from '../../propositional-logic/propositional-logic-util'
 import { NegationIntroductionRuleInterface } from './negation-introduction-rule-interface'
 import { DoubleNegationEliminationRuleInterface } from './double-negation-elimination-rule-interface'
 import { WeakNegationEliminationRuleInterface } from './weak-negation-elimination-rule-interface'
+import { ConditionalEliminationRuleInterface } from './conditional-elimination-rule-interface'
 
 // Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
 export const RulesInterface = (deduction, ...steps) => ({
@@ -121,12 +122,28 @@ export const RulesInterface = (deduction, ...steps) => ({
           const [step1Index, step2Index] = steps
           const [step1, step2] = steps.map(i => Deduction.getStep(deduction, i))
 
-          if (areCanonicallyContradictory(step1.formula, step2.formula)) {
+          if (isNegationOf(step1.formula, step2.formula)) {
+            return WeakNegationEliminationRuleInterface(deduction, step2Index, step1Index)
+          }
+
+          if (isNegationOf(step2.formula, step1.formula)) {
             return WeakNegationEliminationRuleInterface(deduction, step1Index, step2Index)
           }
         }
         break
       case Rule.ConditionalElimination:
+        if (steps.length === 2) {
+          const [premise1Index, premise2Index] = steps
+          const [premise1, premise2] = steps.map(i => Deduction.getStep(deduction, i).formula)
+
+          if (isConditionalFrom(premise1, premise2)) {
+            return ConditionalEliminationRuleInterface(deduction, premise1Index, premise2Index)
+          }
+
+          if (isConditionalFrom(premise2, premise1)) {
+            return ConditionalEliminationRuleInterface(deduction, premise2Index, premise1Index)
+          }
+        }
         break
       case Rule.ConjunctionIntroduction:
         break

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.2% </span>
+                <span class="strong">68.83% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>47/71</span>
+                <span class='fraction'>53/77</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">51.72% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>27/54</span>
+                <span class='fraction'>30/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.85% </span>
+                <span class="strong">71.64% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>42/61</span>
+                <span class='fraction'>48/67</span>
             </div>
         
             
@@ -193,7 +193,18 @@
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
 <a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -215,9 +226,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">96x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">96x</span>
+<span class="cline-any cline-yes">98x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">98x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -305,8 +317,18 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -348,7 +370,8 @@ import {
   isDoubleNegation
 } from '../../propositional-logic/propositional-logic-util'
 import { NegationIntroductionRuleInterface } from './negation-introduction-rule-interface'
-import { DoubleNegationElimination } from './double-negation-elimination'
+import { DoubleNegationEliminationRuleInterface } from './double-negation-elimination-rule-interface'
+import { WeakNegationEliminationRuleInterface } from './weak-negation-elimination-rule-interface'
 &nbsp;
 // Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
 export const RulesInterface = (deduction, ...steps) =&gt; ({
@@ -440,11 +463,21 @@ export const RulesInterface = (deduction, ...steps) =&gt; ({
           const [stepIndex] = steps
           const { formula } = Deduction.getStep(deduction, stepIndex)
 &nbsp;
-          <span class="missing-if-branch" title="else path not taken" >E</span>if (isDoubleNegation(formula)) return DoubleNegationElimination(deduction, stepIndex)
+          <span class="missing-if-branch" title="else path not taken" >E</span>if (isDoubleNegation(formula)) {
+            return DoubleNegationEliminationRuleInterface(deduction, stepIndex)
+          }
         }
 <span class="cstat-no" title="statement not covered" >        break</span>
       }
-<span class="branch-10 cbranch-no" title="branch not covered" >      case Rule.WeakNegationElimination:</span>
+      case Rule.WeakNegationElimination:
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (steps.length === 2) {
+          const [step1Index, step2Index] = steps
+          const [step1, step2] = steps.map(i =&gt; Deduction.getStep(deduction, i))
+&nbsp;
+          <span class="missing-if-branch" title="else path not taken" >E</span>if (areCanonicallyContradictory(step1.formula, step2.formula)) {
+            return WeakNegationEliminationRuleInterface(deduction, step1Index, step2Index)
+          }
+        }
 <span class="cstat-no" title="statement not covered" >        break</span>
 <span class="branch-11 cbranch-no" title="branch not covered" >      case Rule.ConditionalElimination:</span>
 <span class="cstat-no" title="statement not covered" >        break</span>
@@ -472,7 +505,7 @@ export const RulesInterface = (deduction, ...steps) =&gt; ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Nov 01 2020 17:33:24 GMT+0000 (Coordinated Universal Time)
+                at Sun Nov 01 2020 17:48:49 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

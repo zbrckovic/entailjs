@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>double-negation-elimination.js</title>
+  <title>weak-negation-elimination.test.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="../../docco.css" />
@@ -85,93 +85,103 @@
                 </a>
               
                 
-                <a class="source" href="deduction-rule-interface.html">
+                <a class="source" href="../rules-interface/deduction-rule-interface.html">
                   deduction-interface/rules-interface/deduction-rule-interface.js
                 </a>
               
                 
-                <a class="source" href="double-negation-elimination.html">
-                  deduction-interface/rules-interface/double-negation-elimination.js
+                <a class="source" href="../rules-interface/double-negation-elimination-rule-interface.html">
+                  deduction-interface/rules-interface/double-negation-elimination-rule-interface.js
                 </a>
               
                 
-                <a class="source" href="index.html">
+                <a class="source" href="../rules-interface/index.html">
                   deduction-interface/rules-interface/index.js
                 </a>
               
                 
-                <a class="source" href="negation-introduction-rule-interface.html">
+                <a class="source" href="../rules-interface/negation-introduction-rule-interface.html">
                   deduction-interface/rules-interface/negation-introduction-rule-interface.js
                 </a>
               
                 
-                <a class="source" href="premise-rule-interface.html">
+                <a class="source" href="../rules-interface/premise-rule-interface.html">
                   deduction-interface/rules-interface/premise-rule-interface.js
                 </a>
               
                 
-                <a class="source" href="quantification.html">
+                <a class="source" href="../rules-interface/quantification.html">
                   deduction-interface/rules-interface/quantification.js
                 </a>
               
                 
-                <a class="source" href="rules-interface.html">
+                <a class="source" href="../rules-interface/rules-interface.html">
                   deduction-interface/rules-interface/rules-interface.js
                 </a>
               
                 
-                <a class="source" href="tautological-implication-rule-interface.html">
+                <a class="source" href="../rules-interface/tautological-implication-rule-interface.html">
                   deduction-interface/rules-interface/tautological-implication-rule-interface.js
                 </a>
               
                 
-                <a class="source" href="theorem-rule-interface.html">
+                <a class="source" href="../rules-interface/theorem-rule-interface.html">
                   deduction-interface/rules-interface/theorem-rule-interface.js
                 </a>
               
                 
-                <a class="source" href="../tests/deduction.test.html">
+                <a class="source" href="../rules-interface/weak-negation-elimination-rule-interface.html">
+                  deduction-interface/rules-interface/weak-negation-elimination-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="deduction.test.html">
                   deduction-interface/tests/deduction.test.js
                 </a>
               
                 
-                <a class="source" href="../tests/double-negation-elimination.test.html">
+                <a class="source" href="double-negation-elimination.test.html">
                   deduction-interface/tests/double-negation-elimination.test.js
                 </a>
               
                 
-                <a class="source" href="../tests/existential-generalization.test.html">
+                <a class="source" href="existential-generalization.test.html">
                   deduction-interface/tests/existential-generalization.test.js
                 </a>
               
                 
-                <a class="source" href="../tests/existential-instantiation.test.html">
+                <a class="source" href="existential-instantiation.test.html">
                   deduction-interface/tests/existential-instantiation.test.js
                 </a>
               
                 
-                <a class="source" href="../tests/negation-introduction.test.html">
+                <a class="source" href="negation-introduction.test.html">
                   deduction-interface/tests/negation-introduction.test.js
                 </a>
               
                 
-                <a class="source" href="../tests/premise.test.html">
+                <a class="source" href="premise.test.html">
                   deduction-interface/tests/premise.test.js
                 </a>
               
                 
-                <a class="source" href="../tests/tautological-implication.test.html">
+                <a class="source" href="tautological-implication.test.html">
                   deduction-interface/tests/tautological-implication.test.js
                 </a>
               
                 
-                <a class="source" href="../tests/universal-generalization.test.html">
+                <a class="source" href="universal-generalization.test.html">
                   deduction-interface/tests/universal-generalization.test.js
                 </a>
               
                 
-                <a class="source" href="../tests/universal-instantiation.test.html">
+                <a class="source" href="universal-instantiation.test.html">
                   deduction-interface/tests/universal-instantiation.test.js
+                </a>
+              
+                
+                <a class="source" href="weak-negation-elimination.test.html">
+                  deduction-interface/tests/weak-negation-elimination.test.js
                 </a>
               
                 
@@ -408,7 +418,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>double-negation-elimination.js</h1>
+                  <h1>weak-negation-elimination.test.js</h1>
               </div>
           </li>
         
@@ -423,26 +433,61 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { RegularRuleApplicationSpec } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/rule-application-spec&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../parsers/formula-parser&#x27;</span>
+<span class="hljs-keyword">import</span> { primitiveSyms } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
+<span class="hljs-keyword">import</span> { primitivePresentations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../presentation/sym-presentation&#x27;</span>
 <span class="hljs-keyword">import</span> { Deduction, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
+<span class="hljs-keyword">import</span> { RegularRuleApplicationSummary, Step } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/step&#x27;</span>
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> DoubleNegationElimination = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndex</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> apply = <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">const</span> { formula } = Deduction.getStep(deduction, stepIndex)
+<span class="hljs-keyword">let</span> parser
+beforeEach(<span class="hljs-function">() =&gt;</span> {
+  parser = <span class="hljs-keyword">new</span> FormulaParser({
+    <span class="hljs-attr">syms</span>: primitiveSyms,
+    <span class="hljs-attr">presentations</span>: primitivePresentations
+  })
+})
 
-    <span class="hljs-keyword">const</span> ruleApplicationSpec = RegularRuleApplicationSpec({
-      <span class="hljs-attr">rule</span>: Rule.DoubleNegationElimination,
-      <span class="hljs-attr">premises</span>: [stepIndex],
-      <span class="hljs-attr">conclusion</span>: formula.children[<span class="hljs-number">0</span>].children[<span class="hljs-number">0</span>]
+test.each([
+  [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>],
+  [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]
+])(<span class="hljs-string">&#x27;weak negation elimination&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formula0Text, formula1Text</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> formula0 = parser.parse(formula0Text)
+  <span class="hljs-keyword">const</span> formula1 = parser.parse(formula1Text)
+  <span class="hljs-keyword">const</span> formula2 = parser.parse(<span class="hljs-string">&#x27;q&#x27;</span>)
+
+  <span class="hljs-keyword">const</span> deduction = Deduction({
+    <span class="hljs-attr">steps</span>: [
+      Step({
+        <span class="hljs-attr">formula</span>: formula0,
+        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
+      }),
+      Step({
+        <span class="hljs-attr">formula</span>: formula1,
+        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
+      })
+    ]
+  })
+
+  <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
+    .selectSteps(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+    .chooseRule(Rule.WeakNegationElimination)
+    .apply(formula2)
+    .deduction
+
+  <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
+
+  <span class="hljs-keyword">const</span> expected = Step({
+    <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]),
+    <span class="hljs-attr">formula</span>: formula2,
+    <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+      <span class="hljs-attr">rule</span>: Rule.WeakNegationElimination,
+      <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]
     })
-    <span class="hljs-keyword">const</span> newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+  })
 
-    <span class="hljs-keyword">return</span> startDeduction(newDeduction)
-  }
-
-  <span class="hljs-keyword">return</span> ({ apply })
-}</pre></div></div>
+  expect(actual).toEqual(expected)
+})</pre></div></div>
             
         </li>
         

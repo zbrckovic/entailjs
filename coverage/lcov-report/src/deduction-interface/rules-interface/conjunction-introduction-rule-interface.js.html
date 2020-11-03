@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/primitive-syms.js</title>
+    <title>Code coverage report for src/deduction-interface/rules-interface/conjunction-introduction-rule-interface.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../prettify.css" />
-    <link rel="stylesheet" href="../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">src</a> primitive-syms.js</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/deduction-interface/rules-interface</a> conjunction-introduction-rule-interface.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -76,43 +76,64 @@
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24x</span>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Sym } from './abstract-structures'
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Expression } from '../../abstract-structures'
+import { Deduction, Rule } from '../../deduction-structure'
+import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
+import { conjunction } from '../../primitive-syms'
+import { startDeduction } from '../deduction-interface'
 &nbsp;
-export const negation = Sym.ff({ id: 0, arity: 1 })
-export const conjunction = Sym.ff({ id: 1, arity: 2 })
-export const disjunction = Sym.ff({ id: 2, arity: 2 })
-export const conditional = Sym.ff({ id: 3, arity: 2 })
-export const equivalence = Sym.ff({ id: 4, arity: 2 })
-export const universalQuantifier = Sym.ff({ id: 5, arity: 1, binds: true })
-export const existentialQuantifier = Sym.ff({ id: 6, arity: 1, binds: true })
+export const ConjunctionIntroductionRuleInterface = (deduction, premise1Index, premise2Index) =&gt; {
+  const apply = () =&gt; {
+    const ruleApplicationSpec = RegularRuleApplicationSpec({
+      rule: Rule.ConjunctionIntroduction,
+      premises: [premise1Index, premise2Index],
+      conclusion: Expression({
+        sym: conjunction,
+        children: [
+          Deduction.getStep(deduction, premise1Index).formula,
+          Deduction.getStep(deduction, premise2Index).formula
+        ]
+      })
+    })
+    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
 &nbsp;
-export const primitiveSyms = {
-  [negation.id]: negation,
-  [conjunction.id]: conjunction,
-  [disjunction.id]: disjunction,
-  [conditional.id]: conditional,
-  [equivalence.id]: equivalence,
-  [universalQuantifier.id]: universalQuantifier,
-  [existentialQuantifier.id]: existentialQuantifier
+    return startDeduction(newDeduction)
+  }
+&nbsp;
+  return { apply }
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -124,14 +145,14 @@ export const primitiveSyms = {
                 at Tue Nov 03 2020 00:04:02 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
-        <script src="../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../sorter.js"></script>
-        <script src="../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     

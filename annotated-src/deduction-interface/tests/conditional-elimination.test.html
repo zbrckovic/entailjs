@@ -90,6 +90,11 @@
                 </a>
               
                 
+                <a class="source" href="../rules-interface/conjunction-introduction-rule-interface.html">
+                  deduction-interface/rules-interface/conjunction-introduction-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="../rules-interface/deduction-rule-interface.html">
                   deduction-interface/rules-interface/deduction-rule-interface.js
                 </a>
@@ -142,6 +147,11 @@
                 
                 <a class="source" href="conditional-elimination.test.html">
                   deduction-interface/tests/conditional-elimination.test.js
+                </a>
+              
+                
+                <a class="source" href="conjunction-introduction.test.html">
+                  deduction-interface/tests/conjunction-introduction.test.js
                 </a>
               
                 
@@ -459,9 +469,11 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
 })
 
 test.each([
-  [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
-  [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]]
-])(<span class="hljs-string">&#x27;weak negation elimination&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">premise1Text, premise2Text, premises</span>) =&gt;</span> {
+  [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
+  [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
+  [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+  [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]]
+])(<span class="hljs-string">&#x27;conditional elimination&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">premise1Text, premise2Text, selectedSteps, rulePremises</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> premise1 = parser.parse(premise1Text)
   <span class="hljs-keyword">const</span> premise2 = parser.parse(premise2Text)
   <span class="hljs-keyword">const</span> conclusion = parser.parse(<span class="hljs-string">&#x27;q&#x27;</span>)
@@ -492,7 +504,7 @@ test.each([
     <span class="hljs-attr">formula</span>: conclusion,
     <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
       <span class="hljs-attr">rule</span>: Rule.ConditionalElimination,
-      premises
+      <span class="hljs-attr">premises</span>: rulePremises
     })
   })
 

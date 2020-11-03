@@ -90,6 +90,11 @@
                 </a>
               
                 
+                <a class="source" href="../rules-interface/conjunction-introduction-rule-interface.html">
+                  deduction-interface/rules-interface/conjunction-introduction-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="../rules-interface/deduction-rule-interface.html">
                   deduction-interface/rules-interface/deduction-rule-interface.js
                 </a>
@@ -142,6 +147,11 @@
                 
                 <a class="source" href="conditional-elimination.test.html">
                   deduction-interface/tests/conditional-elimination.test.js
+                </a>
+              
+                
+                <a class="source" href="conjunction-introduction.test.html">
+                  deduction-interface/tests/conjunction-introduction.test.js
                 </a>
               
                 
@@ -458,20 +468,23 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
   })
 })
 
-test(<span class="hljs-string">&#x27;deduction&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;~~p&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;p&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula2 = parser.parse(<span class="hljs-string">&#x27;~~p -&gt; p&#x27;</span>)
+test.each([
+  [[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]],
+  [[<span class="hljs-number">2</span>, <span class="hljs-number">1</span>]]
+])(<span class="hljs-string">&#x27;deduction&#x27;</span>, <span class="hljs-function"><span class="hljs-params">selectedSteps</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> premise1 = parser.parse(<span class="hljs-string">&#x27;~~p&#x27;</span>)
+  <span class="hljs-keyword">const</span> premise2 = parser.parse(<span class="hljs-string">&#x27;p&#x27;</span>)
+  <span class="hljs-keyword">const</span> conclusion = parser.parse(<span class="hljs-string">&#x27;~~p -&gt; p&#x27;</span>)
 
   <span class="hljs-keyword">const</span> deduction = Deduction({
     <span class="hljs-attr">steps</span>: [
       Step({
-        <span class="hljs-attr">formula</span>: formula0,
+        <span class="hljs-attr">formula</span>: premise1,
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
       }),
       Step({
         <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
-        <span class="hljs-attr">formula</span>: formula1,
+        <span class="hljs-attr">formula</span>: premise2,
         <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
           <span class="hljs-attr">rule</span>: Rule.TautologicalImplication,
           <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>]
@@ -481,7 +494,7 @@ test(<span class="hljs-string">&#x27;deduction&#x27;</span>, <span class="hljs-f
   })
 
   <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-    .selectSteps(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+    .selectSteps(...selectedSteps)
     .chooseRule(Rule.Deduction)
     .apply()
     .deduction
@@ -489,7 +502,7 @@ test(<span class="hljs-string">&#x27;deduction&#x27;</span>, <span class="hljs-f
   <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
 
   <span class="hljs-keyword">const</span> expected = Step({
-    <span class="hljs-attr">formula</span>: formula2,
+    <span class="hljs-attr">formula</span>: conclusion,
     <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
       <span class="hljs-attr">rule</span>: Rule.Deduction,
       <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]

@@ -90,6 +90,11 @@
                 </a>
               
                 
+                <a class="source" href="../rules-interface/conjunction-introduction-rule-interface.html">
+                  deduction-interface/rules-interface/conjunction-introduction-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="../rules-interface/deduction-rule-interface.html">
                   deduction-interface/rules-interface/deduction-rule-interface.js
                 </a>
@@ -142,6 +147,11 @@
                 
                 <a class="source" href="conditional-elimination.test.html">
                   deduction-interface/tests/conditional-elimination.test.js
+                </a>
+              
+                
+                <a class="source" href="conjunction-introduction.test.html">
+                  deduction-interface/tests/conjunction-introduction.test.js
                 </a>
               
                 
@@ -459,11 +469,19 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
 })
 
 test.each([
-  [<span class="hljs-string">&#x27;p &amp; ~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>],
-  [<span class="hljs-string">&#x27;p &amp; ~p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>],
-  [<span class="hljs-string">&#x27;~p &amp; p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>],
-  [<span class="hljs-string">&#x27;~p &amp; p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]
-])(<span class="hljs-string">&#x27;negation-introduction&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">premiseText, formula1Text, formula2Text</span>) =&gt;</span> {
+  [<span class="hljs-string">&#x27;p &amp; ~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]],
+  [<span class="hljs-string">&#x27;p &amp; ~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]],
+  [<span class="hljs-string">&#x27;p &amp; ~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]],
+  [<span class="hljs-string">&#x27;p &amp; ~p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>]],
+  [<span class="hljs-string">&#x27;~p &amp; p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]],
+  [<span class="hljs-string">&#x27;~p &amp; p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>]]
+])(<span class="hljs-string">&#x27;negation introduction&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">
+  premiseText,
+  formula1Text,
+  formula2Text,
+  selectedSteps,
+  rulePremises
+</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula0 = parser.parse(premiseText)
   <span class="hljs-keyword">const</span> formula1 = parser.parse(formula1Text)
   <span class="hljs-keyword">const</span> formula2 = parser.parse(formula2Text)
@@ -495,7 +513,7 @@ test.each([
   })
 
   <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-    .selectSteps(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+    .selectSteps(...selectedSteps)
     .chooseRule(Rule.NegationIntroduction)
     .apply()
     .deduction
@@ -506,7 +524,7 @@ test.each([
     <span class="hljs-attr">formula</span>: formula3,
     <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
       <span class="hljs-attr">rule</span>: Rule.NegationIntroduction,
-      <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+      <span class="hljs-attr">premises</span>: rulePremises
     })
   })
 

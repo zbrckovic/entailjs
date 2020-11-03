@@ -1,8 +1,8 @@
-import { FormulaParser } from '../../parsers/formula-parser'
-import { primitiveSyms } from '../../primitive-syms'
-import { primitivePresentations } from '../../presentation/sym-presentation'
 import { Deduction, Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSummary, Step } from '../../deduction-structure/step'
+import { FormulaParser } from '../../parsers/formula-parser'
+import { primitivePresentations } from '../../presentation/sym-presentation'
+import { primitiveSyms } from '../../primitive-syms'
 import { startDeduction } from '../deduction-interface'
 
 let parser
@@ -14,14 +14,17 @@ beforeEach(() => {
 })
 
 test.each([
-  ['p', '~p', [1, 2], [0, 1]],
-  ['p', '~p', [2, 1], [0, 1]],
-  ['~p', 'p', [1, 2], [1, 0]],
-  ['~p', 'p', [2, 1], [1, 0]]
-])('weak negation elimination', (premise1Text, premise2Text, selectedSteps, premises) => {
+  ['p', 'q', [1, 2], [0, 1]],
+  ['q', 'p', [2, 1], [1, 0]]
+])('conjunction introduction', (
+  premise1Text,
+  premise2Text,
+  selectedSteps,
+  rulePremises
+) => {
   const premise1 = parser.parse(premise1Text)
   const premise2 = parser.parse(premise2Text)
-  const conclusion = parser.parse('q')
+  const conclusion = parser.parse('p & q')
 
   const deduction = Deduction({
     steps: [
@@ -37,9 +40,9 @@ test.each([
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1, 2)
-    .chooseRule(Rule.WeakNegationElimination)
-    .apply(conclusion)
+    .selectSteps(...selectedSteps)
+    .chooseRule(Rule.ConjunctionIntroduction)
+    .apply()
     .deduction
 
   const actual = Deduction.getLastStep(newDeduction)
@@ -48,8 +51,8 @@ test.each([
     assumptions: new Set([0, 1]),
     formula: conclusion,
     ruleApplicationSummary: RegularRuleApplicationSummary({
-      rule: Rule.WeakNegationElimination,
-      premises
+      rule: Rule.ConjunctionIntroduction,
+      premises: rulePremises
     })
   })
 

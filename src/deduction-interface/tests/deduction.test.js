@@ -13,20 +13,23 @@ beforeEach(() => {
   })
 })
 
-test('deduction', () => {
-  const formula0 = parser.parse('~~p')
-  const formula1 = parser.parse('p')
-  const formula2 = parser.parse('~~p -> p')
+test.each([
+  [[1, 2]],
+  [[2, 1]]
+])('deduction', selectedSteps => {
+  const premise1 = parser.parse('~~p')
+  const premise2 = parser.parse('p')
+  const conclusion = parser.parse('~~p -> p')
 
   const deduction = Deduction({
     steps: [
       Step({
-        formula: formula0,
+        formula: premise1,
         ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
       }),
       Step({
         assumptions: new Set([0]),
-        formula: formula1,
+        formula: premise2,
         ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.TautologicalImplication,
           premises: [0]
@@ -36,7 +39,7 @@ test('deduction', () => {
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1, 2)
+    .selectSteps(...selectedSteps)
     .chooseRule(Rule.Deduction)
     .apply()
     .deduction
@@ -44,7 +47,7 @@ test('deduction', () => {
   const actual = Deduction.getLastStep(newDeduction)
 
   const expected = Step({
-    formula: formula2,
+    formula: conclusion,
     ruleApplicationSummary: RegularRuleApplicationSummary({
       rule: Rule.Deduction,
       premises: [0, 1]

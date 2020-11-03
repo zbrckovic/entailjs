@@ -14,11 +14,19 @@ beforeEach(() => {
 })
 
 test.each([
-  ['p & ~p', 'p', '~p'],
-  ['p & ~p', '~p', 'p'],
-  ['~p & p', 'p', '~p'],
-  ['~p & p', '~p', 'p']
-])('negation-introduction', (premiseText, formula1Text, formula2Text) => {
+  ['p & ~p', 'p', '~p', [1, 2, 3], [0, 1, 2]],
+  ['p & ~p', 'p', '~p', [3, 2, 1], [0, 1, 2]],
+  ['p & ~p', 'p', '~p', [1, 3, 2], [0, 1, 2]],
+  ['p & ~p', '~p', 'p', [1, 2, 3], [0, 2, 1]],
+  ['~p & p', 'p', '~p', [1, 2, 3], [0, 1, 2]],
+  ['~p & p', '~p', 'p', [1, 2, 3], [0, 2, 1]]
+])('negation introduction', (
+  premiseText,
+  formula1Text,
+  formula2Text,
+  selectedSteps,
+  rulePremises
+) => {
   const formula0 = parser.parse(premiseText)
   const formula1 = parser.parse(formula1Text)
   const formula2 = parser.parse(formula2Text)
@@ -50,7 +58,7 @@ test.each([
   })
 
   const newDeduction = startDeduction(deduction)
-    .selectSteps(1, 2, 3)
+    .selectSteps(...selectedSteps)
     .chooseRule(Rule.NegationIntroduction)
     .apply()
     .deduction
@@ -61,7 +69,7 @@ test.each([
     formula: formula3,
     ruleApplicationSummary: RegularRuleApplicationSummary({
       rule: Rule.NegationIntroduction,
-      premises: [0, 1, 2]
+      premises: rulePremises
     })
   })
 

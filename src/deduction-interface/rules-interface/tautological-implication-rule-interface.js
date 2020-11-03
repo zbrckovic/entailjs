@@ -18,7 +18,7 @@ export const TautologicalImplicationRuleInterface = (deduction, stepIndexes = []
 
     const ruleApplicationSpec = RegularRuleApplicationSpec({
       rule: Rule.TautologicalImplication,
-      premises: stepIndexes,
+      premises: [...stepIndexes].sort(),
       conclusion: formula
     })
 

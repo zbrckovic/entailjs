@@ -14,9 +14,11 @@ beforeEach(() => {
 })
 
 test.each([
-  ['p -> q', 'p', [0, 1]],
-  ['p', 'p -> q', [1, 0]]
-])('weak negation elimination', (premise1Text, premise2Text, premises) => {
+  ['p -> q', 'p', [1, 2], [0, 1]],
+  ['p -> q', 'p', [2, 1], [0, 1]],
+  ['p', 'p -> q', [1, 2], [1, 0]],
+  ['p', 'p -> q', [2, 1], [1, 0]]
+])('conditional elimination', (premise1Text, premise2Text, selectedSteps, rulePremises) => {
   const premise1 = parser.parse(premise1Text)
   const premise2 = parser.parse(premise2Text)
   const conclusion = parser.parse('q')
@@ -47,7 +49,7 @@ test.each([
     formula: conclusion,
     ruleApplicationSummary: RegularRuleApplicationSummary({
       rule: Rule.ConditionalElimination,
-      premises
+      premises: rulePremises
     })
   })
 

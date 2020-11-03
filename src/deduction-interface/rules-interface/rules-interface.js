@@ -1,6 +1,17 @@
+import { Sym } from '../../abstract-structures'
 import { Deduction, Rule } from '../../deduction-structure'
+import { createError, ErrorName } from '../../error'
 import { existentialQuantifier, universalQuantifier } from '../../primitive-syms'
+import {
+  isConditionalFrom,
+  isDoubleNegation,
+  isNegationOf
+} from '../../propositional-logic/propositional-logic-util'
+import { ConditionalEliminationRuleInterface } from './conditional-elimination-rule-interface'
+import { ConjunctionIntroductionRuleInterface } from './conjunction-introduction-rule-interface'
 import { DeductionRuleInterface } from './deduction-rule-interface'
+import { DoubleNegationEliminationRuleInterface } from './double-negation-elimination-rule-interface'
+import { NegationIntroductionRuleInterface } from './negation-introduction-rule-interface'
 import { PremiseRuleInterface } from './premise-rule-interface'
 import {
   ExistentialGeneralizationRuleInterface,
@@ -8,18 +19,9 @@ import {
   UniversalGeneralizationRuleInterface,
   UniversalInstantiationRuleInterface
 } from './quantification'
-import { TheoremRuleInterface } from './theorem-rule-interface'
-import { Sym } from '../../abstract-structures'
-import { createError, ErrorName } from '../../error'
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
-import {
-  areCanonicallyContradictory, isConditionalFrom,
-  isDoubleNegation, isNegationOf
-} from '../../propositional-logic/propositional-logic-util'
-import { NegationIntroductionRuleInterface } from './negation-introduction-rule-interface'
-import { DoubleNegationEliminationRuleInterface } from './double-negation-elimination-rule-interface'
+import { TheoremRuleInterface } from './theorem-rule-interface'
 import { WeakNegationEliminationRuleInterface } from './weak-negation-elimination-rule-interface'
-import { ConditionalEliminationRuleInterface } from './conditional-elimination-rule-interface'
 
 // Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
 export const RulesInterface = (deduction, ...steps) => ({
@@ -39,6 +41,13 @@ export const RulesInterface = (deduction, ...steps) => ({
 
           if (step1IsPremise && step1IsAssumptionForStep2) {
             return DeductionRuleInterface(deduction, step1Index, step2Index)
+          }
+
+          const step2IsPremise = step2.ruleApplicationSummary.rule === Rule.Premise
+          const step2IsAssumptionForStep1 = step1.assumptions.has(step2Index)
+
+          if (step2IsPremise && step2IsAssumptionForStep1) {
+            return DeductionRuleInterface(deduction, step2Index, step1Index)
           }
         }
         break
@@ -88,21 +97,50 @@ export const RulesInterface = (deduction, ...steps) => ({
       }
       case Rule.NegationIntroduction: {
         if (steps.length === 3) {
-          const [step1Index, step2Index, step3Index] = steps
-          const [step1, step2, step3] = steps.map(i => Deduction.getStep(deduction, i))
+          let premiseIndex
+          const conclusionStepIndexes = []
 
-          const step1IsPremise = step1.ruleApplicationSummary.rule === Rule.Premise
-          if (!step1IsPremise) break
+          steps.forEach(stepIndex => {
+            const formula = Deduction.getStep(deduction, stepIndex)
+            const isPremise = formula.ruleApplicationSummary.rule === Rule.Premise
 
-          const step1IsAssumptionForStep2 = step2.assumptions.has(step1Index)
+            if (isPremise) {
+              premiseIndex = stepIndex
+            } else {
+              conclusionStepIndexes.push(stepIndex)
+            }
+          })
+
+          if (premiseIndex === undefined || conclusionStepIndexes.length !== 2) break
+
+          const [conclusion1StepIndex, conclusion2StepIndex] = conclusionStepIndexes
+
+          const conclusion1Step = Deduction.getStep(deduction, conclusion1StepIndex)
+          const conclusion2Step = Deduction.getStep(deduction, conclusion2StepIndex)
+
+          const step1IsAssumptionForStep2 = conclusion1Step.assumptions.has(premiseIndex)
           if (!step1IsAssumptionForStep2) break
 
-          const step1IsAssumptionForStep3 = step3.assumptions.has(step1Index)
+          const step1IsAssumptionForStep3 = conclusion2Step.assumptions.has(premiseIndex)
           if (!step1IsAssumptionForStep3) break
 
-          if (!areCanonicallyContradictory(step2.formula, step3.formula)) break
+          if (isNegationOf(conclusion1Step.formula, conclusion2Step.formula)) {
+            return NegationIntroductionRuleInterface(
+              deduction,
+              premiseIndex,
+              conclusion2StepIndex,
+              conclusion1StepIndex
+            )
+          }
 
-          return NegationIntroductionRuleInterface(deduction, step1Index, step2Index, step3Index)
+          if (isNegationOf(conclusion2Step.formula, conclusion1Step.formula)) {
+            return NegationIntroductionRuleInterface(
+              deduction,
+              premiseIndex,
+              conclusion1StepIndex,
+              conclusion2StepIndex
+            )
+          }
         }
         break
       }
@@ -146,6 +184,10 @@ export const RulesInterface = (deduction, ...steps) => ({
         }
         break
       case Rule.ConjunctionIntroduction:
+        if (steps.length === 2) {
+          const [premise1Index, premise2Index] = steps
+          return ConjunctionIntroductionRuleInterface(deduction, premise1Index, premise2Index)
+        }
         break
       case Rule.ConjunctionElimination:
         break

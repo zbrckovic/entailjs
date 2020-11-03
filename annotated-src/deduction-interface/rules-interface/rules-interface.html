@@ -85,8 +85,18 @@
                 </a>
               
                 
+                <a class="source" href="biconditional-introduction-rule-interface.html">
+                  deduction-interface/rules-interface/biconditional-introduction-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="conditional-elimination-rule-interface.html">
                   deduction-interface/rules-interface/conditional-elimination-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="conjunction-elimination-rule-interface.html">
+                  deduction-interface/rules-interface/conjunction-elimination-rule-interface.js
                 </a>
               
                 
@@ -145,8 +155,18 @@
                 </a>
               
                 
+                <a class="source" href="../tests/biconditional-introduction.test.html">
+                  deduction-interface/tests/biconditional-introduction.test.js
+                </a>
+              
+                
                 <a class="source" href="../tests/conditional-elimination.test.html">
                   deduction-interface/tests/conditional-elimination.test.js
+                </a>
+              
+                
+                <a class="source" href="../tests/conjunction-elimination.test.html">
+                  deduction-interface/tests/conjunction-elimination.test.js
                 </a>
               
                 
@@ -456,13 +476,20 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
 <span class="hljs-keyword">import</span> { Deduction, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
-<span class="hljs-keyword">import</span> { existentialQuantifier, universalQuantifier } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
+<span class="hljs-keyword">import</span> {
+  conditional,
+  conjunction,
+  existentialQuantifier,
+  universalQuantifier
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
 <span class="hljs-keyword">import</span> {
   isConditionalFrom,
   isDoubleNegation,
   isNegationOf
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../propositional-logic/propositional-logic-util&#x27;</span>
+<span class="hljs-keyword">import</span> { BiconditionalIntroductionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./biconditional-introduction-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { ConditionalEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./conditional-elimination-rule-interface&#x27;</span>
+<span class="hljs-keyword">import</span> { ConjunctionEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./conjunction-elimination-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { ConjunctionIntroductionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./conjunction-introduction-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { DeductionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { DoubleNegationEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./double-negation-elimination-rule-interface&#x27;</span>
@@ -476,7 +503,8 @@
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./quantification&#x27;</span>
 <span class="hljs-keyword">import</span> { TautologicalImplicationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./tautological-implication-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { TheoremRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./theorem-rule-interface&#x27;</span>
-<span class="hljs-keyword">import</span> { WeakNegationEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./weak-negation-elimination-rule-interface&#x27;</span></pre></div></div>
+<span class="hljs-keyword">import</span> { WeakNegationEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./weak-negation-elimination-rule-interface&#x27;</span>
+<span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span></pre></div></div>
             
         </li>
         
@@ -657,12 +685,35 @@
         }
         <span class="hljs-keyword">break</span>
       <span class="hljs-keyword">case</span> Rule.ConjunctionElimination:
+        <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">1</span>) {
+          <span class="hljs-keyword">const</span> [premiseIndex] = steps
+          <span class="hljs-keyword">const</span> premise = Deduction.getStep(deduction, premiseIndex).formula
+
+          <span class="hljs-keyword">if</span> (Sym.equals(premise.sym, conjunction)) {
+            <span class="hljs-keyword">return</span> ConjunctionEliminationRuleInterface(deduction, premiseIndex)
+          }
+        }
+
         <span class="hljs-keyword">break</span>
       <span class="hljs-keyword">case</span> Rule.DisjunctionIntroduction:
         <span class="hljs-keyword">break</span>
       <span class="hljs-keyword">case</span> Rule.DisjunctionElimination:
         <span class="hljs-keyword">break</span>
       <span class="hljs-keyword">case</span> Rule.BiconditionalIntroduction:
+        <span class="hljs-keyword">if</span> (steps.length === <span class="hljs-number">2</span>) {
+          <span class="hljs-keyword">const</span> [premise1, premise2] = steps.map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> Deduction.getStep(deduction, i).formula)
+
+          <span class="hljs-keyword">if</span> (!Sym.equals(premise1.sym, conditional)) { <span class="hljs-keyword">break</span> }
+          <span class="hljs-keyword">if</span> (!Sym.equals(premise2.sym, conditional)) { <span class="hljs-keyword">break</span> }
+
+          <span class="hljs-keyword">const</span> [antecedent1, consequent1] = premise1.children
+          <span class="hljs-keyword">const</span> [antecedent2, consequent2] = premise2.children
+
+          <span class="hljs-keyword">if</span> (!_.isEqual(antecedent1, consequent2)) { <span class="hljs-keyword">break</span> }
+          <span class="hljs-keyword">if</span> (!_.isEqual(antecedent2, consequent1)) { <span class="hljs-keyword">break</span> }
+
+          <span class="hljs-keyword">return</span> BiconditionalIntroductionRuleInterface(deduction, ...steps)
+        }
         <span class="hljs-keyword">break</span>
       <span class="hljs-keyword">case</span> Rule.BiconditionalElimination:
         <span class="hljs-keyword">break</span>

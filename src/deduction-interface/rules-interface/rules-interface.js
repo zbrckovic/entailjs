@@ -1,13 +1,20 @@
 import { Sym } from '../../abstract-structures'
 import { Deduction, Rule } from '../../deduction-structure'
 import { createError, ErrorName } from '../../error'
-import { existentialQuantifier, universalQuantifier } from '../../primitive-syms'
+import {
+  conditional,
+  conjunction,
+  existentialQuantifier,
+  universalQuantifier
+} from '../../primitive-syms'
 import {
   isConditionalFrom,
   isDoubleNegation,
   isNegationOf
 } from '../../propositional-logic/propositional-logic-util'
+import { BiconditionalIntroductionRuleInterface } from './biconditional-introduction-rule-interface'
 import { ConditionalEliminationRuleInterface } from './conditional-elimination-rule-interface'
+import { ConjunctionEliminationRuleInterface } from './conjunction-elimination-rule-interface'
 import { ConjunctionIntroductionRuleInterface } from './conjunction-introduction-rule-interface'
 import { DeductionRuleInterface } from './deduction-rule-interface'
 import { DoubleNegationEliminationRuleInterface } from './double-negation-elimination-rule-interface'
@@ -22,6 +29,7 @@ import {
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
 import { TheoremRuleInterface } from './theorem-rule-interface'
 import { WeakNegationEliminationRuleInterface } from './weak-negation-elimination-rule-interface'
+import _ from 'lodash'
 
 // Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
 export const RulesInterface = (deduction, ...steps) => ({
@@ -190,12 +198,35 @@ export const RulesInterface = (deduction, ...steps) => ({
         }
         break
       case Rule.ConjunctionElimination:
+        if (steps.length === 1) {
+          const [premiseIndex] = steps
+          const premise = Deduction.getStep(deduction, premiseIndex).formula
+
+          if (Sym.equals(premise.sym, conjunction)) {
+            return ConjunctionEliminationRuleInterface(deduction, premiseIndex)
+          }
+        }
+
         break
       case Rule.DisjunctionIntroduction:
         break
       case Rule.DisjunctionElimination:
         break
       case Rule.BiconditionalIntroduction:
+        if (steps.length === 2) {
+          const [premise1, premise2] = steps.map(i => Deduction.getStep(deduction, i).formula)
+
+          if (!Sym.equals(premise1.sym, conditional)) { break }
+          if (!Sym.equals(premise2.sym, conditional)) { break }
+
+          const [antecedent1, consequent1] = premise1.children
+          const [antecedent2, consequent2] = premise2.children
+
+          if (!_.isEqual(antecedent1, consequent2)) { break }
+          if (!_.isEqual(antecedent2, consequent1)) { break }
+
+          return BiconditionalIntroductionRuleInterface(deduction, ...steps)
+        }
         break
       case Rule.BiconditionalElimination:
         break

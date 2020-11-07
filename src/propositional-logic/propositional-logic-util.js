@@ -132,6 +132,6 @@ export const isConditionalFrom = (formula1, formula2) => {
 // Checks whether `formula2` is a consequent of `formula1`.
 export const isConditionalTo = (formula1, formula2) => {
   if (!Sym.equals(formula1.sym, conditional)) return false
-  const [, consequent] = formula1.children
+  const [antecedent, consequent] = formula1.children
   return _.isEqual(consequent, formula2)
 }

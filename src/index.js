@@ -22,7 +22,7 @@ export {
   existentialQuantifier,
   conjunction,
   disjunction,
-  equivalence,
+  biconditional,
   conditional,
   negation,
   primitiveSyms,

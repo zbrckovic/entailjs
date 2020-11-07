@@ -6,7 +6,7 @@ import {
   conditional,
   conjunction,
   disjunction,
-  equivalence,
+  biconditional,
   existentialQuantifier,
   universalQuantifier
 } from '../../primitive-syms'
@@ -309,7 +309,7 @@ export const RulesInterface = (deduction, ...steps) => {
 
       const premise = Deduction.getStep(deduction, premiseIndex).formula
 
-      if (!Sym.equals(premise.sym, equivalence)) return undefined
+      if (!Sym.equals(premise.sym, biconditional)) return undefined
 
       return BiconditionalEliminationRuleInterface(deduction, premiseIndex)
     }

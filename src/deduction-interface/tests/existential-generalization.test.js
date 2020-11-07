@@ -11,108 +11,110 @@ beforeEach(() => {
   parser = FormulaParser({ syms: primitiveSyms, presentations: primitivePresentations })
 })
 
-test('vacuous', () => {
-  const formula0 = parser.parse('Fa')
-  const formula1 = parser.parse('Ex Fa')
+describe('existential generalization', () => {
+  test('vacuous: Fa |- Ex Fa', () => {
+    const formula0 = parser.parse('Fa')
+    const formula1 = parser.parse('Ex Fa')
 
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: formula0,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      })
-    ]
-  })
-
-  const newDeduction = startDeduction(deduction)
-    .selectSteps(1)
-    .chooseRule(Rule.ExistentialGeneralization)
-    .apply(parser.getSym('x'))
-    .deduction
-
-  const actual = Deduction.getLastStep(newDeduction)
-
-  const expected = Step({
-    assumptions: new Set([0]),
-    formula: formula1,
-    ruleApplicationSummary: RegularRuleApplicationSummary({
-      rule: Rule.ExistentialGeneralization,
-      premises: [0]
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: formula0,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
     })
-  })
 
-  expect(actual).toEqual(expected)
-})
+    const newDeduction = startDeduction(deduction)
+      .selectSteps(1)
+      .chooseRule(Rule.ExistentialGeneralization)
+      .apply(parser.getSym('x'))
+      .deduction
 
-test('simple', () => {
-  const formula0 = parser.parse('Fa')
-  const formula1 = parser.parse('Ex Fx')
+    const actual = Deduction.getLastStep(newDeduction)
 
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: formula0,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+    const expected = Step({
+      assumptions: new Set([0]),
+      formula: formula1,
+      ruleApplicationSummary: RegularRuleApplicationSummary({
+        rule: Rule.ExistentialGeneralization,
+        premises: [0]
       })
-    ]
-  })
-
-  const newDeduction = startDeduction(deduction)
-    .selectSteps(1)
-    .chooseRule(Rule.ExistentialGeneralization)
-    .apply(parser.getSym('x'), parser.getSym('a'))
-    .deduction
-
-  const actual = Deduction.getLastStep(newDeduction)
-
-  const expected = Step({
-    assumptions: new Set([0]),
-    formula: formula1,
-    ruleApplicationSummary: RegularRuleApplicationSummary({
-      rule: Rule.ExistentialGeneralization,
-      premises: [0]
     })
+
+    expect(actual).toEqual(expected)
   })
 
-  expect(actual).toEqual(expected)
-})
+  test('simple: Fa |- Ex Fx', () => {
+    const formula0 = parser.parse('Fa')
+    const formula1 = parser.parse('Ex Fx')
 
-test(`throws ${ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS}`, () => {
-  const formula0 = parser.parse('Fax')
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: formula0,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
+    })
 
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: formula0,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      })
-    ]
-  })
-
-  expect(() => {
-    startDeduction(deduction)
+    const newDeduction = startDeduction(deduction)
       .selectSteps(1)
       .chooseRule(Rule.ExistentialGeneralization)
       .apply(parser.getSym('x'), parser.getSym('a'))
-  }).toThrow(ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS)
-})
+      .deduction
 
-test(`throws ${ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
-  const formula0 = parser.parse('Ax Fa')
+    const actual = Deduction.getLastStep(newDeduction)
 
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: formula0,
-        ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
+    const expected = Step({
+      assumptions: new Set([0]),
+      formula: formula1,
+      ruleApplicationSummary: RegularRuleApplicationSummary({
+        rule: Rule.ExistentialGeneralization,
+        premises: [0]
       })
-    ]
+    })
+
+    expect(actual).toEqual(expected)
   })
 
-  expect(() => {
-    startDeduction(deduction)
-      .selectSteps(1)
-      .chooseRule(Rule.ExistentialGeneralization)
-      .apply(parser.getSym('x'), parser.getSym('a'))
-  }).toThrow(ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND)
+  test(`throws ${ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS}`, () => {
+    const formula0 = parser.parse('Fax')
+
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: formula0,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
+    })
+
+    expect(() => {
+      startDeduction(deduction)
+        .selectSteps(1)
+        .chooseRule(Rule.ExistentialGeneralization)
+        .apply(parser.getSym('x'), parser.getSym('a'))
+    }).toThrow(ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS)
+  })
+
+  test(`throws ${ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
+    const formula0 = parser.parse('Ax Fa')
+
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: formula0,
+          ruleApplicationSummary: new RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
+    })
+
+    expect(() => {
+      startDeduction(deduction)
+        .selectSteps(1)
+        .chooseRule(Rule.ExistentialGeneralization)
+        .apply(parser.getSym('x'), parser.getSym('a'))
+    }).toThrow(ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND)
+  })
 })

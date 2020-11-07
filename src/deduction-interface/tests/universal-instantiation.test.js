@@ -11,108 +11,110 @@ beforeEach(() => {
   parser = FormulaParser({ syms: primitiveSyms, presentations: primitivePresentations })
 })
 
-test('vacuous', () => {
-  const formula0 = parser.parse('Ax Fa')
-  const formula1 = parser.parse('Fa')
+describe('universal instantiation', () => {
+  test('vacuous: Ax Fa |- Fa', () => {
+    const formula0 = parser.parse('Ax Fa')
+    const formula1 = parser.parse('Fa')
 
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: formula0,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      })
-    ]
-  })
-
-  const newDeduction = startDeduction(deduction)
-    .selectSteps(1)
-    .chooseRule(Rule.UniversalInstantiation)
-    .apply()
-    .deduction
-
-  const actual = Deduction.getLastStep(newDeduction)
-
-  const expected = Step({
-    assumptions: new Set([0]),
-    formula: formula1,
-    ruleApplicationSummary: RegularRuleApplicationSummary({
-      rule: Rule.UniversalInstantiation,
-      premises: [0]
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: formula0,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
     })
-  })
 
-  expect(actual).toEqual(expected)
-})
-
-test('simple', () => {
-  const formula0 = parser.parse('Ax Fx')
-  const formula1 = parser.parse('Fa')
-
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: formula0,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      })
-    ]
-  })
-
-  const newDeduction = startDeduction(deduction)
-    .selectSteps(1)
-    .chooseRule(Rule.UniversalInstantiation)
-    .apply(parser.getSym('a'))
-    .deduction
-
-  const actual = Deduction.getLastStep(newDeduction)
-
-  const expected = Step({
-    assumptions: new Set([0]),
-    formula: formula1,
-    ruleApplicationSummary: RegularRuleApplicationSummary({
-      rule: Rule.UniversalInstantiation,
-      premises: [0]
-    })
-  })
-
-  expect(actual).toEqual(expected)
-})
-
-test(`throws ${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}`, () => {
-  const formula0 = parser.parse('Ax Fxa')
-
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: formula0,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      })
-    ]
-  })
-
-  expect(() => {
-    startDeduction(deduction)
+    const newDeduction = startDeduction(deduction)
       .selectSteps(1)
       .chooseRule(Rule.UniversalInstantiation)
       .apply()
-  }).toThrow(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
-})
+      .deduction
 
-test(`throws ${ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
-  const formula0 = parser.parse('Ax Ey Fxy')
+    const actual = Deduction.getLastStep(newDeduction)
 
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: formula0,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+    const expected = Step({
+      assumptions: new Set([0]),
+      formula: formula1,
+      ruleApplicationSummary: RegularRuleApplicationSummary({
+        rule: Rule.UniversalInstantiation,
+        premises: [0]
       })
-    ]
+    })
+
+    expect(actual).toEqual(expected)
   })
 
-  expect(() => {
-    startDeduction(deduction)
+  test('simple: Ax Fx |- Fa', () => {
+    const formula0 = parser.parse('Ax Fx')
+    const formula1 = parser.parse('Fa')
+
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: formula0,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
+    })
+
+    const newDeduction = startDeduction(deduction)
       .selectSteps(1)
       .chooseRule(Rule.UniversalInstantiation)
-      .apply(parser.getSym('y'))
-  }).toThrow(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
+      .apply(parser.getSym('a'))
+      .deduction
+
+    const actual = Deduction.getLastStep(newDeduction)
+
+    const expected = Step({
+      assumptions: new Set([0]),
+      formula: formula1,
+      ruleApplicationSummary: RegularRuleApplicationSummary({
+        rule: Rule.UniversalInstantiation,
+        premises: [0]
+      })
+    })
+
+    expect(actual).toEqual(expected)
+  })
+
+  test(`throws ${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}`, () => {
+    const formula0 = parser.parse('Ax Fxa')
+
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: formula0,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
+    })
+
+    expect(() => {
+      startDeduction(deduction)
+        .selectSteps(1)
+        .chooseRule(Rule.UniversalInstantiation)
+        .apply()
+    }).toThrow(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
+  })
+
+  test(`throws ${ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND}`, () => {
+    const formula0 = parser.parse('Ax Ey Fxy')
+
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: formula0,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
+    })
+
+    expect(() => {
+      startDeduction(deduction)
+        .selectSteps(1)
+        .chooseRule(Rule.UniversalInstantiation)
+        .apply(parser.getSym('y'))
+    }).toThrow(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
+  })
 })

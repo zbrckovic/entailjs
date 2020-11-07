@@ -13,38 +13,40 @@ beforeEach(() => {
   })
 })
 
-test.each([
-  ['p <-> q', false, 'p -> q'],
-  ['p <-> q', true, 'q -> p']
-])('biconditional elimination', (premiseText, reversed, conclusionText) => {
-  const premise = parser.parse(premiseText)
-  const conclusion = parser.parse(conclusionText)
+describe('biconditional elimination', () => {
+  test.each([
+    ['p <-> q', 'p -> q', false],
+    ['p <-> q', 'q -> p', true]
+  ])('%s |- %s, reversed: %s', (premiseText, conclusionText, reversed) => {
+    const premise = parser.parse(premiseText)
+    const conclusion = parser.parse(conclusionText)
 
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: premise,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      })
-    ]
-  })
-
-  const newDeduction = startDeduction(deduction)
-    .selectSteps(1)
-    .chooseRule(Rule.BiconditionalElimination)
-    .apply(reversed)
-    .deduction
-
-  const actual = Deduction.getLastStep(newDeduction)
-
-  const expected = Step({
-    assumptions: new Set([0]),
-    formula: conclusion,
-    ruleApplicationSummary: RegularRuleApplicationSummary({
-      rule: Rule.BiconditionalElimination,
-      premises: [0]
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: premise,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
     })
-  })
 
-  expect(actual).toEqual(expected)
+    const newDeduction = startDeduction(deduction)
+      .selectSteps(1)
+      .chooseRule(Rule.BiconditionalElimination)
+      .apply(reversed)
+      .deduction
+
+    const actual = Deduction.getLastStep(newDeduction)
+
+    const expected = Step({
+      assumptions: new Set([0]),
+      formula: conclusion,
+      ruleApplicationSummary: RegularRuleApplicationSummary({
+        rule: Rule.BiconditionalElimination,
+        premises: [0]
+      })
+    })
+
+    expect(actual).toEqual(expected)
+  })
 })

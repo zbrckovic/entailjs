@@ -17,7 +17,12 @@ describe('disjunction introduction', () => {
   test.each([
     ['p', 'q', 'p | q', false],
     ['p', 'q', 'q | p', true]
-  ])('%s |- %s', (premiseText, disjunctText, conclusionText, addingLeft) => {
+  ])('%s (adding %s) |- %s (adding left: %s)', (
+    premiseText,
+    disjunctText,
+    conclusionText,
+    addingLeft
+  ) => {
     const premise = parser.parse(premiseText)
     const disjunct = parser.parse(disjunctText)
     const conclusion = parser.parse(conclusionText)

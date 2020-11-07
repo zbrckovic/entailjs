@@ -1,7 +1,7 @@
 import { Expression } from '../../abstract-structures'
 import { Deduction, Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
-import { equivalence } from '../../primitive-syms'
+import { biconditional } from '../../primitive-syms'
 import { startDeduction } from '../deduction-interface'
 
 export const BiconditionalIntroductionRuleInterface = (
@@ -14,7 +14,7 @@ export const BiconditionalIntroductionRuleInterface = (
       rule: Rule.BiconditionalIntroduction,
       premises: [premise1Index, premise2Index],
       conclusion: Expression({
-        sym: equivalence,
+        sym: biconditional,
         children: Deduction.getStep(deduction, premise1Index).formula.children
       })
     })

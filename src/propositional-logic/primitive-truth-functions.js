@@ -1,4 +1,4 @@
-import { conjunction, disjunction, equivalence, conditional, negation } from '../primitive-syms'
+import { conjunction, disjunction, biconditional, conditional, negation } from '../primitive-syms'
 import _ from 'lodash'
 
 export const primitiveTruthFunctions = {
@@ -6,7 +6,7 @@ export const primitiveTruthFunctions = {
   [conjunction.id]: (a, b) => a && b,
   [disjunction.id]: (a, b) => a || b,
   [conditional.id]: (a, b) => !a || b,
-  [equivalence.id]: (a, b) => a === b
+  [biconditional.id]: (a, b) => a === b
 }
 
 export const generateValuesPermutations = arity =>

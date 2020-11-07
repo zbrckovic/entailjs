@@ -13,35 +13,37 @@ beforeEach(() => {
   })
 })
 
-test('tautological implication', () => {
-  const formula0 = parser.parse('~~p')
-  const formula1 = parser.parse('p')
+describe('tautological implication', () => {
+  test('~~p |- p', () => {
+    const premise1 = parser.parse('~~p')
+    const conclusion = parser.parse('p')
 
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: formula0,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      })
-    ]
-  })
-
-  const newDeduction = startDeduction(deduction)
-    .selectSteps(1)
-    .chooseRule(Rule.TautologicalImplication)
-    .apply(formula1)
-    .deduction
-
-  const actual = Deduction.getLastStep(newDeduction)
-
-  const expected = Step({
-    assumptions: new Set([0]),
-    formula: formula1,
-    ruleApplicationSummary: RegularRuleApplicationSummary({
-      rule: Rule.TautologicalImplication,
-      premises: [0]
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: premise1,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
     })
-  })
 
-  expect(actual).toEqual(expected)
+    const newDeduction = startDeduction(deduction)
+      .selectSteps(1)
+      .chooseRule(Rule.TautologicalImplication)
+      .apply(conclusion)
+      .deduction
+
+    const actual = Deduction.getLastStep(newDeduction)
+
+    const expected = Step({
+      assumptions: new Set([0]),
+      formula: conclusion,
+      ruleApplicationSummary: RegularRuleApplicationSummary({
+        rule: Rule.TautologicalImplication,
+        premises: [0]
+      })
+    })
+
+    expect(actual).toEqual(expected)
+  })
 })

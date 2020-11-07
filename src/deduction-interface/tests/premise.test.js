@@ -12,7 +12,7 @@ beforeEach(() => {
   })
 })
 
-test('premise', () => {
+test('premise: p', () => {
   const premise = parser.parse('p')
 
   const newDeduction = startDeduction()

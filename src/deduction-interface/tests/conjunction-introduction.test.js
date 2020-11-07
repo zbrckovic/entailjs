@@ -13,48 +13,51 @@ beforeEach(() => {
   })
 })
 
-test.each([
-  ['p', 'q', [1, 2], [0, 1]],
-  ['q', 'p', [2, 1], [1, 0]]
-])('conjunction introduction', (
-  premise1Text,
-  premise2Text,
-  selectedSteps,
-  rulePremises
-) => {
-  const premise1 = parser.parse(premise1Text)
-  const premise2 = parser.parse(premise2Text)
-  const conclusion = parser.parse('p & q')
+describe('conjunction introduction', () => {
+  test.each([
+    ['p', 'q', 'p & q', [1, 2], [0, 1]],
+    ['q', 'p', 'p & q', [2, 1], [1, 0]]
+  ])('%s, %s |- %s (selected steps: %j)', (
+    premise1Text,
+    premise2Text,
+    conclusionText,
+    selectedSteps,
+    rulePremises
+  ) => {
+    const premise1 = parser.parse(premise1Text)
+    const premise2 = parser.parse(premise2Text)
+    const conclusion = parser.parse(conclusionText)
 
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: premise1,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      }),
-      Step({
-        formula: premise2,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      })
-    ]
-  })
-
-  const newDeduction = startDeduction(deduction)
-    .selectSteps(...selectedSteps)
-    .chooseRule(Rule.ConjunctionIntroduction)
-    .apply()
-    .deduction
-
-  const actual = Deduction.getLastStep(newDeduction)
-
-  const expected = Step({
-    assumptions: new Set([0, 1]),
-    formula: conclusion,
-    ruleApplicationSummary: RegularRuleApplicationSummary({
-      rule: Rule.ConjunctionIntroduction,
-      premises: rulePremises
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: premise1,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        }),
+        Step({
+          formula: premise2,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
     })
-  })
 
-  expect(actual).toEqual(expected)
+    const newDeduction = startDeduction(deduction)
+      .selectSteps(...selectedSteps)
+      .chooseRule(Rule.ConjunctionIntroduction)
+      .apply()
+      .deduction
+
+    const actual = Deduction.getLastStep(newDeduction)
+
+    const expected = Step({
+      assumptions: new Set([0, 1]),
+      formula: conclusion,
+      ruleApplicationSummary: RegularRuleApplicationSummary({
+        rule: Rule.ConjunctionIntroduction,
+        premises: rulePremises
+      })
+    })
+
+    expect(actual).toEqual(expected)
+  })
 })

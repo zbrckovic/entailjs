@@ -13,45 +13,55 @@ beforeEach(() => {
   })
 })
 
-test.each([
-  ['p', '~p', [1, 2], [0, 1]],
-  ['p', '~p', [2, 1], [0, 1]],
-  ['~p', 'p', [1, 2], [1, 0]],
-  ['~p', 'p', [2, 1], [1, 0]]
-])('weak negation elimination', (premise1Text, premise2Text, selectedSteps, premises) => {
-  const premise1 = parser.parse(premise1Text)
-  const premise2 = parser.parse(premise2Text)
-  const conclusion = parser.parse('q')
+describe('weak negation elimination', () => {
+  test.each([
+    ['p', '~p', 'q', [1, 2], [0, 1]],
+    ['p', '~p', 'q', [2, 1], [0, 1]],
+    ['~p', 'p', 'q', [1, 2], [1, 0]],
+    ['~p', 'p', 'q', [2, 1], [1, 0]]
+  ])('%s, %s |- %s (selected steps: %j)', (
+    premise1Text,
+    premise2Text,
+    conclusionText,
+    selectedSteps,
+    premises
+  ) => {
+    const premise1 = parser.parse(premise1Text)
+    const premise2 = parser.parse(premise2Text)
+    const conclusion = parser.parse('q')
 
-  const deduction = Deduction({
-    steps: [
-      Step({
-        formula: premise1,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      }),
-      Step({
-        formula: premise2,
-        ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
-      })
-    ]
-  })
-
-  const newDeduction = startDeduction(deduction)
-    .selectSteps(...selectedSteps)
-    .chooseRule(Rule.WeakNegationElimination)
-    .apply(conclusion)
-    .deduction
-
-  const actual = Deduction.getLastStep(newDeduction)
-
-  const expected = Step({
-    assumptions: new Set([0, 1]),
-    formula: conclusion,
-    ruleApplicationSummary: RegularRuleApplicationSummary({
-      rule: Rule.WeakNegationElimination,
-      premises
+    const deduction = Deduction({
+      steps: [
+        Step({
+          formula: premise1,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        }),
+        Step({
+          formula: premise2,
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+        })
+      ]
     })
-  })
 
-  expect(actual).toEqual(expected)
+    const newDeduction = startDeduction(deduction)
+      .selectSteps(...selectedSteps)
+      .chooseRule(Rule.WeakNegationElimination)
+      .apply(conclusion)
+      .deduction
+
+    const actual = Deduction.getLastStep(newDeduction)
+
+    const expected = Step({
+      assumptions: new Set([0, 1]),
+      formula: conclusion,
+      ruleApplicationSummary: RegularRuleApplicationSummary({
+        rule: Rule.WeakNegationElimination,
+        premises
+      })
+    })
+
+    expect(actual).toEqual(expected)
+  })
 })
+
+

@@ -1,7 +1,7 @@
 import {
   conjunction,
   disjunction,
-  equivalence,
+  biconditional,
   existentialQuantifier,
   conditional,
   negation,
@@ -31,7 +31,7 @@ export const primitivePresentations = {
     unicode: SyntacticInfo.infix('→')
   }),
 
-  [equivalence.id]: SymPresentation({
+  [biconditional.id]: SymPresentation({
     ascii: SyntacticInfo.infix('<->'),
     unicode: SyntacticInfo.infix('↔')
   }),

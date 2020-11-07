@@ -85,6 +85,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-interface/rules-interface/biconditional-elimination-rule-interface.html">
+                  deduction-interface/rules-interface/biconditional-elimination-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-interface/rules-interface/biconditional-introduction-rule-interface.html">
                   deduction-interface/rules-interface/biconditional-introduction-rule-interface.js
                 </a>
@@ -107,6 +112,16 @@
                 
                 <a class="source" href="../deduction-interface/rules-interface/deduction-rule-interface.html">
                   deduction-interface/rules-interface/deduction-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/disjunction-elimination-rule-interface.html">
+                  deduction-interface/rules-interface/disjunction-elimination-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/disjunction-introduction-rule-interface.html">
+                  deduction-interface/rules-interface/disjunction-introduction-rule-interface.js
                 </a>
               
                 
@@ -155,6 +170,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-interface/tests/biconditional-elimination.test.html">
+                  deduction-interface/tests/biconditional-elimination.test.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-interface/tests/biconditional-introduction.test.html">
                   deduction-interface/tests/biconditional-introduction.test.js
                 </a>
@@ -177,6 +197,16 @@
                 
                 <a class="source" href="../deduction-interface/tests/deduction.test.html">
                   deduction-interface/tests/deduction.test.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/tests/disjunction-elimination.test.html">
+                  deduction-interface/tests/disjunction-elimination.test.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/tests/disjunction-introduction.test.html">
+                  deduction-interface/tests/disjunction-introduction.test.js
                 </a>
               
                 
@@ -727,7 +757,7 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isConditionalTo = <span class="hljs-function">(<span class="hljs-params">formula1, formula2</span>) =&gt;</span> {
   <span class="hljs-keyword">if</span> (!Sym.equals(formula1.sym, conditional)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
-  <span class="hljs-keyword">const</span> [, consequent] = formula1.children
+  <span class="hljs-keyword">const</span> [antecedent, consequent] = formula1.children
   <span class="hljs-keyword">return</span> _.isEqual(consequent, formula2)
 }</pre></div></div>
             

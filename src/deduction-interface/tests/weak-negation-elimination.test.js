@@ -63,5 +63,3 @@ describe('weak negation elimination', () => {
     expect(actual).toEqual(expected)
   })
 })
-
-

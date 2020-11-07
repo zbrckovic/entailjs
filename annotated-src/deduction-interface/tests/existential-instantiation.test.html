@@ -516,151 +516,153 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
   parser = FormulaParser({ <span class="hljs-attr">syms</span>: primitiveSyms, <span class="hljs-attr">presentations</span>: primitivePresentations })
 })
 
-test(<span class="hljs-string">&#x27;vacuous&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ex Fa&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Fa&#x27;</span>)
+describe(<span class="hljs-string">&#x27;existential instantiation&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  test(<span class="hljs-string">&#x27;vacuous: Ex Fa |- Fa&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ex Fa&#x27;</span>)
+    <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Fa&#x27;</span>)
 
-  <span class="hljs-keyword">const</span> deduction = Deduction({
-    <span class="hljs-attr">steps</span>: [
-      Step({
-        <span class="hljs-attr">formula</span>: formula0,
-        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
-      })
-    ]
-  })
-
-  <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-    .selectSteps(<span class="hljs-number">1</span>)
-    .chooseRule(Rule.ExistentialInstantiation)
-    .apply()
-    .deduction
-
-  <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
-
-  <span class="hljs-keyword">const</span> expected = Step({
-    <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
-    <span class="hljs-attr">formula</span>: formula1,
-    <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
-      <span class="hljs-attr">rule</span>: Rule.ExistentialInstantiation,
-      <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">const</span> deduction = Deduction({
+      <span class="hljs-attr">steps</span>: [
+        Step({
+          <span class="hljs-attr">formula</span>: formula0,
+          <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
+        })
+      ]
     })
-  })
 
-  expect(actual).toEqual(expected)
-})
-
-test(<span class="hljs-string">&#x27;simple&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ex Fx&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Fa&#x27;</span>)
-
-  <span class="hljs-keyword">const</span> deduction = Deduction({
-    <span class="hljs-attr">steps</span>: [
-      Step({
-        <span class="hljs-attr">formula</span>: formula0,
-        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
-      })
-    ]
-  })
-
-  <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-    .selectSteps(<span class="hljs-number">1</span>)
-    .chooseRule(Rule.ExistentialInstantiation)
-    .apply(parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>))
-    .deduction
-
-  <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
-
-  <span class="hljs-keyword">const</span> expected = Step({
-    <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
-    <span class="hljs-attr">formula</span>: formula1,
-    <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
-      <span class="hljs-attr">rule</span>: Rule.ExistentialInstantiation,
-      <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>],
-      <span class="hljs-attr">addedTermDependencies</span>: {
-        <span class="hljs-attr">dependent</span>: parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>).id,
-        <span class="hljs-attr">dependencies</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
-      }
-    })
-  })
-
-  expect(actual).toEqual(expected)
-})
-
-test(<span class="hljs-string">&#x27;with dependency terms&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ex Fxb&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Fab&#x27;</span>)
-
-  <span class="hljs-keyword">const</span> deduction = Deduction({
-    <span class="hljs-attr">steps</span>: [
-      Step({
-        <span class="hljs-attr">formula</span>: formula0,
-        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
-      })
-    ]
-  })
-
-  <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-    .selectSteps(<span class="hljs-number">1</span>)
-    .chooseRule(Rule.ExistentialInstantiation)
-    .apply(parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>))
-    .deduction
-
-  <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
-
-  <span class="hljs-keyword">const</span> expected = Step({
-    <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
-    <span class="hljs-attr">formula</span>: formula1,
-    <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
-      <span class="hljs-attr">rule</span>: Rule.ExistentialInstantiation,
-      <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>],
-      <span class="hljs-attr">addedTermDependencies</span>: {
-        <span class="hljs-attr">dependent</span>: parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>).id,
-        <span class="hljs-attr">dependencies</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([parser.getSym(<span class="hljs-string">&#x27;b&#x27;</span>).id])
-      }
-    })
-  })
-
-  expect(actual).toEqual(expected)
-})
-
-test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ex Fxa&#x27;</span>)
-
-  <span class="hljs-keyword">const</span> deduction = Deduction({
-    <span class="hljs-attr">steps</span>: [
-      Step({
-        <span class="hljs-attr">formula</span>: formula0,
-        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
-      })
-    ]
-  })
-
-  expect(<span class="hljs-function">() =&gt;</span> {
-    startDeduction(deduction)
+    <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
       .selectSteps(<span class="hljs-number">1</span>)
       .chooseRule(Rule.ExistentialInstantiation)
       .apply()
-  }).toThrow(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
-})
+      .deduction
 
-test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ex Ay Fxy&#x27;</span>)
+    <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
 
-  <span class="hljs-keyword">const</span> deduction = Deduction({
-    <span class="hljs-attr">steps</span>: [
-      Step({
-        <span class="hljs-attr">formula</span>: formula0,
-        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
+    <span class="hljs-keyword">const</span> expected = Step({
+      <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
+      <span class="hljs-attr">formula</span>: formula1,
+      <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+        <span class="hljs-attr">rule</span>: Rule.ExistentialInstantiation,
+        <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>]
       })
-    ]
+    })
+
+    expect(actual).toEqual(expected)
   })
 
-  expect(<span class="hljs-function">() =&gt;</span> {
-    startDeduction(deduction)
+  test(<span class="hljs-string">&#x27;simple: Ex Fx |- Fa&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ex Fx&#x27;</span>)
+    <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Fa&#x27;</span>)
+
+    <span class="hljs-keyword">const</span> deduction = Deduction({
+      <span class="hljs-attr">steps</span>: [
+        Step({
+          <span class="hljs-attr">formula</span>: formula0,
+          <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
+        })
+      ]
+    })
+
+    <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
       .selectSteps(<span class="hljs-number">1</span>)
       .chooseRule(Rule.ExistentialInstantiation)
-      .apply(parser.getSym(<span class="hljs-string">&#x27;y&#x27;</span>))
-  }).toThrow(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
+      .apply(parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>))
+      .deduction
+
+    <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
+
+    <span class="hljs-keyword">const</span> expected = Step({
+      <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
+      <span class="hljs-attr">formula</span>: formula1,
+      <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+        <span class="hljs-attr">rule</span>: Rule.ExistentialInstantiation,
+        <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>],
+        <span class="hljs-attr">addedTermDependencies</span>: {
+          <span class="hljs-attr">dependent</span>: parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>).id,
+          <span class="hljs-attr">dependencies</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
+        }
+      })
+    })
+
+    expect(actual).toEqual(expected)
+  })
+
+  test(<span class="hljs-string">&#x27;with dependency terms: Ex Fxb |- Fab&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ex Fxb&#x27;</span>)
+    <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;Fab&#x27;</span>)
+
+    <span class="hljs-keyword">const</span> deduction = Deduction({
+      <span class="hljs-attr">steps</span>: [
+        Step({
+          <span class="hljs-attr">formula</span>: formula0,
+          <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
+        })
+      ]
+    })
+
+    <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
+      .selectSteps(<span class="hljs-number">1</span>)
+      .chooseRule(Rule.ExistentialInstantiation)
+      .apply(parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>))
+      .deduction
+
+    <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
+
+    <span class="hljs-keyword">const</span> expected = Step({
+      <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
+      <span class="hljs-attr">formula</span>: formula1,
+      <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+        <span class="hljs-attr">rule</span>: Rule.ExistentialInstantiation,
+        <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>],
+        <span class="hljs-attr">addedTermDependencies</span>: {
+          <span class="hljs-attr">dependent</span>: parser.getSym(<span class="hljs-string">&#x27;a&#x27;</span>).id,
+          <span class="hljs-attr">dependencies</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([parser.getSym(<span class="hljs-string">&#x27;b&#x27;</span>).id])
+        }
+      })
+    })
+
+    expect(actual).toEqual(expected)
+  })
+
+  test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ex Fxa&#x27;</span>)
+
+    <span class="hljs-keyword">const</span> deduction = Deduction({
+      <span class="hljs-attr">steps</span>: [
+        Step({
+          <span class="hljs-attr">formula</span>: formula0,
+          <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
+        })
+      ]
+    })
+
+    expect(<span class="hljs-function">() =&gt;</span> {
+      startDeduction(deduction)
+        .selectSteps(<span class="hljs-number">1</span>)
+        .chooseRule(Rule.ExistentialInstantiation)
+        .apply()
+    }).toThrow(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
+  })
+
+  test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;Ex Ay Fxy&#x27;</span>)
+
+    <span class="hljs-keyword">const</span> deduction = Deduction({
+      <span class="hljs-attr">steps</span>: [
+        Step({
+          <span class="hljs-attr">formula</span>: formula0,
+          <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
+        })
+      ]
+    })
+
+    expect(<span class="hljs-function">() =&gt;</span> {
+      startDeduction(deduction)
+        .selectSteps(<span class="hljs-number">1</span>)
+        .chooseRule(Rule.ExistentialInstantiation)
+        .apply(parser.getSym(<span class="hljs-string">&#x27;y&#x27;</span>))
+    }).toThrow(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
+  })
 })</pre></div></div>
             
         </li>

@@ -518,37 +518,39 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
   })
 })
 
-test(<span class="hljs-string">&#x27;double negation&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> formula0 = parser.parse(<span class="hljs-string">&#x27;~~p&#x27;</span>)
-  <span class="hljs-keyword">const</span> formula1 = parser.parse(<span class="hljs-string">&#x27;p&#x27;</span>)
+describe(<span class="hljs-string">&#x27;double negation elimination&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  test(<span class="hljs-string">&#x27;~~p |- p&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> premise1 = parser.parse(<span class="hljs-string">&#x27;~~p&#x27;</span>)
+    <span class="hljs-keyword">const</span> premise2 = parser.parse(<span class="hljs-string">&#x27;p&#x27;</span>)
 
-  <span class="hljs-keyword">const</span> deduction = Deduction({
-    <span class="hljs-attr">steps</span>: [
-      Step({
-        <span class="hljs-attr">formula</span>: formula0,
-        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
-      })
-    ]
-  })
-
-  <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-    .selectSteps(<span class="hljs-number">1</span>)
-    .chooseRule(Rule.DoubleNegationElimination)
-    .apply()
-    .deduction
-
-  <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
-
-  <span class="hljs-keyword">const</span> expected = Step({
-    <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
-    <span class="hljs-attr">formula</span>: formula1,
-    <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
-      <span class="hljs-attr">rule</span>: Rule.DoubleNegationElimination,
-      <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">const</span> deduction = Deduction({
+      <span class="hljs-attr">steps</span>: [
+        Step({
+          <span class="hljs-attr">formula</span>: premise1,
+          <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
+        })
+      ]
     })
-  })
 
-  expect(actual).toEqual(expected)
+    <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
+      .selectSteps(<span class="hljs-number">1</span>)
+      .chooseRule(Rule.DoubleNegationElimination)
+      .apply()
+      .deduction
+
+    <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
+
+    <span class="hljs-keyword">const</span> expected = Step({
+      <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
+      <span class="hljs-attr">formula</span>: premise2,
+      <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+        <span class="hljs-attr">rule</span>: Rule.DoubleNegationElimination,
+        <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>]
+      })
+    })
+
+    expect(actual).toEqual(expected)
+  })
 })</pre></div></div>
             
         </li>

@@ -506,7 +506,7 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
 <span class="hljs-keyword">import</span> { Deduction, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
 <span class="hljs-keyword">import</span> { RegularRuleApplicationSpec } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/rule-application-spec&#x27;</span>
-<span class="hljs-keyword">import</span> { equivalence } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
+<span class="hljs-keyword">import</span> { biconditional } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> BiconditionalIntroductionRuleInterface = <span class="hljs-function">(<span class="hljs-params">
@@ -519,7 +519,7 @@
       <span class="hljs-attr">rule</span>: Rule.BiconditionalIntroduction,
       <span class="hljs-attr">premises</span>: [premise1Index, premise2Index],
       <span class="hljs-attr">conclusion</span>: Expression({
-        <span class="hljs-attr">sym</span>: equivalence,
+        <span class="hljs-attr">sym</span>: biconditional,
         <span class="hljs-attr">children</span>: Deduction.getStep(deduction, premise1Index).formula.children
       })
     })

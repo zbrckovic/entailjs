@@ -518,40 +518,42 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
   })
 })
 
-test.each([
-  [<span class="hljs-string">&#x27;p &lt;-&gt; q&#x27;</span>, <span class="hljs-literal">false</span>, <span class="hljs-string">&#x27;p -&gt; q&#x27;</span>],
-  [<span class="hljs-string">&#x27;p &lt;-&gt; q&#x27;</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;q -&gt; p&#x27;</span>]
-])(<span class="hljs-string">&#x27;biconditional elimination&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">premiseText, reversed, conclusionText</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> premise = parser.parse(premiseText)
-  <span class="hljs-keyword">const</span> conclusion = parser.parse(conclusionText)
+describe(<span class="hljs-string">&#x27;biconditional elimination&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  test.each([
+    [<span class="hljs-string">&#x27;p &lt;-&gt; q&#x27;</span>, <span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, <span class="hljs-literal">false</span>],
+    [<span class="hljs-string">&#x27;p &lt;-&gt; q&#x27;</span>, <span class="hljs-string">&#x27;q -&gt; p&#x27;</span>, <span class="hljs-literal">true</span>]
+  ])(<span class="hljs-string">&#x27;%s |- %s, reversed: %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">premiseText, conclusionText, reversed</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> premise = parser.parse(premiseText)
+    <span class="hljs-keyword">const</span> conclusion = parser.parse(conclusionText)
 
-  <span class="hljs-keyword">const</span> deduction = Deduction({
-    <span class="hljs-attr">steps</span>: [
-      Step({
-        <span class="hljs-attr">formula</span>: premise,
-        <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
-      })
-    ]
-  })
-
-  <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-    .selectSteps(<span class="hljs-number">1</span>)
-    .chooseRule(Rule.BiconditionalElimination)
-    .apply(reversed)
-    .deduction
-
-  <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
-
-  <span class="hljs-keyword">const</span> expected = Step({
-    <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
-    <span class="hljs-attr">formula</span>: conclusion,
-    <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
-      <span class="hljs-attr">rule</span>: Rule.BiconditionalElimination,
-      <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">const</span> deduction = Deduction({
+      <span class="hljs-attr">steps</span>: [
+        Step({
+          <span class="hljs-attr">formula</span>: premise,
+          <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
+        })
+      ]
     })
-  })
 
-  expect(actual).toEqual(expected)
+    <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
+      .selectSteps(<span class="hljs-number">1</span>)
+      .chooseRule(Rule.BiconditionalElimination)
+      .apply(reversed)
+      .deduction
+
+    <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
+
+    <span class="hljs-keyword">const</span> expected = Step({
+      <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
+      <span class="hljs-attr">formula</span>: conclusion,
+      <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
+        <span class="hljs-attr">rule</span>: Rule.BiconditionalElimination,
+        <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>]
+      })
+    })
+
+    expect(actual).toEqual(expected)
+  })
 })</pre></div></div>
             
         </li>

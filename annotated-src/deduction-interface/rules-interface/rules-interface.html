@@ -511,7 +511,7 @@
   conditional,
   conjunction,
   disjunction,
-  equivalence,
+  biconditional,
   existentialQuantifier,
   universalQuantifier
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
@@ -914,7 +914,7 @@
 
       <span class="hljs-keyword">const</span> premise = Deduction.getStep(deduction, premiseIndex).formula
 
-      <span class="hljs-keyword">if</span> (!Sym.equals(premise.sym, equivalence)) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
+      <span class="hljs-keyword">if</span> (!Sym.equals(premise.sym, biconditional)) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
 
       <span class="hljs-keyword">return</span> BiconditionalEliminationRuleInterface(deduction, premiseIndex)
     }

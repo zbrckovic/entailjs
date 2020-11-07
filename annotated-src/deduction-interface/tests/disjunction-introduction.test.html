@@ -522,7 +522,12 @@ describe(<span class="hljs-string">&#x27;disjunction introduction&#x27;</span>, 
   test.each([
     [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;p | q&#x27;</span>, <span class="hljs-literal">false</span>],
     [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;q | p&#x27;</span>, <span class="hljs-literal">true</span>]
-  ])(<span class="hljs-string">&#x27;%s |- %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">premiseText, disjunctText, conclusionText, addingLeft</span>) =&gt;</span> {
+  ])(<span class="hljs-string">&#x27;%s (adding %s) |- %s (adding left: %s)&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">
+    premiseText,
+    disjunctText,
+    conclusionText,
+    addingLeft
+  </span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> premise = parser.parse(premiseText)
     <span class="hljs-keyword">const</span> disjunct = parser.parse(disjunctText)
     <span class="hljs-keyword">const</span> conclusion = parser.parse(conclusionText)

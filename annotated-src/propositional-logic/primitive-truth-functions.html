@@ -503,7 +503,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { conjunction, disjunction, equivalence, conditional, negation } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { conjunction, disjunction, biconditional, conditional, negation } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
 <span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> primitiveTruthFunctions = {
@@ -511,7 +511,7 @@
   [conjunction.id]: <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a &amp;&amp; b,
   [disjunction.id]: <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a || b,
   [conditional.id]: <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> !a || b,
-  [equivalence.id]: <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a === b
+  [biconditional.id]: <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a === b
 }
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> generateValuesPermutations = <span class="hljs-function"><span class="hljs-params">arity</span> =&gt;</span>

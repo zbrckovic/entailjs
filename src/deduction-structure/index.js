@@ -1,3 +1,3 @@
 export { Deduction } from './deduction'
-export { Rule } from './rule'
+export { Rule, getAbbreviation, getRule } from './rule'
 export { TermDependencyGraph } from './term-dependency-graph'

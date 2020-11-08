@@ -1,7 +1,13 @@
 export {
   Expression, ExpressionPointer, connectWithBinarySym, Category, Kind, Sym
 } from './abstract-structures'
-export { Deduction, Rule, TermDependencyGraph } from './deduction-structure'
+export {
+  Deduction,
+  Rule,
+  TermDependencyGraph,
+  getAbbreviation,
+  getRule
+} from './deduction-structure'
 export {
   FormulaParser,
   DeductionParser,

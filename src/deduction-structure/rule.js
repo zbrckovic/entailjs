@@ -45,7 +45,7 @@ const ruleToAbbreviation = {
   [Rule.ConditionalElimination]: 'IF-',
 
   [Rule.ConjunctionIntroduction]: 'AND+',
-  [Rule.DisjunctionElimination]: 'AND-',
+  [Rule.ConjunctionElimination]: 'AND-',
 
   [Rule.DisjunctionIntroduction]: 'OR+',
   [Rule.DisjunctionElimination]: 'OR-',
@@ -75,7 +75,7 @@ const abbreviationToRule = {
   'NOT-': Rule.NegationElimination,
 
   'AND+': Rule.ConjunctionIntroduction,
-  'AND-': Rule.ConditionalElimination,
+  'AND-': Rule.ConjunctionElimination,
 
   'OR+': Rule.DisjunctionIntroduction,
   'OR-': Rule.DisjunctionElimination,

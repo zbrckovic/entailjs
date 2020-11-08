@@ -13,7 +13,7 @@ beforeEach(() => {
   })
 })
 
-describe('double negation elimination', () => {
+describe('negation elimination', () => {
   test('~~p |- p', () => {
     const premise1 = parser.parse('~~p')
     const premise2 = parser.parse('p')
@@ -29,7 +29,7 @@ describe('double negation elimination', () => {
 
     const newDeduction = startDeduction(deduction)
       .selectSteps(1)
-      .chooseRule(Rule.DoubleNegationElimination)
+      .chooseRule(Rule.NegationElimination)
       .apply()
       .deduction
 
@@ -39,7 +39,7 @@ describe('double negation elimination', () => {
       assumptions: new Set([0]),
       formula: premise2,
       ruleApplicationSummary: RegularRuleApplicationSummary({
-        rule: Rule.DoubleNegationElimination,
+        rule: Rule.NegationElimination,
         premises: [0]
       })
     })

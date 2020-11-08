@@ -21,10 +21,10 @@ import { BiconditionalIntroductionRuleInterface } from './biconditional-introduc
 import { ConditionalEliminationRuleInterface } from './conditional-elimination-rule-interface'
 import { ConjunctionEliminationRuleInterface } from './conjunction-elimination-rule-interface'
 import { ConjunctionIntroductionRuleInterface } from './conjunction-introduction-rule-interface'
-import { DeductionRuleInterface } from './deduction-rule-interface'
+import { ConditionalIntroductionRuleInterface } from './conditional-introduction-rule-interface'
 import { DisjunctionEliminationRuleInterface } from './disjunction-elimination-rule-interface'
 import { DisjunctionIntroductionRuleInterface } from './disjunction-introduction-rule-interface'
-import { DoubleNegationEliminationRuleInterface } from './double-negation-elimination-rule-interface'
+import { NegationEliminationRuleInterface } from './negation-elimination-rule-interface'
 import { NegationIntroductionRuleInterface } from './negation-introduction-rule-interface'
 import { PremiseRuleInterface } from './premise-rule-interface'
 import {
@@ -35,7 +35,7 @@ import {
 } from './quantification'
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
 import { TheoremRuleInterface } from './theorem-rule-interface'
-import { WeakNegationEliminationRuleInterface } from './weak-negation-elimination-rule-interface'
+import { ExplosionRuleInterface } from './explosion-rule-interface'
 
 // Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
 export const RulesInterface = (deduction, ...steps) => {
@@ -45,7 +45,7 @@ export const RulesInterface = (deduction, ...steps) => {
 
       return PremiseRuleInterface(deduction)
     },
-    [Rule.Deduction]: () => {
+    [Rule.ConditionalIntroduction]: () => {
       if (steps.length !== 2) return undefined
 
       const [step1Index, step2Index] = steps
@@ -55,14 +55,14 @@ export const RulesInterface = (deduction, ...steps) => {
       const step1IsAssumptionForStep2 = step2.assumptions.has(step1Index)
 
       if (step1IsPremise && step1IsAssumptionForStep2) {
-        return DeductionRuleInterface(deduction, step1Index, step2Index)
+        return ConditionalIntroductionRuleInterface(deduction, step1Index, step2Index)
       }
 
       const step2IsPremise = step2.ruleApplicationSummary.rule === Rule.Premise
       const step2IsAssumptionForStep1 = step1.assumptions.has(step2Index)
 
       if (step2IsPremise && step2IsAssumptionForStep1) {
-        return DeductionRuleInterface(deduction, step2Index, step1Index)
+        return ConditionalIntroductionRuleInterface(deduction, step2Index, step1Index)
       }
 
       return undefined
@@ -157,7 +157,7 @@ export const RulesInterface = (deduction, ...steps) => {
         )
       }
     },
-    [Rule.DoubleNegationElimination]: () => {
+    [Rule.NegationElimination]: () => {
       if (steps.length !== 1) return undefined
 
       const [stepIndex] = steps
@@ -165,20 +165,20 @@ export const RulesInterface = (deduction, ...steps) => {
 
       if (!isDoubleNegation(formula)) return undefined
 
-      return DoubleNegationEliminationRuleInterface(deduction, stepIndex)
+      return NegationEliminationRuleInterface(deduction, stepIndex)
     },
-    [Rule.WeakNegationElimination]: () => {
+    [Rule.Explosion]: () => {
       if (steps.length !== 2) return undefined
 
       const [step1Index, step2Index] = steps
       const [step1, step2] = steps.map(i => Deduction.getStep(deduction, i))
 
       if (isNegationOf(step1.formula, step2.formula)) {
-        return WeakNegationEliminationRuleInterface(deduction, step2Index, step1Index)
+        return ExplosionRuleInterface(deduction, step2Index, step1Index)
       }
 
       if (isNegationOf(step2.formula, step1.formula)) {
-        return WeakNegationEliminationRuleInterface(deduction, step1Index, step2Index)
+        return ExplosionRuleInterface(deduction, step1Index, step2Index)
       }
 
       return undefined

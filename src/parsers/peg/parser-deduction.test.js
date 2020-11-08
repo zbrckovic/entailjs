@@ -269,7 +269,7 @@ test('parse()', () => {
         },
         ordinal: 6,
         ruleApplicationSummary: {
-          rule: getAbbreviation(Rule.Deduction),
+          rule: getAbbreviation(Rule.ConditionalIntroduction),
           premises: [1, 5]
         }
       }

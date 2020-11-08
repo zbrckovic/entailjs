@@ -4,10 +4,10 @@ import { Deduction, Rule } from '../../deduction-structure'
 import { Expression } from '../../abstract-structures'
 import { conditional } from '../../primitive-syms'
 
-export const DeductionRuleInterface = (deduction, step1Index, step2Index) => {
+export const ConditionalIntroductionRuleInterface = (deduction, step1Index, step2Index) => {
   const apply = () => {
     const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.Deduction,
+      rule: Rule.ConditionalIntroduction,
       premises: [step1Index, step2Index],
       conclusion: Expression({
         sym: conditional,

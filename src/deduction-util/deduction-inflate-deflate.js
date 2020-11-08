@@ -25,7 +25,7 @@ export const deflateDeduction = deduction =>
         result.formula = formula
         break
       }
-      case Rule.Deduction: {
+      case Rule.ConditionalIntroduction: {
         break
       }
       case Rule.UniversalGeneralization: {
@@ -84,7 +84,7 @@ export const inflateDeduction = steps => {
       case Rule.TautologicalImplication:
         deductionInterface = ruleInterface.apply(step.formula)
         break
-      case Rule.Deduction:
+      case Rule.ConditionalIntroduction:
         deductionInterface = ruleInterface.apply()
         break
       case Rule.UniversalGeneralization:

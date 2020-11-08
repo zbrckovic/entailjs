@@ -1,8 +1,8 @@
-import { FormulaParser } from '../../parsers/formula-parser'
-import { primitiveSyms } from '../../primitive-syms'
-import { primitivePresentations } from '../../presentation/sym-presentation'
 import { Deduction, Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSummary, Step } from '../../deduction-structure/step'
+import { FormulaParser } from '../../parsers/formula-parser'
+import { primitivePresentations } from '../../presentation/sym-presentation'
+import { primitiveSyms } from '../../primitive-syms'
 import { startDeduction } from '../deduction-interface'
 
 let parser
@@ -13,22 +13,19 @@ beforeEach(() => {
   })
 })
 
-describe('weak negation elimination', () => {
+describe('conditional introduction', () => {
   test.each([
-    ['p', '~p', 'q', [1, 2], [0, 1]],
-    ['p', '~p', 'q', [2, 1], [0, 1]],
-    ['~p', 'p', 'q', [1, 2], [1, 0]],
-    ['~p', 'p', 'q', [2, 1], [1, 0]]
-  ])('%s, %s |- %s (selected steps: %j)', (
+    ['~~p', 'p', '~~p -> p', [1, 2]],
+    ['~~p', 'p', '~~p -> p', [2, 1]]
+  ])('%s, %s |- %s (selected steps %j)', (
     premise1Text,
     premise2Text,
     conclusionText,
-    selectedSteps,
-    premises
+    selectedSteps
   ) => {
     const premise1 = parser.parse(premise1Text)
     const premise2 = parser.parse(premise2Text)
-    const conclusion = parser.parse('q')
+    const conclusion = parser.parse(conclusionText)
 
     const deduction = Deduction({
       steps: [
@@ -37,26 +34,29 @@ describe('weak negation elimination', () => {
           ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
         }),
         Step({
+          assumptions: new Set([0]),
           formula: premise2,
-          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
+          ruleApplicationSummary: RegularRuleApplicationSummary({
+            rule: Rule.TautologicalImplication,
+            premises: [0]
+          })
         })
       ]
     })
 
     const newDeduction = startDeduction(deduction)
       .selectSteps(...selectedSteps)
-      .chooseRule(Rule.WeakNegationElimination)
-      .apply(conclusion)
+      .chooseRule(Rule.ConditionalIntroduction)
+      .apply()
       .deduction
 
     const actual = Deduction.getLastStep(newDeduction)
 
     const expected = Step({
-      assumptions: new Set([0, 1]),
       formula: conclusion,
       ruleApplicationSummary: RegularRuleApplicationSummary({
-        rule: Rule.WeakNegationElimination,
-        premises
+        rule: Rule.ConditionalIntroduction,
+        premises: [0, 1]
       })
     })
 

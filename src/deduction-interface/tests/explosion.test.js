@@ -1,8 +1,8 @@
+import { FormulaParser } from '../../parsers/formula-parser'
+import { primitiveSyms } from '../../primitive-syms'
+import { primitivePresentations } from '../../presentation/sym-presentation'
 import { Deduction, Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSummary, Step } from '../../deduction-structure/step'
-import { FormulaParser } from '../../parsers/formula-parser'
-import { primitivePresentations } from '../../presentation/sym-presentation'
-import { primitiveSyms } from '../../primitive-syms'
 import { startDeduction } from '../deduction-interface'
 
 let parser
@@ -13,19 +13,22 @@ beforeEach(() => {
   })
 })
 
-describe('deduction', () => {
+describe('explosion', () => {
   test.each([
-    ['~~p', 'p', '~~p -> p', [1, 2]],
-    ['~~p', 'p', '~~p -> p', [2, 1]]
-  ])('%s, %s |- %s (selected steps %j)', (
+    ['p', '~p', 'q', [1, 2], [0, 1]],
+    ['p', '~p', 'q', [2, 1], [0, 1]],
+    ['~p', 'p', 'q', [1, 2], [1, 0]],
+    ['~p', 'p', 'q', [2, 1], [1, 0]]
+  ])('%s, %s |- %s (selected steps: %j)', (
     premise1Text,
     premise2Text,
     conclusionText,
-    selectedSteps
+    selectedSteps,
+    premises
   ) => {
     const premise1 = parser.parse(premise1Text)
     const premise2 = parser.parse(premise2Text)
-    const conclusion = parser.parse(conclusionText)
+    const conclusion = parser.parse('q')
 
     const deduction = Deduction({
       steps: [
@@ -34,29 +37,26 @@ describe('deduction', () => {
           ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
         }),
         Step({
-          assumptions: new Set([0]),
           formula: premise2,
-          ruleApplicationSummary: RegularRuleApplicationSummary({
-            rule: Rule.TautologicalImplication,
-            premises: [0]
-          })
+          ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
         })
       ]
     })
 
     const newDeduction = startDeduction(deduction)
       .selectSteps(...selectedSteps)
-      .chooseRule(Rule.Deduction)
-      .apply()
+      .chooseRule(Rule.Explosion)
+      .apply(conclusion)
       .deduction
 
     const actual = Deduction.getLastStep(newDeduction)
 
     const expected = Step({
+      assumptions: new Set([0, 1]),
       formula: conclusion,
       ruleApplicationSummary: RegularRuleApplicationSummary({
-        rule: Rule.Deduction,
-        premises: [0, 1]
+        rule: Rule.Explosion,
+        premises
       })
     })
 

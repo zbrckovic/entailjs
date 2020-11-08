@@ -2,12 +2,12 @@ import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-appli
 import { Deduction, Rule } from '../../deduction-structure'
 import { startDeduction } from '../deduction-interface'
 
-export const DoubleNegationEliminationRuleInterface = (deduction, stepIndex) => {
+export const NegationEliminationRuleInterface = (deduction, stepIndex) => {
   const apply = () => {
     const { formula } = Deduction.getStep(deduction, stepIndex)
 
     const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.DoubleNegationElimination,
+      rule: Rule.NegationElimination,
       premises: [stepIndex],
       conclusion: formula.children[0].children[0]
     })

@@ -6,11 +6,9 @@ export const Rule = {
   TautologicalImplication: 'TautologicalImplication',
 
   NegationIntroduction: 'NegationIntroduction',
-  DoubleNegationElimination: 'DoubleNegationElimination',
+  NegationElimination: 'DoubleNegationElimination',
 
-  WeakNegationElimination: 'WeakNegationElimination',
-
-  Deduction: 'Deduction',
+  ConditionalIntroduction: 'Deduction',
   ConditionalElimination: 'ConditionalElimination',
 
   ConjunctionIntroduction: 'ConjunctionIntroduction',
@@ -22,8 +20,11 @@ export const Rule = {
   BiconditionalIntroduction: 'BiconditionalIntroduction',
   BiconditionalElimination: 'BiconditionalElimination',
 
+  Explosion: 'Explosion',
+
   UniversalGeneralization: 'UniversalGeneralization',
   UniversalInstantiation: 'UniversalInstantiation',
+
   ExistentialGeneralization: 'ExistentialGeneralization',
   ExistentialInstantiation: 'ExistentialInstantiation'
 }
@@ -38,9 +39,9 @@ const ruleToAbbreviation = {
   [Rule.TautologicalImplication]: 'TI',
 
   [Rule.NegationIntroduction]: 'NOT+',
-  [Rule.DoubleNegationElimination]: 'NOT-',
+  [Rule.NegationElimination]: 'NOT-',
 
-  [Rule.Deduction]: 'IF+',
+  [Rule.ConditionalIntroduction]: 'IF+',
   [Rule.ConditionalElimination]: 'IF-',
 
   [Rule.ConjunctionIntroduction]: 'AND+',
@@ -52,7 +53,7 @@ const ruleToAbbreviation = {
   [Rule.BiconditionalIntroduction]: 'IFF+',
   [Rule.BiconditionalElimination]: 'IFF-',
 
-  [Rule.WeakNegationElimination]: 'X',
+  [Rule.Explosion]: 'X',
 
   [Rule.UniversalInstantiation]: 'A-',
   [Rule.UniversalGeneralization]: 'A+',
@@ -67,11 +68,11 @@ const abbreviationToRule = {
 
   TI: Rule.TautologicalImplication,
 
-  'IF+': Rule.Deduction,
+  'IF+': Rule.ConditionalIntroduction,
   'IF-': Rule.ConditionalElimination,
 
   'NOT+': Rule.NegationIntroduction,
-  'NOT-': Rule.DoubleNegationElimination,
+  'NOT-': Rule.NegationElimination,
 
   'AND+': Rule.ConjunctionIntroduction,
   'AND-': Rule.ConditionalElimination,
@@ -82,7 +83,7 @@ const abbreviationToRule = {
   'IFF+': Rule.BiconditionalIntroduction,
   'IFF-': Rule.BiconditionalElimination,
 
-  X: Rule.WeakNegationElimination,
+  X: Rule.Explosion,
 
   'A-': Rule.UniversalInstantiation,
   'A+': Rule.UniversalGeneralization,

@@ -53,7 +53,7 @@ export const AstProcessor = ({ syms, presentations }) => {
         deductionInterface = ruleInterface.apply(formula)
         break
       }
-      case Rule.Deduction: {
+      case Rule.ConditionalIntroduction: {
         if (ruleInterface === undefined) {
           throw createError(ErrorName.RULE_NOT_ALLOWED, undefined, rule)
         }

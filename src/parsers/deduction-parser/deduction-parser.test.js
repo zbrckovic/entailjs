@@ -81,7 +81,7 @@ test('parse()', () => {
         assumptions: new Set(),
         formula: formulaParser.parse('Ey Ax Fxy -> Ax Ey Fxy'),
         ruleApplicationSummary: RegularRuleApplicationSummary({
-          rule: Rule.Deduction,
+          rule: Rule.ConditionalIntroduction,
           premises: [0, 4]
         })
       })
@@ -178,7 +178,7 @@ test('parse()', () => {
       Step({
         formula: formulaParser.parse('Ex Fx -> Ex Hx'),
         ruleApplicationSummary: RegularRuleApplicationSummary({
-          rule: Rule.Deduction,
+          rule: Rule.ConditionalIntroduction,
           premises: [2, 7]
         }),
         assumptions: new Set([0, 1])
@@ -186,7 +186,7 @@ test('parse()', () => {
       Step({
         formula: formulaParser.parse('Ax (Gx -> Hx) -> (Ex Fx -> Ex Hx)'),
         ruleApplicationSummary: RegularRuleApplicationSummary({
-          rule: Rule.Deduction,
+          rule: Rule.ConditionalIntroduction,
           premises: [1, 8]
         }),
         assumptions: new Set([0])
@@ -196,7 +196,7 @@ test('parse()', () => {
           'Ax (Fx -> Gx) -> (Ax (Gx -> Hx) -> (Ex Fx -> Ex Hx))'
         ),
         ruleApplicationSummary: RegularRuleApplicationSummary({
-          rule: Rule.Deduction,
+          rule: Rule.ConditionalIntroduction,
           premises: [0, 9]
         })
       })

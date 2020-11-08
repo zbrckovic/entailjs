@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1604768669513" clover="3.2.0">
-  <project timestamp="1604768669513" name="All files">
+<coverage generated="1604835261520" clover="3.2.0">
+  <project timestamp="1604835261520" name="All files">
     <metrics statements="996" coveredstatements="923" conditionals="469" coveredconditionals="345" methods="271" coveredmethods="251" elements="1736" coveredelements="1519" complexity="0" loc="996" ncloc="996" packages="13" files="55" classes="55"/>
     <package name="src">
       <metrics statements="26" coveredstatements="19" conditionals="5" coveredconditionals="3" methods="4" coveredmethods="3"/>
@@ -706,10 +706,10 @@
       <file name="rule.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/rule.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="2" count="21" type="stmt"/>
-        <line num="35" count="21" type="stmt"/>
-        <line num="36" count="53" type="stmt"/>
-        <line num="38" count="21" type="stmt"/>
-        <line num="70" count="21" type="stmt"/>
+        <line num="31" count="21" type="stmt"/>
+        <line num="32" count="53" type="stmt"/>
+        <line num="34" count="21" type="stmt"/>
+        <line num="64" count="21" type="stmt"/>
       </file>
       <file name="step.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/step.js">
         <metrics statements="5" coveredstatements="5" conditionals="7" coveredconditionals="3" methods="3" coveredmethods="2"/>

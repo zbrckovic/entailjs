@@ -146,12 +146,10 @@
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -213,9 +211,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -237,92 +241,94 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// Fixed set of rule names/identifiers available in deduction.
 export const Rule = {
-  // BASE RULES:
   Premise: 'Premise',
-  Deduction: 'Deduction', // also ConditionalIntroduction
-  TautologicalImplication: 'TautologicalImplication',
-  UniversalInstantiation: 'UniversalInstantiation',
-  UniversalGeneralization: 'UniversalGeneralization',
-  ExistentialInstantiation: 'ExistentialInstantiation',
-  ExistentialGeneralization: 'ExistentialGeneralization',
   Theorem: 'Theorem',
 &nbsp;
-  // ADDITIONAL RULES FOR PROPOSITIONAL LOGIC
-  // Rules of negation:
+  TautologicalImplication: 'TautologicalImplication',
+&nbsp;
   NegationIntroduction: 'NegationIntroduction',
   DoubleNegationElimination: 'DoubleNegationElimination',
+&nbsp;
   WeakNegationElimination: 'WeakNegationElimination',
 &nbsp;
-  // Rules of conditional:
+  Deduction: 'Deduction',
   ConditionalElimination: 'ConditionalElimination',
 &nbsp;
-  // Rules of conjunction:
   ConjunctionIntroduction: 'ConjunctionIntroduction',
   ConjunctionElimination: 'ConjunctionElimination',
 &nbsp;
-  // Rules of disjunction:
   DisjunctionIntroduction: 'DisjunctionIntroduction',
   DisjunctionElimination: 'DisjunctionElimination',
 &nbsp;
-  // Rules of biconditional:
   BiconditionalIntroduction: 'BiconditionalIntroduction',
-  BiconditionalElimination: 'BiconditionalElimination'
+  BiconditionalElimination: 'BiconditionalElimination',
+&nbsp;
+  UniversalGeneralization: 'UniversalGeneralization',
+  UniversalInstantiation: 'UniversalInstantiation',
+  ExistentialGeneralization: 'ExistentialGeneralization',
+  ExistentialInstantiation: 'ExistentialInstantiation'
 }
 &nbsp;
 export const getAbbreviation = rule =&gt; ruleToAbbreviation[rule]
 export const getRule = abbreviation =&gt; abbreviationToRule[abbreviation]
 &nbsp;
 const ruleToAbbreviation = {
-  // Base rules:
   [Rule.Premise]: 'P',
-  [Rule.Deduction]: 'D',
-  [Rule.TautologicalImplication]: 'TI',
-  [Rule.UniversalInstantiation]: 'UI',
-  [Rule.UniversalGeneralization]: 'UG',
-  [Rule.ExistentialInstantiation]: 'EI',
-  [Rule.ExistentialGeneralization]: 'EG',
   [Rule.Theorem]: 'T',
 &nbsp;
-  // Rules of negation:
-  [Rule.NegationIntroduction]: 'NEG+',
-  [Rule.WeakNegationElimination]: 'NEG-',
-  [Rule.DoubleNegationElimination]: 'NEG--',
+  [Rule.TautologicalImplication]: 'TI',
 &nbsp;
-  // Rules of conditional:
+  [Rule.NegationIntroduction]: 'NOT+',
+  [Rule.DoubleNegationElimination]: 'NOT-',
+&nbsp;
+  [Rule.Deduction]: 'IF+',
   [Rule.ConditionalElimination]: 'IF-',
 &nbsp;
-  // Rules of conjunction:
   [Rule.ConjunctionIntroduction]: 'AND+',
   [Rule.DisjunctionElimination]: 'AND-',
 &nbsp;
-  // Rules of disjunction:
   [Rule.DisjunctionIntroduction]: 'OR+',
   [Rule.DisjunctionElimination]: 'OR-',
 &nbsp;
-  // Rules of biconditional:
   [Rule.BiconditionalIntroduction]: 'IFF+',
-  [Rule.BiconditionalElimination]: 'IFF-'
+  [Rule.BiconditionalElimination]: 'IFF-',
+&nbsp;
+  [Rule.WeakNegationElimination]: 'X',
+&nbsp;
+  [Rule.UniversalInstantiation]: 'A-',
+  [Rule.UniversalGeneralization]: 'A+',
+&nbsp;
+  [Rule.ExistentialInstantiation]: 'E-',
+  [Rule.ExistentialGeneralization]: 'E+'
 }
 &nbsp;
 const abbreviationToRule = {
   P: Rule.Premise,
-  D: Rule.Deduction,
-  TI: Rule.TautologicalImplication,
-  UI: Rule.UniversalInstantiation,
-  UG: Rule.UniversalGeneralization,
-  EI: Rule.ExistentialInstantiation,
-  EG: Rule.ExistentialGeneralization,
   T: Rule.Theorem,
+&nbsp;
+  TI: Rule.TautologicalImplication,
+&nbsp;
+  'IF+': Rule.Deduction,
   'IF-': Rule.ConditionalElimination,
-  'NEG+': Rule.NegationIntroduction,
-  'NEG-': Rule.WeakNegationElimination,
-  'NEG--': Rule.DoubleNegationElimination,
+&nbsp;
+  'NOT+': Rule.NegationIntroduction,
+  'NOT-': Rule.DoubleNegationElimination,
+&nbsp;
   'AND+': Rule.ConjunctionIntroduction,
   'AND-': Rule.ConditionalElimination,
+&nbsp;
   'OR+': Rule.DisjunctionIntroduction,
   'OR-': Rule.DisjunctionElimination,
+&nbsp;
   'IFF+': Rule.BiconditionalIntroduction,
-  'IFF-': Rule.BiconditionalElimination
+  'IFF-': Rule.BiconditionalElimination,
+&nbsp;
+  X: Rule.WeakNegationElimination,
+&nbsp;
+  'A-': Rule.UniversalInstantiation,
+  'A+': Rule.UniversalGeneralization,
+  'E-': Rule.ExistentialInstantiation,
+  'E+': Rule.ExistentialGeneralization
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -331,7 +337,7 @@ const abbreviationToRule = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Nov 07 2020 17:04:29 GMT+0000 (Coordinated Universal Time)
+                at Sun Nov 08 2020 11:34:21 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

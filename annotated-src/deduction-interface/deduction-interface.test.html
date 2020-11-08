@@ -518,7 +518,7 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
 test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.TERM_ALREADY_USED}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> deduction = parser.parse(<span class="hljs-string">`
         (1) Ex Fx / P;
-    1   (2) Fa    / EI 1;
+    1   (2) Fa    / E- 1;
     `</span>)
 
   expect(<span class="hljs-function">() =&gt;</span> {
@@ -532,8 +532,8 @@ test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.TERM
 test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.CYCLIC_DEPENDENCIES}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> deduction = parser.parse(<span class="hljs-string">`
     (1) Ax Ey Fxy / P;
-  1 (2) Ey Fay    / UI 1;
-  1 (3) Fab       / EI 2;
+  1 (2) Ey Fay    / A- 1;
+  1 (3) Fab       / E- 2;
   `</span>)
 
   expect(<span class="hljs-function">() =&gt;</span> {
@@ -547,15 +547,15 @@ test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.CYCL
 test(<span class="hljs-string">&#x27;#deleteLastStep() case 1&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> expectedDeduction = parser.parse(<span class="hljs-string">`
     (1) Ex Ey Ez Fxyz / P;
-  1 (2) Ey Ez Fayz    / EI 1;
-  1 (3) Ez Fabz       / EI 2;
+  1 (2) Ey Ez Fayz    / E- 1;
+  1 (3) Ez Fabz       / E- 2;
   `</span>)
 
   <span class="hljs-keyword">const</span> deductionWithAddedStep = parser.parse(<span class="hljs-string">`
     (1) Ex Ey Ez Fxyz / P;
-  1 (2) Ey Ez Fayz    / EI 1;
-  1 (3) Ez Fabz       / EI 2;
-  1 (4) Fabc          / EI 3;
+  1 (2) Ey Ez Fayz    / E- 1;
+  1 (3) Ez Fabz       / E- 2;
+  1 (4) Fabc          / E- 3;
   `</span>)
 
   <span class="hljs-keyword">const</span> actualDeduction = startDeduction(deductionWithAddedStep).deleteLastStep().deduction
@@ -567,14 +567,14 @@ test(<span class="hljs-string">&#x27;#deleteLastStep() case 2&#x27;</span>, <spa
   <span class="hljs-keyword">const</span> expectedDeduction = parser.parse(<span class="hljs-string">`
     (1) Ex Fxbc / P;
     (2) Ex Gxc  / P;
-  1 (3) Fabc    / EI 1;
+  1 (3) Fabc    / E- 1;
   `</span>)
 
   <span class="hljs-keyword">const</span> deductionWithAddedStep = parser.parse(<span class="hljs-string">`
     (1) Ex Fxbc / P;
     (2) Ex Gxc  / P;
-  1 (3) Fabc    / EI 1;
-  2 (4) Gbc     / EI 2;
+  1 (3) Fabc    / E- 1;
+  2 (4) Gbc     / E- 2;
   `</span>)
 
   <span class="hljs-keyword">const</span> actualDeduction = startDeduction(deductionWithAddedStep).deleteLastStep().deduction

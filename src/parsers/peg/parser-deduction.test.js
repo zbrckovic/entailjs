@@ -6,11 +6,11 @@ import { Rule } from '../../deduction-structure'
 test('parse()', () => {
   const text = `
         (1) Ey Ax Fxy              / P;
-    1   (2) Ax Fxa                 / EI 1;
-    1   (3) Fba                    / UI 2;
-    1   (4) Ey Fby                 / EG 3;
-    1   (5) Ax Ey Fxy              / UG 4;
-        (6) Ey Ax Fxy -> Ax Ey Fxy / D 1, 5;
+    1   (2) Ax Fxa                 / E- 1;
+    1   (3) Fba                    / A- 2;
+    1   (4) Ey Fby                 / E+ 3;
+    1   (5) Ax Ey Fxy              / A+ 4;
+        (6) Ey Ax Fxy -> Ax Ey Fxy / IF+ 1, 5;
     `
 
   const expected = {

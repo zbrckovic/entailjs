@@ -178,23 +178,23 @@ RuleApplicationSummary
 
 Rule
     = "P"
-    / "D"
     / "TI"
-    / "UI"
-    / "UG"
-    / "EI"
-    / "EG"
     / "T"
+    / "IF+"
     / "IF-"
-    / "NEG+"
-    / "NEG-"
-    / "NEG-"
+    / "NOT+"
+    / "NOT-"
     / "AND+"
     / "AND-"
     / "OR+"
     / "OR-"
     / "IFF+"
     / "IFF-"
+    / "X"
+    / "A+"
+    / "A-"
+    / "E+"
+    / "E-"
 
 /* ---------- Util ---------- */
 

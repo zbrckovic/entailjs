@@ -13,7 +13,7 @@ beforeEach(() => {
 test(`throws ${ErrorName.TERM_ALREADY_USED}`, () => {
   const deduction = parser.parse(`
         (1) Ex Fx / P;
-    1   (2) Fa    / EI 1;
+    1   (2) Fa    / E- 1;
     `)
 
   expect(() => {
@@ -27,8 +27,8 @@ test(`throws ${ErrorName.TERM_ALREADY_USED}`, () => {
 test(`throws ${ErrorName.CYCLIC_DEPENDENCIES}`, () => {
   const deduction = parser.parse(`
     (1) Ax Ey Fxy / P;
-  1 (2) Ey Fay    / UI 1;
-  1 (3) Fab       / EI 2;
+  1 (2) Ey Fay    / A- 1;
+  1 (3) Fab       / E- 2;
   `)
 
   expect(() => {
@@ -42,15 +42,15 @@ test(`throws ${ErrorName.CYCLIC_DEPENDENCIES}`, () => {
 test('#deleteLastStep() case 1', () => {
   const expectedDeduction = parser.parse(`
     (1) Ex Ey Ez Fxyz / P;
-  1 (2) Ey Ez Fayz    / EI 1;
-  1 (3) Ez Fabz       / EI 2;
+  1 (2) Ey Ez Fayz    / E- 1;
+  1 (3) Ez Fabz       / E- 2;
   `)
 
   const deductionWithAddedStep = parser.parse(`
     (1) Ex Ey Ez Fxyz / P;
-  1 (2) Ey Ez Fayz    / EI 1;
-  1 (3) Ez Fabz       / EI 2;
-  1 (4) Fabc          / EI 3;
+  1 (2) Ey Ez Fayz    / E- 1;
+  1 (3) Ez Fabz       / E- 2;
+  1 (4) Fabc          / E- 3;
   `)
 
   const actualDeduction = startDeduction(deductionWithAddedStep).deleteLastStep().deduction
@@ -62,14 +62,14 @@ test('#deleteLastStep() case 2', () => {
   const expectedDeduction = parser.parse(`
     (1) Ex Fxbc / P;
     (2) Ex Gxc  / P;
-  1 (3) Fabc    / EI 1;
+  1 (3) Fabc    / E- 1;
   `)
 
   const deductionWithAddedStep = parser.parse(`
     (1) Ex Fxbc / P;
     (2) Ex Gxc  / P;
-  1 (3) Fabc    / EI 1;
-  2 (4) Gbc     / EI 2;
+  1 (3) Fabc    / E- 1;
+  2 (4) Gbc     / E- 2;
   `)
 
   const actualDeduction = startDeduction(deductionWithAddedStep).deleteLastStep().deduction

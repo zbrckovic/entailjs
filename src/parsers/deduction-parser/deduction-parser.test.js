@@ -17,11 +17,11 @@ beforeEach(() => {
 test('parse()', () => {
   const text = `
         (1) Ey Ax Fxy              / P;
-    1   (2) Ax Fxa                 / EI 1;
-    1   (3) Fba                    / UI 2;
-    1   (4) Ey Fby                 / EG 3;
-    1   (5) Ax Ey Fxy              / UG 4;
-        (6) Ey Ax Fxy -> Ax Ey Fxy / D 1, 5;
+    1   (2) Ax Fxa                 / E- 1;
+    1   (3) Fba                    / A- 2;
+    1   (4) Ey Fby                 / E+ 3;
+    1   (5) Ax Ey Fxy              / A+ 4;
+        (6) Ey Ax Fxy -> Ax Ey Fxy / IF+ 1, 5;
     `
 
   const actual = parser.parse(text)
@@ -100,14 +100,14 @@ test('parse()', () => {
           (1)  Ax (Fx -> Gx)                                        / P;
           (2)  Ax (Gx -> Hx)                                        / P;
           (3)  Ex F(x)                                              / P;
-        3 (4)  Fa                                                   / EI 3;
-        1 (5)  Fa -> Ga                                             / UI 1;
-        2 (6)  Ga -> Ha                                             / UI 2;
+        3 (4)  Fa                                                   / E- 3;
+        1 (5)  Fa -> Ga                                             / A- 1;
+        2 (6)  Ga -> Ha                                             / A- 2;
     1,2,3 (7)  Ha                                                   / TI 4,5,6;
-    1,2,3 (8)  Ex Hx                                                / EG 7;
-      1,2 (9)  Ex Fx -> Ex Hx                                       / D 3, 8;
-        1 (10) Ax (Gx -> Hx) -> (Ex Fx -> Ex Hx)                    / D 2, 9;
-          (11) Ax (Fx -> Gx) -> (Ax (Gx -> Hx) -> (Ex Fx -> Ex Hx)) / D 1, 10; 
+    1,2,3 (8)  Ex Hx                                                / E+ 7;
+      1,2 (9)  Ex Fx -> Ex Hx                                       / IF+ 3, 8;
+        1 (10) Ax (Gx -> Hx) -> (Ex Fx -> Ex Hx)                    / IF+ 2, 9;
+          (11) Ax (Fx -> Gx) -> (Ax (Gx -> Hx) -> (Ex Fx -> Ex Hx)) / IF+ 1, 10; 
     `
 
   const actual = parser.parse(text)

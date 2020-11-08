@@ -1,7 +1,6 @@
 import { parseDeduction } from '.'
-import { getAbbreviation } from '../../deduction-structure/rule'
 import { Placement } from '../../presentation/sym-presentation'
-import { Rule } from '../../deduction-structure'
+import { Rule, getAbbreviation } from '../../deduction-structure'
 
 test('parse()', () => {
   const text = `

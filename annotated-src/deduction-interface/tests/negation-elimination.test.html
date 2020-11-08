@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>weak-negation-elimination.test.js</title>
+  <title>negation-elimination.test.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="../../docco.css" />
@@ -100,6 +100,11 @@
                 </a>
               
                 
+                <a class="source" href="../rules-interface/conditional-introduction-rule-interface.html">
+                  deduction-interface/rules-interface/conditional-introduction-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="../rules-interface/conjunction-elimination-rule-interface.html">
                   deduction-interface/rules-interface/conjunction-elimination-rule-interface.js
                 </a>
@@ -107,11 +112,6 @@
                 
                 <a class="source" href="../rules-interface/conjunction-introduction-rule-interface.html">
                   deduction-interface/rules-interface/conjunction-introduction-rule-interface.js
-                </a>
-              
-                
-                <a class="source" href="../rules-interface/deduction-rule-interface.html">
-                  deduction-interface/rules-interface/deduction-rule-interface.js
                 </a>
               
                 
@@ -125,13 +125,18 @@
                 </a>
               
                 
-                <a class="source" href="../rules-interface/double-negation-elimination-rule-interface.html">
-                  deduction-interface/rules-interface/double-negation-elimination-rule-interface.js
+                <a class="source" href="../rules-interface/explosion-rule-interface.html">
+                  deduction-interface/rules-interface/explosion-rule-interface.js
                 </a>
               
                 
                 <a class="source" href="../rules-interface/index.html">
                   deduction-interface/rules-interface/index.js
+                </a>
+              
+                
+                <a class="source" href="../rules-interface/negation-elimination-rule-interface.html">
+                  deduction-interface/rules-interface/negation-elimination-rule-interface.js
                 </a>
               
                 
@@ -165,11 +170,6 @@
                 </a>
               
                 
-                <a class="source" href="../rules-interface/weak-negation-elimination-rule-interface.html">
-                  deduction-interface/rules-interface/weak-negation-elimination-rule-interface.js
-                </a>
-              
-                
                 <a class="source" href="biconditional-elimination.test.html">
                   deduction-interface/tests/biconditional-elimination.test.js
                 </a>
@@ -185,6 +185,11 @@
                 </a>
               
                 
+                <a class="source" href="conditional-introduction.test.html">
+                  deduction-interface/tests/conditional-introduction.test.js
+                </a>
+              
+                
                 <a class="source" href="conjunction-elimination.test.html">
                   deduction-interface/tests/conjunction-elimination.test.js
                 </a>
@@ -192,11 +197,6 @@
                 
                 <a class="source" href="conjunction-introduction.test.html">
                   deduction-interface/tests/conjunction-introduction.test.js
-                </a>
-              
-                
-                <a class="source" href="deduction.test.html">
-                  deduction-interface/tests/deduction.test.js
                 </a>
               
                 
@@ -210,11 +210,6 @@
                 </a>
               
                 
-                <a class="source" href="double-negation-elimination.test.html">
-                  deduction-interface/tests/double-negation-elimination.test.js
-                </a>
-              
-                
                 <a class="source" href="existential-generalization.test.html">
                   deduction-interface/tests/existential-generalization.test.js
                 </a>
@@ -222,6 +217,16 @@
                 
                 <a class="source" href="existential-instantiation.test.html">
                   deduction-interface/tests/existential-instantiation.test.js
+                </a>
+              
+                
+                <a class="source" href="explosion.test.html">
+                  deduction-interface/tests/explosion.test.js
+                </a>
+              
+                
+                <a class="source" href="negation-elimination.test.html">
+                  deduction-interface/tests/negation-elimination.test.js
                 </a>
               
                 
@@ -247,11 +252,6 @@
                 
                 <a class="source" href="universal-instantiation.test.html">
                   deduction-interface/tests/universal-instantiation.test.js
-                </a>
-              
-                
-                <a class="source" href="weak-negation-elimination.test.html">
-                  deduction-interface/tests/weak-negation-elimination.test.js
                 </a>
               
                 
@@ -488,7 +488,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>weak-negation-elimination.test.js</h1>
+                  <h1>negation-elimination.test.js</h1>
               </div>
           </li>
         
@@ -512,56 +512,40 @@
 
 <span class="hljs-keyword">let</span> parser
 beforeEach(<span class="hljs-function">() =&gt;</span> {
-  parser = <span class="hljs-keyword">new</span> FormulaParser({
+  parser = FormulaParser({
     <span class="hljs-attr">syms</span>: primitiveSyms,
     <span class="hljs-attr">presentations</span>: primitivePresentations
   })
 })
 
-describe(<span class="hljs-string">&#x27;weak negation elimination&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  test.each([
-    [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
-    [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]]
-  ])(<span class="hljs-string">&#x27;%s, %s |- %s (selected steps: %j)&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">
-    premise1Text,
-    premise2Text,
-    conclusionText,
-    selectedSteps,
-    premises
-  </span>) =&gt;</span> {
-    <span class="hljs-keyword">const</span> premise1 = parser.parse(premise1Text)
-    <span class="hljs-keyword">const</span> premise2 = parser.parse(premise2Text)
-    <span class="hljs-keyword">const</span> conclusion = parser.parse(<span class="hljs-string">&#x27;q&#x27;</span>)
+describe(<span class="hljs-string">&#x27;negation elimination&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  test(<span class="hljs-string">&#x27;~~p |- p&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> premise1 = parser.parse(<span class="hljs-string">&#x27;~~p&#x27;</span>)
+    <span class="hljs-keyword">const</span> premise2 = parser.parse(<span class="hljs-string">&#x27;p&#x27;</span>)
 
     <span class="hljs-keyword">const</span> deduction = Deduction({
       <span class="hljs-attr">steps</span>: [
         Step({
           <span class="hljs-attr">formula</span>: premise1,
           <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
-        }),
-        Step({
-          <span class="hljs-attr">formula</span>: premise2,
-          <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({ <span class="hljs-attr">rule</span>: Rule.Premise })
         })
       ]
     })
 
     <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-      .selectSteps(...selectedSteps)
-      .chooseRule(Rule.WeakNegationElimination)
-      .apply(conclusion)
+      .selectSteps(<span class="hljs-number">1</span>)
+      .chooseRule(Rule.NegationElimination)
+      .apply()
       .deduction
 
     <span class="hljs-keyword">const</span> actual = Deduction.getLastStep(newDeduction)
 
     <span class="hljs-keyword">const</span> expected = Step({
-      <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]),
-      <span class="hljs-attr">formula</span>: conclusion,
+      <span class="hljs-attr">assumptions</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]),
+      <span class="hljs-attr">formula</span>: premise2,
       <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
-        <span class="hljs-attr">rule</span>: Rule.WeakNegationElimination,
-        premises
+        <span class="hljs-attr">rule</span>: Rule.NegationElimination,
+        <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>]
       })
     })
 

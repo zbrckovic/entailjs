@@ -738,10 +738,10 @@ import { BiconditionalIntroductionRuleInterface } from './biconditional-introduc
 import { ConditionalEliminationRuleInterface } from './conditional-elimination-rule-interface'
 import { ConjunctionEliminationRuleInterface } from './conjunction-elimination-rule-interface'
 import { ConjunctionIntroductionRuleInterface } from './conjunction-introduction-rule-interface'
-import { DeductionRuleInterface } from './deduction-rule-interface'
+import { ConditionalIntroductionRuleInterface } from './conditional-introduction-rule-interface'
 import { DisjunctionEliminationRuleInterface } from './disjunction-elimination-rule-interface'
 import { DisjunctionIntroductionRuleInterface } from './disjunction-introduction-rule-interface'
-import { DoubleNegationEliminationRuleInterface } from './double-negation-elimination-rule-interface'
+import { NegationEliminationRuleInterface } from './negation-elimination-rule-interface'
 import { NegationIntroductionRuleInterface } from './negation-introduction-rule-interface'
 import { PremiseRuleInterface } from './premise-rule-interface'
 import {
@@ -752,7 +752,7 @@ import {
 } from './quantification'
 import { TautologicalImplicationRuleInterface } from './tautological-implication-rule-interface'
 import { TheoremRuleInterface } from './theorem-rule-interface'
-import { WeakNegationEliminationRuleInterface } from './weak-negation-elimination-rule-interface'
+import { ExplosionRuleInterface } from './explosion-rule-interface'
 &nbsp;
 // Accepts deduction and selected steps (step indexes), returns interface for choosing rule.
 export const RulesInterface = (deduction, ...steps) =&gt; {
@@ -762,7 +762,7 @@ export const RulesInterface = (deduction, ...steps) =&gt; {
 &nbsp;
       return PremiseRuleInterface(deduction)
     },
-    [Rule.Deduction]: () =&gt; {
+    [Rule.ConditionalIntroduction]: () =&gt; {
       <span class="missing-if-branch" title="if path not taken" >I</span>if (steps.length !== 2) <span class="cstat-no" title="statement not covered" >return undefined</span>
 &nbsp;
       const [step1Index, step2Index] = steps
@@ -772,14 +772,14 @@ export const RulesInterface = (deduction, ...steps) =&gt; {
       const step1IsAssumptionForStep2 = step2.assumptions.has(step1Index)
 &nbsp;
       if (step1IsPremise &amp;&amp; step1IsAssumptionForStep2) {
-        return DeductionRuleInterface(deduction, step1Index, step2Index)
+        return ConditionalIntroductionRuleInterface(deduction, step1Index, step2Index)
       }
 &nbsp;
       const step2IsPremise = step2.ruleApplicationSummary.rule === Rule.Premise
       const step2IsAssumptionForStep1 = step1.assumptions.has(step2Index)
 &nbsp;
       <span class="missing-if-branch" title="else path not taken" >E</span>if (step2IsPremise &amp;&amp; step2IsAssumptionForStep1) {
-        return DeductionRuleInterface(deduction, step2Index, step1Index)
+        return ConditionalIntroductionRuleInterface(deduction, step2Index, step1Index)
       }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return undefined</span>
@@ -874,7 +874,7 @@ export const RulesInterface = (deduction, ...steps) =&gt; {
         )
       }
     },
-    [Rule.DoubleNegationElimination]: () =&gt; {
+    [Rule.NegationElimination]: () =&gt; {
       <span class="missing-if-branch" title="if path not taken" >I</span>if (steps.length !== 1) <span class="cstat-no" title="statement not covered" >return undefined</span>
 &nbsp;
       const [stepIndex] = steps
@@ -882,20 +882,20 @@ export const RulesInterface = (deduction, ...steps) =&gt; {
 &nbsp;
       <span class="missing-if-branch" title="if path not taken" >I</span>if (!isDoubleNegation(formula)) <span class="cstat-no" title="statement not covered" >return undefined</span>
 &nbsp;
-      return DoubleNegationEliminationRuleInterface(deduction, stepIndex)
+      return NegationEliminationRuleInterface(deduction, stepIndex)
     },
-    [Rule.WeakNegationElimination]: () =&gt; {
+    [Rule.Explosion]: () =&gt; {
       <span class="missing-if-branch" title="if path not taken" >I</span>if (steps.length !== 2) <span class="cstat-no" title="statement not covered" >return undefined</span>
 &nbsp;
       const [step1Index, step2Index] = steps
       const [step1, step2] = steps.map(i =&gt; Deduction.getStep(deduction, i))
 &nbsp;
       if (isNegationOf(step1.formula, step2.formula)) {
-        return WeakNegationEliminationRuleInterface(deduction, step2Index, step1Index)
+        return ExplosionRuleInterface(deduction, step2Index, step1Index)
       }
 &nbsp;
       <span class="missing-if-branch" title="else path not taken" >E</span>if (isNegationOf(step2.formula, step1.formula)) {
-        return WeakNegationEliminationRuleInterface(deduction, step1Index, step2Index)
+        return ExplosionRuleInterface(deduction, step1Index, step2Index)
       }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return undefined</span>
@@ -1051,7 +1051,7 @@ export const RulesInterface = (deduction, ...steps) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Nov 08 2020 11:34:21 GMT+0000 (Coordinated Universal Time)
+                at Sun Nov 08 2020 15:54:02 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

@@ -100,6 +100,11 @@
                 </a>
               
                 
+                <a class="source" href="conditional-introduction-rule-interface.html">
+                  deduction-interface/rules-interface/conditional-introduction-rule-interface.js
+                </a>
+              
+                
                 <a class="source" href="conjunction-elimination-rule-interface.html">
                   deduction-interface/rules-interface/conjunction-elimination-rule-interface.js
                 </a>
@@ -107,11 +112,6 @@
                 
                 <a class="source" href="conjunction-introduction-rule-interface.html">
                   deduction-interface/rules-interface/conjunction-introduction-rule-interface.js
-                </a>
-              
-                
-                <a class="source" href="deduction-rule-interface.html">
-                  deduction-interface/rules-interface/deduction-rule-interface.js
                 </a>
               
                 
@@ -125,13 +125,18 @@
                 </a>
               
                 
-                <a class="source" href="double-negation-elimination-rule-interface.html">
-                  deduction-interface/rules-interface/double-negation-elimination-rule-interface.js
+                <a class="source" href="explosion-rule-interface.html">
+                  deduction-interface/rules-interface/explosion-rule-interface.js
                 </a>
               
                 
                 <a class="source" href="index.html">
                   deduction-interface/rules-interface/index.js
+                </a>
+              
+                
+                <a class="source" href="negation-elimination-rule-interface.html">
+                  deduction-interface/rules-interface/negation-elimination-rule-interface.js
                 </a>
               
                 
@@ -165,11 +170,6 @@
                 </a>
               
                 
-                <a class="source" href="weak-negation-elimination-rule-interface.html">
-                  deduction-interface/rules-interface/weak-negation-elimination-rule-interface.js
-                </a>
-              
-                
                 <a class="source" href="../tests/biconditional-elimination.test.html">
                   deduction-interface/tests/biconditional-elimination.test.js
                 </a>
@@ -185,6 +185,11 @@
                 </a>
               
                 
+                <a class="source" href="../tests/conditional-introduction.test.html">
+                  deduction-interface/tests/conditional-introduction.test.js
+                </a>
+              
+                
                 <a class="source" href="../tests/conjunction-elimination.test.html">
                   deduction-interface/tests/conjunction-elimination.test.js
                 </a>
@@ -192,11 +197,6 @@
                 
                 <a class="source" href="../tests/conjunction-introduction.test.html">
                   deduction-interface/tests/conjunction-introduction.test.js
-                </a>
-              
-                
-                <a class="source" href="../tests/deduction.test.html">
-                  deduction-interface/tests/deduction.test.js
                 </a>
               
                 
@@ -210,11 +210,6 @@
                 </a>
               
                 
-                <a class="source" href="../tests/double-negation-elimination.test.html">
-                  deduction-interface/tests/double-negation-elimination.test.js
-                </a>
-              
-                
                 <a class="source" href="../tests/existential-generalization.test.html">
                   deduction-interface/tests/existential-generalization.test.js
                 </a>
@@ -222,6 +217,16 @@
                 
                 <a class="source" href="../tests/existential-instantiation.test.html">
                   deduction-interface/tests/existential-instantiation.test.js
+                </a>
+              
+                
+                <a class="source" href="../tests/explosion.test.html">
+                  deduction-interface/tests/explosion.test.js
+                </a>
+              
+                
+                <a class="source" href="../tests/negation-elimination.test.html">
+                  deduction-interface/tests/negation-elimination.test.js
                 </a>
               
                 
@@ -247,11 +252,6 @@
                 
                 <a class="source" href="../tests/universal-instantiation.test.html">
                   deduction-interface/tests/universal-instantiation.test.js
-                </a>
-              
-                
-                <a class="source" href="../tests/weak-negation-elimination.test.html">
-                  deduction-interface/tests/weak-negation-elimination.test.js
                 </a>
               
                 
@@ -526,10 +526,10 @@
 <span class="hljs-keyword">import</span> { ConditionalEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./conditional-elimination-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { ConjunctionEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./conjunction-elimination-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { ConjunctionIntroductionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./conjunction-introduction-rule-interface&#x27;</span>
-<span class="hljs-keyword">import</span> { DeductionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-rule-interface&#x27;</span>
+<span class="hljs-keyword">import</span> { ConditionalIntroductionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./conditional-introduction-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { DisjunctionEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./disjunction-elimination-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { DisjunctionIntroductionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./disjunction-introduction-rule-interface&#x27;</span>
-<span class="hljs-keyword">import</span> { DoubleNegationEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./double-negation-elimination-rule-interface&#x27;</span>
+<span class="hljs-keyword">import</span> { NegationEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./negation-elimination-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { NegationIntroductionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./negation-introduction-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { PremiseRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./premise-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> {
@@ -540,7 +540,7 @@
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./quantification&#x27;</span>
 <span class="hljs-keyword">import</span> { TautologicalImplicationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./tautological-implication-rule-interface&#x27;</span>
 <span class="hljs-keyword">import</span> { TheoremRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./theorem-rule-interface&#x27;</span>
-<span class="hljs-keyword">import</span> { WeakNegationEliminationRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./weak-negation-elimination-rule-interface&#x27;</span></pre></div></div>
+<span class="hljs-keyword">import</span> { ExplosionRuleInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./explosion-rule-interface&#x27;</span></pre></div></div>
             
         </li>
         
@@ -562,7 +562,7 @@
 
       <span class="hljs-keyword">return</span> PremiseRuleInterface(deduction)
     },
-    [Rule.Deduction]: <span class="hljs-function">() =&gt;</span> {
+    [Rule.ConditionalIntroduction]: <span class="hljs-function">() =&gt;</span> {
       <span class="hljs-keyword">if</span> (steps.length !== <span class="hljs-number">2</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
 
       <span class="hljs-keyword">const</span> [step1Index, step2Index] = steps
@@ -572,14 +572,14 @@
       <span class="hljs-keyword">const</span> step1IsAssumptionForStep2 = step2.assumptions.has(step1Index)
 
       <span class="hljs-keyword">if</span> (step1IsPremise &amp;&amp; step1IsAssumptionForStep2) {
-        <span class="hljs-keyword">return</span> DeductionRuleInterface(deduction, step1Index, step2Index)
+        <span class="hljs-keyword">return</span> ConditionalIntroductionRuleInterface(deduction, step1Index, step2Index)
       }
 
       <span class="hljs-keyword">const</span> step2IsPremise = step2.ruleApplicationSummary.rule === Rule.Premise
       <span class="hljs-keyword">const</span> step2IsAssumptionForStep1 = step1.assumptions.has(step2Index)
 
       <span class="hljs-keyword">if</span> (step2IsPremise &amp;&amp; step2IsAssumptionForStep1) {
-        <span class="hljs-keyword">return</span> DeductionRuleInterface(deduction, step2Index, step1Index)
+        <span class="hljs-keyword">return</span> ConditionalIntroductionRuleInterface(deduction, step2Index, step1Index)
       }
 
       <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
@@ -724,7 +724,7 @@
         )
       }
     },
-    [Rule.DoubleNegationElimination]: <span class="hljs-function">() =&gt;</span> {
+    [Rule.NegationElimination]: <span class="hljs-function">() =&gt;</span> {
       <span class="hljs-keyword">if</span> (steps.length !== <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
 
       <span class="hljs-keyword">const</span> [stepIndex] = steps
@@ -732,20 +732,20 @@
 
       <span class="hljs-keyword">if</span> (!isDoubleNegation(formula)) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
 
-      <span class="hljs-keyword">return</span> DoubleNegationEliminationRuleInterface(deduction, stepIndex)
+      <span class="hljs-keyword">return</span> NegationEliminationRuleInterface(deduction, stepIndex)
     },
-    [Rule.WeakNegationElimination]: <span class="hljs-function">() =&gt;</span> {
+    [Rule.Explosion]: <span class="hljs-function">() =&gt;</span> {
       <span class="hljs-keyword">if</span> (steps.length !== <span class="hljs-number">2</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
 
       <span class="hljs-keyword">const</span> [step1Index, step2Index] = steps
       <span class="hljs-keyword">const</span> [step1, step2] = steps.map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> Deduction.getStep(deduction, i))
 
       <span class="hljs-keyword">if</span> (isNegationOf(step1.formula, step2.formula)) {
-        <span class="hljs-keyword">return</span> WeakNegationEliminationRuleInterface(deduction, step2Index, step1Index)
+        <span class="hljs-keyword">return</span> ExplosionRuleInterface(deduction, step2Index, step1Index)
       }
 
       <span class="hljs-keyword">if</span> (isNegationOf(step2.formula, step1.formula)) {
-        <span class="hljs-keyword">return</span> WeakNegationEliminationRuleInterface(deduction, step1Index, step2Index)
+        <span class="hljs-keyword">return</span> ExplosionRuleInterface(deduction, step1Index, step2Index)
       }
 
       <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>

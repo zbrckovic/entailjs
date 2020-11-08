@@ -506,7 +506,13 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> {
   Expression, ExpressionPointer, connectWithBinarySym, Category, Kind, Sym
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./abstract-structures&#x27;</span>
-<span class="hljs-keyword">export</span> { Deduction, Rule, TermDependencyGraph } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-structure&#x27;</span>
+<span class="hljs-keyword">export</span> {
+  Deduction,
+  Rule,
+  TermDependencyGraph,
+  getAbbreviation,
+  getRule
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-structure&#x27;</span>
 <span class="hljs-keyword">export</span> {
   FormulaParser,
   DeductionParser,

@@ -520,14 +520,11 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
 
 describe(<span class="hljs-string">&#x27;conjunction introduction&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   test.each([
-    [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;p &amp; q&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;p &amp; q&#x27;</span>, [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]]
+    [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;p &amp; q&#x27;</span>]
   ])(<span class="hljs-string">&#x27;%s, %s |- %s (selected steps: %j)&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">
     premise1Text,
     premise2Text,
-    conclusionText,
-    selectedSteps,
-    rulePremises
+    conclusionText
   </span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> premise1 = parser.parse(premise1Text)
     <span class="hljs-keyword">const</span> premise2 = parser.parse(premise2Text)
@@ -547,7 +544,7 @@ describe(<span class="hljs-string">&#x27;conjunction introduction&#x27;</span>, 
     })
 
     <span class="hljs-keyword">const</span> newDeduction = startDeduction(deduction)
-      .selectSteps(...selectedSteps)
+      .selectSteps(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
       .chooseRule(Rule.ConjunctionIntroduction)
       .apply()
       .deduction
@@ -559,7 +556,7 @@ describe(<span class="hljs-string">&#x27;conjunction introduction&#x27;</span>, 
       <span class="hljs-attr">formula</span>: conclusion,
       <span class="hljs-attr">ruleApplicationSummary</span>: RegularRuleApplicationSummary({
         <span class="hljs-attr">rule</span>: Rule.ConjunctionIntroduction,
-        <span class="hljs-attr">premises</span>: rulePremises
+        <span class="hljs-attr">premises</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]
       })
     })
 

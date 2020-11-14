@@ -521,8 +521,6 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
 describe(<span class="hljs-string">&#x27;explosion&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   test.each([
     [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
     [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]]
   ])(<span class="hljs-string">&#x27;%s, %s |- %s (selected steps: %j)&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">
     premise1Text,

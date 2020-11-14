@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1604853769700" clover="3.2.0">
-  <project timestamp="1604853769700" name="All files">
-    <metrics statements="996" coveredstatements="923" conditionals="469" coveredconditionals="345" methods="271" coveredmethods="251" elements="1736" coveredelements="1519" complexity="0" loc="996" ncloc="996" packages="13" files="55" classes="55"/>
+<coverage generated="1605353143159" clover="3.2.0">
+  <project timestamp="1605353143159" name="All files">
+    <metrics statements="966" coveredstatements="898" conditionals="449" coveredconditionals="328" methods="270" coveredmethods="250" elements="1685" coveredelements="1476" complexity="0" loc="966" ncloc="966" packages="13" files="55" classes="55"/>
     <package name="src">
       <metrics statements="26" coveredstatements="19" conditionals="5" coveredconditionals="3" methods="4" coveredmethods="3"/>
       <file name="error.js" path="/home/runner/work/entail-core/entail-core/src/error.js">
@@ -92,7 +92,7 @@
       <file name="expression.js" path="/home/runner/work/entail-core/entail-core/src/abstract-structures/expression.js">
         <metrics statements="102" coveredstatements="99" conditionals="46" coveredconditionals="41" methods="31" coveredmethods="31"/>
         <line num="6" count="29" type="stmt"/>
-        <line num="16" count="1682" type="stmt"/>
+        <line num="16" count="1617" type="stmt"/>
         <line num="19" count="29" type="stmt"/>
         <line num="20" count="176" type="stmt"/>
         <line num="21" count="176" type="cond" truecount="1" falsecount="1"/>
@@ -200,7 +200,7 @@
       <file name="sym.js" path="/home/runner/work/entail-core/entail-core/src/abstract-structures/sym.js">
         <metrics statements="35" coveredstatements="33" conditionals="25" coveredconditionals="22" methods="13" coveredmethods="11"/>
         <line num="3" count="30" type="cond" truecount="0" falsecount="1"/>
-        <line num="20" count="719" type="stmt"/>
+        <line num="20" count="704" type="stmt"/>
         <line num="22" count="30" type="cond" truecount="1" falsecount="0"/>
         <line num="23" count="255" type="stmt"/>
         <line num="25" count="233" type="cond" truecount="1" falsecount="0"/>
@@ -228,7 +228,7 @@
         <line num="73" count="4" type="stmt"/>
         <line num="78" count="12" type="stmt"/>
         <line num="85" count="30" type="stmt"/>
-        <line num="87" count="127" type="stmt"/>
+        <line num="87" count="112" type="stmt"/>
         <line num="89" count="30" type="stmt"/>
         <line num="98" count="30" type="stmt"/>
         <line num="124" count="30" type="stmt"/>
@@ -264,15 +264,15 @@
       <file name="deduction-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/deduction-interface.js">
         <metrics statements="29" coveredstatements="27" conditionals="12" coveredconditionals="8" methods="9" coveredmethods="9"/>
         <line num="9" count="20" type="cond" truecount="1" falsecount="0"/>
-        <line num="10" count="174" type="stmt"/>
-        <line num="11" count="143" type="stmt"/>
-        <line num="15" count="118" type="cond" truecount="1" falsecount="1"/>
+        <line num="10" count="156" type="stmt"/>
+        <line num="11" count="123" type="stmt"/>
+        <line num="15" count="109" type="cond" truecount="1" falsecount="1"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="23" count="143" type="stmt"/>
-        <line num="27" count="174" type="stmt"/>
-        <line num="28" count="118" type="stmt"/>
-        <line num="29" count="118" type="stmt"/>
-        <line num="32" count="174" type="stmt"/>
+        <line num="23" count="123" type="stmt"/>
+        <line num="27" count="156" type="stmt"/>
+        <line num="28" count="109" type="stmt"/>
+        <line num="29" count="109" type="stmt"/>
+        <line num="32" count="156" type="stmt"/>
         <line num="33" count="2" type="stmt"/>
         <line num="35" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="42" count="2" type="stmt"/>
@@ -291,14 +291,14 @@
         <line num="67" count="2" type="stmt"/>
         <line num="71" count="2" type="stmt"/>
         <line num="77" count="2" type="stmt"/>
-        <line num="80" count="174" type="stmt"/>
+        <line num="80" count="156" type="stmt"/>
       </file>
       <file name="index.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/index.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
     <package name="src.deduction-interface.rules-interface">
-      <metrics statements="289" coveredstatements="279" conditionals="139" coveredconditionals="91" methods="74" coveredmethods="71"/>
+      <metrics statements="259" coveredstatements="254" conditionals="119" coveredconditionals="74" methods="73" coveredmethods="70"/>
       <file name="biconditional-elimination-rule-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/biconditional-elimination-rule-interface.js">
         <metrics statements="9" coveredstatements="9" conditionals="3" coveredconditionals="2" methods="2" coveredmethods="2"/>
         <line num="7" count="20" type="stmt"/>
@@ -323,22 +323,22 @@
       <file name="conditional-elimination-rule-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/conditional-elimination-rule-interface.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="5" count="20" type="stmt"/>
-        <line num="10" count="4" type="stmt"/>
-        <line num="11" count="4" type="stmt"/>
-        <line num="12" count="4" type="stmt"/>
-        <line num="14" count="4" type="stmt"/>
-        <line num="19" count="4" type="stmt"/>
-        <line num="21" count="4" type="stmt"/>
-        <line num="24" count="4" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
       </file>
       <file name="conditional-introduction-rule-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/conditional-introduction-rule-interface.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="7" count="20" type="stmt"/>
-        <line num="8" count="14" type="stmt"/>
-        <line num="9" count="14" type="stmt"/>
-        <line num="27" count="14" type="stmt"/>
-        <line num="29" count="14" type="stmt"/>
-        <line num="32" count="14" type="stmt"/>
+        <line num="8" count="13" type="stmt"/>
+        <line num="9" count="13" type="stmt"/>
+        <line num="27" count="13" type="stmt"/>
+        <line num="29" count="13" type="stmt"/>
+        <line num="32" count="13" type="stmt"/>
       </file>
       <file name="conjunction-elimination-rule-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/conjunction-elimination-rule-interface.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
@@ -354,11 +354,11 @@
       <file name="conjunction-introduction-rule-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/conjunction-introduction-rule-interface.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="7" count="20" type="stmt"/>
-        <line num="8" count="2" type="stmt"/>
-        <line num="9" count="2" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
-        <line num="22" count="2" type="stmt"/>
-        <line num="25" count="2" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
       </file>
       <file name="disjunction-elimination-rule-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/disjunction-elimination-rule-interface.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
@@ -384,11 +384,11 @@
       <file name="explosion-rule-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/explosion-rule-interface.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="5" count="20" type="stmt"/>
-        <line num="10" count="4" type="stmt"/>
-        <line num="11" count="4" type="stmt"/>
-        <line num="16" count="4" type="stmt"/>
-        <line num="18" count="4" type="stmt"/>
-        <line num="21" count="4" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
       </file>
       <file name="index.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/index.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -406,11 +406,11 @@
       <file name="negation-introduction-rule-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/negation-introduction-rule-interface.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="7" count="20" type="stmt"/>
-        <line num="13" count="6" type="stmt"/>
-        <line num="14" count="6" type="stmt"/>
-        <line num="23" count="6" type="stmt"/>
-        <line num="25" count="6" type="stmt"/>
-        <line num="28" count="6" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="25" count="4" type="stmt"/>
+        <line num="28" count="4" type="stmt"/>
       </file>
       <file name="premise-rule-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/premise-rule-interface.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
@@ -496,132 +496,102 @@
         <line num="190" count="106" type="stmt"/>
       </file>
       <file name="rules-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/rules-interface.js">
-        <metrics statements="125" coveredstatements="116" conditionals="102" coveredconditionals="59" methods="27" coveredmethods="26"/>
+        <metrics statements="95" coveredstatements="91" conditionals="82" coveredconditionals="42" methods="26" coveredmethods="25"/>
         <line num="41" count="20" type="stmt"/>
-        <line num="42" count="118" type="stmt"/>
+        <line num="42" count="109" type="stmt"/>
         <line num="44" count="21" type="cond" truecount="1" falsecount="1"/>
         <line num="46" count="21" type="stmt"/>
-        <line num="49" count="14" type="cond" truecount="1" falsecount="1"/>
-        <line num="51" count="14" type="stmt"/>
-        <line num="52" count="28" type="stmt"/>
-        <line num="54" count="14" type="stmt"/>
-        <line num="55" count="14" type="stmt"/>
-        <line num="57" count="14" type="cond" truecount="4" falsecount="0"/>
-        <line num="58" count="13" type="stmt"/>
-        <line num="61" count="1" type="stmt"/>
-        <line num="62" count="1" type="stmt"/>
-        <line num="64" count="1" type="cond" truecount="3" falsecount="1"/>
-        <line num="65" count="1" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="70" count="4" type="stmt"/>
-        <line num="72" count="14" type="cond" truecount="1" falsecount="1"/>
-        <line num="74" count="14" type="stmt"/>
-        <line num="75" count="14" type="stmt"/>
-        <line num="76" count="14" type="cond" truecount="1" falsecount="1"/>
-        <line num="78" count="14" type="stmt"/>
-        <line num="81" count="8" type="cond" truecount="1" falsecount="1"/>
-        <line num="83" count="8" type="stmt"/>
-        <line num="85" count="8" type="stmt"/>
-        <line num="88" count="21" type="cond" truecount="1" falsecount="1"/>
-        <line num="90" count="21" type="stmt"/>
-        <line num="91" count="21" type="stmt"/>
-        <line num="92" count="21" type="cond" truecount="1" falsecount="1"/>
-        <line num="94" count="21" type="stmt"/>
-        <line num="97" count="10" type="cond" truecount="1" falsecount="1"/>
-        <line num="99" count="10" type="stmt"/>
-        <line num="101" count="10" type="stmt"/>
-        <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="106" count="0" type="stmt"/>
-        <line num="109" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="112" count="6" type="stmt"/>
-        <line num="114" count="6" type="stmt"/>
-        <line num="115" count="18" type="stmt"/>
-        <line num="116" count="18" type="stmt"/>
-        <line num="118" count="18" type="cond" truecount="2" falsecount="0"/>
-        <line num="119" count="6" type="stmt"/>
-        <line num="121" count="12" type="stmt"/>
-        <line num="125" count="6" type="cond" truecount="3" falsecount="1"/>
-        <line num="127" count="6" type="stmt"/>
-        <line num="129" count="6" type="stmt"/>
-        <line num="130" count="6" type="stmt"/>
-        <line num="133" count="6" type="stmt"/>
-        <line num="134" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="137" count="6" type="stmt"/>
-        <line num="138" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="140" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="49" count="13" type="cond" truecount="1" falsecount="1"/>
+        <line num="51" count="13" type="stmt"/>
+        <line num="52" count="26" type="stmt"/>
+        <line num="54" count="13" type="stmt"/>
+        <line num="55" count="13" type="stmt"/>
+        <line num="57" count="13" type="cond" truecount="3" falsecount="1"/>
+        <line num="59" count="13" type="stmt"/>
+        <line num="61" count="4" type="stmt"/>
+        <line num="63" count="14" type="cond" truecount="1" falsecount="1"/>
+        <line num="65" count="14" type="stmt"/>
+        <line num="66" count="14" type="stmt"/>
+        <line num="67" count="14" type="cond" truecount="1" falsecount="1"/>
+        <line num="69" count="14" type="stmt"/>
+        <line num="72" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="74" count="8" type="stmt"/>
+        <line num="76" count="8" type="stmt"/>
+        <line num="79" count="21" type="cond" truecount="1" falsecount="1"/>
+        <line num="81" count="21" type="stmt"/>
+        <line num="82" count="21" type="stmt"/>
+        <line num="83" count="21" type="cond" truecount="1" falsecount="1"/>
+        <line num="85" count="21" type="stmt"/>
+        <line num="88" count="10" type="cond" truecount="1" falsecount="1"/>
+        <line num="90" count="10" type="stmt"/>
+        <line num="92" count="10" type="stmt"/>
+        <line num="95" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="100" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="106" count="4" type="stmt"/>
+        <line num="112" count="12" type="stmt"/>
+        <line num="114" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="116" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="117" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="119" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="121" count="4" type="stmt"/>
+        <line num="129" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="131" count="1" type="stmt"/>
+        <line num="132" count="1" type="stmt"/>
+        <line num="134" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="136" count="1" type="stmt"/>
+        <line num="139" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="141" count="2" type="stmt"/>
         <line num="142" count="4" type="stmt"/>
-        <line num="150" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="144" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="146" count="2" type="stmt"/>
+        <line num="149" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="151" count="1" type="stmt"/>
         <line num="152" count="2" type="stmt"/>
-        <line num="161" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="163" count="1" type="stmt"/>
-        <line num="164" count="1" type="stmt"/>
-        <line num="166" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="168" count="1" type="stmt"/>
-        <line num="171" count="4" type="cond" truecount="1" falsecount="1"/>
-        <line num="173" count="4" type="stmt"/>
-        <line num="174" count="8" type="stmt"/>
-        <line num="176" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="154" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="156" count="1" type="stmt"/>
+        <line num="163" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="165" count="1" type="stmt"/>
+        <line num="167" count="1" type="stmt"/>
+        <line num="170" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="172" count="2" type="stmt"/>
+        <line num="173" count="2" type="stmt"/>
+        <line num="175" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="177" count="2" type="stmt"/>
         <line num="180" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="181" count="2" type="stmt"/>
-        <line num="184" count="0" type="stmt"/>
-        <line num="187" count="4" type="cond" truecount="1" falsecount="1"/>
-        <line num="189" count="4" type="stmt"/>
-        <line num="190" count="8" type="stmt"/>
-        <line num="192" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="193" count="2" type="stmt"/>
-        <line num="196" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="197" count="2" type="stmt"/>
-        <line num="200" count="0" type="stmt"/>
-        <line num="203" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="205" count="2" type="stmt"/>
-        <line num="207" count="2" type="stmt"/>
-        <line num="210" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="212" count="2" type="stmt"/>
-        <line num="213" count="2" type="stmt"/>
-        <line num="215" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="217" count="2" type="stmt"/>
-        <line num="220" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="222" count="2" type="stmt"/>
-        <line num="224" count="2" type="stmt"/>
-        <line num="227" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="230" count="1" type="stmt"/>
-        <line num="232" count="1" type="stmt"/>
-        <line num="233" count="3" type="stmt"/>
-        <line num="235" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="236" count="1" type="stmt"/>
-        <line num="237" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="238" count="2" type="stmt"/>
-        <line num="242" count="1" type="cond" truecount="3" falsecount="1"/>
-        <line num="243" count="0" type="stmt"/>
-        <line num="246" count="1" type="stmt"/>
-        <line num="250" count="2" type="stmt"/>
-        <line num="251" count="1" type="stmt"/>
-        <line num="253" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="259" count="1" type="stmt"/>
-        <line num="261" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="266" count="1" type="stmt"/>
-        <line num="275" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="280" count="0" type="stmt"/>
-        <line num="290" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="292" count="4" type="stmt"/>
-        <line num="294" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="295" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="297" count="2" type="stmt"/>
-        <line num="298" count="2" type="stmt"/>
-        <line num="300" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="301" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="303" count="2" type="stmt"/>
-        <line num="306" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="308" count="2" type="stmt"/>
-        <line num="310" count="2" type="stmt"/>
-        <line num="312" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="314" count="2" type="stmt"/>
-        <line num="318" count="118" type="stmt"/>
-        <line num="320" count="118" type="stmt"/>
-        <line num="322" count="118" type="cond" truecount="1" falsecount="1"/>
-        <line num="323" count="0" type="stmt"/>
-        <line num="326" count="118" type="stmt"/>
+        <line num="182" count="2" type="stmt"/>
+        <line num="184" count="2" type="stmt"/>
+        <line num="187" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="193" count="1" type="stmt"/>
+        <line num="199" count="3" type="stmt"/>
+        <line num="201" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="202" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="203" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="205" count="1" type="stmt"/>
+        <line num="206" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="208" count="1" type="stmt"/>
+        <line num="210" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="213" count="0" type="stmt"/>
+        <line num="215" count="1" type="stmt"/>
+        <line num="224" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="226" count="4" type="stmt"/>
+        <line num="228" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="229" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="231" count="2" type="stmt"/>
+        <line num="232" count="2" type="stmt"/>
+        <line num="234" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="235" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="237" count="2" type="stmt"/>
+        <line num="240" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="242" count="2" type="stmt"/>
+        <line num="244" count="2" type="stmt"/>
+        <line num="246" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="248" count="2" type="stmt"/>
+        <line num="252" count="109" type="stmt"/>
+        <line num="254" count="109" type="stmt"/>
+        <line num="256" count="109" type="cond" truecount="1" falsecount="1"/>
+        <line num="257" count="0" type="stmt"/>
+        <line num="260" count="109" type="stmt"/>
       </file>
       <file name="tautological-implication-rule-interface.js" path="/home/runner/work/entail-core/entail-core/src/deduction-interface/rules-interface/tautological-implication-rule-interface.js">
         <metrics statements="9" coveredstatements="8" conditionals="3" coveredconditionals="1" methods="3" coveredmethods="3"/>
@@ -645,37 +615,37 @@
       <file name="deduction.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/deduction.js">
         <metrics statements="55" coveredstatements="49" conditionals="19" coveredconditionals="14" methods="18" coveredmethods="15"/>
         <line num="8" count="21" type="cond" truecount="1" falsecount="0"/>
-        <line num="13" count="62" type="stmt"/>
-        <line num="15" count="196" type="stmt"/>
+        <line num="13" count="53" type="stmt"/>
+        <line num="15" count="176" type="stmt"/>
         <line num="19" count="43" type="stmt"/>
         <line num="22" count="21" type="stmt"/>
-        <line num="23" count="471" type="stmt"/>
-        <line num="24" count="471" type="cond" truecount="1" falsecount="1"/>
-        <line num="25" count="471" type="stmt"/>
+        <line num="23" count="409" type="stmt"/>
+        <line num="24" count="409" type="cond" truecount="1" falsecount="1"/>
+        <line num="25" count="409" type="stmt"/>
         <line num="29" count="21" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="36" count="21" type="stmt"/>
-        <line num="37" count="93" type="stmt"/>
-        <line num="38" count="93" type="cond" truecount="1" falsecount="1"/>
-        <line num="39" count="93" type="stmt"/>
+        <line num="37" count="84" type="stmt"/>
+        <line num="38" count="84" type="cond" truecount="1" falsecount="1"/>
+        <line num="39" count="84" type="stmt"/>
         <line num="43" count="21" type="stmt"/>
-        <line num="44" count="112" type="cond" truecount="1" falsecount="1"/>
+        <line num="44" count="103" type="cond" truecount="1" falsecount="1"/>
         <line num="49" count="21" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
         <line num="55" count="21" type="stmt"/>
-        <line num="62" count="112" type="stmt"/>
-        <line num="64" count="112" type="stmt"/>
-        <line num="66" count="112" type="cond" truecount="2" falsecount="0"/>
+        <line num="62" count="103" type="stmt"/>
+        <line num="64" count="103" type="stmt"/>
+        <line num="66" count="103" type="cond" truecount="2" falsecount="0"/>
         <line num="67" count="25" type="stmt"/>
-        <line num="70" count="110" type="stmt"/>
-        <line num="77" count="110" type="stmt"/>
-        <line num="83" count="110" type="stmt"/>
-        <line num="84" count="110" type="stmt"/>
-        <line num="86" count="110" type="stmt"/>
+        <line num="70" count="101" type="stmt"/>
+        <line num="77" count="101" type="stmt"/>
+        <line num="83" count="101" type="stmt"/>
+        <line num="84" count="101" type="stmt"/>
+        <line num="86" count="101" type="stmt"/>
         <line num="91" count="21" type="stmt"/>
         <line num="92" count="25" type="stmt"/>
         <line num="94" count="25" type="stmt"/>
@@ -686,19 +656,19 @@
         <line num="104" count="2" type="stmt"/>
         <line num="106" count="2" type="stmt"/>
         <line num="110" count="23" type="stmt"/>
-        <line num="113" count="110" type="stmt"/>
-        <line num="115" count="110" type="stmt"/>
+        <line num="113" count="101" type="stmt"/>
+        <line num="115" count="101" type="stmt"/>
         <line num="120" count="21" type="stmt"/>
-        <line num="121" count="112" type="stmt"/>
-        <line num="123" count="112" type="stmt"/>
-        <line num="124" count="137" type="stmt"/>
-        <line num="126" count="137" type="stmt"/>
-        <line num="128" count="137" type="cond" truecount="4" falsecount="0"/>
-        <line num="129" count="84" type="stmt"/>
-        <line num="132" count="137" type="stmt"/>
-        <line num="135" count="112" type="cond" truecount="1" falsecount="1"/>
-        <line num="136" count="112" type="stmt"/>
-        <line num="139" count="112" type="stmt"/>
+        <line num="121" count="103" type="stmt"/>
+        <line num="123" count="103" type="stmt"/>
+        <line num="124" count="117" type="stmt"/>
+        <line num="126" count="117" type="stmt"/>
+        <line num="128" count="117" type="cond" truecount="4" falsecount="0"/>
+        <line num="129" count="69" type="stmt"/>
+        <line num="132" count="117" type="stmt"/>
+        <line num="135" count="103" type="cond" truecount="1" falsecount="1"/>
+        <line num="136" count="103" type="stmt"/>
+        <line num="139" count="103" type="stmt"/>
       </file>
       <file name="index.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/index.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -714,9 +684,9 @@
       <file name="step.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/step.js">
         <metrics statements="5" coveredstatements="5" conditionals="7" coveredconditionals="3" methods="3" coveredmethods="2"/>
         <line num="5" count="21" type="cond" truecount="0" falsecount="1"/>
-        <line num="15" count="240" type="stmt"/>
+        <line num="15" count="202" type="stmt"/>
         <line num="17" count="21" type="cond" truecount="0" falsecount="1"/>
-        <line num="24" count="240" type="stmt"/>
+        <line num="24" count="202" type="stmt"/>
         <line num="26" count="21" type="stmt"/>
       </file>
     </package>
@@ -728,7 +698,7 @@
       <file name="regular-rule-application-spec.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/rule-application-spec/regular-rule-application-spec.js">
         <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
         <line num="15" count="20" type="stmt"/>
-        <line num="25" count="112" type="stmt"/>
+        <line num="25" count="103" type="stmt"/>
       </file>
       <file name="theorem-rule-application-spec.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/rule-application-spec/theorem-rule-application-spec.js">
         <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -743,7 +713,7 @@
       </file>
       <file name="term-dependency-graph.js" path="/home/runner/work/entail-core/entail-core/src/deduction-structure/term-dependency-graph/term-dependency-graph.js">
         <metrics statements="71" coveredstatements="71" conditionals="36" coveredconditionals="30" methods="19" coveredmethods="19"/>
-        <line num="7" count="290" type="cond" truecount="1" falsecount="0"/>
+        <line num="7" count="243" type="cond" truecount="1" falsecount="0"/>
         <line num="11" count="22" type="cond" truecount="0" falsecount="1"/>
         <line num="12" count="32" type="cond" truecount="2" falsecount="0"/>
         <line num="13" count="2" type="stmt"/>
@@ -970,19 +940,19 @@
       <file name="ast-processor.js" path="/home/runner/work/entail-core/entail-core/src/parsers/formula-parser/ast-processor.js">
         <metrics statements="50" coveredstatements="44" conditionals="29" coveredconditionals="24" methods="13" coveredmethods="12"/>
         <line num="15" count="27" type="stmt"/>
-        <line num="28" count="211" type="cond" truecount="1" falsecount="0"/>
-        <line num="29" count="1420" type="cond" truecount="2" falsecount="0"/>
-        <line num="31" count="1418" type="stmt"/>
-        <line num="32" count="1418" type="stmt"/>
-        <line num="34" count="1418" type="cond" truecount="2" falsecount="0"/>
-        <line num="37" count="1418" type="stmt"/>
-        <line num="39" count="1418" type="cond" truecount="1" falsecount="1"/>
+        <line num="28" count="202" type="cond" truecount="1" falsecount="0"/>
+        <line num="29" count="1359" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="1357" type="stmt"/>
+        <line num="32" count="1357" type="stmt"/>
+        <line num="34" count="1357" type="cond" truecount="2" falsecount="0"/>
+        <line num="37" count="1357" type="stmt"/>
+        <line num="39" count="1357" type="cond" truecount="1" falsecount="1"/>
         <line num="40" count="0" type="stmt"/>
-        <line num="47" count="1418" type="cond" truecount="1" falsecount="1"/>
+        <line num="47" count="1357" type="cond" truecount="1" falsecount="1"/>
         <line num="48" count="0" type="stmt"/>
-        <line num="54" count="1418" type="cond" truecount="2" falsecount="0"/>
+        <line num="54" count="1357" type="cond" truecount="2" falsecount="0"/>
         <line num="55" count="2" type="stmt"/>
-        <line num="63" count="1416" type="cond" truecount="2" falsecount="0"/>
+        <line num="63" count="1355" type="cond" truecount="2" falsecount="0"/>
         <line num="64" count="185" type="stmt"/>
         <line num="66" count="185" type="cond" truecount="2" falsecount="0"/>
         <line num="67" count="95" type="cond" truecount="2" falsecount="0"/>
@@ -990,45 +960,45 @@
         <line num="75" count="94" type="cond" truecount="1" falsecount="1"/>
         <line num="76" count="0" type="stmt"/>
         <line num="83" count="90" type="stmt"/>
-        <line num="87" count="1415" type="stmt"/>
-        <line num="90" count="970" type="stmt"/>
-        <line num="95" count="211" type="stmt"/>
-        <line num="96" count="463" type="stmt"/>
-        <line num="97" count="463" type="stmt"/>
-        <line num="98" count="463" type="stmt"/>
-        <line num="99" count="463" type="stmt"/>
-        <line num="104" count="211" type="stmt"/>
-        <line num="105" count="460" type="stmt"/>
-        <line num="106" count="460" type="stmt"/>
-        <line num="107" count="460" type="stmt"/>
-        <line num="108" count="460" type="stmt"/>
-        <line num="110" count="460" type="stmt"/>
-        <line num="112" count="460" type="stmt"/>
-        <line num="115" count="211" type="stmt"/>
+        <line num="87" count="1354" type="stmt"/>
+        <line num="90" count="938" type="stmt"/>
+        <line num="95" count="202" type="stmt"/>
+        <line num="96" count="448" type="stmt"/>
+        <line num="97" count="448" type="stmt"/>
+        <line num="98" count="448" type="stmt"/>
+        <line num="99" count="448" type="stmt"/>
+        <line num="104" count="202" type="stmt"/>
+        <line num="105" count="445" type="stmt"/>
+        <line num="106" count="445" type="stmt"/>
+        <line num="107" count="445" type="stmt"/>
+        <line num="108" count="445" type="stmt"/>
+        <line num="110" count="445" type="stmt"/>
+        <line num="112" count="445" type="stmt"/>
+        <line num="115" count="202" type="stmt"/>
         <line num="120" count="123" type="stmt"/>
         <line num="121" count="7" type="stmt"/>
         <line num="122" count="2" type="stmt"/>
         <line num="123" count="0" type="stmt"/>
         <line num="124" count="8" type="stmt"/>
         <line num="128" count="27" type="stmt"/>
-        <line num="129" count="460" type="cond" truecount="2" falsecount="0"/>
-        <line num="131" count="304" type="cond" truecount="2" falsecount="0"/>
-        <line num="132" count="215" type="cond" truecount="1" falsecount="1"/>
+        <line num="129" count="445" type="cond" truecount="2" falsecount="0"/>
+        <line num="131" count="289" type="cond" truecount="2" falsecount="0"/>
+        <line num="132" count="200" type="cond" truecount="1" falsecount="1"/>
         <line num="133" count="0" type="stmt"/>
         <line num="136" count="156" type="cond" truecount="1" falsecount="1"/>
         <line num="137" count="0" type="stmt"/>
-        <line num="142" count="304" type="stmt"/>
-        <line num="143" count="371" type="stmt"/>
+        <line num="142" count="289" type="stmt"/>
+        <line num="143" count="356" type="stmt"/>
       </file>
       <file name="formula-parser.js" path="/home/runner/work/entail-core/entail-core/src/parsers/formula-parser/formula-parser.js">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="4" count="25" type="stmt"/>
-        <line num="5" count="203" type="stmt"/>
-        <line num="7" count="203" type="stmt"/>
-        <line num="8" count="395" type="stmt"/>
-        <line num="9" count="395" type="stmt"/>
-        <line num="20" count="203" type="stmt"/>
-        <line num="22" count="203" type="stmt"/>
+        <line num="5" count="194" type="stmt"/>
+        <line num="7" count="194" type="stmt"/>
+        <line num="8" count="366" type="stmt"/>
+        <line num="9" count="366" type="stmt"/>
+        <line num="20" count="194" type="stmt"/>
+        <line num="22" count="194" type="stmt"/>
       </file>
       <file name="index.js" path="/home/runner/work/entail-core/entail-core/src/parsers/formula-parser/index.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -1038,11 +1008,11 @@
       <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
       <file name="ast-formula.js" path="/home/runner/work/entail-core/entail-core/src/parsers/peg/ast-formula.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="1" count="1420" type="stmt"/>
+        <line num="1" count="1359" type="stmt"/>
       </file>
       <file name="index.js" path="/home/runner/work/entail-core/entail-core/src/parsers/peg/index.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="3" count="402" type="stmt"/>
+        <line num="3" count="373" type="stmt"/>
         <line num="4" count="29" type="stmt"/>
       </file>
     </package>
@@ -1054,11 +1024,11 @@
       <file name="presentations.js" path="/home/runner/work/entail-core/entail-core/src/presentation/sym-presentation/presentations.js">
         <metrics statements="6" coveredstatements="6" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="4"/>
         <line num="9" count="29" type="stmt"/>
-        <line num="10" count="211" type="stmt"/>
-        <line num="13" count="1487" type="stmt"/>
+        <line num="10" count="202" type="stmt"/>
+        <line num="13" count="1424" type="stmt"/>
         <line num="17" count="29" type="stmt"/>
-        <line num="18" count="211" type="stmt"/>
-        <line num="19" count="1487" type="cond" truecount="1" falsecount="1"/>
+        <line num="18" count="202" type="stmt"/>
+        <line num="19" count="1424" type="cond" truecount="1" falsecount="1"/>
       </file>
       <file name="primitive-presentations.js" path="/home/runner/work/entail-core/entail-core/src/presentation/sym-presentation/primitive-presentations.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -1066,12 +1036,12 @@
       </file>
       <file name="sym-presentation.js" path="/home/runner/work/entail-core/entail-core/src/presentation/sym-presentation/sym-presentation.js">
         <metrics statements="13" coveredstatements="8" conditionals="7" coveredconditionals="0" methods="7" coveredmethods="4"/>
-        <line num="5" count="666" type="stmt"/>
+        <line num="5" count="651" type="stmt"/>
         <line num="7" count="29" type="stmt"/>
         <line num="8" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="10" count="29" type="stmt"/>
         <line num="11" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="13" count="869" type="cond" truecount="0" falsecount="1"/>
+        <line num="13" count="854" type="cond" truecount="0" falsecount="1"/>
         <line num="15" count="177" type="stmt"/>
         <line num="17" count="232" type="stmt"/>
         <line num="19" count="29" type="cond" truecount="0" falsecount="1"/>
@@ -1133,9 +1103,9 @@
         <line num="75" count="113" type="cond" truecount="1" falsecount="1"/>
         <line num="76" count="113" type="stmt"/>
         <line num="80" count="22" type="stmt"/>
-        <line num="81" count="26" type="cond" truecount="2" falsecount="0"/>
-        <line num="82" count="17" type="stmt"/>
-        <line num="83" count="17" type="stmt"/>
+        <line num="81" count="18" type="cond" truecount="2" falsecount="0"/>
+        <line num="82" count="13" type="stmt"/>
+        <line num="83" count="13" type="stmt"/>
         <line num="87" count="22" type="stmt"/>
         <line num="88" count="7" type="cond" truecount="2" falsecount="0"/>
         <line num="92" count="22" type="stmt"/>
@@ -1157,9 +1127,9 @@
         <line num="121" count="5" type="stmt"/>
         <line num="122" count="5" type="cond" truecount="2" falsecount="0"/>
         <line num="126" count="22" type="stmt"/>
-        <line num="127" count="12" type="cond" truecount="2" falsecount="0"/>
-        <line num="128" count="9" type="stmt"/>
-        <line num="129" count="9" type="stmt"/>
+        <line num="127" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="128" count="6" type="stmt"/>
+        <line num="129" count="6" type="stmt"/>
         <line num="133" count="22" type="stmt"/>
         <line num="134" count="5" type="cond" truecount="2" falsecount="0"/>
         <line num="135" count="4" type="stmt"/>

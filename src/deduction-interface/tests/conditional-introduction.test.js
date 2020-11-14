@@ -15,13 +15,11 @@ beforeEach(() => {
 
 describe('conditional introduction', () => {
   test.each([
-    ['~~p', 'p', '~~p -> p', [1, 2]],
-    ['~~p', 'p', '~~p -> p', [2, 1]]
+    ['~~p', 'p', '~~p -> p']
   ])('%s, %s |- %s (selected steps %j)', (
     premise1Text,
     premise2Text,
-    conclusionText,
-    selectedSteps
+    conclusionText
   ) => {
     const premise1 = parser.parse(premise1Text)
     const premise2 = parser.parse(premise2Text)
@@ -45,7 +43,7 @@ describe('conditional introduction', () => {
     })
 
     const newDeduction = startDeduction(deduction)
-      .selectSteps(...selectedSteps)
+      .selectSteps(1, 2)
       .chooseRule(Rule.ConditionalIntroduction)
       .apply()
       .deduction

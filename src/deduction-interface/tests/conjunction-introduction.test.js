@@ -15,14 +15,11 @@ beforeEach(() => {
 
 describe('conjunction introduction', () => {
   test.each([
-    ['p', 'q', 'p & q', [1, 2], [0, 1]],
-    ['q', 'p', 'p & q', [2, 1], [1, 0]]
+    ['p', 'q', 'p & q']
   ])('%s, %s |- %s (selected steps: %j)', (
     premise1Text,
     premise2Text,
-    conclusionText,
-    selectedSteps,
-    rulePremises
+    conclusionText
   ) => {
     const premise1 = parser.parse(premise1Text)
     const premise2 = parser.parse(premise2Text)
@@ -42,7 +39,7 @@ describe('conjunction introduction', () => {
     })
 
     const newDeduction = startDeduction(deduction)
-      .selectSteps(...selectedSteps)
+      .selectSteps(1, 2)
       .chooseRule(Rule.ConjunctionIntroduction)
       .apply()
       .deduction
@@ -54,7 +51,7 @@ describe('conjunction introduction', () => {
       formula: conclusion,
       ruleApplicationSummary: RegularRuleApplicationSummary({
         rule: Rule.ConjunctionIntroduction,
-        premises: rulePremises
+        premises: [0, 1]
       })
     })
 

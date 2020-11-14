@@ -15,12 +15,9 @@ beforeEach(() => {
 
 describe('conditional elimination', () => {
   test.each([
-    ['p -> q', 'p', 'q', [1, 2], [0, 1]],
-    ['p -> q', 'p', 'q', [2, 1], [0, 1]],
-    ['p', 'p -> q', 'q', [1, 2], [1, 0]],
-    ['p', 'p -> q', 'q', [2, 1], [1, 0]]
+    ['p -> q', 'p', 'q', [0, 1]]
   ])('%s, %s |- %s (selected steps: %j)',
-    (premise1Text, premise2Text, conclusionText, selectedSteps, rulePremises) => {
+    (premise1Text, premise2Text, conclusionText) => {
       const premise1 = parser.parse(premise1Text)
       const premise2 = parser.parse(premise2Text)
       const conclusion = parser.parse(conclusionText)
@@ -51,7 +48,7 @@ describe('conditional elimination', () => {
         formula: conclusion,
         ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.ConditionalElimination,
-          premises: rulePremises
+          premises: [0, 1]
         })
       })
 

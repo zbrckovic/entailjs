@@ -16,8 +16,6 @@ beforeEach(() => {
 describe('explosion', () => {
   test.each([
     ['p', '~p', 'q', [1, 2], [0, 1]],
-    ['p', '~p', 'q', [2, 1], [0, 1]],
-    ['~p', 'p', 'q', [1, 2], [1, 0]],
     ['~p', 'p', 'q', [2, 1], [1, 0]]
   ])('%s, %s |- %s (selected steps: %j)', (
     premise1Text,

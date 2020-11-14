@@ -15,41 +15,39 @@ beforeEach(() => {
 
 describe('disjunction elimination', () => {
   test.each([
-    ['p | q', 'p -> r', 'q -> r', 'r', [1, 2, 3], [0, 1, 2]]
+    ['p | q', 'p -> r', 'q -> r', 'r']
   ])(
     '%s, %s, %s |- %s (selected steps: %j)',
     (
-      premise1Text,
-      premise2Text,
-      premise3Text,
-      conclusionText,
-      selectedSteps,
-      rulePremises
+      disjunctionText,
+      conditional1Text,
+      conditional2Text,
+      conclusionText
     ) => {
-      const premise1 = parser.parse(premise1Text)
-      const premise2 = parser.parse(premise2Text)
-      const premise3 = parser.parse(premise3Text)
+      const disjunctionFormula = parser.parse(disjunctionText)
+      const conditional1Formula = parser.parse(conditional1Text)
+      const conditional2Formula = parser.parse(conditional2Text)
       const conclusion = parser.parse(conclusionText)
 
       const deduction = Deduction({
         steps: [
           Step({
-            formula: premise1,
+            formula: disjunctionFormula,
             ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
           }),
           Step({
-            formula: premise2,
+            formula: conditional1Formula,
             ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
           }),
           Step({
-            formula: premise3,
+            formula: conditional2Formula,
             ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
           })
         ]
       })
 
       const newDeduction = startDeduction(deduction)
-        .selectSteps(...selectedSteps)
+        .selectSteps(1, 2, 3)
         .chooseRule(Rule.DisjunctionElimination)
         .apply(conclusion)
         .deduction
@@ -61,7 +59,7 @@ describe('disjunction elimination', () => {
         formula: conclusion,
         ruleApplicationSummary: RegularRuleApplicationSummary({
           rule: Rule.DisjunctionElimination,
-          premises: rulePremises
+          premises: [0, 1, 2]
         })
       })
 

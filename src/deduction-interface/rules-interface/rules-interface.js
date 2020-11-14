@@ -54,18 +54,9 @@ export const RulesInterface = (deduction, ...steps) => {
       const step1IsPremise = step1.ruleApplicationSummary.rule === Rule.Premise
       const step1IsAssumptionForStep2 = step2.assumptions.has(step1Index)
 
-      if (step1IsPremise && step1IsAssumptionForStep2) {
-        return ConditionalIntroductionRuleInterface(deduction, step1Index, step2Index)
-      }
+      if (!(step1IsPremise && step1IsAssumptionForStep2)) return undefined
 
-      const step2IsPremise = step2.ruleApplicationSummary.rule === Rule.Premise
-      const step2IsAssumptionForStep1 = step1.assumptions.has(step2Index)
-
-      if (step2IsPremise && step2IsAssumptionForStep1) {
-        return ConditionalIntroductionRuleInterface(deduction, step2Index, step1Index)
-      }
-
-      return undefined
+      return ConditionalIntroductionRuleInterface(deduction, step1Index, step2Index)
     },
     [Rule.TautologicalImplication]: () => TautologicalImplicationRuleInterface(deduction, steps),
     [Rule.UniversalInstantiation]: () => {
@@ -108,54 +99,31 @@ export const RulesInterface = (deduction, ...steps) => {
     [Rule.NegationIntroduction]: () => {
       if (steps.length !== 3) return undefined
 
-      let premiseIndex
-      const conclusionStepIndexes = []
+      const [
+        premiseStepIndex,
+        conclusion1StepIndex,
+        conclusion2StepIndex
+      ] = steps
 
-      steps.forEach(stepIndex => {
-        const formula = Deduction.getStep(deduction, stepIndex)
-        const isPremise = formula.ruleApplicationSummary.rule === Rule.Premise
+      const [
+        premiseStep,
+        conclusion1Step,
+        conclusion2Step
+      ] = steps.map(stepIndex => Deduction.getStep(deduction, stepIndex))
 
-        if (isPremise) {
-          premiseIndex = stepIndex
-        } else {
-          conclusionStepIndexes.push(stepIndex)
-        }
-      })
+      if (premiseStep.ruleApplicationSummary.rule !== Rule.Premise) return undefined
 
-      if (premiseIndex === undefined || conclusionStepIndexes.length !== 2) return undefined
+      if (!conclusion1Step.assumptions.has(premiseStepIndex)) return undefined
+      if (!conclusion2Step.assumptions.has(premiseStepIndex)) return undefined
 
-      const [conclusion1StepIndex, conclusion2StepIndex] = conclusionStepIndexes
+      if (!isNegationOf(conclusion2Step.formula, conclusion1Step.formula)) return undefined
 
-      const conclusion1Step = Deduction.getStep(deduction, conclusion1StepIndex)
-      const conclusion2Step = Deduction.getStep(deduction, conclusion2StepIndex)
-
-      // noinspection JSUnusedAssignment
-      const step1IsAssumptionForStep2 = conclusion1Step.assumptions.has(premiseIndex)
-      if (!step1IsAssumptionForStep2) return undefined
-
-      // noinspection JSUnusedAssignment
-      const step1IsAssumptionForStep3 = conclusion2Step.assumptions.has(premiseIndex)
-      if (!step1IsAssumptionForStep3) return undefined
-
-      if (isNegationOf(conclusion1Step.formula, conclusion2Step.formula)) {
-        // noinspection JSUnusedAssignment
-        return NegationIntroductionRuleInterface(
-          deduction,
-          premiseIndex,
-          conclusion2StepIndex,
-          conclusion1StepIndex
-        )
-      }
-
-      if (isNegationOf(conclusion2Step.formula, conclusion1Step.formula)) {
-        // noinspection JSUnusedAssignment
-        return NegationIntroductionRuleInterface(
-          deduction,
-          premiseIndex,
-          conclusion1StepIndex,
-          conclusion2StepIndex
-        )
-      }
+      return NegationIntroductionRuleInterface(
+        deduction,
+        premiseStepIndex,
+        conclusion1StepIndex,
+        conclusion2StepIndex
+      )
     },
     [Rule.NegationElimination]: () => {
       if (steps.length !== 1) return undefined
@@ -173,48 +141,40 @@ export const RulesInterface = (deduction, ...steps) => {
       const [step1Index, step2Index] = steps
       const [step1, step2] = steps.map(i => Deduction.getStep(deduction, i))
 
-      if (isNegationOf(step1.formula, step2.formula)) {
-        return ExplosionRuleInterface(deduction, step2Index, step1Index)
-      }
+      if (!isNegationOf(step2.formula, step1.formula)) return undefined
 
-      if (isNegationOf(step2.formula, step1.formula)) {
-        return ExplosionRuleInterface(deduction, step1Index, step2Index)
-      }
-
-      return undefined
+      return ExplosionRuleInterface(deduction, step1Index, step2Index)
     },
     [Rule.ConditionalElimination]: () => {
       if (steps.length !== 2) return undefined
 
-      const [premise1Index, premise2Index] = steps
-      const [premise1, premise2] = steps.map(i => Deduction.getStep(deduction, i).formula)
+      const [conditionalStepIndex, antecedentStepIndex] = steps
+      const [conditional, antecedent] = steps.map(i => Deduction.getStep(deduction, i).formula)
 
-      if (isConditionalFrom(premise1, premise2)) {
-        return ConditionalEliminationRuleInterface(deduction, premise1Index, premise2Index)
-      }
+      if (!isConditionalFrom(conditional, antecedent)) return undefined
 
-      if (isConditionalFrom(premise2, premise1)) {
-        return ConditionalEliminationRuleInterface(deduction, premise2Index, premise1Index)
-      }
-
-      return undefined
+      return ConditionalEliminationRuleInterface(
+        deduction,
+        conditionalStepIndex,
+        antecedentStepIndex
+      )
     },
     [Rule.ConjunctionIntroduction]: () => {
       if (steps.length !== 2) return undefined
 
-      const [premise1Index, premise2Index] = steps
+      const [conjunct1StepIndex, conjunct2StepIndex] = steps
 
-      return ConjunctionIntroductionRuleInterface(deduction, premise1Index, premise2Index)
+      return ConjunctionIntroductionRuleInterface(deduction, conjunct1StepIndex, conjunct2StepIndex)
     },
     [Rule.ConjunctionElimination]: () => {
       if (steps.length !== 1) return undefined
 
-      const [premiseIndex] = steps
-      const premise = Deduction.getStep(deduction, premiseIndex).formula
+      const [conjunctionStepIndex] = steps
+      const conjunctionFormula = Deduction.getStep(deduction, conjunctionStepIndex).formula
 
-      if (!Sym.equals(premise.sym, conjunction)) return undefined
+      if (!Sym.equals(conjunctionFormula.sym, conjunction)) return undefined
 
-      return ConjunctionEliminationRuleInterface(deduction, premiseIndex)
+      return ConjunctionEliminationRuleInterface(deduction, conjunctionStepIndex)
     },
     [Rule.DisjunctionIntroduction]: () => {
       if (steps.length !== 1) return undefined
@@ -226,76 +186,50 @@ export const RulesInterface = (deduction, ...steps) => {
     [Rule.DisjunctionElimination]: () => {
       if (steps.length !== 3) return undefined
 
-      let disjunctionStepIndex
-      const conditionalStepIndexes = []
-
-      steps.forEach(stepIndex => {
-        const formula = Deduction.getStep(deduction, stepIndex).formula
-
-        if (Sym.equals(formula.sym, disjunction)) {
-          disjunctionStepIndex = stepIndex
-        } else if (Sym.equals(formula.sym, conditional)) {
-          conditionalStepIndexes.push(stepIndex)
-        }
-      })
-
-      if (disjunctionStepIndex === undefined || conditionalStepIndexes.length !== 2) {
-        return undefined
-      }
-
-      const [conditional1StepIndex, conditional2StepIndex] = conditionalStepIndexes
       const [
-        conditional1,
-        conditional2
-      ] = conditionalStepIndexes.map(i => Deduction.getStep(deduction, i).formula)
-      const consequent = conditional1.children[1]
+        disjunctionStepIndex,
+        conditional1StepIndex,
+        conditional2StepIndex
+      ] = steps
 
-      if (!isConditionalTo(conditional2, consequent)) return undefined
-
-      // noinspection JSUnusedAssignment
       const [
-        disjunct1,
-        disjunct2
-      ] = Deduction.getStep(deduction, disjunctionStepIndex).formula.children
+        disjunctionStep,
+        conditional1Step,
+        conditional2Step
+      ] = steps.map(stepIndex => Deduction.getStep(deduction, stepIndex))
 
-      if (
-        isConditionalFrom(conditional1, disjunct1) &&
-        isConditionalFrom(conditional2, disjunct2)
-      ) {
-        // noinspection JSUnusedAssignment
-        return DisjunctionEliminationRuleInterface(
-          deduction,
-          disjunctionStepIndex,
-          conditional1StepIndex,
-          conditional2StepIndex,
-          consequent
-        )
-      }
+      if (!Sym.equals(disjunctionStep.formula.sym, disjunction)) return undefined
+      if (!Sym.equals(conditional1Step.formula.sym, conditional)) return undefined
+      if (!Sym.equals(conditional2Step.formula.sym, conditional)) return undefined
 
-      if (
-        isConditionalFrom(conditional2, disjunct1) &&
-        isConditionalFrom(conditional1, disjunct2)
-      ) {
-        // noinspection JSUnusedAssignment
-        return DisjunctionEliminationRuleInterface(
-          deduction,
-          disjunctionStepIndex,
-          conditional2StepIndex,
-          conditional1StepIndex,
-          consequent
-        )
-      }
+      const consequent = conditional1Step.formula.children[1]
+      if (!isConditionalTo(conditional2Step.formula, consequent)) return undefined
+
+      const [disjunct1, disjunct2] = disjunctionStep.formula.children
+
+      if (!(
+        isConditionalFrom(conditional1Step.formula, disjunct1) &&
+        isConditionalFrom(conditional2Step.formula, disjunct2)
+      )) return undefined
+
+      return DisjunctionEliminationRuleInterface(
+        deduction,
+        disjunctionStepIndex,
+        conditional1StepIndex,
+        conditional2StepIndex,
+        consequent
+      )
     },
     [Rule.BiconditionalIntroduction]: () => {
       if (steps.length !== 2) return undefined
 
-      const [premise1, premise2] = steps.map(i => Deduction.getStep(deduction, i).formula)
+      const [conditional1, conditional2] = steps.map(i => Deduction.getStep(deduction, i).formula)
 
-      if (!Sym.equals(premise1.sym, conditional)) return undefined
-      if (!Sym.equals(premise2.sym, conditional)) return undefined
+      if (!Sym.equals(conditional1.sym, conditional)) return undefined
+      if (!Sym.equals(conditional2.sym, conditional)) return undefined
 
-      const [antecedent1, consequent1] = premise1.children
-      const [antecedent2, consequent2] = premise2.children
+      const [antecedent1, consequent1] = conditional1.children
+      const [antecedent2, consequent2] = conditional2.children
 
       if (!_.isEqual(antecedent1, consequent2)) return undefined
       if (!_.isEqual(antecedent2, consequent1)) return undefined

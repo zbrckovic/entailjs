@@ -21,7 +21,7 @@ test(`.parent throws ${ErrorName.CANT_GET_PARENT_OF_ROOT} for root.`, () => {
   expect(() => { pointer.parent }).toThrow(ErrorName.CANT_GET_PARENT_OF_ROOT)
 })
 
-test('({ p -> q, [1] }).parent is { p -> q, [] }', () => {
+test('{ p -> q, [1] } .parent is { p -> q, [] }', () => {
   const expression = parser.parse('p -> q')
   const pointer = ExpressionPointer({ expression, position: [1] })
   const expectedParent = ExpressionPointer({ expression })
@@ -38,7 +38,7 @@ test.each([
   ['Ax Fxy', [0], 'y', undefined],
   ['Ax (p -> Ex Fx)', [0, 1, 0, 0], 'x', [0, 1]]
 ])(
-  '{ %s, %j }.findDefinition(%s) is %j',
+  '{ %s, %j } .findDefinition(%s) is %j',
   (formulaStr, position, symbolText, expectedDefinitionPosition) => {
     const expression = parser.parse(formulaStr)
     const pointer = ExpressionPointer({ expression, position })
@@ -52,7 +52,7 @@ test.each([
 test.each([
   ['p -> q', [], 'q', [[1]]]
 ])(
-  '{ %s %j }.findFreeOccurrences(%s) is %j',
+  '{ %s %j } .findFreeOccurrences(%s) is %j',
   (formulaStr, position, symbolText, expectedFreeOccurrences) => {
     const expression = parser.parse(formulaStr)
     const pointer = ExpressionPointer({ expression, position })
@@ -67,7 +67,7 @@ test.each([
   ['p -> Ax Fyx', [1], [[1, 0, 1]]],
   ['p -> Ax Fyy', [1], []]
 ])(
-  '{ %s %j }.findBoundOccurrences() is %j',
+  '{ %s %j } .findBoundOccurrences() is %j',
   (formulaStr, position, expectedBoundOccurrences) => {
     const expression = parser.parse(formulaStr)
     const pointer = ExpressionPointer({ expression, position })
@@ -90,7 +90,7 @@ test.each([
   ['Ey Fy -> Ax Fy', [0, 0], ['y']],
   ['Ey (Fy -> Ax Fy)', [0, 1, 0], ['x', 'y']]
 ])(
-  '{ %s %j }.getBoundSyms() is %j',
+  '{ %s %j } .getBoundSyms() is %j',
   (formulaStr, position, expectedContextStr) => {
     const expression = parser.parse(formulaStr)
     const pointer = ExpressionPointer({ expression, position })

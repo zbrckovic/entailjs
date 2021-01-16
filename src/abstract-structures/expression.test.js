@@ -3,7 +3,6 @@ import { ErrorName } from '../error'
 import { FormulaParser } from '../parsers'
 import { primitivePresentations } from '../presentation/sym-presentation'
 import { primitiveSyms } from '../primitive-syms'
-import { Expression } from './expression'
 
 let parser
 beforeEach(() => {
@@ -18,7 +17,7 @@ test.each([
   ['~p', [0], 'p'],
   ['p -> q', [1], 'q'],
   ['Ax Ex (Fxy -> Fyx)', [0, 0, 1], 'Fyx']
-])('#getSubexpression(%s, %j) is %s', (formulaText, position, expectedSubformulaText) => {
+])('%s .getSubexpression(%j) is %s', (formulaText, position, expectedSubformulaText) => {
   const formula = parser.parse(formulaText)
   const expectedSubformula = parser.parse(expectedSubformulaText)
   const subformula = formula.getSubexpression(position)
@@ -34,7 +33,7 @@ test.each([
   ['Ax Fy', 'y', [[0, 0]]],
   ['Ax Fx', 'x', []],
   ['Ax Fxy -> Ey Fyx', 'x', [[1, 0, 1]]]
-])('#findFreeOccurrences(%s, %s) is %j', (text, symbol, expectedPositions) => {
+])('%s .findFreeOccurrences(%s) is %j', (text, symbol, expectedPositions) => {
   const formula = parser.parse(text)
   const sym = parser.getSym(symbol)
   const positions = formula.findFreeOccurrences(sym)
@@ -45,7 +44,7 @@ test.each([
 test.each([
   ['p'],
   ['Fx']
-])(`#findBoundOccurrences(%s) throws ${ErrorName.EXPRESSION_DOESNT_BIND}`, text => {
+])(`%s .findBoundOccurrences() throws ${ErrorName.EXPRESSION_DOESNT_BIND}`, text => {
   const formula = parser.parse(text)
 
   expect(() => { formula.findBoundOccurrences() }).toThrow(ErrorName.EXPRESSION_DOESNT_BIND)
@@ -55,7 +54,7 @@ test.each([
   ['Ax Fx', [[0, 0]]],
   ['Ax Ex Fx', []],
   ['Ax (Ex Fyx -> Fyx)', [[0, 1, 1]]]
-])('#findBoundOccurrences(%s) is %j', (text, expectedPositions) => {
+])('%s .findBoundOccurrences() is %j', (text, expectedPositions) => {
   const formula = parser.parse(text)
   const positions = formula.findBoundOccurrences()
 
@@ -66,7 +65,7 @@ test.each([
   ['p', [], ['p']],
   ['~p', [0], ['~p', 'p']],
   ['Ax (Fx -> Gx)', [0, 1], ['Ax (Fx -> Gx)', 'Fx -> Gx', 'Gx']]
-])('#getSubexpressionsOnPath(%s, %j) is %s', (text, path, expectedFormulasTexts) => {
+])('%s .getSubexpressionsOnPath(%j) is %s', (text, path, expectedFormulasTexts) => {
   const formula = parser.parse(text)
   const expectedFormulas = expectedFormulasTexts.map(
     expectedFormulaText => parser.parse(expectedFormulaText)
@@ -91,7 +90,7 @@ test.each([
   ['p -> q', '->', 'A', 'Ax p', () => 'x', undefined],
   ['p', 'p', 'A', 'Ax q', () => 'x', () => 'q']
 ])(
-  '#replaceFreeOccurrences(%s, %s, %s) is %s',
+  '%s .replaceFreeOccurrences(%s, %s) is %s',
   (
     oldFormulaText,
     oldSymText,
@@ -116,7 +115,7 @@ test.each([
   ['Ax Fx', 'y', 'Ay Fy'],
   ['Ax (Ex Fx -> Fx)', 'y', 'Ay (Ex Fx -> Fy)']
 ])(
-  '#replaceBoundOccurrences(%s, %s) is %s',
+  '%s .replaceBoundOccurrences(%s) is %s',
   (oldFormulaText, symText, expectedNewFormulaText) => {
     const oldFormula = parser.parse(oldFormulaText)
     const expectedNewFormula = parser.parse(expectedNewFormulaText)
@@ -131,7 +130,7 @@ test.each([
   ['p -> Ax Fx', 'y', [1], 'p -> Ay Fy'],
   ['Ax (Ex Fx -> Fx)', 'y', [0, 0], 'Ax (Ey Fy -> Fx)']
 ])(
-  '#replaceBoundOccurrencesAt(%s, %s, %j) is %s',
+  '%s .replaceBoundOccurrencesAt(%s, %j) is %s',
   (oldFormulaText, symbolText, position, expectedNewFormulaText) => {
     const oldFormula = parser.parse(oldFormulaText)
     const expectedNewFormula = parser.parse(expectedNewFormulaText)
@@ -148,7 +147,7 @@ test.each([
   ['~~p', ['~', 'p']],
   ['Ax p', ['A', 'x', 'p']],
   ['Ax Fxy -> Ey Fyx', ['A', 'E', '->', 'F', 'x', 'y']]
-])('#getSyms(%s) is %j', (formulaText, symsTexts) => {
+])('%s .getSyms() is %j', (formulaText, symsTexts) => {
   const formula = parser.parse(formulaText)
   const expectedSyms = _.fromPairs(
     symsTexts
@@ -166,7 +165,7 @@ test.each([
   ['Ax Fxy', ['A', 'F', 'y']],
   ['Ax Ey Fxy', ['A', 'E', 'F']],
   ['Ax Fx -> Ey Gyx', ['A', 'E', 'F', 'G', '->', 'x']]
-])('#getFreeSyms(%s) is %j', (formulaText, symsTexts) => {
+])('%s .getFreeSyms() is %j', (formulaText, symsTexts) => {
   const formula = parser.parse(formulaText)
   const expectedSyms = _.fromPairs(
     symsTexts
@@ -183,7 +182,7 @@ test.each([
   ['Ax Fxy', 'x', []],
   ['Ax Fxy', 'y', ['x']],
   ['Ax Fzx & Ey Fzy', 'z', ['x', 'y']]
-])('#findBoundSymsAtFreeOccurrencesOfSym(%s) is %j', (formulaText, symText, symsTexts) => {
+])('%s .findBoundSymsAtFreeOccurrencesOfSym() is %j', (formulaText, symText, symsTexts) => {
   const formula = parser.parse(formulaText)
   const sym = parser.getSym(symText)
   const expectedSyms = _.fromPairs(

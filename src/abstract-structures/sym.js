@@ -1,52 +1,70 @@
 // `Sym` (short for symbol) is the main entity from which [`Expression`](./expression)s are built.
 // Word `symbol` has been avoided because it's a built-in type in ES6.
 export const Sym = ({
+  id = 0,
+  kind = Kind.Formula,
+  argumentKind = Kind.Formula,
+  arity = 0,
+  binds = false
+} = {}) => ({
+  constructor: Sym,
+
   // Non-negative integer which must be the same throughout all of this symbol's occurrences in some
   // context (expression, deduction, etc...). Symbol identity is also established by comparing id.
-  id = 0,
+  id,
+
   // When this symbol is the main symbol of an expression `kind` determines which of two possible
   // 'roles' this expression has - it can be either a formula or a term. We will say that expression
   // is of a kind K when it's main symbol is of a kind K.
-  kind = Kind.Formula,
+  kind,
+
   // When this symbol is the main symbol of an expression `argumentKind` determines what kind of
   // expressions are accepted as children.
-  argumentKind = Kind.Formula,
+  argumentKind,
+
   // When this symbol is the main symbol of an expression `arity` determines how many children this
   // expression must have.
-  arity = 0,
+  arity,
+
   // When this symbol is the main symbol of an expression `binds` determines whether expression also
   // accepts a bound symbol. This will be true for quantifiers.
-  binds = false
-} = {}) => ({ id, kind, argumentKind, arity, binds })
+  binds,
 
-Sym.fromCategory = (category, props = {}) =>
-  Sym({ ...props, ...Sym.getKindsFromCategory(category) })
+  get category() {
+    switch (this.kind) {
+      case Kind.Formula:
+        switch (this.argumentKind) {
+          case Kind.Formula:
+            return Category.FF
+          case Kind.Term:
+            return Category.FT
+        }
+        break
+      case Kind.Term:
+        switch (this.argumentKind) {
+          case Kind.Formula:
+            return Category.TF
+          case Kind.Term:
+            return Category.TT
+        }
+        break
+    }
+  },
 
-Sym.ff = (props = {}) => Sym.fromCategory(Category.FF, props)
-Sym.ft = (props = {}) => Sym.fromCategory(Category.FT, props)
-Sym.tf = (props = {}) => Sym.fromCategory(Category.TF, props)
-Sym.tt = (props = {}) => Sym.fromCategory(Category.TT, props)
+  get isBindable() {
+    return this.category === Category.TT && this.arity === 0
+  },
 
-Sym.getCategory = sym => {
-  switch (sym.kind) {
-    case Kind.Formula:
-      switch (sym.argumentKind) {
-        case Kind.Formula:
-          return Category.FF
-        case Kind.Term:
-          return Category.FT
-      }
-      break
-    case Kind.Term:
-      switch (sym.argumentKind) {
-        case Kind.Formula:
-          return Category.TF
-        case Kind.Term:
-          return Category.TT
-      }
-      break
-  }
-}
+  equals(sym) { return this.id === sym.id },
+
+  order(sym) { return this.id - sym.id }
+})
+
+Sym.fromCategory = (category, spec = {}) => Sym({ ...spec, ...Sym.getKindsFromCategory(category) })
+Sym.ff = (spec = {}) => Sym.fromCategory(Category.FF, spec)
+Sym.ft = (spec = {}) => Sym.fromCategory(Category.FT, spec)
+Sym.tf = (spec = {}) => Sym.fromCategory(Category.TF, spec)
+Sym.tt = (spec = {}) => Sym.fromCategory(Category.TT, spec)
 
 Sym.getCategoriesWithKind = kind => {
   switch (kind) {
@@ -82,10 +100,6 @@ Sym.getKindsFromCategory = category => {
   }
 }
 
-Sym.order = (sym1, sym2) => sym1.id - sym2.id
-
-Sym.equals = (sym1, sym2) => sym1.id === sym2.id
-
 export const Kind = {
   Formula: 'Formula',
   Term: 'Term'
@@ -120,14 +134,3 @@ export const Category = {
 // definite category to each symbol. In order to conserve simplicity and consistency we enforce the
 // following rule: nullary symbol's `kind` and `argumentKind` must always be the same. In other
 // words: nullary symbol's category can either be `FF` or `TT`, never `FT` nor `TF`.
-
-const precedence = {
-  [Category.FF]: 0,
-  [Category.FT]: 1,
-  [Category.TT]: 2,
-  [Category.TF]: 3
-}
-
-Sym.isBindable = sym => Sym.getCategory(sym) === Category.TT && sym.arity === 0
-
-export const order = (category1, category2) => precedence[category1] - precedence[category2]

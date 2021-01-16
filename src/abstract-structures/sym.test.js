@@ -26,9 +26,9 @@ test.each([
   [Kind.Formula, Kind.Term, Category.FT],
   [Kind.Term, Kind.Term, Category.TT],
   [Kind.Term, Kind.Formula, Category.TF]
-])('#getCategory() for sym with kinds %s, %s is %s', (kind, argumentKind, category) => {
+])('.category for sym with kinds %s, %s is %s', (kind, argumentKind, category) => {
   const sym = Sym({ kind, argumentKind })
-  expect(Sym.getCategory(sym)).toEqual(category)
+  expect(sym.category).toEqual(category)
 })
 
 test.each([
@@ -52,13 +52,13 @@ test.each([
   [Sym.tf(), false],
   [Sym.ft(), false],
   [Sym.tt(), true]
-])('.isBindable() only for TT', (sym, expected) => {
-  expect(Sym.isBindable(sym)).toEqual(expected)
+])('.isBindable only for TT', (sym, expected) => {
+  expect(sym.isBindable).toEqual(expected)
 })
 
 test.each([
   [Sym.tt({ arity: 1 }), false],
   [Sym.tt({ arity: 0 }), true]
-])('.isBindable() only for nullary', (sym, expected) => {
-  expect(Sym.isBindable(sym)).toEqual(expected)
+])('.isBindable only for nullary', (sym, expected) => {
+  expect(sym.isBindable).toEqual(expected)
 })

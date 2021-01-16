@@ -1,4 +1,4 @@
-import { FormulaParser } from '../../parsers/formula-parser'
+import { FormulaParser } from '../../parsers'
 import { primitiveSyms } from '../../primitive-syms'
 import { primitivePresentations } from '../../presentation/sym-presentation'
 import { Deduction, Rule } from '../../deduction-structure'

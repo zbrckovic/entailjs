@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { ErrorName } from '../error'
-import { FormulaParser } from '../parsers/formula-parser'
+import { FormulaParser } from '../parsers'
 import { primitivePresentations } from '../presentation/sym-presentation'
 import { primitiveSyms } from '../primitive-syms'
 import { ExpressionPointer } from './expression-pointer'
@@ -13,20 +13,20 @@ beforeEach(() => {
   })
 })
 
-test(`#getParentPointer() throws ${ErrorName.CANT_GET_PARENT_OF_ROOT} for root.`, () => {
+test(`.parent throws ${ErrorName.CANT_GET_PARENT_OF_ROOT} for root.`, () => {
   const expression = parser.parse('p')
   const pointer = ExpressionPointer({ expression })
 
-  expect(() => { ExpressionPointer.getParent(pointer) }).toThrow(ErrorName.CANT_GET_PARENT_OF_ROOT)
+  // eslint-disable-next-line no-unused-expressions
+  expect(() => { pointer.parent }).toThrow(ErrorName.CANT_GET_PARENT_OF_ROOT)
 })
 
-test('#getParentPointer({ p -> q, [1] }) for is { p -> q, [] }', () => {
+test('({ p -> q, [1] }).parent is { p -> q, [] }', () => {
   const expression = parser.parse('p -> q')
   const pointer = ExpressionPointer({ expression, position: [1] })
-  const expectedParentPointer = ExpressionPointer({ expression })
-  const parentPointer = ExpressionPointer.getParent(pointer)
+  const expectedParent = ExpressionPointer({ expression })
 
-  expect(parentPointer).toEqual(expectedParentPointer)
+  expect(pointer.parent).toEqual(expectedParent)
 })
 
 test.each([
@@ -38,12 +38,12 @@ test.each([
   ['Ax Fxy', [0], 'y', undefined],
   ['Ax (p -> Ex Fx)', [0, 1, 0, 0], 'x', [0, 1]]
 ])(
-  '#findDefinition({ %s, %j }, %s) is %j',
+  '{ %s, %j }.findDefinition(%s) is %j',
   (formulaStr, position, symbolText, expectedDefinitionPosition) => {
     const expression = parser.parse(formulaStr)
     const pointer = ExpressionPointer({ expression, position })
     const sym = parser.getSym(symbolText)
-    const actualDefinitionPosition = ExpressionPointer.findBindingOccurrence(pointer, sym)
+    const actualDefinitionPosition = pointer.findBindingOccurrence(sym)
 
     expect(actualDefinitionPosition).toEqual(expectedDefinitionPosition)
   }
@@ -52,12 +52,12 @@ test.each([
 test.each([
   ['p -> q', [], 'q', [[1]]]
 ])(
-  '#findFreeOccurrences({ %s %j }, %s) is %j',
+  '{ %s %j }.findFreeOccurrences(%s) is %j',
   (formulaStr, position, symbolText, expectedFreeOccurrences) => {
     const expression = parser.parse(formulaStr)
     const pointer = ExpressionPointer({ expression, position })
     const sym = parser.getSym(symbolText)
-    const freeOccurrences = ExpressionPointer.findFreeOccurrences(pointer, sym)
+    const freeOccurrences = pointer.findFreeOccurrences(sym)
 
     expect(freeOccurrences).toEqual(expectedFreeOccurrences)
   }
@@ -67,11 +67,11 @@ test.each([
   ['p -> Ax Fyx', [1], [[1, 0, 1]]],
   ['p -> Ax Fyy', [1], []]
 ])(
-  '#findBoundOccurrences({ %s %j }) is %j',
+  '{ %s %j }.findBoundOccurrences() is %j',
   (formulaStr, position, expectedBoundOccurrences) => {
     const expression = parser.parse(formulaStr)
     const pointer = ExpressionPointer({ expression, position })
-    const boundOccurrences = ExpressionPointer.findBoundOccurrences(pointer)
+    const boundOccurrences = pointer.findBoundOccurrences()
 
     expect(boundOccurrences).toEqual(expectedBoundOccurrences)
   }
@@ -90,19 +90,16 @@ test.each([
   ['Ey Fy -> Ax Fy', [0, 0], ['y']],
   ['Ey (Fy -> Ax Fy)', [0, 1, 0], ['x', 'y']]
 ])(
-  '#getBoundSyms({ %s %j }) is %j',
+  '{ %s %j }.getBoundSyms() is %j',
   (formulaStr, position, expectedContextStr) => {
     const expression = parser.parse(formulaStr)
-    const pointer = new ExpressionPointer({
-      expression,
-      position
-    })
+    const pointer = ExpressionPointer({ expression, position })
     const expectedContext = _.fromPairs(
       expectedContextStr
         .map(symStr => parser.getSym(symStr))
         .map(sym => ([sym.id, sym]))
     )
-    const context = ExpressionPointer.getBoundSyms(pointer)
+    const context = pointer.getBoundSyms()
 
     expect(context).toEqual(expectedContext)
   }

@@ -1,32 +1,27 @@
 import { parseFormula } from '../peg'
 import { AstProcessor } from './ast-processor'
+import _ from 'lodash'
 
-export const FormulaParser = ({ syms, presentations }) => {
-  const astProcessor = AstProcessor({ syms, presentations })
+export const FormulaParser = ({ syms, presentations }) => _.create(FormulaParser.prototype, {
+  astProcessor: AstProcessor({ syms, presentations })
+})
 
-  const parse = text => {
+FormulaParser.prototype = {
+  constructor: FormulaParser,
+
+  parse(text) {
     const ast = parseFormula(text)
-    return astProcessor.process(ast)
-  }
-
-  const {
-    createSym,
-    addPresentation,
-    getSym,
-    getSyms,
-    getPresentations,
-    getTextToSymMap,
-    getMaxSymId
-  } = astProcessor
-
-  return ({
-    parse,
-    createSym,
-    addPresentation,
-    getSym,
-    getSyms,
-    getPresentations,
-    getTextToSymMap,
-    getMaxSymId
-  })
+    return this.astProcessor.process(ast)
+  },
+  createSym(kind, arity, binds, text, placement) {
+    return this.astProcessor.createSym(kind, arity, binds, text, placement)
+  },
+  addPresentation(sym, presentation) {
+    return this.astProcessor.addPresentation(sym, presentation)
+  },
+  getSym(text) { return this.astProcessor.getSym(text) },
+  getSyms() { return this.astProcessor.getSyms() },
+  getPresentations() { return this.astProcessor.getPresentations() },
+  getTextToSymMap() { return this.astProcessor.getTextToSymMap() },
+  getMaxSymId() { return this.astProcessor.getMaxSymId() }
 }

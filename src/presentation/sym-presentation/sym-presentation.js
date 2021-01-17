@@ -2,10 +2,10 @@ import _ from 'lodash'
 
 // ASCII and unicode presentation of a symbol. ASCII presentation is intended to be used in plain
 // text environments, while unicode is primarily intended for GUI and generated documents.
-export const SymPresentation = ({ ascii, unicode }) => _.create(SymPresentationPrototype, {
+export const SymPresentation = ({ ascii, unicode }) => _.create(SymPresentation.prototype, {
   ascii, unicode
 })
-const SymPresentationPrototype = {
+SymPresentation.prototype = {
   constructor: SymPresentation,
 
   get defaultSyntacticInfo() {
@@ -18,14 +18,14 @@ const SymPresentationPrototype = {
 }
 
 export const SyntacticInfo = ({ text, placement = Placement.Prefix }) => _.create(
-  SyntacticInfoPrototype,
+  SyntacticInfo.prototype,
   { text, placement }
 )
 
 SyntacticInfo.prefix = text => SyntacticInfo({ text, placement: Placement.Prefix })
 SyntacticInfo.infix = text => SyntacticInfo({ text, placement: Placement.Infix })
 
-const SyntacticInfoPrototype = {
+SyntacticInfo.prototype = {
   constructor: SyntacticInfo,
 
   createDescription(arity = 1) {

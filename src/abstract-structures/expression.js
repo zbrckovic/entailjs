@@ -7,7 +7,7 @@ export const Expression = ({
   sym,
   boundSym,
   children = []
-}) => _.create(expressionPrototype, {
+}) => _.create(Expression.prototype, {
   // Main symbol of this expression.
   sym,
 
@@ -20,7 +20,7 @@ export const Expression = ({
   // `sym`'s `argumentKind`
   children
 })
-const expressionPrototype = {
+Expression.prototype = {
   constructor: Expression,
 
   // Returns the child at the index `i` or throws an error.

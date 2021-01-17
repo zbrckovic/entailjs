@@ -1,33 +1,34 @@
 import { startDeduction } from '../../deduction-interface'
-import { getRule, Rule } from '../../deduction-structure/rule'
 import { createError, ErrorName } from '../../error'
 import { findDuplicates } from '../../utils'
 import { AstProcessor as FormulaAstProcessor } from '../formula-parser/ast-processor'
 import _ from 'lodash'
-import { Deduction } from '../../deduction-structure'
+import { getRule, Rule, Deduction } from '../../deduction-structure'
 
 // `AstProcessor` can process deduction AST (the result of parsing formula) and creates a
 // `Deduction`. Internally it uses formula [`AstProcessor`](../formula-parser/ast-processor) for
 // parsing formula on each step.
-export const AstProcessor = ({ syms, presentations }) => {
-  const formulaAstProcessor = FormulaAstProcessor({ syms, presentations })
+export const AstProcessor = ({ syms, presentations }) => _.create(AstProcessor.prototype, {
+  formulaAstProcessor: FormulaAstProcessor({ syms, presentations })
+})
 
-  const { getSym, getSyms, getPresentations, getTextToSymMap, getMaxSymId } = formulaAstProcessor
+AstProcessor.prototype = {
+  constructor: AstProcessor,
 
-  const process = ast => {
+  process(ast) {
     const { steps } = ast
 
     let deductionInterface = startDeduction()
 
     deductionInterface = steps.reduce(
-      (deductionInterface, step, i) => processStep(deductionInterface, step, i + 1),
+      (deductionInterface, step, i) => this.processStep(deductionInterface, step, i + 1),
       deductionInterface
     )
 
     return deductionInterface.deduction
-  }
+  },
 
-  const processStep = (deductionInterface, astStep, stepOrdinal) => {
+  processStep(deductionInterface, astStep, stepOrdinal) {
     validateStepOrdinal(stepOrdinal, astStep.ordinal)
 
     const assumptionsOrdinals = astStep.assumptions
@@ -36,7 +37,7 @@ export const AstProcessor = ({ syms, presentations }) => {
 
     const rule = getRule(astStep.ruleApplicationSummary.rule)
     const premisesOrdinals = astStep.ruleApplicationSummary.premises
-    const formula = formulaAstProcessor.process(astStep.formula)
+    const formula = this.formulaAstProcessor.process(astStep.formula)
 
     const ruleInterface = deductionInterface
       .selectSteps(...premisesOrdinals)
@@ -121,16 +122,12 @@ export const AstProcessor = ({ syms, presentations }) => {
     }
 
     return deductionInterface
-  }
-
-  return {
-    process,
-    getSym,
-    getSyms,
-    getPresentations,
-    getTextToSymMap,
-    getMaxSymId
-  }
+  },
+  getSym(text) { return this.formulaAstProcessor.getSym(text) },
+  getSyms() { return this.formulaAstProcessor.getSyms() },
+  getPresentations() { return this.formulaAstProcessor.getPresentations() },
+  getTextToSymMap() { return this.formulaAstProcessor.getTextToSymMap() },
+  getMaxSymId() { return this.formulaAstProcessor.getMaxSymId() }
 }
 
 const validateStepOrdinal = (actualStepOrdinal, encounteredStepOrdinal) => {

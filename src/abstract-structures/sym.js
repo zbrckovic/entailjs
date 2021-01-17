@@ -8,7 +8,7 @@ export const Sym = ({
   argumentKind = Kind.Formula,
   arity = 0,
   binds = false
-} = {}) => _.create(symPrototype, {
+} = {}) => _.create(Sym.prototype, {
   // Non-negative integer which must be the same throughout all of this symbol's occurrences in some
   // context (expression, deduction, etc...). Symbol identity is also established by comparing id.
   id,
@@ -31,7 +31,7 @@ export const Sym = ({
   binds
 })
 
-const symPrototype = {
+Sym.prototype = {
   constructor: Sym,
 
   getCategory() {

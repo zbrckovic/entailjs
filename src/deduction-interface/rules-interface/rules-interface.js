@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import { Sym } from '../../abstract-structures'
 import { Deduction, Rule } from '../../deduction-structure'
 import { createError, ErrorName } from '../../error'
 import {

@@ -55,10 +55,13 @@ export const Sym = ({
     return this.category === Category.TT && this.arity === 0
   },
 
-  equals(sym) { return this.id === sym.id },
-
-  order(sym) { return this.id - sym.id }
+  ...Sym.methods
 })
+
+Sym.methods = {
+  equals(sym) { return this.id === sym.id },
+  order(sym) { return this.id - sym.id }
+}
 
 Sym.fromCategory = (category, spec = {}) => Sym({ ...spec, ...Sym.getKindsFromCategory(category) })
 Sym.ff = (spec = {}) => Sym.fromCategory(Category.FF, spec)

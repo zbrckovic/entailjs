@@ -64,7 +64,7 @@ export const RulesInterface = (deduction, ...steps) => {
 
       const [step] = steps
       const universallyQuantifiedFormula = Deduction.getStep(deduction, step).formula
-      if (!Sym.equals(universallyQuantifiedFormula.sym, universalQuantifier)) return undefined
+      if (!universallyQuantifiedFormula.sym.equals(universalQuantifier)) return undefined
 
       return UniversalInstantiationRuleInterface(deduction, step)
     },
@@ -80,7 +80,7 @@ export const RulesInterface = (deduction, ...steps) => {
 
       const [step] = steps
       const existentiallyQuantifiedFormula = Deduction.getStep(deduction, step).formula
-      if (!Sym.equals(existentiallyQuantifiedFormula.sym, existentialQuantifier)) return undefined
+      if (!existentiallyQuantifiedFormula.sym.equals(existentialQuantifier)) return undefined
 
       return ExistentialInstantiationRuleInterface(deduction, step)
     },
@@ -172,7 +172,7 @@ export const RulesInterface = (deduction, ...steps) => {
       const [conjunctionStepIndex] = steps
       const conjunctionFormula = Deduction.getStep(deduction, conjunctionStepIndex).formula
 
-      if (!Sym.equals(conjunctionFormula.sym, conjunction)) return undefined
+      if (!conjunctionFormula.sym.equals(conjunction)) return undefined
 
       return ConjunctionEliminationRuleInterface(deduction, conjunctionStepIndex)
     },
@@ -198,9 +198,9 @@ export const RulesInterface = (deduction, ...steps) => {
         conditional2Step
       ] = steps.map(stepIndex => Deduction.getStep(deduction, stepIndex))
 
-      if (!Sym.equals(disjunctionStep.formula.sym, disjunction)) return undefined
-      if (!Sym.equals(conditional1Step.formula.sym, conditional)) return undefined
-      if (!Sym.equals(conditional2Step.formula.sym, conditional)) return undefined
+      if (!disjunctionStep.formula.sym.equals(disjunction)) return undefined
+      if (!conditional1Step.formula.sym.equals(conditional)) return undefined
+      if (!conditional2Step.formula.sym.equals(conditional)) return undefined
 
       const consequent = conditional1Step.formula.children[1]
       if (!isConditionalTo(conditional2Step.formula, consequent)) return undefined
@@ -225,8 +225,8 @@ export const RulesInterface = (deduction, ...steps) => {
 
       const [conditional1, conditional2] = steps.map(i => Deduction.getStep(deduction, i).formula)
 
-      if (!Sym.equals(conditional1.sym, conditional)) return undefined
-      if (!Sym.equals(conditional2.sym, conditional)) return undefined
+      if (!conditional1.sym.equals(conditional)) return undefined
+      if (!conditional2.sym.equals(conditional)) return undefined
 
       const [antecedent1, consequent1] = conditional1.children
       const [antecedent2, consequent2] = conditional2.children
@@ -243,7 +243,7 @@ export const RulesInterface = (deduction, ...steps) => {
 
       const premise = Deduction.getStep(deduction, premiseIndex).formula
 
-      if (!Sym.equals(premise.sym, biconditional)) return undefined
+      if (!premise.sym.equals(biconditional)) return undefined
 
       return BiconditionalEliminationRuleInterface(deduction, premiseIndex)
     }

@@ -12,7 +12,7 @@ export const ExistentialGeneralizationRuleInterface = (deduction, stepIndex) => 
 
   return GeneralizationRuleInterface(deduction, stepIndex, (newTerm, oldTerm) => {
     const child = oldTerm !== undefined
-      ? Expression.replaceFreeOccurrences(premise, oldTerm, newTerm)
+      ? premise.replaceFreeOccurrences(oldTerm, newTerm)
       : premise
 
     const ruleApplicationSpec = RegularRuleApplicationSpec({
@@ -40,12 +40,12 @@ export const ExistentialInstantiationRuleInterface = (deduction, stepIndex) => {
     newTerm => {
       const [child] = premise.children
       const conclusion = newTerm !== undefined
-        ? Expression.replaceFreeOccurrences(child, premise.boundSym, newTerm)
+        ? child.replaceFreeOccurrences(premise.boundSym, newTerm)
         : child
 
       let termDependencies
       if (newTerm !== undefined) {
-        const freeTerms = { ...Expression.getFreeTerms(conclusion) }
+        const freeTerms = { ...conclusion.getFreeTerms() }
         delete freeTerms[newTerm.id]
 
         const freeTermIds = Object.keys(freeTerms).map(id => parseInt(id, 10))
@@ -74,13 +74,13 @@ export const InstantiationRuleInterface = (deduction, stepIndex, concreteApply) 
   // vacuous `newTerm` doesn't need to be provided.
   const apply = newTerm => {
     if (newTerm === undefined) {
-      if (Expression.findBoundOccurrences(premise).length > 0) {
+      if (premise.findBoundOccurrences().length > 0) {
         throw createError(ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION)
       }
     } else {
       const oldTerm = premise.boundSym
       const [child] = premise.children
-      const boundSyms = Expression.findBoundSymsAtFreeOccurrencesOfSym(child, oldTerm)
+      const boundSyms = child.findBoundSymsAtFreeOccurrencesOfSym(oldTerm)
       if (boundSyms[newTerm.id] !== undefined) {
         throw createError(ErrorName.INSTANCE_TERM_BECOMES_ILLEGALLY_BOUND)
       }
@@ -101,12 +101,12 @@ export const UniversalGeneralizationRuleInterface = (deduction, stepIndex) => {
 
   return GeneralizationRuleInterface(deduction, stepIndex, (newTerm, oldTerm) => {
     const child = oldTerm !== undefined
-      ? Expression.replaceFreeOccurrences(premise, oldTerm, newTerm)
+      ? premise.replaceFreeOccurrences(oldTerm, newTerm)
       : premise
 
     let termDependencies
     if (oldTerm !== undefined) {
-      const freeTerms = { ...Expression.getFreeTerms(premise) }
+      const freeTerms = { ...premise.getFreeTerms() }
       delete freeTerms[oldTerm.id]
 
       const freeTermIds = Object.keys(freeTerms).map(id => parseInt(id, 10))
@@ -140,7 +140,7 @@ export const UniversalInstantiationRuleInterface = (deduction, stepIndex) => {
     const [child] = children
 
     const conclusion = newTerm !== undefined
-      ? Expression.replaceFreeOccurrences(child, boundSym, newTerm)
+      ? child.replaceFreeOccurrences(boundSym, newTerm)
       : child
 
     const ruleApplicationSpec = RegularRuleApplicationSpec({
@@ -162,14 +162,14 @@ export const GeneralizationRuleInterface = (deduction, stepIndex, concreteApply)
   // term which if provided will be substituted with `newTerm`. If `oldTerm` is not provided
   // generalization will be vacuous.
   const apply = (newTerm, oldTerm) => {
-    const substitutionRequired = oldTerm !== undefined && !Sym.equals(newTerm, oldTerm)
+    const substitutionRequired = oldTerm !== undefined && !newTerm.equals(oldTerm)
     if (substitutionRequired) {
-      if (Expression.getFreeSyms(premise)[newTerm.id] !== undefined) {
+      if (premise.getFreeSyms()[newTerm.id] !== undefined) {
         throw createError(ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS)
       }
 
       if (oldTerm !== undefined) {
-        const boundSyms = Expression.findBoundSymsAtFreeOccurrencesOfSym(premise, oldTerm)
+        const boundSyms = premise.findBoundSymsAtFreeOccurrencesOfSym(oldTerm)
         if (boundSyms[newTerm.id] !== undefined) {
           throw createError(ErrorName.GENERALIZED_TERM_BECOMES_ILLEGALLY_BOUND)
         }

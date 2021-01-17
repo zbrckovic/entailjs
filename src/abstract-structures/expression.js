@@ -8,8 +8,6 @@ export const Expression = ({
   boundSym,
   children = []
 }) => ({
-  constructor: Expression,
-
   // Main symbol of this expression.
   sym,
 
@@ -21,6 +19,10 @@ export const Expression = ({
   // Array of subexpressions whose length will match `sym`'s arity and their kinds will match
   // `sym`'s `argumentKind`
   children,
+  ...Expression.methods
+})
+Expression.methods = {
+  constructor: Expression,
 
   // Returns the child of an `expression` at the index `i` or throws an error.
   getChild(i) {
@@ -130,7 +132,7 @@ export const Expression = ({
   },
 
   // Replaces free occurrences of `sym` with `newSym`.
-  replaceFreeOccurrences(
+  replaceFreeOccurrences: function(
     sym,
     newSym,
     // Called if `newSym` binds, but old one doesn't.
@@ -141,12 +143,13 @@ export const Expression = ({
     return this
       .findFreeOccurrences(sym)
       .reduce(
-        (expression, position) => expression.replaceSymAt(
-          position,
-          newSym,
-          getBoundSym === undefined ? undefined : () => getBoundSym(position),
-          getChild === undefined ? undefined : () => getChild(position)
-        ),
+        (expression, position) =>
+          expression.replaceSymAt(
+            position,
+            newSym,
+            getBoundSym === undefined ? undefined : () => getBoundSym(position),
+            getChild === undefined ? undefined : () => getChild(position)
+          ),
         this
       )
   },
@@ -233,7 +236,7 @@ export const Expression = ({
 
     return result
   }
-})
+}
 
 const resolveChildren = (oldSym, newSym, oldChildren, getChild) => {
   if (oldSym.argumentKind !== newSym.argumentKind) {

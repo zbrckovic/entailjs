@@ -7,7 +7,7 @@ import _ from 'lodash'
 export const evaluate = (formula, interpretation = {}) => {
   const { sym, children } = formula
 
-  if (Sym.getCategory(sym) !== Category.FF) throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
+  if (sym.category !== Category.FF) throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
 
   if (sym.arity === 0) {
     const value = interpretation[sym.id]
@@ -33,7 +33,7 @@ const findInterpretationsLimitedByBaseInterpretation = (
 ) => {
   const { sym, children } = formula
 
-  if (Sym.getCategory(sym) !== Category.FF || sym.binds) {
+  if (sym.category !== Category.FF || sym.binds) {
     throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
   }
 
@@ -78,7 +78,7 @@ const getTruthFunction = sym => {
 
 // Checks whether first formula is the negation of the second.
 export const isNegationOf = (first, second) => {
-  if (!Sym.equals(first.sym, negation)) return false
+  if (!first.sym.equals(negation)) return false
   const [firstChild] = first.children
   return _.isEqual(firstChild, second)
 }
@@ -91,7 +91,7 @@ export const areCanonicallyContradictory = (formula1, formula2) => {
 // Checks whether `formula` is of the form `A & ~A` or `~A & A`.
 export const isCanonicalContradiction = formula => {
   const { sym, children } = formula
-  if (!Sym.equals(sym, conjunction)) return false
+  if (!sym.equals(conjunction)) return false
 
   const [child1, child2] = children
 
@@ -101,37 +101,37 @@ export const isCanonicalContradiction = formula => {
 export const isDoubleNegation = formula => {
   const { sym, children } = formula
 
-  if (!Sym.equals(sym, negation)) return false
+  if (!sym.equals(negation)) return false
 
   const [child] = children
 
-  return Sym.equals(child.sym, negation)
+  return child.sym.equals(negation)
 }
 
 // Checks whether `formula1` is a conjunction containing `formula2` as one of its conjuncts.
 export const isConjunctionOf = (formula1, formula2) => {
-  if (!Sym.equals(formula1.sym, conjunction)) return false
+  if (!formula1.sym.equals(conjunction)) return false
   const [conjunct1, conjunct2] = formula1.children
   return _.isEqual(conjunct1, formula2) || _.isEqual(conjunct2, formula2)
 }
 
 // Checks whether `formula1` is a disjunction containing `formula2` as one of its disjuncts.
 export const isDisjunctionOf = (formula1, formula2) => {
-  if (!Sym.equals(formula1.sym, disjunction)) return false
+  if (!formula1.sym.equals(disjunction)) return false
   const [disjunct1, disjunct2] = formula1.children
   return _.isEqual(disjunct1, formula2) || _.isEqual(disjunct2, formula2)
 }
 
 // Checks whether `formula2` is an antecedent of `formula1`.
 export const isConditionalFrom = (formula1, formula2) => {
-  if (!Sym.equals(formula1.sym, conditional)) return false
+  if (!formula1.sym.equals(conditional)) return false
   const [antecedent] = formula1.children
   return _.isEqual(antecedent, formula2)
 }
 
 // Checks whether `formula2` is a consequent of `formula1`.
 export const isConditionalTo = (formula1, formula2) => {
-  if (!Sym.equals(formula1.sym, conditional)) return false
+  if (!formula1.sym.equals(conditional)) return false
   const [, consequent] = formula1.children
   return _.isEqual(consequent, formula2)
 }

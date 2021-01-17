@@ -28,7 +28,7 @@ Deduction.getStep = (deduction, stepIndex) => {
 // Gets all symbols appearing in deduction (free or not).
 Deduction.getSyms = deduction => {
   const syms = {}
-  deduction.steps.forEach(step => { Object.assign(syms, Expression.getSyms(step.formula)) })
+  deduction.steps.forEach(step => { Object.assign(syms, step.formula.getSyms()) })
 
   return syms
 }

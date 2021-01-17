@@ -8,14 +8,22 @@ export const ExpressionPointer = ({
   position = []
 }) => ({
   constructor: ExpressionPointer,
+
   expression,
   position,
-  get isRoot() { return this.position.length === 0 },
-  get target() { return this.expression.getSubexpression(this.position) },
+
+  ...ExpressionPointer.methods
+})
+ExpressionPointer.methods = {
+  isRoot() { return this.position.length === 0 },
+
+  getTarget() {
+    return this.expression.getSubexpression(this.position)
+  },
 
   // Returns parent of the target or throws if there's no parent.
-  get parent() {
-    if (this.isRoot) throw createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
+  getParent() {
+    if (this.isRoot()) throw createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
     return { ...this, position: this.position.slice(0, -1) }
   },
 
@@ -23,26 +31,26 @@ export const ExpressionPointer = ({
   // words, find the closest target's ancestor which has `sym` as its `boundSym`. If `sym` is not
   // specified, target's `mainSym` is assumed.
   findBindingOccurrence(sym) {
-    if (this.isRoot) return undefined
+    if (this.isRoot()) return undefined
 
-    sym = sym ?? this.target.sym
+    sym = sym ?? this.getTarget().sym
 
-    const parent = this.parent
-    const { boundSym } = parent.target
+    const parent = this.getParent()
+    const { boundSym } = parent.getTarget()
 
     return boundSym?.id === sym.id ? parent.position : parent.findBindingOccurrence(sym)
   },
 
   // Returns free occurrences of `sym` at target.
   findFreeOccurrences(sym) {
-    return this.target
+    return this.getTarget()
       .findFreeOccurrences(sym)
       .map(position => this.position.concat(position))
   },
 
   // Returns bound occurrences of target's `boundSym` at target.
   findBoundOccurrences() {
-    return this.target
+    return this.getTarget()
       .findBoundOccurrences()
       .map(position => this.position.concat(position))
   },
@@ -52,9 +60,9 @@ export const ExpressionPointer = ({
   // bound by some ancestor if we replaced the target with some formula containing S as free symbol.
   // In other words, it also returns vacuously bound symbols.
   getBoundSyms() {
-    if (this.isRoot) return {}
-    const parent = this.parent
-    const boundSym = parent.target.boundSym
+    if (this.isRoot()) return {}
+    const parent = this.getParent()
+    const boundSym = parent.getTarget().boundSym
 
     const result = {}
 
@@ -66,4 +74,4 @@ export const ExpressionPointer = ({
 
     return result
   }
-})
+}

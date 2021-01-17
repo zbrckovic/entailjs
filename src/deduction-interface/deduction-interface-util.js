@@ -5,11 +5,11 @@ import { Expression } from '../abstract-structures'
 import { createError, ErrorName } from '../error'
 
 export const determineNewTermInInstantiationResult = (formula, premise) => {
-  const [firstOccurrence] = Expression.findBoundOccurrences(premise)
+  const [firstOccurrence] = premise.findBoundOccurrences()
   if (firstOccurrence === undefined) return undefined
 
   try {
-    return Expression.getSubexpression(formula, firstOccurrence.slice(1)).sym
+    return formula.getSubexpression(firstOccurrence.slice(1)).sym
   } catch (e) {
     if (e.name === ErrorName.NO_CHILD_AT_INDEX) {
       throw createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
@@ -25,10 +25,10 @@ export const determineSubstitutionInGeneralizationResult = (formula, premise) =>
   if (newTerm === undefined) throw createError(ErrorName.INVALID_SUBSTITUTION_RESULT)
 
   try {
-    const [firstBoundOccurrencePosition] = Expression.findBoundOccurrences(formula)
+    const [firstBoundOccurrencePosition] = formula.findBoundOccurrences()
     if (firstBoundOccurrencePosition === undefined) return { newTerm }
     const [, ...restIndexes] = firstBoundOccurrencePosition
-    const oldTerm = Expression.getSubexpression(premise, restIndexes).sym
+    const oldTerm = premise.getSubexpression(restIndexes).sym
     return { oldTerm, newTerm }
   } catch (e) {
     if (e.name === ErrorName.NO_CHILD_AT_INDEX) {

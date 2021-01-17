@@ -13,20 +13,19 @@ beforeEach(() => {
   })
 })
 
-test(`.parent throws ${ErrorName.CANT_GET_PARENT_OF_ROOT} for root.`, () => {
+test(`.getParent() throws ${ErrorName.CANT_GET_PARENT_OF_ROOT} for root.`, () => {
   const expression = parser.parse('p')
   const pointer = ExpressionPointer({ expression })
 
-  // eslint-disable-next-line no-unused-expressions
-  expect(() => { pointer.parent }).toThrow(ErrorName.CANT_GET_PARENT_OF_ROOT)
+  expect(() => { pointer.getParent() }).toThrow(ErrorName.CANT_GET_PARENT_OF_ROOT)
 })
 
-test('{ p -> q, [1] } .parent is { p -> q, [] }', () => {
+test('{ p -> q, [1] } .getParent() is { p -> q, [] }', () => {
   const expression = parser.parse('p -> q')
   const pointer = ExpressionPointer({ expression, position: [1] })
   const expectedParent = ExpressionPointer({ expression })
 
-  expect(pointer.parent).toEqual(expectedParent)
+  expect(pointer.getParent()).toEqual(expectedParent)
 })
 
 test.each([

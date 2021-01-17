@@ -7,7 +7,7 @@ export const Expression = ({
   sym,
   boundSym,
   children = []
-}) => ({
+}) => _.create(expressionPrototype, {
   // Main symbol of this expression.
   sym,
 
@@ -18,10 +18,9 @@ export const Expression = ({
 
   // Array of subexpressions whose length will match `sym`'s arity and their kinds will match
   // `sym`'s `argumentKind`
-  children,
-  ...Expression.methods
+  children
 })
-Expression.methods = {
+const expressionPrototype = {
   constructor: Expression,
 
   // Returns the child of an `expression` at the index `i` or throws an error.
@@ -52,7 +51,7 @@ Expression.methods = {
       ...this.children.slice(firstIndex + 1)
     ]
 
-    return { ...this, children }
+    return this.constructor({ ...this, children })
   },
 
   // Replaces subexpression at the `position` with the result of calling `update`. `update` receives
@@ -89,12 +88,12 @@ Expression.methods = {
       const newBoundSym = newSym.binds ? boundSym ?? getBoundSym?.() : undefined
       const newChildren = resolveChildren(sym, newSym, children, getChild)
 
-      return {
+      return this.constructor({
         ...subexpression,
         sym: newSym,
         boundSym: newBoundSym,
         children: newChildren
-      }
+      })
     })
   },
 
@@ -157,12 +156,12 @@ Expression.methods = {
   // Replaces bound occurrences of `boundSym` with `newSym`. Also replaces `boundSym` property
   // in root expression.
   replaceBoundOccurrences(newSym) {
-    return {
+    return this.constructor({
       ...this
         .findBoundOccurrences()
         .reduce((expression, position) => expression.replaceSymAt(position, newSym), this),
       boundSym: newSym
-    }
+    })
   },
 
   // Finds subexpression at `position` and replaces all bound occurrences of it's `boundSym` with

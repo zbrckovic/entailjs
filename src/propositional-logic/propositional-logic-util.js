@@ -1,4 +1,4 @@
-import { Category, Sym } from '../abstract-structures'
+import { Category } from '../abstract-structures'
 import { createError, ErrorName } from '../error'
 import { generateValuesPermutations, primitiveTruthFunctions } from './primitive-truth-functions'
 import { conditional, conjunction, disjunction, negation } from '../primitive-syms'
@@ -7,7 +7,7 @@ import _ from 'lodash'
 export const evaluate = (formula, interpretation = {}) => {
   const { sym, children } = formula
 
-  if (sym.category !== Category.FF) throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
+  if (sym.getCategory() !== Category.FF) throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
 
   if (sym.arity === 0) {
     const value = interpretation[sym.id]
@@ -33,7 +33,7 @@ const findInterpretationsLimitedByBaseInterpretation = (
 ) => {
   const { sym, children } = formula
 
-  if (sym.category !== Category.FF || sym.binds) {
+  if (sym.getCategory() !== Category.FF || sym.binds) {
     throw createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
   }
 

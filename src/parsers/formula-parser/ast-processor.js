@@ -64,7 +64,7 @@ export const AstProcessor = ({
       boundSym = textToSymMap[ast.boundSym]
 
       if (boundSym !== undefined) {
-        if (boundSym.category !== Category.TT) {
+        if (boundSym.getCategory() !== Category.TT) {
           throw createError(
             ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
             undefined,

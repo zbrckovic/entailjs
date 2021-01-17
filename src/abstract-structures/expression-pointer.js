@@ -1,4 +1,5 @@
 import { createError, ErrorName } from '../error'
+import _ from 'lodash'
 
 // Pointer to the specific subexpression of the base expression. Contains the base
 // `expression` and the `position` which is a path to some subexpression of `expression`. This
@@ -6,15 +7,11 @@ import { createError, ErrorName } from '../error'
 export const ExpressionPointer = ({
   expression,
   position = []
-}) => ({
+}) => _.create(expressionPointerPrototype, { expression, position })
+
+const expressionPointerPrototype = {
   constructor: ExpressionPointer,
 
-  expression,
-  position,
-
-  ...ExpressionPointer.methods
-})
-ExpressionPointer.methods = {
   isRoot() { return this.position.length === 0 },
 
   getTarget() {
@@ -24,7 +21,7 @@ ExpressionPointer.methods = {
   // Returns parent of the target or throws if there's no parent.
   getParent() {
     if (this.isRoot()) throw createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
-    return { ...this, position: this.position.slice(0, -1) }
+    return this.constructor({ ...this, position: this.position.slice(0, -1) })
   },
 
   // Returns a path to the ancestor subexpression which binds `sym` at the target position. In other

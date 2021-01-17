@@ -25,7 +25,7 @@ const expressionPointerPrototype = {
   },
 
   // Returns a path to the ancestor subexpression which binds `sym` at the target position. In other
-  // words, find the closest target's ancestor which has `sym` as its `boundSym`. If `sym` is not
+  // words, finds the closest target's ancestor which has `sym` as its `boundSym`. If `sym` is not
   // specified, target's `mainSym` is assumed.
   findBindingOccurrence(sym) {
     if (this.isRoot()) return undefined
@@ -53,7 +53,7 @@ const expressionPointerPrototype = {
   },
 
   // Finds all symbols which are bound by target's ancestors. It doesn't necessarily search for
-  // symbols which actually appear in the target. It searches for all symbols S which would be
+  // symbols which actually appear in the target. It searches for each symbol S which would be
   // bound by some ancestor if we replaced the target with some formula containing S as free symbol.
   // In other words, it also returns vacuously bound symbols.
   getBoundSyms() {

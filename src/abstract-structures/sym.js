@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
-// `Sym` (short for symbol) is the main entity from which [`Expression`](./expression)s are built.
-// Word `symbol` has been avoided because it's a built-in type in ES6.
+// `Sym` (short for symbol) is the main entity from which expressions are built. Word `symbol` has
+// been avoided because it's a built-in type in ES6.
 export const Sym = ({
   id = 0,
   kind = Kind.Formula,
@@ -14,20 +14,20 @@ export const Sym = ({
   id,
 
   // When this symbol is the main symbol of an expression `kind` determines which of two possible
-  // 'roles' this expression has - it can be either a formula or a term. We will say that expression
-  // is of a kind K when it's main symbol is of a kind K.
+  // 'roles' the expression has - it can be either a formula or a term. We will say that expression
+  // is of a kind K when its main symbol is of a kind K.
   kind,
 
   // When this symbol is the main symbol of an expression `argumentKind` determines what kind of
   // expressions are accepted as children.
   argumentKind,
 
-  // When this symbol is the main symbol of an expression `arity` determines how many children this
+  // When this symbol is the main symbol of an expression `arity` determines how many children the
   // expression must have.
   arity,
 
-  // When this symbol is the main symbol of an expression `binds` determines whether expression also
-  // accepts a bound symbol. This will be true for quantifiers.
+  // When this symbol is the main symbol of an expression `binds` determines whether the expression
+  // also accepts a bound symbol. This will be true for quantifiers.
   binds
 })
 
@@ -109,9 +109,9 @@ export const Kind = {
 }
 
 // Given that `kind` and `argumentKind` of symbol can have two values each, there are 4
-// possibilities. We classify symbols in four **categories** where `F` is for 'formula' and `T`
-// is for 'term'). Here are the correlations between `category` values and traditional
-// symbolic logic terminology:`
+// possible combinations. We classify symbols in four **categories**: `FF`, `FT`, `TF`, `TT` where
+// `F` is for 'formula' and `T` is for 'term'). Here are the correlations between `category` values
+// and traditional symbolic logic terminology:
 export const Category = {
   // Corresponds to propositional variables/constants when arity is zero and to propositional
   // connectives when arity is positive.
@@ -128,8 +128,8 @@ export const Category = {
 
 // We didn't mention the cases of nullary `FT` and `TF` symbols. Nullary `FT` symbols would
 // correspond to nullary predicates. From the standpoint of symbolic logic system it seems that
-// there's no need to allow for nullary predicates when we already
-// have propositional variables i.e. nullary `FF` symbols. The same goes for nullary `TF` symbols.
+// there's no need to allow for nullary predicates when we already have propositional variables i.e.
+// nullary `FF` symbols. The same goes for nullary `TF` symbols.
 //
 // On the other hand, if we look at the way this code is organized, when symbol is nullary
 // `argumentKind` doesn't have significance since expression with such a symbol will never have

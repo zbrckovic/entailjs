@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { createError, ErrorName } from '../error'
 import { Kind } from './sym'
 
-// Expression is a recursive tree structure built from [`Symbols`](./sym).
+// Expression is a recursive tree structure built from symbols.
 export const Expression = ({
   sym,
   boundSym,
@@ -11,7 +11,7 @@ export const Expression = ({
   // Main symbol of this expression.
   sym,
 
-  // Optional bound symbol which will exists if `sym`'s `binds` is true. In first-order logic
+  // Optional bound symbol which will exist if `sym`'s `binds` is true. In first-order logic
   // `boundSym` will always be a nullary term symbol (individual variable), but here we are at a
   // higher level of abstraction and don't make this assumption.
   boundSym,
@@ -23,7 +23,7 @@ export const Expression = ({
 const expressionPrototype = {
   constructor: Expression,
 
-  // Returns the child of an `expression` at the index `i` or throws an error.
+  // Returns the child at the index `i` or throws an error.
   getChild(i) {
     const child = this.children[i]
     if (child === undefined) {
@@ -164,7 +164,7 @@ const expressionPrototype = {
     })
   },
 
-  // Finds subexpression at `position` and replaces all bound occurrences of it's `boundSym` with
+  // Finds subexpression at `position` and replaces all bound occurrences of its `boundSym` with
   // `newSym`.
   replaceBoundOccurrencesAt(position, newSym) {
     return this.updateSubexpression(
@@ -188,9 +188,9 @@ const expressionPrototype = {
     return result
   },
 
-  // Returns free symbols in `expression`. `boundSyms` contains additional symbols which are
-  // considered as bound. These symbols are omitted from the result. `boundSyms` primarily exists
-  // for passing data in recursive calls.
+  // Returns free symbols. `boundSyms` contains additional symbols which are to be considered as
+  // bound. These symbols are omitted from the result. `boundSyms` primarily exists for passing data
+  // in recursive calls.
   getFreeSyms(boundSyms = {}) {
     const result = {}
 
@@ -216,9 +216,9 @@ const expressionPrototype = {
   },
 
   // Finds all `boundSym`s which occur on the paths to free occurrences of `sym`. In other words
-  // it looks for all symbols which are bound by subexpressions where `sym` appears as free, or by
-  // some ancestors of these subexpressions. `boundSyms` are additional symbols which will be added
-  // to the result. `boundSyms` exists primarily for passing data in recursive calls.
+  // it looks for all symbols which are bound by subexpressions where `sym` appears as free.
+  // `boundSyms` are additional symbols which will be added to the result. `boundSyms` exists
+  // primarily for passing data in recursive calls.
   findBoundSymsAtFreeOccurrencesOfSym(sym, boundSyms = {}) {
     let result = {}
 

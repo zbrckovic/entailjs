@@ -35,7 +35,7 @@ AstProcessor.prototype = {
   // Processes formula AST (returned from peg parser) and tries to construct an expression (more
   // precisely it tries to construct a formula because parser accepts only formula expressions). If
   // it can't, throws an error.
-  process(ast, kind = Kind.Formula) {
+  process (ast, kind = Kind.Formula) {
     if (isBracketed(ast)) return this.process(ast.expression, kind)
 
     const childrenAsts = ast.children
@@ -102,7 +102,7 @@ AstProcessor.prototype = {
   },
 
   // Updates internal state by adding new association between symbol and its presentation.
-  addPresentation(sym, presentation) {
+  addPresentation (sym, presentation) {
     this.syms = { ...this.syms, [sym.id]: sym }
     this.presentations = { ...this.presentations, [sym.id]: presentation }
     this.textToSymMap = { ...this.textToSymMap, [presentation.ascii.text]: sym }
@@ -111,7 +111,7 @@ AstProcessor.prototype = {
 
   // Creates new symbol, generates new id for it, updates internal state according to the new symbol
   // addition and returns newly created symbol.
-  createSym(kind, arity, binds, text, placement) {
+  createSym (kind, arity, binds, text, placement) {
     const argumentKind = determineArgumentKind(kind, text)
     const id = this.maxSymId + 1
     const sym = Sym({ id, kind, argumentKind, arity, binds })
@@ -123,11 +123,11 @@ AstProcessor.prototype = {
   },
 
   // Gets symbol associated with `text`.
-  getSym(text) { return this.textToSymMap[text] },
-  getSyms() { return this.syms },
-  getPresentations() { return this.presentations },
-  getTextToSymMap() { return this.textToSymMap },
-  getMaxSymId() { return this.maxSymId }
+  getSym (text) { return this.textToSymMap[text] },
+  getSyms () { return this.syms },
+  getPresentations () { return this.presentations },
+  getTextToSymMap () { return this.textToSymMap },
+  getMaxSymId () { return this.maxSymId }
 }
 
 const determineArgumentKind = (kind, text) => {

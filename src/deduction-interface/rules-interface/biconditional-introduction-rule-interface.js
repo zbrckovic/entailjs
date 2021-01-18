@@ -1,5 +1,5 @@
 import { Expression } from '../../abstract-structures'
-import { Deduction, Rule } from '../../deduction-structure'
+import { Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
 import { biconditional } from '../../primitive-syms'
 import { startDeduction } from '../deduction-interface'
@@ -15,10 +15,10 @@ export const BiconditionalIntroductionRuleInterface = (
       premises: [premise1Index, premise2Index],
       conclusion: Expression({
         sym: biconditional,
-        children: Deduction.getStep(deduction, premise1Index).formula.children
+        children: deduction.getStep(premise1Index).formula.children
       })
     })
-    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+    const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   }

@@ -2,7 +2,10 @@ import _ from 'lodash'
 import { ErrorName } from '../error'
 import { FormulaParser } from '../parsers'
 import { primitivePresentations } from '../presentation/sym-presentation'
-import { primitiveSyms } from '../primitive-syms'
+import { conditional, primitiveSyms, universalQuantifier } from '../primitive-syms'
+import { Expression } from './expression'
+import { connectWithBinarySym } from './expression-util'
+import { Sym } from './sym'
 
 let parser
 beforeEach(() => {
@@ -193,4 +196,122 @@ test.each([
   const syms = formula.findBoundSymsAtFreeOccurrencesOfSym(sym)
 
   expect(syms).toEqual(expectedSyms)
+})
+
+const maxPrimitiveId = Math.max(..._.values(primitiveSyms).map(({ id }) => id))
+
+test.each([
+  [
+    // p
+    Expression({ sym: Sym.ff({ id: 2 }) }),
+    {},
+    Expression({ sym: Sym.ff({ id: 0 }) }),
+    { 2: Sym.ff({ id: 0 }) }
+  ],
+  [
+    Expression({ sym: Sym.ff({ id: 2 }) }),
+    { 2: Sym.ff({ id: 3 }) },
+    Expression({ sym: Sym.ff({ id: 3 }) }),
+    { 2: Sym.ff({ id: 3 }) }
+  ],
+  [
+    // p -> p
+    connectWithBinarySym([
+      Expression({ sym: Sym.ff({ id: maxPrimitiveId + 2 }) }),
+      Expression({ sym: Sym.ff({ id: maxPrimitiveId + 2 }) })
+    ], conditional),
+    primitiveSyms,
+    connectWithBinarySym([
+      Expression({ sym: Sym.ff({ id: maxPrimitiveId + 1 }) }),
+      Expression({ sym: Sym.ff({ id: maxPrimitiveId + 1 }) })
+    ], conditional),
+    {
+      ...primitiveSyms,
+      [maxPrimitiveId + 2]: Sym.ff({ id: maxPrimitiveId + 1 })
+    }
+  ],
+  [
+    // Ax Fx
+    Expression({
+      sym: universalQuantifier,
+      boundSym: Sym.tt({ id: maxPrimitiveId + 3 }),
+      children: [
+        Expression({
+          sym: Sym.ft({ id: maxPrimitiveId + 2 }),
+          children: [
+            Expression({
+              sym: Sym.tt({ id: maxPrimitiveId + 3 })
+            })
+          ]
+        })
+      ]
+    }),
+    primitiveSyms,
+    Expression({
+      sym: universalQuantifier,
+      boundSym: Sym.tt({ id: maxPrimitiveId + 1 }),
+      children: [
+        Expression({
+          sym: Sym.ft({ id: maxPrimitiveId + 2 }),
+          children: [
+            Expression({
+              sym: Sym.tt({ id: maxPrimitiveId + 1 })
+            })
+          ]
+        })
+      ]
+    }),
+    {
+      ...primitiveSyms,
+      [maxPrimitiveId + 2]: Sym.ft({ id: maxPrimitiveId + 2 })
+    }
+  ],
+  [
+    // Ax Fxy
+    Expression({
+      sym: universalQuantifier,
+      boundSym: Sym.tt({ id: maxPrimitiveId + 2 }),
+      children: [
+        Expression({
+          sym: Sym.ft({ id: maxPrimitiveId + 3 }),
+          children: [
+            Expression({
+              sym: Sym.tt({ id: maxPrimitiveId + 2 })
+            }),
+            Expression({
+              sym: Sym.tt({ id: maxPrimitiveId + 1 })
+            })
+          ]
+        })
+      ]
+    }),
+    primitiveSyms,
+    Expression({
+      sym: universalQuantifier,
+      boundSym: Sym.tt({ id: maxPrimitiveId + 1 }),
+      children: [
+        Expression({
+          sym: Sym.ft({ id: maxPrimitiveId + 2 }),
+          children: [
+            Expression({
+              sym: Sym.tt({ id: maxPrimitiveId + 1 })
+            }),
+            Expression({
+              sym: Sym.tt({ id: maxPrimitiveId + 3 })
+            })
+          ]
+        })
+      ]
+    }),
+    {
+      ...primitiveSyms,
+      [maxPrimitiveId + 3]: Sym.ft({ id: maxPrimitiveId + 2 }),
+      [maxPrimitiveId + 1]: Sym.tt({ id: maxPrimitiveId + 3 })
+    }
+  ]
+])('.normalize()', (formula, syms, expectedFormula, expectedSyms) => {
+  const [actualFormula, actualSyms] = formula.normalize(syms)
+
+  expect(actualFormula).toEqual(expectedFormula)
+  expect(actualSyms).toEqual(expectedSyms)
 })

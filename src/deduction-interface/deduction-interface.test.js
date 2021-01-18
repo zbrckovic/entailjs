@@ -1,5 +1,5 @@
 import { ErrorName } from '../error'
-import { DeductionParser } from '../parsers/deduction-parser'
+import { DeductionParser } from '../parsers'
 import { primitivePresentations } from '../presentation/sym-presentation'
 import { primitiveSyms } from '../primitive-syms'
 import { startDeduction } from './deduction-interface'

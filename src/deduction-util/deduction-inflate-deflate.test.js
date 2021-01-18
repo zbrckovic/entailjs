@@ -1,4 +1,4 @@
-import { DeductionParser } from '../parsers/deduction-parser'
+import { DeductionParser } from '../parsers'
 import { primitiveSyms } from '../primitive-syms'
 import { primitivePresentations } from '../presentation/sym-presentation'
 import { deflateDeduction, inflateDeduction } from './deduction-inflate-deflate'

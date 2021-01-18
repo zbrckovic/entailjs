@@ -1,7 +1,6 @@
 // Given that `formula` is the result of an application of an instantiation rule to the `premise`
 // determines which term was introduced in the substitution. If instantiation was vacuous
 // returns `undefined`.
-import { Expression } from '../abstract-structures'
 import { createError, ErrorName } from '../error'
 
 export const determineNewTermInInstantiationResult = (formula, premise) => {

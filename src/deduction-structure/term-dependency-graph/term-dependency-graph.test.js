@@ -6,7 +6,7 @@ describe('#addDirectDependency()', () => {
     const graph = TermDependencyGraph({ 0: new Set() })
 
     expect(() => {
-      TermDependencyGraph.addDependencies(graph, 0, [1])
+      graph.addDependencies(0, [1])
     }).toThrow(ErrorName.TERM_ALREADY_USED)
   })
 
@@ -17,18 +17,18 @@ describe('#addDirectDependency()', () => {
     })
 
     expect(() => {
-      TermDependencyGraph.addDependencies(graph, 1, [0])
+      graph.addDependencies(1, [0])
     }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
 
     expect(() => {
-      TermDependencyGraph.addDependencies(graph, 3, [0])
+      graph.addDependencies(3, [0])
     }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
   })
 
   test('basic case', () => {
     let actual = TermDependencyGraph()
-    actual = TermDependencyGraph.addDependencies(actual, 0, [1, 2])
-    actual = TermDependencyGraph.addDependencies(actual, 2, [3])
+    actual = actual.addDependencies(0, [1, 2])
+    actual = actual.addDependencies(2, [3])
 
     const expected = TermDependencyGraph({
       0: new Set([1, 2]),
@@ -65,7 +65,7 @@ describe('#addDirectDependency()', () => {
     ]
   ])('normalization', (graph, expected, dependent, dependency, expectedRemovedDependency) => {
     const onRemove = jest.fn()
-    const actual = TermDependencyGraph.addDependencies(graph, dependent, [dependency], onRemove)
+    const actual = graph.addDependencies(dependent, [dependency], onRemove)
 
     expect(actual).toEqual(expected)
     expect(onRemove).toHaveBeenCalledWith(...expectedRemovedDependency)
@@ -78,10 +78,10 @@ test('#hasDirectDependency()', () => {
     2: new Set([3])
   })
 
-  expect(TermDependencyGraph.hasDirectDependency(graph, 0, 4)).toBe(false)
-  expect(TermDependencyGraph.hasDirectDependency(graph, 0, 3)).toBe(false)
-  expect(TermDependencyGraph.hasDependency(graph, 0, 1)).toBe(true)
-  expect(TermDependencyGraph.hasDependency(graph, 0, 2)).toBe(true)
+  expect(graph.hasDirectDependency(0, 4)).toBe(false)
+  expect(graph.hasDirectDependency(0, 3)).toBe(false)
+  expect(graph.hasDependency(0, 1)).toBe(true)
+  expect(graph.hasDependency(0, 2)).toBe(true)
 })
 
 test('#hasDependency()', () => {
@@ -90,9 +90,9 @@ test('#hasDependency()', () => {
     2: new Set([3])
   })
 
-  expect(TermDependencyGraph.hasDependency(graph, 0, 4)).toBe(false)
-  expect(TermDependencyGraph.hasDependency(graph, 0, 1)).toBe(true)
-  expect(TermDependencyGraph.hasDependency(graph, 0, 3)).toBe(true)
+  expect(graph.hasDependency(0, 4)).toBe(false)
+  expect(graph.hasDependency(0, 1)).toBe(true)
+  expect(graph.hasDependency(0, 3)).toBe(true)
 })
 
 test('#getDirectDependents()', () => {
@@ -101,8 +101,8 @@ test('#getDirectDependents()', () => {
     1: new Set([2])
   })
 
-  expect(new Set(TermDependencyGraph.getDirectDependents(graph, 2))).toEqual(new Set([0, 1]))
-  expect(new Set(TermDependencyGraph.getDirectDependents(graph, 0))).toEqual(new Set())
+  expect(new Set(graph.getDirectDependents(2))).toEqual(new Set([0, 1]))
+  expect(new Set(graph.getDirectDependents(0))).toEqual(new Set())
 })
 
 test('#getDependents()', () => {
@@ -112,8 +112,8 @@ test('#getDependents()', () => {
     2: new Set([3])
   })
 
-  expect(new Set(TermDependencyGraph.getDependents(graph, 1))).toEqual(new Set([0]))
-  expect(new Set(TermDependencyGraph.getDependents(graph, 3))).toEqual(new Set([1, 2, 0]))
+  expect(new Set(graph.getDependents(1))).toEqual(new Set([0]))
+  expect(new Set(graph.getDependents(3))).toEqual(new Set([1, 2, 0]))
 })
 
 test('#getDependencies()', () => {
@@ -122,6 +122,6 @@ test('#getDependencies()', () => {
     2: new Set([3])
   })
 
-  expect(new Set(TermDependencyGraph.getDependencies(graph, 2))).toEqual(new Set([3]))
-  expect(new Set(TermDependencyGraph.getDependencies(graph, 0))).toEqual(new Set([1, 2, 3]))
+  expect(new Set(graph.getDependencies(2))).toEqual(new Set([3]))
+  expect(new Set(graph.getDependencies(0))).toEqual(new Set([1, 2, 3]))
 })

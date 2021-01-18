@@ -8,11 +8,11 @@ export const SymPresentation = ({ ascii, unicode }) => _.create(SymPresentation.
 SymPresentation.prototype = {
   constructor: SymPresentation,
 
-  get defaultSyntacticInfo() {
+  get defaultSyntacticInfo () {
     return this.unicode ?? this.ascii
   },
 
-  createDescription(arity = 1) {
+  createDescription (arity = 1) {
     return this.ascii.createDescription(arity)
   }
 }
@@ -28,7 +28,7 @@ SyntacticInfo.infix = text => SyntacticInfo({ text, placement: Placement.Infix }
 SyntacticInfo.prototype = {
   constructor: SyntacticInfo,
 
-  createDescription(arity = 1) {
+  createDescription (arity = 1) {
     switch (this.placement) {
       case Placement.Prefix:
         return `${this.text}${_.repeat(' _', arity).join('')}`

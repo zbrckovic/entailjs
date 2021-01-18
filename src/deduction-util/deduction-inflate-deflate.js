@@ -4,25 +4,26 @@ import {
   determineSubstitutionInGeneralizationResult,
   startDeduction
 } from '../deduction-interface'
+import { DeductionDeflated, StepDeflated } from './deduction-deflated'
 
 // Produce minimal information necessary to reconstruct this deduction using deduction interface.
-export const deflateDeduction = deduction =>
-  deduction.steps.map(step => {
+export const deflateDeduction = deduction => {
+  const deflatedSteps = deduction.steps.map(step => {
     const { formula, ruleApplicationSummary: { rule, premises } } = step
 
-    const result = { steps: premises.map(premise => premise + 1), rule }
+    const stepDeflated = StepDeflated({ steps: premises.map(premise => premise + 1), rule })
 
     switch (rule) {
       case Rule.Premise: {
-        result.formula = formula
+        stepDeflated.formula = formula
         break
       }
       case Rule.Theorem: {
-        result.formula = formula
+        stepDeflated.formula = formula
         break
       }
       case Rule.TautologicalImplication: {
-        result.formula = formula
+        stepDeflated.formula = formula
         break
       }
       case Rule.ConditionalIntroduction: {
@@ -34,9 +35,9 @@ export const deflateDeduction = deduction =>
           deduction.steps[premises[0]].formula
         )
 
-        result.newTerm = formula.boundSym
-        result.oldTerm = oldTerm
-        result.newTerm = newTerm
+        stepDeflated.newTerm = formula.boundSym
+        stepDeflated.oldTerm = oldTerm
+        stepDeflated.newTerm = newTerm
         break
       }
       case Rule.ExistentialGeneralization: {
@@ -45,20 +46,20 @@ export const deflateDeduction = deduction =>
           deduction.steps[premises[0]].formula
         )
 
-        result.oldTerm = oldTerm
-        result.newTerm = newTerm
+        stepDeflated.oldTerm = oldTerm
+        stepDeflated.newTerm = newTerm
 
         break
       }
       case Rule.UniversalInstantiation: {
-        result.newTerm = determineNewTermInInstantiationResult(
+        stepDeflated.newTerm = determineNewTermInInstantiationResult(
           formula,
           deduction.steps[premises[0]].formula
         )
         break
       }
       case Rule.ExistentialInstantiation: {
-        result.newTerm = determineNewTermInInstantiationResult(
+        stepDeflated.newTerm = determineNewTermInInstantiationResult(
           formula,
           deduction.steps[premises[0]].formula
         )
@@ -66,10 +67,13 @@ export const deflateDeduction = deduction =>
       }
     }
 
-    return result
+    return stepDeflated
   })
 
-export const inflateDeduction = steps => {
+  return DeductionDeflated({ steps: deflatedSteps })
+}
+
+export const inflateDeduction = ({ steps }) => {
   let deductionInterface = startDeduction()
 
   steps.forEach(step => {

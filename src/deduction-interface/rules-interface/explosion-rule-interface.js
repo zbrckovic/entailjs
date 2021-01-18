@@ -1,4 +1,4 @@
-import { Deduction, Rule } from '../../deduction-structure'
+import { Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
 import { startDeduction } from '../deduction-interface'
 
@@ -13,7 +13,7 @@ export const ExplosionRuleInterface = (
       premises: [affirmativeStepIndex, negativeStepIndex],
       conclusion: formula
     })
-    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+    const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   }

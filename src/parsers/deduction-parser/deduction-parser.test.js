@@ -1,6 +1,5 @@
-import { Deduction, Rule } from '../../deduction-structure'
+import { Deduction, Rule, TermDependencyGraph } from '../../deduction-structure'
 import { RegularRuleApplicationSummary, Step } from '../../deduction-structure/step'
-import { TermDependencyGraph } from '../../deduction-structure/term-dependency-graph'
 import { primitivePresentations } from '../../presentation/sym-presentation'
 import { primitiveSyms } from '../../primitive-syms'
 import { FormulaParser } from '../formula-parser'

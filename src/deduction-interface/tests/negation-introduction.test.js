@@ -62,7 +62,7 @@ describe('negation introduction', () => {
       .apply()
       .deduction
 
-    const actual = Deduction.getLastStep(newDeduction)
+    const actual = newDeduction.getLastStep()
 
     const expected = Step({
       formula: formula3,

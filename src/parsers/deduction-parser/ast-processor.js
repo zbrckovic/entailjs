@@ -3,7 +3,7 @@ import { createError, ErrorName } from '../../error'
 import { findDuplicates } from '../../utils'
 import { AstProcessor as FormulaAstProcessor } from '../formula-parser/ast-processor'
 import _ from 'lodash'
-import { getRule, Rule, Deduction } from '../../deduction-structure'
+import { getRule, Rule } from '../../deduction-structure'
 
 // `AstProcessor` can process deduction AST (the result of parsing formula) and creates a
 // `Deduction`. Internally it uses formula [`AstProcessor`](../formula-parser/ast-processor) for
@@ -15,7 +15,7 @@ export const AstProcessor = ({ syms, presentations }) => _.create(AstProcessor.p
 AstProcessor.prototype = {
   constructor: AstProcessor,
 
-  process(ast) {
+  process (ast) {
     const { steps } = ast
 
     let deductionInterface = startDeduction()
@@ -28,7 +28,7 @@ AstProcessor.prototype = {
     return deductionInterface.deduction
   },
 
-  processStep(deductionInterface, astStep, stepOrdinal) {
+  processStep (deductionInterface, astStep, stepOrdinal) {
     validateStepOrdinal(stepOrdinal, astStep.ordinal)
 
     const assumptionsOrdinals = astStep.assumptions
@@ -108,7 +108,7 @@ AstProcessor.prototype = {
       }
     }
 
-    const newStep = Deduction.getLastStep(deductionInterface.deduction)
+    const newStep = deductionInterface.deduction.getLastStep()
 
     const assumptionIndexes = new Set(assumptionsOrdinals.map(ordinal => ordinal - 1))
     if (!_.isEqual(newStep.assumptions, assumptionIndexes)) {
@@ -123,11 +123,11 @@ AstProcessor.prototype = {
 
     return deductionInterface
   },
-  getSym(text) { return this.formulaAstProcessor.getSym(text) },
-  getSyms() { return this.formulaAstProcessor.getSyms() },
-  getPresentations() { return this.formulaAstProcessor.getPresentations() },
-  getTextToSymMap() { return this.formulaAstProcessor.getTextToSymMap() },
-  getMaxSymId() { return this.formulaAstProcessor.getMaxSymId() }
+  getSym (text) { return this.formulaAstProcessor.getSym(text) },
+  getSyms () { return this.formulaAstProcessor.getSyms() },
+  getPresentations () { return this.formulaAstProcessor.getPresentations() },
+  getTextToSymMap () { return this.formulaAstProcessor.getTextToSymMap() },
+  getMaxSymId () { return this.formulaAstProcessor.getMaxSymId() }
 }
 
 const validateStepOrdinal = (actualStepOrdinal, encounteredStepOrdinal) => {
@@ -154,7 +154,7 @@ const validateAssumptionsOrdinals = (deduction, assumptionsOrdinalsArray) => {
     )
   }
 
-  const maxStepOrdinal = Deduction.getSize(deduction)
+  const maxStepOrdinal = deduction.getSize()
 
   for (const assumptionOrdinal of assumptionsOrdinals) {
     if (assumptionOrdinal > maxStepOrdinal) {
@@ -165,8 +165,8 @@ const validateAssumptionsOrdinals = (deduction, assumptionsOrdinalsArray) => {
       )
     }
 
-    const assumptionRule = Deduction
-      .getStepByOrdinal(deduction, assumptionOrdinal)
+    const assumptionRule = deduction
+      .getStepByOrdinal(assumptionOrdinal)
       .ruleApplicationSummary
       .rule
 

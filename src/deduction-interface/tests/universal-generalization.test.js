@@ -1,6 +1,6 @@
 import { Deduction, Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSummary, Step } from '../../deduction-structure/step'
-import { FormulaParser } from '../../parsers/formula-parser'
+import { FormulaParser } from '../../parsers'
 import { primitivePresentations } from '../../presentation/sym-presentation'
 import { primitiveSyms } from '../../primitive-syms'
 import { startDeduction } from '../deduction-interface'
@@ -30,7 +30,7 @@ describe('universal generalization', () => {
       .apply(parser.getSym('x'))
       .deduction
 
-    const actual = Deduction.getLastStep(newDeduction)
+    const actual = newDeduction.getLastStep()
 
     const expected = Step({
       assumptions: new Set([0]),
@@ -63,7 +63,7 @@ describe('universal generalization', () => {
       .apply(parser.getSym('x'), parser.getSym('a'))
       .deduction
 
-    const actual = Deduction.getLastStep(newDeduction)
+    const actual = newDeduction.getLastStep()
 
     const expected = Step({
       assumptions: new Set([0]),
@@ -100,7 +100,7 @@ describe('universal generalization', () => {
       .apply(parser.getSym('x'), parser.getSym('a'))
       .deduction
 
-    const actual = Deduction.getLastStep(newDeduction)
+    const actual = newDeduction.getLastStep()
 
     const expected = Step({
       assumptions: new Set([0]),

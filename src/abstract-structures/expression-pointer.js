@@ -12,14 +12,14 @@ export const ExpressionPointer = ({
 ExpressionPointer.prototype = {
   constructor: ExpressionPointer,
 
-  isRoot() { return this.position.length === 0 },
+  isRoot () { return this.position.length === 0 },
 
-  getTarget() {
+  getTarget () {
     return this.expression.getSubexpression(this.position)
   },
 
   // Returns parent of the target or throws if there's no parent.
-  getParent() {
+  getParent () {
     if (this.isRoot()) throw createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
     return this.constructor({ ...this, position: this.position.slice(0, -1) })
   },
@@ -27,7 +27,7 @@ ExpressionPointer.prototype = {
   // Returns a path to the ancestor subexpression which binds `sym` at the target position. In other
   // words, finds the closest target's ancestor which has `sym` as its `boundSym`. If `sym` is not
   // specified, target's `mainSym` is assumed.
-  findBindingOccurrence(sym) {
+  findBindingOccurrence (sym) {
     if (this.isRoot()) return undefined
 
     sym = sym ?? this.getTarget().sym
@@ -39,14 +39,14 @@ ExpressionPointer.prototype = {
   },
 
   // Returns free occurrences of `sym` at target.
-  findFreeOccurrences(sym) {
+  findFreeOccurrences (sym) {
     return this.getTarget()
       .findFreeOccurrences(sym)
       .map(position => this.position.concat(position))
   },
 
   // Returns bound occurrences of target's `boundSym` at target.
-  findBoundOccurrences() {
+  findBoundOccurrences () {
     return this.getTarget()
       .findBoundOccurrences()
       .map(position => this.position.concat(position))
@@ -56,7 +56,7 @@ ExpressionPointer.prototype = {
   // symbols which actually appear in the target. It searches for each symbol S which would be
   // bound by some ancestor if we replaced the target with some formula containing S as free symbol.
   // In other words, it also returns vacuously bound symbols.
-  getBoundSyms() {
+  getBoundSyms () {
     if (this.isRoot()) return {}
     const parent = this.getParent()
     const boundSym = parent.getTarget().boundSym

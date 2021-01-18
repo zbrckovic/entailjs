@@ -16,7 +16,6 @@ module.exports = {
       code: 100,
       ignoreStrings: true,
       ignoreTemplateLiterals: true
-    }],
-    'space-before-function-paren': ['error', 'never']
+    }]
   }
 }

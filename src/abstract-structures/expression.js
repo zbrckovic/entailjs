@@ -24,7 +24,7 @@ Expression.prototype = {
   constructor: Expression,
 
   // Returns the child at the index `i` or throws an error.
-  getChild(i) {
+  getChild (i) {
     const child = this.children[i]
     if (child === undefined) {
       throw createError(ErrorName.NO_CHILD_AT_INDEX, undefined, { expression: this, i })
@@ -33,14 +33,14 @@ Expression.prototype = {
   },
 
   // Returns the subexpression at the `position` where position is an array of indexes.
-  getSubexpression(position) {
+  getSubexpression (position) {
     if (position.length === 0) return this
     const [firstIndex, ...restIndexes] = position
     return this.getChild(firstIndex).getSubexpression(restIndexes)
   },
 
   // Replaces subexpression at the `position` with a `newSubexpression`.
-  replaceSubexpression(position, newSubexpression) {
+  replaceSubexpression (position, newSubexpression) {
     if (position.length === 0) return newSubexpression
 
     const [firstIndex, ...restIndexes] = position
@@ -56,13 +56,13 @@ Expression.prototype = {
 
   // Replaces subexpression at the `position` with the result of calling `update`. `update` receives
   // existing subexpression as an argument.
-  updateSubexpression(position, update) {
+  updateSubexpression (position, update) {
     const newSubexpression = update(this.getSubexpression(position))
     return this.replaceSubexpression(position, newSubexpression)
   },
 
   // Returns an array of subexpressions on path `position`.
-  getSubexpressionsOnPath(position) {
+  getSubexpressionsOnPath (position) {
     const result = [this]
 
     if (position.length > 0) {
@@ -74,7 +74,7 @@ Expression.prototype = {
   },
 
   // Replaces main symbol at `position` with `newSym`.
-  replaceSymAt(
+  replaceSymAt (
     position,
     newSym,
     // Called if `newSym` binds, but old one doesn't.
@@ -98,7 +98,7 @@ Expression.prototype = {
   },
 
   // Returns an array of positions where `sym` occurs as free.
-  findFreeOccurrences(sym) {
+  findFreeOccurrences (sym) {
     const result = []
 
     if (this.sym.id === sym.id) result.push([])
@@ -116,7 +116,7 @@ Expression.prototype = {
 
   // Returns a list of positions of bound occurrences of `boundSym`. Throws an error if `boundSym`
   // doesn't exist.
-  findBoundOccurrences() {
+  findBoundOccurrences () {
     if (this.boundSym === undefined) {
       throw createError(ErrorName.EXPRESSION_DOESNT_BIND, undefined, this)
     }
@@ -131,7 +131,7 @@ Expression.prototype = {
   },
 
   // Replaces free occurrences of `sym` with `newSym`.
-  replaceFreeOccurrences: function(
+  replaceFreeOccurrences: function (
     sym,
     newSym,
     // Called if `newSym` binds, but old one doesn't.
@@ -155,7 +155,7 @@ Expression.prototype = {
 
   // Replaces bound occurrences of `boundSym` with `newSym`. Also replaces `boundSym` property
   // in root expression.
-  replaceBoundOccurrences(newSym) {
+  replaceBoundOccurrences (newSym) {
     return this.constructor({
       ...this
         .findBoundOccurrences()
@@ -166,7 +166,7 @@ Expression.prototype = {
 
   // Finds subexpression at `position` and replaces all bound occurrences of its `boundSym` with
   // `newSym`.
-  replaceBoundOccurrencesAt(position, newSym) {
+  replaceBoundOccurrencesAt (position, newSym) {
     return this.updateSubexpression(
       position,
       subexpression => subexpression.replaceBoundOccurrences(newSym)
@@ -175,7 +175,7 @@ Expression.prototype = {
 
   // Returns all symbols in an `expression` (both main and bound symbols). Result is an object
   // which contains symbols mapped by their ids.
-  getSyms() {
+  getSyms () {
     const result = {}
     result[this.sym.id] = this.sym
 
@@ -191,7 +191,7 @@ Expression.prototype = {
   // Returns free symbols. `boundSyms` contains additional symbols which are to be considered as
   // bound. These symbols are omitted from the result. `boundSyms` primarily exists for passing data
   // in recursive calls.
-  getFreeSyms(boundSyms = {}) {
+  getFreeSyms (boundSyms = {}) {
     const result = {}
 
     if (boundSyms[this.sym.id] === undefined) {
@@ -208,7 +208,7 @@ Expression.prototype = {
   },
 
   // Returns free symbols of the kind `Term`.
-  getFreeTerms(boundSyms = {}) {
+  getFreeTerms (boundSyms = {}) {
     return _.pickBy(
       this.getFreeSyms(boundSyms),
       sym => sym.kind === Kind.Term
@@ -219,7 +219,7 @@ Expression.prototype = {
   // it looks for all symbols which are bound by subexpressions where `sym` appears as free.
   // `boundSyms` are additional symbols which will be added to the result. `boundSyms` exists
   // primarily for passing data in recursive calls.
-  findBoundSymsAtFreeOccurrencesOfSym(sym, boundSyms = {}) {
+  findBoundSymsAtFreeOccurrencesOfSym (sym, boundSyms = {}) {
     let result = {}
 
     if (this.sym.id === sym.id) result = boundSyms
@@ -234,6 +234,44 @@ Expression.prototype = {
     })
 
     return result
+  },
+
+  // Returns isomorphic expression with lowest possible symbol ids and a map with performed symbol
+  // substitutions. `syms` is a set of symbols which won't be changed (it can also be considered as
+  // initial map of substitutions where all substitutions are redundant i.e. substitute is the same
+  // as the symbol being substituted).
+  normalize (syms = {}) {
+    let mainSymSubstitute = syms[this.sym.id]
+
+    if (mainSymSubstitute === undefined) {
+      const newMainSymId = getNextSymId(syms)
+      mainSymSubstitute = this.sym.constructor({ ...this.sym, id: newMainSymId })
+      syms = { ...syms, [this.sym.id]: mainSymSubstitute }
+    }
+
+    let boundSymSubstitute
+    if (this.boundSym !== undefined) {
+      const newBoundSymId = getNextSymId(syms)
+      boundSymSubstitute = this.sym.constructor({ ...this.boundSym, id: newBoundSymId })
+      syms = { ...syms, [this.boundSym.id]: boundSymSubstitute }
+    }
+
+    const childrenSubstitute = []
+    this.children.forEach(child => {
+      const [childSubstitute, newSyms] = child.normalize(syms)
+      childrenSubstitute.push(childSubstitute)
+      syms = newSyms
+    })
+
+    return [
+      this.constructor({
+        ...this,
+        sym: mainSymSubstitute,
+        boundSym: boundSymSubstitute,
+        children: childrenSubstitute
+      }),
+      this.boundSym !== undefined ? _.omit(syms, [`${this.boundSym.id}`]) : syms
+    ]
   }
 }
 
@@ -250,3 +288,8 @@ const resolveChildren = (oldSym, newSym, oldChildren, getChild) => {
     return oldChildren.concat(_.range(oldChildren.length, newSym.arity).map(getChild))
   }
 }
+
+const getNextSymId = syms =>
+  _.isEmpty(syms)
+    ? 0
+    : Math.max(..._.values(syms).map(({ id }) => id)) + 1

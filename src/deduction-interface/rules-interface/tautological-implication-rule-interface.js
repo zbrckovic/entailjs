@@ -1,12 +1,12 @@
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
 import { createError, ErrorName } from '../../error'
 import { isLogicalConsequence } from '../../propositional-logic/propositional-logic'
-import { Deduction, Rule } from '../../deduction-structure'
+import { Rule } from '../../deduction-structure'
 import { startDeduction } from '../deduction-interface'
 
 export const TautologicalImplicationRuleInterface = (deduction, stepIndexes = []) => {
   const apply = formula => {
-    const assumptions = stepIndexes.map(i => Deduction.getStep(deduction, i).formula)
+    const assumptions = stepIndexes.map(i => deduction.getStep(i).formula)
 
     if (!isLogicalConsequence(assumptions, formula)) {
       throw createError(
@@ -22,7 +22,7 @@ export const TautologicalImplicationRuleInterface = (deduction, stepIndexes = []
       conclusion: formula
     })
 
-    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+    const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   }

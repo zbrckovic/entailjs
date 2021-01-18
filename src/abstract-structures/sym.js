@@ -34,7 +34,7 @@ export const Sym = ({
 Sym.prototype = {
   constructor: Sym,
 
-  getCategory() {
+  getCategory () {
     switch (this.kind) {
       case Kind.Formula:
         switch (this.argumentKind) {
@@ -55,12 +55,12 @@ Sym.prototype = {
     }
   },
 
-  isBindable() {
+  isBindable () {
     return this.getCategory() === Category.TT && this.arity === 0
   },
 
-  equals(sym) { return this.id === sym.id },
-  order(sym) { return this.id - sym.id }
+  equals (sym) { return this.id === sym.id },
+  order (sym) { return this.id - sym.id }
 }
 
 Sym.fromCategory = (category, spec = {}) => Sym({ ...spec, ...Sym.getKindsFromCategory(category) })

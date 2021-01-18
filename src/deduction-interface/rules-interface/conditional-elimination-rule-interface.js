@@ -1,5 +1,5 @@
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
-import { Deduction, Rule } from '../../deduction-structure'
+import { Rule } from '../../deduction-structure'
 import { startDeduction } from '../deduction-interface'
 
 export const ConditionalEliminationRuleInterface = (
@@ -8,7 +8,7 @@ export const ConditionalEliminationRuleInterface = (
   antecedentStepIndex
 ) => {
   const apply = () => {
-    const conditional = Deduction.getStep(deduction, conditionalStepIndex).formula
+    const conditional = deduction.getStep(conditionalStepIndex).formula
     const [, consequent] = conditional.children
 
     const ruleApplicationSpec = RegularRuleApplicationSpec({
@@ -16,7 +16,7 @@ export const ConditionalEliminationRuleInterface = (
       premises: [conditionalStepIndex, antecedentStepIndex],
       conclusion: consequent
     })
-    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+    const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   }

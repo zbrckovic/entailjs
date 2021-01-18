@@ -9,14 +9,14 @@ import _ from 'lodash'
 export const startDeduction = (deduction = Deduction()) => {
   const createIndexes = (...ordinals) => {
     const stepOrdinalOutOfRange = ordinals.find(ordinal => !(
-      Number.isInteger(ordinal) && ordinal >= 1 && ordinal <= Deduction.getSize(deduction)
+      Number.isInteger(ordinal) && ordinal >= 1 && ordinal <= deduction.getSize()
     ))
 
     if (stepOrdinalOutOfRange !== undefined) {
       throw createError(
         ErrorName.STEP_ORDINAL_OUT_OF_RANGE,
         undefined,
-        { stepOrdinalOutOfRange, size: Deduction.getSize(deduction) }
+        { stepOrdinalOutOfRange, size: deduction.getSize() }
       )
     }
 

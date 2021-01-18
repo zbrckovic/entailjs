@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Deduction, Rule } from '../../deduction-structure'
+import { Rule } from '../../deduction-structure'
 import { createError, ErrorName } from '../../error'
 import {
   conditional,
@@ -48,7 +48,7 @@ export const RulesInterface = (deduction, ...steps) => {
       if (steps.length !== 2) return undefined
 
       const [step1Index, step2Index] = steps
-      const [step1, step2] = steps.map(i => Deduction.getStep(deduction, i))
+      const [step1, step2] = steps.map(i => deduction.getStep(i))
 
       const step1IsPremise = step1.ruleApplicationSummary.rule === Rule.Premise
       const step1IsAssumptionForStep2 = step2.assumptions.has(step1Index)
@@ -62,7 +62,7 @@ export const RulesInterface = (deduction, ...steps) => {
       if (steps.length !== 1) return undefined
 
       const [step] = steps
-      const universallyQuantifiedFormula = Deduction.getStep(deduction, step).formula
+      const universallyQuantifiedFormula = deduction.getStep(step).formula
       if (!universallyQuantifiedFormula.sym.equals(universalQuantifier)) return undefined
 
       return UniversalInstantiationRuleInterface(deduction, step)
@@ -78,7 +78,7 @@ export const RulesInterface = (deduction, ...steps) => {
       if (steps.length !== 1) return undefined
 
       const [step] = steps
-      const existentiallyQuantifiedFormula = Deduction.getStep(deduction, step).formula
+      const existentiallyQuantifiedFormula = deduction.getStep(step).formula
       if (!existentiallyQuantifiedFormula.sym.equals(existentialQuantifier)) return undefined
 
       return ExistentialInstantiationRuleInterface(deduction, step)
@@ -108,7 +108,7 @@ export const RulesInterface = (deduction, ...steps) => {
         premiseStep,
         conclusion1Step,
         conclusion2Step
-      ] = steps.map(stepIndex => Deduction.getStep(deduction, stepIndex))
+      ] = steps.map(stepIndex => deduction.getStep(stepIndex))
 
       if (premiseStep.ruleApplicationSummary.rule !== Rule.Premise) return undefined
 
@@ -128,7 +128,7 @@ export const RulesInterface = (deduction, ...steps) => {
       if (steps.length !== 1) return undefined
 
       const [stepIndex] = steps
-      const { formula } = Deduction.getStep(deduction, stepIndex)
+      const { formula } = deduction.getStep(stepIndex)
 
       if (!isDoubleNegation(formula)) return undefined
 
@@ -138,7 +138,7 @@ export const RulesInterface = (deduction, ...steps) => {
       if (steps.length !== 2) return undefined
 
       const [step1Index, step2Index] = steps
-      const [step1, step2] = steps.map(i => Deduction.getStep(deduction, i))
+      const [step1, step2] = steps.map(i => deduction.getStep(i))
 
       if (!isNegationOf(step2.formula, step1.formula)) return undefined
 
@@ -148,7 +148,7 @@ export const RulesInterface = (deduction, ...steps) => {
       if (steps.length !== 2) return undefined
 
       const [conditionalStepIndex, antecedentStepIndex] = steps
-      const [conditional, antecedent] = steps.map(i => Deduction.getStep(deduction, i).formula)
+      const [conditional, antecedent] = steps.map(i => deduction.getStep(i).formula)
 
       if (!isConditionalFrom(conditional, antecedent)) return undefined
 
@@ -169,7 +169,7 @@ export const RulesInterface = (deduction, ...steps) => {
       if (steps.length !== 1) return undefined
 
       const [conjunctionStepIndex] = steps
-      const conjunctionFormula = Deduction.getStep(deduction, conjunctionStepIndex).formula
+      const conjunctionFormula = deduction.getStep(conjunctionStepIndex).formula
 
       if (!conjunctionFormula.sym.equals(conjunction)) return undefined
 
@@ -195,7 +195,7 @@ export const RulesInterface = (deduction, ...steps) => {
         disjunctionStep,
         conditional1Step,
         conditional2Step
-      ] = steps.map(stepIndex => Deduction.getStep(deduction, stepIndex))
+      ] = steps.map(stepIndex => deduction.getStep(stepIndex))
 
       if (!disjunctionStep.formula.sym.equals(disjunction)) return undefined
       if (!conditional1Step.formula.sym.equals(conditional)) return undefined
@@ -222,7 +222,7 @@ export const RulesInterface = (deduction, ...steps) => {
     [Rule.BiconditionalIntroduction]: () => {
       if (steps.length !== 2) return undefined
 
-      const [conditional1, conditional2] = steps.map(i => Deduction.getStep(deduction, i).formula)
+      const [conditional1, conditional2] = steps.map(i => deduction.getStep(i).formula)
 
       if (!conditional1.sym.equals(conditional)) return undefined
       if (!conditional2.sym.equals(conditional)) return undefined
@@ -240,7 +240,7 @@ export const RulesInterface = (deduction, ...steps) => {
 
       const [premiseIndex] = steps
 
-      const premise = Deduction.getStep(deduction, premiseIndex).formula
+      const premise = deduction.getStep(premiseIndex).formula
 
       if (!premise.sym.equals(biconditional)) return undefined
 
@@ -249,7 +249,7 @@ export const RulesInterface = (deduction, ...steps) => {
   }
 
   return ({
-    chooseRule(rule) {
+    chooseRule (rule) {
       const ruleInterface = handlers[rule]?.()
 
       if (ruleInterface === undefined) {

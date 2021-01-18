@@ -1,4 +1,4 @@
-export function createError(name, message = '', extra) {
+export function createError (name, message = '', extra) {
   const error = new Error(message)
   error.name = name
   error.message = `${name}: ${message}`

@@ -1,6 +1,6 @@
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
 import { startDeduction } from '../deduction-interface'
-import { Deduction, Rule } from '../../deduction-structure'
+import { Rule } from '../../deduction-structure'
 import { Expression } from '../../abstract-structures'
 import { conditional } from '../../primitive-syms'
 
@@ -12,19 +12,13 @@ export const ConditionalIntroductionRuleInterface = (deduction, step1Index, step
       conclusion: Expression({
         sym: conditional,
         children: [
-          Deduction.getStep(
-            deduction,
-            step1Index
-          ).formula,
-          Deduction.getStep(
-            deduction,
-            step2Index
-          ).formula
+          deduction.getStep(step1Index).formula,
+          deduction.getStep(step2Index).formula
         ]
       }),
       assumptionToRemove: step1Index
     })
-    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+    const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   }

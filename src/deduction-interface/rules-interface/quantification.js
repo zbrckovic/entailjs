@@ -1,8 +1,8 @@
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
-import { Deduction, Rule } from '../../deduction-structure'
+import { Rule } from '../../deduction-structure'
 import { startDeduction } from '../deduction-interface'
 import { createError, ErrorName } from '../../error'
-import { Expression, Sym } from '../../abstract-structures'
+import { Expression } from '../../abstract-structures'
 import { determineNewTermInInstantiationResult } from '../../deduction-interface'
 import { determineSubstitutionInGeneralizationResult } from '../deduction-interface-util'
 import { existentialQuantifier, universalQuantifier } from '../../primitive-syms'
@@ -25,7 +25,7 @@ export const ExistentialGeneralizationRuleInterface = (deduction, stepIndex) => 
       })
     })
 
-    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+    const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   })
@@ -60,7 +60,7 @@ export const ExistentialInstantiationRuleInterface = (deduction, stepIndex) => {
         termDependencies
       })
 
-      const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+      const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
       return startDeduction(newDeduction)
     }
@@ -125,7 +125,7 @@ export const UniversalGeneralizationRuleInterface = (deduction, stepIndex) => {
       termDependencies
     })
 
-    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+    const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   })
@@ -149,7 +149,7 @@ export const UniversalInstantiationRuleInterface = (deduction, stepIndex) => {
       conclusion
     })
 
-    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+    const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   })
@@ -187,5 +187,5 @@ export const GeneralizationRuleInterface = (deduction, stepIndex, concreteApply)
 }
 
 export const QuantificationRuleInterface = (deduction, stepIndex) => ({
-  getPremise: () => Deduction.getStep(deduction, stepIndex).formula
+  getPremise: () => deduction.getStep(stepIndex).formula
 })

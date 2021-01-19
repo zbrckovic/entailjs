@@ -43,5 +43,5 @@ test.each([
   const deflated = deflateDeduction(deduction)
   const inflated = inflateDeduction(deflated)
 
-  expect(deduction).toEqual(inflated)
+  expect(deduction).toDeepEqual(inflated)
 })

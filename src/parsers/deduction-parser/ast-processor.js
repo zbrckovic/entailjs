@@ -1,6 +1,6 @@
 import { startDeduction } from '../../deduction-interface'
 import { createError, ErrorName } from '../../error'
-import { findDuplicates } from '../../utils'
+import { findDuplicates, isDeepEqual } from '../../utils'
 import { AstProcessor as FormulaAstProcessor } from '../formula-parser/ast-processor'
 import _ from 'lodash'
 import { getRule, Rule } from '../../deduction-structure'
@@ -9,11 +9,9 @@ import { getRule, Rule } from '../../deduction-structure'
 // `Deduction`. Internally it uses formula [`AstProcessor`](../formula-parser/ast-processor) for
 // parsing formula on each step.
 export const AstProcessor = ({ syms, presentations }) => _.create(AstProcessor.prototype, {
-  formulaAstProcessor: FormulaAstProcessor({ syms, presentations })
-})
-
-AstProcessor.prototype = {
   constructor: AstProcessor,
+
+  formulaAstProcessor: FormulaAstProcessor({ syms, presentations }),
 
   process (ast) {
     const { steps } = ast
@@ -111,13 +109,13 @@ AstProcessor.prototype = {
     const newStep = deductionInterface.deduction.getLastStep()
 
     const assumptionIndexes = new Set(assumptionsOrdinals.map(ordinal => ordinal - 1))
-    if (!_.isEqual(newStep.assumptions, assumptionIndexes)) {
+    if (!isDeepEqual(newStep.assumptions, assumptionIndexes)) {
       throw createError(
         ErrorName.INVALID_ASSUMPTION_ORDINALS, undefined, { stepOrdinal, assumptionsOrdinals }
       )
     }
 
-    if (!_.isEqual(newStep.formula, formula)) {
+    if (!isDeepEqual(newStep.formula, formula)) {
       throw createError(ErrorName.INVALID_FORMULA, undefined, formula)
     }
 
@@ -128,7 +126,7 @@ AstProcessor.prototype = {
   getPresentations () { return this.formulaAstProcessor.getPresentations() },
   getTextToSymMap () { return this.formulaAstProcessor.getTextToSymMap() },
   getMaxSymId () { return this.formulaAstProcessor.getMaxSymId() }
-}
+})
 
 const validateStepOrdinal = (actualStepOrdinal, encounteredStepOrdinal) => {
   if (encounteredStepOrdinal !== undefined && encounteredStepOrdinal !== actualStepOrdinal) {

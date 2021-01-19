@@ -20,7 +20,7 @@ test.each([
 
   const actual = connectWithBinarySym(expressions, sym)
 
-  expect(actual).toEqual(expected)
+  expect(actual).toDeepEqual(expected)
 })
 
 test(`connectWithBinarySym() throws ${ErrorName.NOT_ENOUGH_EXPRESSIONS} for empty list`, () => {

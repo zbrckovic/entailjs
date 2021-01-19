@@ -55,6 +55,6 @@ describe('conjunction introduction', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 })

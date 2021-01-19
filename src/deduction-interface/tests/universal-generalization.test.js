@@ -41,7 +41,7 @@ describe('universal generalization', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test('simple: Fa |- Ax Fx', () => {
@@ -78,7 +78,7 @@ describe('universal generalization', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test('with dependency terms: Fab |- Ax Fxb', () => {
@@ -115,6 +115,6 @@ describe('universal generalization', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 })

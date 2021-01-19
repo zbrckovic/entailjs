@@ -52,6 +52,6 @@ describe('conditional elimination', () => {
         })
       })
 
-      expect(actual).toEqual(expected)
+      expect(actual).toDeepEqual(expected)
     })
 })

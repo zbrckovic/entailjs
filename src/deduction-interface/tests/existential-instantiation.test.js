@@ -42,7 +42,7 @@ describe('existential instantiation', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test('simple: Ex Fx |- Fa', () => {
@@ -79,7 +79,7 @@ describe('existential instantiation', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test('with dependency terms: Ex Fxb |- Fab', () => {
@@ -116,7 +116,7 @@ describe('existential instantiation', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test(`throws ${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}`, () => {

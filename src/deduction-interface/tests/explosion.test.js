@@ -58,6 +58,6 @@ describe('explosion', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 })

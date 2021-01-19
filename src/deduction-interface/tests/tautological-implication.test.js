@@ -44,6 +44,6 @@ describe('tautological implication', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 })

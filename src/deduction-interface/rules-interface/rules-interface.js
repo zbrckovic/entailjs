@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { Rule } from '../../deduction-structure'
 import { createError, ErrorName } from '../../error'
 import {
@@ -15,6 +14,7 @@ import {
   isDoubleNegation,
   isNegationOf
 } from '../../propositional-logic/propositional-logic-util'
+import { isDeepEqual } from '../../utils'
 import { BiconditionalEliminationRuleInterface } from './biconditional-elimination-rule-interface'
 import { BiconditionalIntroductionRuleInterface } from './biconditional-introduction-rule-interface'
 import { ConditionalEliminationRuleInterface } from './conditional-elimination-rule-interface'
@@ -230,8 +230,8 @@ export const RulesInterface = (deduction, ...steps) => {
       const [antecedent1, consequent1] = conditional1.children
       const [antecedent2, consequent2] = conditional2.children
 
-      if (!_.isEqual(antecedent1, consequent2)) return undefined
-      if (!_.isEqual(antecedent2, consequent1)) return undefined
+      if (!isDeepEqual(antecedent1, consequent2)) return undefined
+      if (!isDeepEqual(antecedent2, consequent1)) return undefined
 
       return BiconditionalIntroductionRuleInterface(deduction, ...steps)
     },

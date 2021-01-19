@@ -28,5 +28,5 @@ test('premise: p', () => {
     ruleApplicationSummary: RegularRuleApplicationSummary({ rule: Rule.Premise })
   })
 
-  expect(actual).toEqual(expected)
+  expect(actual).toDeepEqual(expected)
 })

@@ -1,8 +1,8 @@
 import { Category } from '../abstract-structures'
 import { createError, ErrorName } from '../error'
+import { isDeepEqual } from '../utils'
 import { generateValuesPermutations, primitiveTruthFunctions } from './primitive-truth-functions'
 import { conditional, conjunction, disjunction, negation } from '../primitive-syms'
-import _ from 'lodash'
 
 export const evaluate = (formula, interpretation = {}) => {
   const { sym, children } = formula
@@ -80,7 +80,7 @@ const getTruthFunction = sym => {
 export const isNegationOf = (first, second) => {
   if (!first.sym.equals(negation)) return false
   const [firstChild] = first.children
-  return _.isEqual(firstChild, second)
+  return isDeepEqual(firstChild, second)
 }
 
 // Checks whether one formula is the negation of the other.
@@ -112,26 +112,26 @@ export const isDoubleNegation = formula => {
 export const isConjunctionOf = (formula1, formula2) => {
   if (!formula1.sym.equals(conjunction)) return false
   const [conjunct1, conjunct2] = formula1.children
-  return _.isEqual(conjunct1, formula2) || _.isEqual(conjunct2, formula2)
+  return isDeepEqual(conjunct1, formula2) || isDeepEqual(conjunct2, formula2)
 }
 
 // Checks whether `formula1` is a disjunction containing `formula2` as one of its disjuncts.
 export const isDisjunctionOf = (formula1, formula2) => {
   if (!formula1.sym.equals(disjunction)) return false
   const [disjunct1, disjunct2] = formula1.children
-  return _.isEqual(disjunct1, formula2) || _.isEqual(disjunct2, formula2)
+  return isDeepEqual(disjunct1, formula2) || isDeepEqual(disjunct2, formula2)
 }
 
 // Checks whether `formula2` is an antecedent of `formula1`.
 export const isConditionalFrom = (formula1, formula2) => {
   if (!formula1.sym.equals(conditional)) return false
   const [antecedent] = formula1.children
-  return _.isEqual(antecedent, formula2)
+  return isDeepEqual(antecedent, formula2)
 }
 
 // Checks whether `formula2` is a consequent of `formula1`.
 export const isConditionalTo = (formula1, formula2) => {
   if (!formula1.sym.equals(conditional)) return false
   const [, consequent] = formula1.children
-  return _.isEqual(consequent, formula2)
+  return isDeepEqual(consequent, formula2)
 }

@@ -128,7 +128,7 @@ test.each([
   ]
 ])('parse(\'%s\') is \'%j\'', (text, expected) => {
   const actual = parseFormula(text)
-  expect(actual).toEqual(expected)
+  expect(actual).toDeepEqual(expected)
 })
 
 test.each([
@@ -143,5 +143,5 @@ test.each([
 ])('\'%s\' is the same as \'%s\'', (text1, text2) => {
   const formula1 = parseFormula(text1)
   const formula2 = parseFormula(text2)
-  expect(formula1).toEqual(formula2)
+  expect(formula1).toDeepEqual(formula2)
 })

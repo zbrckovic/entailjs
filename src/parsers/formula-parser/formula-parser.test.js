@@ -30,8 +30,8 @@ test('parse(\'p\')', () => {
 
   const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
-  expect(formula).toEqual(expectedFormula)
-  expect(addedSyms).toEqual(expectedAddedSyms)
+  expect(formula).toDeepEqual(expectedFormula)
+  expect(addedSyms).toDeepEqual(expectedAddedSyms)
 })
 
 test('parse(\'p -> q\')', () => {
@@ -54,8 +54,8 @@ test('parse(\'p -> q\')', () => {
 
   const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
-  expect(formula).toEqual(expectedFormula)
-  expect(addedSyms).toEqual(expectedAddedSyms)
+  expect(formula).toDeepEqual(expectedFormula)
+  expect(addedSyms).toDeepEqual(expectedAddedSyms)
 })
 
 test('parse(\'Fxy\')', () => {
@@ -79,8 +79,8 @@ test('parse(\'Fxy\')', () => {
   const formula = parser.parse('Fxy')
   const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
-  expect(formula).toEqual(expectedFormula)
-  expect(addedSyms).toEqual(expectedAddedSyms)
+  expect(formula).toDeepEqual(expectedFormula)
+  expect(addedSyms).toDeepEqual(expectedAddedSyms)
 })
 
 test('parse(\'Ax Fx\')', () => {
@@ -108,8 +108,8 @@ test('parse(\'Ax Fx\')', () => {
   const formula = parser.parse('Ax Fx')
   const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
-  expect(formula).toEqual(expectedFormula)
-  expect(addedSyms).toEqual(expectedAddedSyms)
+  expect(formula).toDeepEqual(expectedFormula)
+  expect(addedSyms).toDeepEqual(expectedAddedSyms)
 })
 
 test('parse(\'Ax Ey (Fxy -> ~Gyx)\'', () => {
@@ -167,8 +167,8 @@ test('parse(\'Ax Ey (Fxy -> ~Gyx)\'', () => {
   const formula = parser.parse('Ax Ey (Fxy -> ~Gyx)')
   const addedSyms = _.pickBy(parser.getSyms(), (sym, id) => primitiveSyms[id] === undefined)
 
-  expect(formula).toEqual(expectedFormula)
-  expect(addedSyms).toEqual(expectedAddedSyms)
+  expect(formula).toDeepEqual(expectedFormula)
+  expect(addedSyms).toDeepEqual(expectedAddedSyms)
 })
 
 test(`parse('~x') throws ${ErrorName.INVALID_SYMBOL_KIND}`, () => {

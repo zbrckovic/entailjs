@@ -6,8 +6,8 @@ test.each([
   ['tt', Kind.Term, Kind.Term, Sym.tt()],
   ['tf', Kind.Term, Kind.Formula, Sym.tf()]
 ])('.%s() has kinds %s, %s', (msg, kind, argumentKind, actual) => {
-  expect(actual.kind).toEqual(kind)
-  expect(actual.argumentKind).toEqual(argumentKind)
+  expect(actual.kind).toDeepEqual(kind)
+  expect(actual.argumentKind).toDeepEqual(argumentKind)
 })
 
 test.each([
@@ -17,8 +17,8 @@ test.each([
   [Category.TF, Kind.Term, Kind.Formula]
 ])('.fromCategory(%s) has kinds %s, %s', (category, kind, argumentKind) => {
   const actual = Sym.fromCategory(category)
-  expect(actual.kind).toEqual(kind)
-  expect(actual.argumentKind).toEqual(argumentKind)
+  expect(actual.kind).toDeepEqual(kind)
+  expect(actual.argumentKind).toDeepEqual(argumentKind)
 })
 
 test.each([
@@ -28,14 +28,14 @@ test.each([
   [Kind.Term, Kind.Formula, Category.TF]
 ])('.getCategory() for sym with kinds %s, %s is %s', (kind, argumentKind, category) => {
   const sym = Sym({ kind, argumentKind })
-  expect(sym.getCategory()).toEqual(category)
+  expect(sym.getCategory()).toDeepEqual(category)
 })
 
 test.each([
   [Kind.Formula, [Category.FF, Category.FT]],
   [Kind.Term, [Category.TF, Category.TT]]
 ])('.getCategoriesWithKind()', (kind, expected) => {
-  expect(Sym.getCategoriesWithKind(kind)).toEqual(expected)
+  expect(Sym.getCategoriesWithKind(kind)).toDeepEqual(expected)
 })
 
 test.each([
@@ -44,7 +44,7 @@ test.each([
   [Category.TT, { kind: Kind.Term, argumentKind: Kind.Term }],
   [Category.TF, { kind: Kind.Term, argumentKind: Kind.Formula }]
 ])('.getKindsFromCategory(%s) is %s', (kind, expected) => {
-  expect(Sym.getKindsFromCategory(kind)).toEqual(expected)
+  expect(Sym.getKindsFromCategory(kind)).toDeepEqual(expected)
 })
 
 test.each([
@@ -53,12 +53,12 @@ test.each([
   [Sym.ft(), false],
   [Sym.tt(), true]
 ])('.isBindable() only for TT', (sym, expected) => {
-  expect(sym.isBindable()).toEqual(expected)
+  expect(sym.isBindable()).toDeepEqual(expected)
 })
 
 test.each([
   [Sym.tt({ arity: 1 }), false],
   [Sym.tt({ arity: 0 }), true]
 ])('.isBindable() only for nullary', (sym, expected) => {
-  expect(sym.isBindable()).toEqual(expected)
+  expect(sym.isBindable()).toDeepEqual(expected)
 })

@@ -8,6 +8,8 @@ export const Expression = ({
   boundSym,
   children = []
 }) => _.create(Expression.prototype, {
+  constructor: Expression,
+
   // Main symbol of this expression.
   sym,
 
@@ -18,10 +20,7 @@ export const Expression = ({
 
   // Array of subexpressions whose length will match `sym`'s arity and their kinds will match
   // `sym`'s `argumentKind`
-  children
-})
-Expression.prototype = {
-  constructor: Expression,
+  children,
 
   // Returns the child at the index `i` or throws an error.
   getChild (i) {
@@ -273,7 +272,7 @@ Expression.prototype = {
       this.boundSym !== undefined ? _.omit(syms, [`${this.boundSym.id}`]) : syms
     ]
   }
-}
+})
 
 const resolveChildren = (oldSym, newSym, oldChildren, getChild) => {
   if (oldSym.argumentKind !== newSym.argumentKind) {

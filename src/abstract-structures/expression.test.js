@@ -25,7 +25,7 @@ test.each([
   const expectedSubformula = parser.parse(expectedSubformulaText)
   const subformula = formula.getSubexpression(position)
 
-  expect(subformula).toEqual(expectedSubformula)
+  expect(subformula).toDeepEqual(expectedSubformula)
 })
 
 test.each([
@@ -41,7 +41,7 @@ test.each([
   const sym = parser.getSym(symbol)
   const positions = formula.findFreeOccurrences(sym)
 
-  expect(positions).toEqual(expectedPositions)
+  expect(positions).toDeepEqual(expectedPositions)
 })
 
 test.each([
@@ -61,7 +61,7 @@ test.each([
   const formula = parser.parse(text)
   const positions = formula.findBoundOccurrences()
 
-  expect(positions).toEqual(expectedPositions)
+  expect(positions).toDeepEqual(expectedPositions)
 })
 
 test.each([
@@ -76,7 +76,7 @@ test.each([
 
   const formulas = formula.getSubexpressionsOnPath(path)
 
-  expect(formulas).toEqual(expectedFormulas)
+  expect(formulas).toDeepEqual(expectedFormulas)
 })
 
 test.each([
@@ -110,7 +110,7 @@ test.each([
     const getChild = () => parser.parse(getChildText())
     const newFormula = oldFormula.replaceFreeOccurrences(oldSym, newSym, getBoundSym, getChild)
 
-    expect(newFormula).toEqual(expectedNewFormula)
+    expect(newFormula).toDeepEqual(expectedNewFormula)
   }
 )
 
@@ -125,7 +125,7 @@ test.each([
     const sym = parser.getSym(symText)
     const newFormula = oldFormula.replaceBoundOccurrences(sym)
 
-    expect(newFormula).toEqual(expectedNewFormula)
+    expect(newFormula).toDeepEqual(expectedNewFormula)
   }
 )
 
@@ -140,7 +140,7 @@ test.each([
     const sym = parser.getSym(symbolText)
     const newFormula = oldFormula.replaceBoundOccurrencesAt(position, sym)
 
-    expect(newFormula).toEqual(expectedNewFormula)
+    expect(newFormula).toDeepEqual(expectedNewFormula)
   }
 )
 
@@ -159,7 +159,7 @@ test.each([
   )
   const syms = formula.getSyms()
 
-  expect(syms).toEqual(expectedSyms)
+  expect(syms).toDeepEqual(expectedSyms)
 })
 
 test.each([
@@ -177,7 +177,7 @@ test.each([
   )
   const syms = formula.getFreeSyms()
 
-  expect(syms).toEqual(expectedSyms)
+  expect(syms).toDeepEqual(expectedSyms)
 })
 
 test.each([
@@ -195,7 +195,7 @@ test.each([
   )
   const syms = formula.findBoundSymsAtFreeOccurrencesOfSym(sym)
 
-  expect(syms).toEqual(expectedSyms)
+  expect(syms).toDeepEqual(expectedSyms)
 })
 
 const maxPrimitiveId = Math.max(..._.values(primitiveSyms).map(({ id }) => id))
@@ -312,6 +312,6 @@ test.each([
 ])('.normalize()', (formula, syms, expectedFormula, expectedSyms) => {
   const [actualFormula, actualSyms] = formula.normalize(syms)
 
-  expect(actualFormula).toEqual(expectedFormula)
-  expect(actualSyms).toEqual(expectedSyms)
+  expect(actualFormula).toDeepEqual(expectedFormula)
+  expect(actualSyms).toDeepEqual(expectedSyms)
 })

@@ -53,6 +53,6 @@ describe('disjunction introduction', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 })

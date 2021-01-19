@@ -91,7 +91,7 @@ test('parse()', () => {
     })
   })
 
-  expect(actual).toEqual(expected)
+  expect(actual).toDeepEqual(expected)
 })
 
 test('parse()', () => {
@@ -205,5 +205,5 @@ test('parse()', () => {
     })
   })
 
-  expect(actual).toEqual(expected)
+  expect(actual).toDeepEqual(expected)
 })

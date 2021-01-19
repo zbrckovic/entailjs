@@ -1,5 +1,5 @@
 import { ErrorName } from '../error'
-import { FormulaParser } from '../parsers/formula-parser'
+import { FormulaParser } from '../parsers'
 import { primitivePresentations } from '../presentation/sym-presentation'
 import { primitiveSyms } from '../primitive-syms'
 import {
@@ -56,7 +56,7 @@ test.each([
   const expected = interpretationObjs.map(createInterpretation)
   const actual = findInterpretations(formula, value)
 
-  expect(actual).toEqual(expected)
+  expect(actual).toDeepEqual(expected)
 })
 
 test.each([

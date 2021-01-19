@@ -42,7 +42,7 @@ describe('universal instantiation', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test('simple: Ax Fx |- Fa', () => {
@@ -75,7 +75,7 @@ describe('universal instantiation', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test(`throws ${ErrorName.TERM_NOT_PROVIDED_FOR_NON_VACUOUS_QUANTIFICATION}`, () => {

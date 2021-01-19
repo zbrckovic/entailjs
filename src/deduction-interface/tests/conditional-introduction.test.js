@@ -58,6 +58,6 @@ describe('conditional introduction', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 })

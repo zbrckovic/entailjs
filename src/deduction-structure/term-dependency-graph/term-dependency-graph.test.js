@@ -35,7 +35,7 @@ describe('#addDirectDependency()', () => {
       2: new Set([3])
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test.each([
@@ -67,7 +67,7 @@ describe('#addDirectDependency()', () => {
     const onRemove = jest.fn()
     const actual = graph.addDependencies(dependent, [dependency], onRemove)
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
     expect(onRemove).toHaveBeenCalledWith(...expectedRemovedDependency)
   })
 })
@@ -101,8 +101,8 @@ test('#getDirectDependents()', () => {
     1: new Set([2])
   })
 
-  expect(new Set(graph.getDirectDependents(2))).toEqual(new Set([0, 1]))
-  expect(new Set(graph.getDirectDependents(0))).toEqual(new Set())
+  expect(new Set(graph.getDirectDependents(2))).toDeepEqual(new Set([0, 1]))
+  expect(new Set(graph.getDirectDependents(0))).toDeepEqual(new Set())
 })
 
 test('#getDependents()', () => {
@@ -112,8 +112,8 @@ test('#getDependents()', () => {
     2: new Set([3])
   })
 
-  expect(new Set(graph.getDependents(1))).toEqual(new Set([0]))
-  expect(new Set(graph.getDependents(3))).toEqual(new Set([1, 2, 0]))
+  expect(new Set(graph.getDependents(1))).toDeepEqual(new Set([0]))
+  expect(new Set(graph.getDependents(3))).toDeepEqual(new Set([1, 2, 0]))
 })
 
 test('#getDependencies()', () => {
@@ -122,6 +122,6 @@ test('#getDependencies()', () => {
     2: new Set([3])
   })
 
-  expect(new Set(graph.getDependencies(2))).toEqual(new Set([3]))
-  expect(new Set(graph.getDependencies(0))).toEqual(new Set([1, 2, 3]))
+  expect(new Set(graph.getDependencies(2))).toDeepEqual(new Set([3]))
+  expect(new Set(graph.getDependencies(0))).toDeepEqual(new Set([1, 2, 3]))
 })

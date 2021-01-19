@@ -91,7 +91,7 @@ Deduction.prototype = {
   _updateGraph (termDependencies) {
     const { dependent, dependencies } = termDependencies
 
-    const removedTermDependencies = {}
+    const removedTermDependencies = TermDependencyGraph()
 
     const graph = this.termDependencyGraph.addDependencies(
       dependent,

@@ -72,6 +72,6 @@ describe('negation introduction', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 })

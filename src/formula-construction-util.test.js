@@ -2,7 +2,7 @@ import {
   createConjunction,
   createConditionalWithAntecedentsAsConjunction
 } from './formula-construction-util'
-import { FormulaParser } from './parsers/formula-parser'
+import { FormulaParser } from './parsers'
 import { primitivePresentations } from './presentation/sym-presentation'
 import { primitiveSyms } from './primitive-syms'
 
@@ -22,7 +22,7 @@ test.each([
   const expressions = formulaTexts.map(text => parser.parse(text))
   const expected = parser.parse(expectedFormulaText)
   const actual = createConjunction(expressions)
-  expect(actual).toEqual(expected)
+  expect(actual).toDeepEqual(expected)
 })
 
 test('createConditionalWithAntecedentsAsConjunction()', () => {
@@ -35,5 +35,5 @@ test('createConditionalWithAntecedentsAsConjunction()', () => {
   const expected = parser.parse('((p & q) & r) -> s')
   const actual = createConditionalWithAntecedentsAsConjunction(antecedents, consequent)
 
-  expect(actual).toEqual(expected)
+  expect(actual).toDeepEqual(expected)
 })

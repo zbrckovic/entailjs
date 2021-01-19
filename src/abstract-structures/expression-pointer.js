@@ -7,10 +7,11 @@ import _ from 'lodash'
 export const ExpressionPointer = ({
   expression,
   position = []
-}) => _.create(ExpressionPointer.prototype, { expression, position })
-
-ExpressionPointer.prototype = {
+}) => ({
   constructor: ExpressionPointer,
+
+  expression,
+  position,
 
   isRoot () { return this.position.length === 0 },
 
@@ -71,4 +72,4 @@ ExpressionPointer.prototype = {
 
     return result
   }
-}
+})

@@ -63,6 +63,6 @@ describe('disjunction elimination', () => {
         })
       })
 
-      expect(actual).toEqual(expected)
+      expect(actual).toDeepEqual(expected)
     })
 })

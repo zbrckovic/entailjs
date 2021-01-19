@@ -42,7 +42,7 @@ describe('existential generalization', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test('simple: Fa |- Ex Fx', () => {
@@ -75,7 +75,7 @@ describe('existential generalization', () => {
       })
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test(`throws ${ErrorName.GENERALIZED_TERM_ILLEGALLY_BINDS}`, () => {

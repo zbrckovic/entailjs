@@ -25,7 +25,7 @@ test('{ p -> q, [1] } .getParent() is { p -> q, [] }', () => {
   const pointer = ExpressionPointer({ expression, position: [1] })
   const expectedParent = ExpressionPointer({ expression })
 
-  expect(pointer.getParent()).toEqual(expectedParent)
+  expect(pointer.getParent()).toDeepEqual(expectedParent)
 })
 
 test.each([
@@ -44,7 +44,7 @@ test.each([
     const sym = parser.getSym(symbolText)
     const actualDefinitionPosition = pointer.findBindingOccurrence(sym)
 
-    expect(actualDefinitionPosition).toEqual(expectedDefinitionPosition)
+    expect(actualDefinitionPosition).toDeepEqual(expectedDefinitionPosition)
   }
 )
 
@@ -58,7 +58,7 @@ test.each([
     const sym = parser.getSym(symbolText)
     const freeOccurrences = pointer.findFreeOccurrences(sym)
 
-    expect(freeOccurrences).toEqual(expectedFreeOccurrences)
+    expect(freeOccurrences).toDeepEqual(expectedFreeOccurrences)
   }
 )
 
@@ -72,7 +72,7 @@ test.each([
     const pointer = ExpressionPointer({ expression, position })
     const boundOccurrences = pointer.findBoundOccurrences()
 
-    expect(boundOccurrences).toEqual(expectedBoundOccurrences)
+    expect(boundOccurrences).toDeepEqual(expectedBoundOccurrences)
   }
 )
 
@@ -100,6 +100,6 @@ test.each([
     )
     const context = pointer.getBoundSyms()
 
-    expect(context).toEqual(expectedContext)
+    expect(context).toDeepEqual(expectedContext)
   }
 )

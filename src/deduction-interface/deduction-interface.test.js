@@ -55,7 +55,7 @@ test('#deleteLastStep() case 1', () => {
 
   const actualDeduction = startDeduction(deductionWithAddedStep).deleteLastStep().deduction
 
-  expect(expectedDeduction).toEqual(actualDeduction)
+  expect(expectedDeduction).toDeepEqual(actualDeduction)
 })
 
 test('#deleteLastStep() case 2', () => {
@@ -74,5 +74,5 @@ test('#deleteLastStep() case 2', () => {
 
   const actualDeduction = startDeduction(deductionWithAddedStep).deleteLastStep().deduction
 
-  expect(expectedDeduction).toEqual(actualDeduction)
+  expect(expectedDeduction).toDeepEqual(actualDeduction)
 })

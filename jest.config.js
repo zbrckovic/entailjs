@@ -6,5 +6,6 @@ module.exports = {
     '/node_modules/',
     './src/parsers/peg/grammar.js'
   ],
-  coverageDirectory: '../docs/coverage'
+  coverageDirectory: '../docs/coverage',
+  setupFilesAfterEnv: ['./jest.setup.js'],
 }

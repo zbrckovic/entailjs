@@ -1,4 +1,4 @@
-import { Deduction } from '../deduction-structure'
+import { Deduction, TermDependencyGraph } from '../deduction-structure'
 import { createError, ErrorName } from '../error'
 import { RulesInterface } from './rules-interface'
 import _ from 'lodash'
@@ -41,7 +41,7 @@ export const startDeduction = (deduction = Deduction()) => {
       }
     } = _.last(steps)
 
-    const newTermDependencyGraph = { ...termDependencyGraph }
+    const newTermDependencyGraph = TermDependencyGraph({ ...termDependencyGraph })
 
     // Add term dependencies which were deleted in last step.
     Object

@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 // `Sym` (short for symbol) is the main entity from which expressions are built. Word `symbol` has
 // been avoided because it's a built-in type in ES6.
 export const Sym = ({
@@ -8,7 +6,9 @@ export const Sym = ({
   argumentKind = Kind.Formula,
   arity = 0,
   binds = false
-} = {}) => _.create(Sym.prototype, {
+} = {}) => ({
+  constructor: Sym,
+
   // Non-negative integer which must be the same throughout all of this symbol's occurrences in some
   // context (expression, deduction, etc...). Symbol identity is also established by comparing id.
   id,
@@ -28,11 +28,7 @@ export const Sym = ({
 
   // When this symbol is the main symbol of an expression `binds` determines whether the expression
   // also accepts a bound symbol. This will be true for quantifiers.
-  binds
-})
-
-Sym.prototype = {
-  constructor: Sym,
+  binds,
 
   getCategory () {
     switch (this.kind) {
@@ -61,7 +57,7 @@ Sym.prototype = {
 
   equals (sym) { return this.id === sym.id },
   order (sym) { return this.id - sym.id }
-}
+})
 
 Sym.fromCategory = (category, spec = {}) => Sym({ ...spec, ...Sym.getKindsFromCategory(category) })
 Sym.ff = (spec = {}) => Sym.fromCategory(Category.FF, spec)

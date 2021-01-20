@@ -7,9 +7,7 @@ export const Expression = ({
   sym,
   boundSym,
   children = []
-}) => _.create(Expression.prototype, {
-  constructor: Expression,
-
+}) => Object.freeze({
   // Main symbol of this expression.
   sym,
 

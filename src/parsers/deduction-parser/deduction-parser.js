@@ -1,7 +1,12 @@
+import _ from 'lodash'
+import { withConstructor } from '../../utils'
 import { parseDeduction } from '../peg'
 import { AstProcessor } from './ast-processor'
 
-export const DeductionParser = ({ syms, presentations }) => ({
+export const DeductionParser = ({
+  syms,
+  presentations
+}) => _.flow(withConstructor(DeductionParser))({
   astProcessor: AstProcessor({ syms, presentations }),
 
   parse (text) {

@@ -1,5 +1,4 @@
 import { createError, ErrorName } from '../error'
-import _ from 'lodash'
 
 // Pointer to the specific subexpression of the base expression. Contains the base
 // `expression` and the `position` which is a path to some subexpression of `expression`. This
@@ -7,9 +6,7 @@ import _ from 'lodash'
 export const ExpressionPointer = ({
   expression,
   position = []
-}) => ({
-  constructor: ExpressionPointer,
-
+}) => Object.freeze({
   expression,
   position,
 

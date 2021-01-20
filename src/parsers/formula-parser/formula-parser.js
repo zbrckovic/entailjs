@@ -1,13 +1,13 @@
+import _ from 'lodash'
+import { withConstructor } from '../../utils'
 import { parseFormula } from '../peg'
 import { AstProcessor } from './ast-processor'
-import _ from 'lodash'
 
-export const FormulaParser = ({ syms, presentations }) => _.create(FormulaParser.prototype, {
-  astProcessor: AstProcessor({ syms, presentations })
-})
-
-FormulaParser.prototype = {
-  constructor: FormulaParser,
+export const FormulaParser = ({
+  syms,
+  presentations
+}) => _.flow(withConstructor(FormulaParser))({
+  astProcessor: AstProcessor({ syms, presentations }),
 
   parse (text) {
     const ast = parseFormula(text)
@@ -24,4 +24,4 @@ FormulaParser.prototype = {
   getPresentations () { return this.astProcessor.getPresentations() },
   getTextToSymMap () { return this.astProcessor.getTextToSymMap() },
   getMaxSymId () { return this.astProcessor.getMaxSymId() }
-}
+})

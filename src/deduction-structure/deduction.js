@@ -1,7 +1,8 @@
+import _ from 'lodash'
+import { withConstructor } from '../utils'
 import { Rule } from './rule'
 import { RegularRuleApplicationSummary, Step, TheoremRuleApplicationSummary } from './step'
 import { TermDependencyGraph } from './term-dependency-graph'
-import _ from 'lodash'
 
 // Structure containing all relevant information about some deduction (proof) carried out as a
 // sequence of steps.
@@ -10,10 +11,9 @@ export const Deduction = ({
   steps = [],
   // Graph containing information about dependencies between terms.
   termDependencyGraph = TermDependencyGraph()
-} = {}) => _.create(Deduction.prototype, { steps, termDependencyGraph })
-
-Deduction.prototype = {
-  constructor: Deduction,
+} = {}) => _.flow(withConstructor(Deduction))({
+  steps,
+  termDependencyGraph,
 
   getSize () { return this.steps.length },
 
@@ -97,10 +97,10 @@ Deduction.prototype = {
       dependent,
       [...dependencies],
       (dependentTerm, dependencyTerm) => {
-        let dependencyTerms = removedTermDependencies[dependentTerm]
+        let dependencyTerms = removedTermDependencies.getDirectDependencies(dependentTerm)
         if (dependencyTerms === undefined) {
           dependencyTerms = new Set()
-          removedTermDependencies[dependentTerm] = dependencyTerms
+          removedTermDependencies.setDirectDependencies(dependentTerm, dependencyTerms)
         }
         dependencyTerms.add(dependencyTerm)
       }
@@ -148,4 +148,4 @@ Deduction.prototype = {
 
     return result
   }
-}
+})

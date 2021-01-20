@@ -7,8 +7,9 @@ import {
   SymPresentation,
   SyntacticInfo
 } from '../../presentation/sym-presentation'
-import { isBracketed } from '../peg/ast-formula'
+import { withConstructor } from '../../utils'
 import _ from 'lodash'
+import { isBracketed } from '../peg/ast-formula'
 
 // `AstProcessor` can process formula AST (the result of parsing formula) and create an
 // `Expression`. As a side-effect of this processing it updates its internal state. Internal state
@@ -22,15 +23,11 @@ export const AstProcessor = ({
   textToSymMap = createTextToSymMap(presentations, syms),
   // Used when new symbol must be introduced to decide about its id (used for optimization).
   maxSymId = getMaxSymId(textToSymMap)
-}) => _.create(AstProcessor.prototype, {
+}) => _.flow(withConstructor(AstProcessor))({
   syms,
   presentations,
   textToSymMap,
-  maxSymId
-})
-
-AstProcessor.prototype = {
-  constructor: AstProcessor,
+  maxSymId,
 
   // Processes formula AST (returned from peg parser) and tries to construct an expression (more
   // precisely it tries to construct a formula because parser accepts only formula expressions). If
@@ -128,7 +125,7 @@ AstProcessor.prototype = {
   getPresentations () { return this.presentations },
   getTextToSymMap () { return this.textToSymMap },
   getMaxSymId () { return this.maxSymId }
-}
+})
 
 const determineArgumentKind = (kind, text) => {
   switch (kind) {

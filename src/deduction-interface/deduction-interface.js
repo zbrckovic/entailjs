@@ -41,14 +41,15 @@ export const startDeduction = (deduction = Deduction()) => {
       }
     } = _.last(steps)
 
-    const newTermDependencyGraph = TermDependencyGraph({ ...termDependencyGraph })
+    const newTermDependencyGraph = TermDependencyGraph({ ...termDependencyGraph.map })
 
     // Add term dependencies which were deleted in last step.
-    Object
-      .entries(removedTermDependencies)
+    removedTermDependencies
+      .getEntries()
       .forEach(([dependentTerm, removedDependencyTerms]) => {
-        const newDependencyTerms = new Set(newTermDependencyGraph[dependentTerm])
-        newTermDependencyGraph[dependentTerm] = newDependencyTerms
+        const newDependencyTerms =
+          new Set(newTermDependencyGraph.getDirectDependencies(dependentTerm))
+        newTermDependencyGraph.setDirectDependencies(dependentTerm, newDependencyTerms)
         removedDependencyTerms.forEach(removedDependencyTerm => {
           newDependencyTerms.add(removedDependencyTerm)
         })
@@ -56,15 +57,20 @@ export const startDeduction = (deduction = Deduction()) => {
 
     // Delete term dependencies which were added in last step.
     if (addedTermDependencies !== undefined) {
-      const newDependencyTerms = new Set(newTermDependencyGraph[addedTermDependencies.dependent])
+      const newDependencyTerms = new Set(
+        newTermDependencyGraph.getDirectDependencies(addedTermDependencies.dependent)
+      )
       addedTermDependencies.dependencies.forEach(dependencyTerm => {
         newDependencyTerms.delete(dependencyTerm)
       })
 
       if (newDependencyTerms.size > 0) {
-        newTermDependencyGraph[addedTermDependencies.dependent] = newDependencyTerms
+        newTermDependencyGraph.setDirectDependencies(
+          addedTermDependencies.dependent,
+          newDependencyTerms
+        )
       } else {
-        delete newTermDependencyGraph[addedTermDependencies.dependent]
+        newTermDependencyGraph.deleteDirectDependencies(addedTermDependencies.dependent)
       }
     }
 

@@ -1,22 +1,32 @@
 import _ from 'lodash'
 import { createError, ErrorName } from '../../error'
+import { withConstructor } from '../../utils'
 
 // `TermDependencyGraph` is a mapping between symbol's id (**dependent**) and a set of symbol ids on
 // which it depends on (**dependencies**). It's important to note that `TermDependencyGraph`
 // contains only ids, not the actual symbol objects. Whenever we mention a symbol in this context
 // it's the symbol's id - not the actual symbol object - we are talking about.
-export const TermDependencyGraph = ({ ...props } = {}) => _.create(
-  TermDependencyGraph.prototype,
-  { ...props }
-)
+export const TermDependencyGraph = ({
+  ...props
+} = {}) => _.flow(withConstructor(TermDependencyGraph))({
+  map: { ...props },
 
-TermDependencyGraph.prototype = {
-  constructor: TermDependencyGraph,
+  getDirectDependencies (dependent) {
+    return this.map[dependent]
+  },
+
+  setDirectDependencies (dependent, dependencies) {
+    this.map[dependent] = dependencies
+  },
+
+  deleteDirectDependencies (dependent) {
+    delete this.map[dependent]
+  },
 
   // Adds direct dependency between `dependentTerm` and `dependencyTerms` and normalizes the graph.
   // Calls `onRemove` whenever dependencies are removed on normalization.
   addDependencies (dependentTerm, dependencyTerms = [], onRemove) {
-    if (this[dependentTerm] !== undefined) {
+    if (this.getDirectDependencies(dependentTerm) !== undefined) {
       throw createError(ErrorName.TERM_ALREADY_USED, undefined, dependentTerm)
     }
 
@@ -27,15 +37,15 @@ TermDependencyGraph.prototype = {
       throw createError(ErrorName.CYCLIC_DEPENDENCIES, undefined, cycleInducingDependency)
     }
 
-    let result = this.constructor({ ...this, [dependentTerm]: new Set() })
+    let result = this.constructor({ ...this.map, [dependentTerm]: new Set() })
     dependencyTerms.forEach(dependencyTerm => {
       result = result._normalize(dependentTerm, dependencyTerm, onRemove)
 
-      if (result[dependentTerm] === undefined) {
-        result[dependentTerm] = new Set()
+      if (result.getDirectDependencies(dependentTerm) === undefined) {
+        result.setDirectDependencies(dependentTerm, new Set())
       }
 
-      result[dependentTerm].add(dependencyTerm)
+      result.getDirectDependencies(dependentTerm).add(dependencyTerm)
     })
 
     return result
@@ -51,7 +61,7 @@ TermDependencyGraph.prototype = {
     if (traversed.has(dependentTerm)) throw new Error('Infinite recursion error.')
     traversed.add(dependentTerm)
 
-    const directDependencyTerms = this[dependentTerm]
+    const directDependencyTerms = this.getDirectDependencies(dependentTerm)
     if (directDependencyTerms === undefined) return false
     if (directDependencyTerms.has(dependencyTerm)) return true
 
@@ -60,10 +70,14 @@ TermDependencyGraph.prototype = {
     )
   },
 
+  getEntries () {
+    return Object.entries(this.map)
+  },
+
   // Finds all direct dependent terms of `dependencyTerm` and return them as an array.
   getDirectDependents (dependencyTerm) {
-    return Object
-      .entries(this)
+    return this
+      .getEntries()
       .filter(([, dependencyTerms]) => dependencyTerms.has(dependencyTerm))
       .map(([dependentTerm]) => parseInt(dependentTerm, 10))
   },
@@ -73,7 +87,7 @@ TermDependencyGraph.prototype = {
     if (traversed.has(dependentTerm)) throw new Error('Infinite recursion error')
     traversed.add(dependentTerm)
 
-    const directDependencyTerms = this[dependentTerm]
+    const directDependencyTerms = this.getDirectDependencies(dependentTerm)
     if (directDependencyTerms === undefined) return []
 
     const transitiveDependencyTerms = []
@@ -85,7 +99,7 @@ TermDependencyGraph.prototype = {
   },
 
   hasDirectDependency (dependentTerm, dependencyTerm) {
-    const directDependencyTerms = this[dependentTerm]
+    const directDependencyTerms = this.getDirectDependencies(dependentTerm)
     if (directDependencyTerms === undefined) return false
     return directDependencyTerms.has(dependencyTerm)
   },
@@ -133,32 +147,34 @@ TermDependencyGraph.prototype = {
       return this._removeDirectDependency(dependentTerm, dependencyTerm)
     }
 
-    const transitiveDependencyTerms = this[dependencyTerm]
+    const transitiveDependencyTerms = this.getDirectDependencies(dependencyTerm)
     if (transitiveDependencyTerms === undefined) return this
 
-    return [...transitiveDependencyTerms].reduce(
-      (intermediateGraph, transitiveDependencyTerm) =>
-        intermediateGraph._normalizeDownwards(dependentTerm, transitiveDependencyTerm, onRemove),
-      this
+    return TermDependencyGraph(
+      [...transitiveDependencyTerms].reduce(
+        (intermediateGraph, transitiveDependencyTerm) =>
+          intermediateGraph._normalizeDownwards(dependentTerm, transitiveDependencyTerm, onRemove),
+        this
+      ).map
     )
   },
 
   // Removes direct dependency between `dependentTerm` and `dependencyTerm` if it exists.
   _removeDirectDependency (dependentTerm, dependencyTerm) {
-    const dependencyTerms = this[dependentTerm]
+    const dependencyTerms = this.getDirectDependencies(dependentTerm)
     if (dependencyTerms === undefined) return this
 
     const newDependencyTerms = new Set(dependencyTerms)
     newDependencyTerms.delete(dependencyTerm)
 
-    const result = this.constructor({ ...this })
+    const result = this.constructor({ ...this.map })
 
     if (newDependencyTerms.size === 0) {
-      delete result[dependentTerm]
+      result.deleteDirectDependencies(dependentTerm)
     } else {
-      result[dependentTerm] = newDependencyTerms
+      result.setDirectDependencies(dependentTerm, newDependencyTerms)
     }
 
     return result
   }
-}
+})

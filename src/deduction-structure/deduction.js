@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import { withConstructor } from '../utils'
 import { Rule } from './rule'
 import { RegularRuleApplicationSummary, Step, TheoremRuleApplicationSummary } from './step'
 import { TermDependencyGraph } from './term-dependency-graph'
@@ -11,9 +10,13 @@ export const Deduction = ({
   steps = [],
   // Graph containing information about dependencies between terms.
   termDependencyGraph = TermDependencyGraph()
-} = {}) => _.flow(withConstructor(Deduction))({
+} = {}) => _.create(Deduction.prototype, {
   steps,
-  termDependencyGraph,
+  termDependencyGraph
+})
+
+_.assign(Deduction.prototype, {
+  constructor: Deduction,
 
   getSize () { return this.steps.length },
 
@@ -48,9 +51,15 @@ export const Deduction = ({
       : this._applyRegularRule(ruleApplicationSpec)
   },
 
-  _applyTheoremRule ({ theorem: formula, theoremId }) {
+  _applyTheoremRule ({
+    theorem: formula,
+    theoremId
+  }) {
     const ruleApplicationSummary = TheoremRuleApplicationSummary({ theoremId })
-    const step = Step({ formula, ruleApplicationSummary })
+    const step = Step({
+      formula,
+      ruleApplicationSummary
+    })
     return this._addStep(step)
   },
 
@@ -89,7 +98,10 @@ export const Deduction = ({
   // creates a second graph which contains removed term dependencies. Returns both graphs as a
   // result.
   _updateGraph (termDependencies) {
-    const { dependent, dependencies } = termDependencies
+    const {
+      dependent,
+      dependencies
+    } = termDependencies
 
     const removedTermDependencies = TermDependencyGraph()
 
@@ -133,7 +145,10 @@ export const Deduction = ({
     premises.forEach(premise => {
       const step = this.getStep(premise)
 
-      const { assumptions, ruleApplicationSummary: { rule } } = step
+      const {
+        assumptions,
+        ruleApplicationSummary: { rule }
+      } = step
 
       if (rule === Rule.Premise || rule === Rule.Theorem) {
         result.add(premise)

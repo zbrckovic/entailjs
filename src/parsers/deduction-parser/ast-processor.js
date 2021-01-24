@@ -1,15 +1,19 @@
 import _ from 'lodash'
 import { startDeduction } from '../../deduction-interface'
 import { createError, ErrorName } from '../../error'
-import { findDuplicates, isDeepEqual, withConstructor } from '../../utils'
+import { findDuplicates, isDeepEqual } from '../../utils'
 import { AstProcessor as FormulaAstProcessor } from '../formula-parser/ast-processor'
 import { getRule, Rule } from '../../deduction-structure'
 
 // `AstProcessor` can process deduction AST (the result of parsing formula) and creates a
 // `Deduction`. Internally it uses formula [`AstProcessor`](../formula-parser/ast-processor) for
 // parsing formula on each step.
-export const AstProcessor = ({ syms, presentations }) => _.flow(withConstructor(AstProcessor))({
-  formulaAstProcessor: FormulaAstProcessor({ syms, presentations }),
+export const AstProcessor = ({ syms, presentations }) => _.create(AstProcessor.prototype, {
+  formulaAstProcessor: FormulaAstProcessor({ syms, presentations })
+})
+
+_.assign(AstProcessor.prototype, {
+  constructor: AstProcessor,
 
   process (ast) {
     const { steps } = ast

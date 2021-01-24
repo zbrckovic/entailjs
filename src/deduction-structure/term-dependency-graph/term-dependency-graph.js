@@ -1,15 +1,15 @@
 import _ from 'lodash'
 import { createError, ErrorName } from '../../error'
-import { withConstructor } from '../../utils'
 
 // `TermDependencyGraph` is a mapping between symbol's id (**dependent**) and a set of symbol ids on
 // which it depends on (**dependencies**). It's important to note that `TermDependencyGraph`
 // contains only ids, not the actual symbol objects. Whenever we mention a symbol in this context
 // it's the symbol's id - not the actual symbol object - we are talking about.
-export const TermDependencyGraph = ({
-  ...props
-} = {}) => _.flow(withConstructor(TermDependencyGraph))({
-  map: { ...props },
+export const TermDependencyGraph = ({ ...props } = {}) =>
+  _.create(TermDependencyGraph.prototype, { map: { ...props } })
+
+_.assign(TermDependencyGraph.prototype, {
+  constructor: TermDependencyGraph,
 
   getDirectDependencies (dependent) {
     return this.map[dependent]

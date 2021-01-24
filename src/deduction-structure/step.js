@@ -1,5 +1,6 @@
 import { Rule } from './rule'
 import { TermDependencyGraph } from './term-dependency-graph'
+import _ from 'lodash'
 
 // Single step of a deduction
 export const Step = ({
@@ -12,7 +13,13 @@ export const Step = ({
   // - How was the rule applied?
   // - What change must be made to the term dependency graph?
   ruleApplicationSummary = RegularRuleApplicationSummary()
-} = {}) => ({ assumptions, formula, ruleApplicationSummary })
+} = {}) => _.create(Step.prototype, {
+  assumptions,
+  formula,
+  ruleApplicationSummary
+})
+
+_.assign(Step.prototype, { constructor: Step })
 
 export const RegularRuleApplicationSummary = ({
   rule = Rule.Premise,
@@ -21,6 +28,25 @@ export const RegularRuleApplicationSummary = ({
   addedTermDependencies,
   // Term dependencies removed as a consequence of normalization.
   removedTermDependencies = TermDependencyGraph()
-} = {}) => ({ rule, premises, addedTermDependencies, removedTermDependencies })
+} = {}) => _.create(RegularRuleApplicationSummary.prototype, {
+  rule,
+  premises,
+  addedTermDependencies,
+  removedTermDependencies
+})
 
-export const TheoremRuleApplicationSummary = ({ theoremId }) => ({ rule: Rule.Theorem, theoremId })
+_.assign(RegularRuleApplicationSummary.prototype, {
+  constructor: RegularRuleApplicationSummary
+})
+
+export const TheoremRuleApplicationSummary = ({ theoremId }) => _.create(
+  TheoremRuleApplicationSummary.prototype,
+  {
+    rule: Rule.Theorem,
+    theoremId
+  }
+)
+
+_.assign(TheoremRuleApplicationSummary.prototype, {
+  constructor: TheoremRuleApplicationSummary
+})

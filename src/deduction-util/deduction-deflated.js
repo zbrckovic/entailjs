@@ -1,8 +1,11 @@
 import _ from 'lodash'
-import { withConstructor } from '../utils'
 
-export const DeductionDeflated = ({ steps }) => _.flow(withConstructor(DeductionDeflated))({
-  steps,
+export const DeductionDeflated = ({ steps }) => _.create(DeductionDeflated.prototype, {
+  steps
+})
+
+_.assign(DeductionDeflated.prototype, {
+  constructor: DeductionDeflated,
 
   normalize (syms) {
     const normalizedSteps = []
@@ -29,12 +32,16 @@ export const StepDeflated = ({
   rule,
   oldTerm,
   newTerm
-}) => _.flow(withConstructor(StepDeflated))({
+}) => _.create(StepDeflated.prototype, {
   steps,
   formula,
   rule,
   oldTerm,
-  newTerm,
+  newTerm
+})
+
+_.assign(StepDeflated.prototype, {
+  constructor: StepDeflated,
 
   normalize (syms) {
     let normalizedFormula

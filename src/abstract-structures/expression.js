@@ -7,7 +7,7 @@ export const Expression = ({
   sym,
   boundSym,
   children = []
-}) => Object.freeze({
+}) => _.create(Expression.prototype, {
   // Main symbol of this expression.
   sym,
 
@@ -18,13 +18,20 @@ export const Expression = ({
 
   // Array of subexpressions whose length will match `sym`'s arity and their kinds will match
   // `sym`'s `argumentKind`
-  children,
+  children
+})
+
+_.assign(Expression.prototype, {
+  constructor: Expression,
 
   // Returns the child at the index `i` or throws an error.
   getChild (i) {
     const child = this.children[i]
     if (child === undefined) {
-      throw createError(ErrorName.NO_CHILD_AT_INDEX, undefined, { expression: this, i })
+      throw createError(ErrorName.NO_CHILD_AT_INDEX, undefined, {
+        expression: this,
+        i
+      })
     }
     return child
   },
@@ -48,7 +55,10 @@ export const Expression = ({
       ...this.children.slice(firstIndex + 1)
     ]
 
-    return this.constructor({ ...this, children })
+    return this.constructor({
+      ...this,
+      children
+    })
   },
 
   // Replaces subexpression at the `position` with the result of calling `update`. `update` receives
@@ -80,7 +90,11 @@ export const Expression = ({
     getChild
   ) {
     return this.updateSubexpression(position, subexpression => {
-      const { sym, boundSym, children } = subexpression
+      const {
+        sym,
+        boundSym,
+        children
+      } = subexpression
 
       const newBoundSym = newSym.binds ? boundSym ?? getBoundSym?.() : undefined
       const newChildren = resolveChildren(sym, newSym, children, getChild)
@@ -196,7 +210,10 @@ export const Expression = ({
     }
 
     if (this.boundSym !== undefined) {
-      boundSyms = { ...boundSyms, [this.boundSym.id]: this.boundSym }
+      boundSyms = {
+        ...boundSyms,
+        [this.boundSym.id]: this.boundSym
+      }
     }
 
     this.children.forEach(child => { Object.assign(result, child.getFreeSyms(boundSyms)) })
@@ -242,15 +259,27 @@ export const Expression = ({
 
     if (mainSymSubstitute === undefined) {
       const newMainSymId = getNextSymId(syms)
-      mainSymSubstitute = this.sym.constructor({ ...this.sym, id: newMainSymId })
-      syms = { ...syms, [this.sym.id]: mainSymSubstitute }
+      mainSymSubstitute = this.sym.constructor({
+        ...this.sym,
+        id: newMainSymId
+      })
+      syms = {
+        ...syms,
+        [this.sym.id]: mainSymSubstitute
+      }
     }
 
     let boundSymSubstitute
     if (this.boundSym !== undefined) {
       const newBoundSymId = getNextSymId(syms)
-      boundSymSubstitute = this.sym.constructor({ ...this.boundSym, id: newBoundSymId })
-      syms = { ...syms, [this.boundSym.id]: boundSymSubstitute }
+      boundSymSubstitute = this.sym.constructor({
+        ...this.boundSym,
+        id: newBoundSymId
+      })
+      syms = {
+        ...syms,
+        [this.boundSym.id]: boundSymSubstitute
+      }
     }
 
     const childrenSubstitute = []

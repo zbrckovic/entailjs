@@ -1,11 +1,14 @@
 import _ from 'lodash'
-import { withConstructor } from '../../utils'
 
 // ASCII and unicode presentation of a symbol. ASCII presentation is intended to be used in plain
 // text environments, while unicode is primarily intended for GUI and generated documents.
-export const SymPresentation = ({ ascii, unicode }) => _.flow(withConstructor(SymPresentation))({
+export const SymPresentation = ({ ascii, unicode }) => _.create(SymPresentation.prototype, {
   ascii,
-  unicode,
+  unicode
+})
+
+_.assign(SymPresentation.prototype, {
+  constructor: SymPresentation,
 
   get defaultSyntacticInfo () {
     return this.unicode ?? this.ascii
@@ -16,12 +19,11 @@ export const SymPresentation = ({ ascii, unicode }) => _.flow(withConstructor(Sy
   }
 })
 
-export const SyntacticInfo = ({
-  text,
-  placement = Placement.Prefix
-}) => _.flow(withConstructor(SyntacticInfo))({
-  text,
-  placement,
+export const SyntacticInfo = ({ text, placement = Placement.Prefix }) =>
+  _.create(SyntacticInfo.prototype, { text, placement })
+
+_.assign(SyntacticInfo.prototype, {
+  constructor: SyntacticInfo,
 
   createDescription (arity = 1) {
     switch (this.placement) {

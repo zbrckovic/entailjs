@@ -7,7 +7,6 @@ import {
   SymPresentation,
   SyntacticInfo
 } from '../../presentation/sym-presentation'
-import { withConstructor } from '../../utils'
 import _ from 'lodash'
 import { isBracketed } from '../peg/ast-formula'
 
@@ -23,11 +22,15 @@ export const AstProcessor = ({
   textToSymMap = createTextToSymMap(presentations, syms),
   // Used when new symbol must be introduced to decide about its id (used for optimization).
   maxSymId = getMaxSymId(textToSymMap)
-}) => _.flow(withConstructor(AstProcessor))({
+}) => _.create(AstProcessor.prototype, {
   syms,
   presentations,
   textToSymMap,
-  maxSymId,
+  maxSymId
+})
+
+_.assign(AstProcessor.prototype, {
+  constructor: AstProcessor,
 
   // Processes formula AST (returned from peg parser) and tries to construct an expression (more
   // precisely it tries to construct a formula because parser accepts only formula expressions). If

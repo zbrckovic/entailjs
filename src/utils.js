@@ -28,8 +28,3 @@ export const isDeepEqual = (received, other, equalsMethod) =>
     if (_.isFunction(first?.equals) && first.equals !== equalsMethod) return first.equals(second)
     return undefined
   })
-
-export const withConstructor = constructor => spec => ({
-  __proto__: { constructor },
-  ...spec
-})

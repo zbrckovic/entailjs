@@ -1,5 +1,5 @@
 export {
-  Expression, ExpressionPointer, connectWithBinarySym, Category, Kind, Sym
+  Expression, ExpressionPointer, Category, Kind, Sym
 } from './abstract-structures'
 export {
   Deduction,

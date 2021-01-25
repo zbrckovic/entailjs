@@ -2,9 +2,8 @@ import _ from 'lodash'
 import { ErrorName } from '../error'
 import { FormulaParser } from '../parsers'
 import { primitivePresentations } from '../presentation/sym-presentation'
-import { conditional, primitiveSyms, universalQuantifier } from '../primitive-syms'
+import { conditional, conjunction, primitiveSyms, universalQuantifier } from '../primitive-syms'
 import { Expression } from './expression'
-import { connectWithBinarySym } from './expression-util'
 import { Sym } from './sym'
 
 let parser
@@ -216,12 +215,12 @@ test.each([
   ],
   [
     // p -> p
-    connectWithBinarySym([
+    Expression.connectWithBinarySym([
       Expression({ sym: Sym.ff({ id: maxPrimitiveId + 2 }) }),
       Expression({ sym: Sym.ff({ id: maxPrimitiveId + 2 }) })
     ], conditional),
     primitiveSyms,
-    connectWithBinarySym([
+    Expression.connectWithBinarySym([
       Expression({ sym: Sym.ff({ id: maxPrimitiveId + 1 }) }),
       Expression({ sym: Sym.ff({ id: maxPrimitiveId + 1 }) })
     ], conditional),
@@ -315,3 +314,32 @@ test.each([
   expect(actualFormula).toDeepEqual(expectedFormula)
   expect(actualSyms).toDeepEqual(expectedSyms)
 })
+
+test.each([
+  [['p', 'q'], conjunction, 'p & q'],
+  [['p', 'q', 'r'], conjunction, '(p & q) & r']
+])('.connectWithBinarySym(%s) is %s', (expressionTexts, sym, expectedExpressionText) => {
+  const expressions = expressionTexts.map(text => parser.parse(text))
+  const expected = expectedExpressionText === undefined
+    ? undefined
+    : parser.parse(expectedExpressionText)
+
+  const actual = Expression.connectWithBinarySym(expressions, sym)
+
+  expect(actual).toDeepEqual(expected)
+})
+
+test(`.connectWithBinarySym() throws ${ErrorName.NOT_ENOUGH_EXPRESSIONS} for empty list`, () => {
+  expect(() => { Expression.connectWithBinarySym([], conjunction) })
+    .toThrow(ErrorName.NOT_ENOUGH_EXPRESSIONS)
+})
+
+test(
+  `.connectWithBinarySym() throws ${ErrorName.NOT_ENOUGH_EXPRESSIONS} for singleton list`,
+  () => {
+    const expression = parser.parse('p')
+
+    expect(() => { Expression.connectWithBinarySym([expression], conjunction) })
+      .toThrow(ErrorName.NOT_ENOUGH_EXPRESSIONS)
+  }
+)

@@ -1,26 +1,29 @@
 import _ from 'lodash'
 import { createError, ErrorName } from '../../error'
 
-// `TermDependencyGraph` is a mapping between symbol's id (**dependent**) and a set of symbol ids on
+// `TermDependencyGraph` is a mapping between term's id (**dependent**) and a set of term ids on
 // which it depends on (**dependencies**). It's important to note that `TermDependencyGraph`
-// contains only ids, not the actual symbol objects. Whenever we mention a symbol in this context
-// it's the symbol's id - not the actual symbol object - we are talking about.
+// contains only ids, not the actual `Sym` objects. Whenever we mention a term in this context
+// it's the term's id - not the actual `Sym` object - we are talking about.
 export const TermDependencyGraph = ({ ...props } = {}) =>
-  _.create(TermDependencyGraph.prototype, { map: { ...props } })
+  _.create(TermDependencyGraph.prototype, {
+    // Internally managed map of dependents and their dependencies.
+    map: { ...props }
+  })
 
 _.assign(TermDependencyGraph.prototype, {
   constructor: TermDependencyGraph,
 
-  getDirectDependencies (dependent) {
-    return this.map[dependent]
+  getDirectDependencies (dependentTerm) {
+    return this.map[dependentTerm]
   },
 
-  setDirectDependencies (dependent, dependencies) {
-    this.map[dependent] = dependencies
+  setDirectDependencies (dependentTerm, dependencyTerms) {
+    this.map[dependentTerm] = dependencyTerms
   },
 
-  deleteDirectDependencies (dependent) {
-    delete this.map[dependent]
+  deleteDirectDependencies (dependentTerm) {
+    delete this.map[dependentTerm]
   },
 
   // Adds direct dependency between `dependentTerm` and `dependencyTerms` and normalizes the graph.

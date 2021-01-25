@@ -21,7 +21,7 @@ _.assign(ExpressionPointer.prototype, {
     return this.expression.getSubexpression(this.position)
   },
 
-  // Returns parent of the target or throws if there's no parent.
+  // Returns parent of the target or throws if there's no parent. Result is `ExpressionPointer`.
   getParent () {
     if (this.isRoot()) throw createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
     return this.constructor({
@@ -32,7 +32,7 @@ _.assign(ExpressionPointer.prototype, {
 
   // Returns a path to the ancestor subexpression which binds `sym` at the target position. In other
   // words, finds the closest target's ancestor which has `sym` as its `boundSym`. If `sym` is not
-  // specified, target's `mainSym` is assumed.
+  // specified, target's `mainSym` is assumed. Results are positions.
   findBindingOccurrence (sym) {
     if (this.isRoot()) return undefined
 
@@ -41,17 +41,17 @@ _.assign(ExpressionPointer.prototype, {
     const parent = this.getParent()
     const { boundSym } = parent.getTarget()
 
-    return boundSym?.id === sym.id ? parent.position : parent.findBindingOccurrence(sym)
+    return boundSym?.equals(sym) ? parent.position : parent.findBindingOccurrence(sym)
   },
 
-  // Returns free occurrences of `sym` at target.
+  // Returns free occurrences of `sym` at target. Results are positions.
   findFreeOccurrences (sym) {
     return this.getTarget()
       .findFreeOccurrences(sym)
       .map(position => this.position.concat(position))
   },
 
-  // Returns bound occurrences of target's `boundSym` at target.
+  // Returns bound occurrences of target's `boundSym` at target. Results are positions.
   findBoundOccurrences () {
     return this.getTarget()
       .findBoundOccurrences()

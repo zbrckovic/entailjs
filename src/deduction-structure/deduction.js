@@ -21,7 +21,7 @@ _.assign(Deduction.prototype, {
   getSize () { return this.steps.length },
 
   // Gets step by its ordinal number. From regular user's perspective steps are referenced by
-  // positive integers starting from 1. Internally, zero-based indexes are used.
+  // positive integers (ordinal numbers) starting from 1. Internally, zero-based indexes are used.
   getStepByOrdinal (ordinal) { return this.getStep(ordinal - 1) },
 
   // Gets step by index or throws if there's no such step.

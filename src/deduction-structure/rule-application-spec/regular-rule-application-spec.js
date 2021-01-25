@@ -1,4 +1,5 @@
 import { Rule } from '../rule'
+import _ from 'lodash'
 
 // Contains all information necessary to apply a regular rule (not theorem rule) against a
 // deduction.
@@ -22,4 +23,14 @@ export const RegularRuleApplicationSpec = ({
   termDependencies,
   // Assumptions to remove from the inherited set of assumptions.
   assumptionToRemove
-}) => ({ rule, premises, conclusion, termDependencies, assumptionToRemove })
+}) => _.create(RegularRuleApplicationSpec.prototype, {
+  rule,
+  premises,
+  conclusion,
+  termDependencies,
+  assumptionToRemove
+})
+
+_.assign(RegularRuleApplicationSpec.prototype, {
+  constructor: RegularRuleApplicationSpec
+})

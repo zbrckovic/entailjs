@@ -13,16 +13,17 @@ export const Sym = ({
   // context (expression, deduction, etc...). Symbol identity is also established by comparing id.
   id,
 
-  // When this symbol is the main symbol of an expression `kind` determines which of two possible
-  // 'roles' the expression has - it can be either a formula or a term. We will say that expression
-  // is of a kind K when its main symbol is of a kind K.
+  // When this symbol is the main symbol of an expression, `kind` determines which of the two
+  // possible 'roles' the expression has - it can be either a formula or a term. We will say that
+  // expression is of a kind K when its main symbol is of a kind K. So we'll talk about formulas or
+  // terms when referring to expressions.
   kind,
 
-  // When this symbol is the main symbol of an expression `argumentKind` determines what kind of
+  // When this symbol is the main symbol of an expression, `argumentKind` determines what kind of
   // expressions are accepted as children.
   argumentKind,
 
-  // When this symbol is the main symbol of an expression `arity` determines how many children the
+  // When this symbol is the main symbol of an expression, `arity` determines how many children the
   // expression must have.
   arity,
 
@@ -56,6 +57,7 @@ _.assign(Sym.prototype, {
     }
   },
 
+  // Bindable symbols are only nullary terms.
   isBindable () {
     return this.getCategory() === Category.TT && this.arity === 0
   },
@@ -109,9 +111,9 @@ export const Kind = {
   Term: 'Term'
 }
 
-// Given that `kind` and `argumentKind` of symbol can have two values each, there are 4
+// Given that `kind` and `argumentKind` of a symbol can have two values each, there are 4
 // possible combinations. We classify symbols in four **categories**: `FF`, `FT`, `TF`, `TT` where
-// `F` is for 'formula' and `T` is for 'term'). Here are the correlations between `category` values
+// `F` is for 'formula' and `T` is for 'term'. Here are the correlations between `category` values
 // and traditional symbolic logic terminology:
 export const Category = {
   // Corresponds to propositional variables/constants when arity is zero and to propositional

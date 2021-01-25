@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { createError, ErrorName } from '../error'
 import { Kind } from './sym'
 
-// Expression is a recursive tree structure built from symbols.
+// Expression is a recursive tree structure built from symbols. It represents formulas and terms.
 export const Expression = ({
   sym,
   boundSym,
@@ -13,7 +13,7 @@ export const Expression = ({
 
   // Optional bound symbol which will exist if `sym`'s `binds` is true. In first-order logic
   // `boundSym` will always be a nullary term symbol (individual variable), but here we are at a
-  // higher level of abstraction and don't make this assumption.
+  // higher level of abstraction and are not concerned about this.
   boundSym,
 
   // Array of subexpressions whose length will match `sym`'s arity and their kinds will match
@@ -24,19 +24,16 @@ export const Expression = ({
 _.assign(Expression.prototype, {
   constructor: Expression,
 
-  // Returns the child at the index `i` or throws an error.
+  // Returns the child subexpression at the index `i` or throws an error.
   getChild (i) {
     const child = this.children[i]
     if (child === undefined) {
-      throw createError(ErrorName.NO_CHILD_AT_INDEX, undefined, {
-        expression: this,
-        i
-      })
+      throw createError(ErrorName.NO_CHILD_AT_INDEX, undefined, { expression: this, i })
     }
     return child
   },
 
-  // Returns the subexpression at the `position` where position is an array of indexes.
+  // Returns the subexpression at the `position` where `position` is an array of indexes.
   getSubexpression (position) {
     if (position.length === 0) return this
     const [firstIndex, ...restIndexes] = position
@@ -84,9 +81,10 @@ _.assign(Expression.prototype, {
   replaceSymAt (
     position,
     newSym,
-    // Called if `newSym` binds, but old one doesn't.
+    // Called if `newSym` binds, but old one doesn't. `getBoundSym` must produce new symbol to bind.
     getBoundSym,
-    // Called if `newSym` has a larger arity than old one.
+    // Called if `newSym` has a larger arity than old one. `getChild` must produce new children to
+    // be added.
     getChild
   ) {
     return this.updateSubexpression(position, subexpression => {
@@ -298,8 +296,19 @@ _.assign(Expression.prototype, {
       }),
       this.boundSym !== undefined ? _.omit(syms, [`${this.boundSym.id}`]) : syms
     ]
-  }
+  },
 })
+
+// Reduces `expressions` to a single expression using binary connective. Reduction is performed from
+// left to right. For example: From `A, B, C` we get `((A, B), C)`, not `(A, (B, C))`.
+Expression.connectWithBinarySym = (expressions, sym) => {
+  if (expressions.length < 2) throw createError(ErrorName.NOT_ENOUGH_EXPRESSIONS)
+  const [first, second, ...rest] = expressions
+
+  const connect = (first, second) => Expression({ sym, children: [first, second] })
+
+  return rest.reduce(connect, connect(first, second))
+}
 
 const resolveChildren = (oldSym, newSym, oldChildren, getChild) => {
   if (oldSym.argumentKind !== newSym.argumentKind) {
@@ -315,6 +324,7 @@ const resolveChildren = (oldSym, newSym, oldChildren, getChild) => {
   }
 }
 
+// Returns next free id not occurring in `syms`.
 const getNextSymId = syms =>
   _.isEmpty(syms)
     ? 0

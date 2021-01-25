@@ -3,10 +3,21 @@ import { createError, ErrorName } from '../../error'
 import { isLogicalConsequence } from '../../propositional-logic/propositional-logic'
 import { Rule } from '../../deduction-structure'
 import { startDeduction } from '../deduction-interface'
+import _ from 'lodash'
 
-export const TautologicalImplicationRuleInterface = (deduction, stepIndexes = []) => {
-  const apply = formula => {
-    const assumptions = stepIndexes.map(i => deduction.getStep(i).formula)
+export const TautologicalImplicationRuleInterface = ({ deduction, stepIndexes = [] }) => _.create(
+  TautologicalImplicationRuleInterface.prototype,
+  {
+    _deduction: deduction,
+    _stepIndexes: stepIndexes
+  }
+)
+
+_.assign(TautologicalImplicationRuleInterface.prototype, {
+  constructor: TautologicalImplicationRuleInterface,
+
+  apply (formula) {
+    const assumptions = this._stepIndexes.map(i => this._deduction.getStep(i).formula)
 
     if (!isLogicalConsequence(assumptions, formula)) {
       throw createError(
@@ -18,14 +29,12 @@ export const TautologicalImplicationRuleInterface = (deduction, stepIndexes = []
 
     const ruleApplicationSpec = RegularRuleApplicationSpec({
       rule: Rule.TautologicalImplication,
-      premises: [...stepIndexes].sort(),
+      premises: [...this._stepIndexes].sort(),
       conclusion: formula
     })
 
-    const newDeduction = deduction.applyRule(ruleApplicationSpec)
+    const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   }
-
-  return ({ apply })
-}
+})

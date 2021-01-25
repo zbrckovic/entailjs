@@ -57,7 +57,10 @@ export const RulesInterface = (deduction, ...steps) => {
 
       return ConditionalIntroductionRuleInterface({ deduction, step1Index, step2Index })
     },
-    [Rule.TautologicalImplication]: () => TautologicalImplicationRuleInterface(deduction, steps),
+    [Rule.TautologicalImplication]: () => TautologicalImplicationRuleInterface({
+      deduction,
+      stepIndexes: steps
+    }),
     [Rule.UniversalInstantiation]: () => {
       if (steps.length !== 1) return undefined
 
@@ -93,7 +96,7 @@ export const RulesInterface = (deduction, ...steps) => {
     [Rule.Theorem]: () => {
       if (steps.length !== 0) return undefined
 
-      return TheoremRuleInterface(deduction)
+      return TheoremRuleInterface({ deduction })
     },
     [Rule.NegationIntroduction]: () => {
       if (steps.length !== 3) return undefined

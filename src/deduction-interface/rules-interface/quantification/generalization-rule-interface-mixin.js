@@ -1,17 +1,9 @@
-import _ from 'lodash'
 import { createError, ErrorName } from '../../../error'
 import { determineSubstitutionInGeneralizationResult } from '../../deduction-interface-util'
-import { QuantificationRuleInterface } from './quantification-rule-interface'
+import { QuantificationRuleInterfaceMixin } from './quantification-rule-interface-mixin'
 
-export const GeneralizationRuleInterface = ({ deduction, stepIndex }) => _.create(
-  GeneralizationRuleInterface.prototype,
-  { ...QuantificationRuleInterface({ deduction, stepIndex }) }
-)
-
-_.assign(GeneralizationRuleInterface.prototype, {
-  ...QuantificationRuleInterface.prototype,
-
-  constructor: GeneralizationRuleInterface,
+export const GeneralizationRuleInterfaceMixin = {
+  ...QuantificationRuleInterfaceMixin,
 
   // `newTerm` is the generalized term which will be the substitute and `oldTerm` is the instance
   // term which if provided will be substituted with `newTerm`. If `oldTerm` is not provided
@@ -42,4 +34,4 @@ _.assign(GeneralizationRuleInterface.prototype, {
   },
 
   _concreteApply () { throw new Error('not implemented') }
-})
+}

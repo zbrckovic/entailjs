@@ -1,17 +1,11 @@
-import _ from 'lodash'
 import { createError, ErrorName } from '../../../error'
 import { determineNewTermInInstantiationResult } from '../../deduction-interface-util'
-import { QuantificationRuleInterface } from './quantification-rule-interface'
+import {
+  QuantificationRuleInterfaceMixin
+} from './quantification-rule-interface-mixin'
 
-export const InstantiationRuleInterface = ({ deduction, stepIndex }) => _.create(
-  InstantiationRuleInterface.prototype,
-  { ...QuantificationRuleInterface({ deduction, stepIndex }) }
-)
-
-_.assign(InstantiationRuleInterface.prototype, {
-  ...QuantificationRuleInterface.prototype,
-
-  constructor: InstantiationRuleInterface,
+export const InstantiationRuleInterfaceMixin = {
+  ...QuantificationRuleInterfaceMixin,
 
   // `newTerm` is an instance term which if provided will be the substituted. If instantiation is
   // vacuous `newTerm` doesn't need to be provided.
@@ -40,4 +34,4 @@ _.assign(InstantiationRuleInterface.prototype, {
   },
 
   _concreteApply () { throw new Error('not implemented') }
-})
+}

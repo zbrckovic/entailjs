@@ -2,15 +2,15 @@ import _ from 'lodash'
 import { RegularRuleApplicationSpec } from '../../../deduction-structure/rule-application-spec'
 import { Rule } from '../../../deduction-structure'
 import { startDeduction } from '../../deduction-interface'
-import { InstantiationRuleInterface } from './instantiation-rule-interface'
+import { InstantiationRuleInterfaceMixin } from './instantiation-rule-interface-mixin'
 
 export const UniversalInstantiationRuleInterface = ({ deduction, stepIndex }) => _.create(
   UniversalInstantiationRuleInterface.prototype,
-  { ...InstantiationRuleInterface({ deduction, stepIndex }) }
+  { _deduction: deduction, _stepIndex: stepIndex }
 )
 
 _.assign(UniversalInstantiationRuleInterface.prototype, {
-  ...InstantiationRuleInterface.prototype,
+  ...InstantiationRuleInterfaceMixin,
 
   constructor: UniversalInstantiationRuleInterface,
 

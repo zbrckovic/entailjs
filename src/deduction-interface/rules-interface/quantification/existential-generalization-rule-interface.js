@@ -4,15 +4,15 @@ import { Expression } from '../../../abstract-structures'
 import { existentialQuantifier } from '../../../primitive-syms'
 import { startDeduction } from '../../deduction-interface'
 import _ from 'lodash'
-import { GeneralizationRuleInterface } from './generalization-rule-interface'
+import { GeneralizationRuleInterfaceMixin } from './generalization-rule-interface-mixin'
 
 export const ExistentialGeneralizationRuleInterface = ({ deduction, stepIndex }) => _.create(
   ExistentialGeneralizationRuleInterface.prototype,
-  { ...GeneralizationRuleInterface({ deduction, stepIndex }) }
+  { _deduction: deduction, _stepIndex: stepIndex }
 )
 
 _.assign(ExistentialGeneralizationRuleInterface.prototype, {
-  ...GeneralizationRuleInterface.prototype,
+  ...GeneralizationRuleInterfaceMixin,
 
   constructor: ExistentialGeneralizationRuleInterface,
 

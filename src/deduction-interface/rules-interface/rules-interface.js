@@ -42,7 +42,7 @@ export const RulesInterface = (deduction, ...steps) => {
     [Rule.Premise]: () => {
       if (steps.length !== 0) return undefined
 
-      return PremiseRuleInterface(deduction)
+      return PremiseRuleInterface({ deduction })
     },
     [Rule.ConditionalIntroduction]: () => {
       if (steps.length !== 2) return undefined
@@ -55,7 +55,7 @@ export const RulesInterface = (deduction, ...steps) => {
 
       if (!(step1IsPremise && step1IsAssumptionForStep2)) return undefined
 
-      return ConditionalIntroductionRuleInterface(deduction, step1Index, step2Index)
+      return ConditionalIntroductionRuleInterface({ deduction, step1Index, step2Index })
     },
     [Rule.TautologicalImplication]: () => TautologicalImplicationRuleInterface(deduction, steps),
     [Rule.UniversalInstantiation]: () => {
@@ -65,14 +65,14 @@ export const RulesInterface = (deduction, ...steps) => {
       const universallyQuantifiedFormula = deduction.getStep(step).formula
       if (!universallyQuantifiedFormula.sym.equals(universalQuantifier)) return undefined
 
-      return UniversalInstantiationRuleInterface(deduction, step)
+      return UniversalInstantiationRuleInterface({ deduction, stepIndex: step })
     },
     [Rule.UniversalGeneralization]: () => {
       if (steps.length !== 1) return undefined
 
       const [step] = steps
 
-      return UniversalGeneralizationRuleInterface(deduction, step)
+      return UniversalGeneralizationRuleInterface({ deduction, stepIndex: step })
     },
     [Rule.ExistentialInstantiation]: () => {
       if (steps.length !== 1) return undefined
@@ -81,14 +81,14 @@ export const RulesInterface = (deduction, ...steps) => {
       const existentiallyQuantifiedFormula = deduction.getStep(step).formula
       if (!existentiallyQuantifiedFormula.sym.equals(existentialQuantifier)) return undefined
 
-      return ExistentialInstantiationRuleInterface(deduction, step)
+      return ExistentialInstantiationRuleInterface({ deduction, stepIndex: step })
     },
     [Rule.ExistentialGeneralization]: () => {
       if (steps.length !== 1) return undefined
 
       const [step] = steps
 
-      return ExistentialGeneralizationRuleInterface(deduction, step)
+      return ExistentialGeneralizationRuleInterface({ deduction, stepIndex: step })
     },
     [Rule.Theorem]: () => {
       if (steps.length !== 0) return undefined
@@ -117,12 +117,12 @@ export const RulesInterface = (deduction, ...steps) => {
 
       if (!isNegationOf(conclusion2Step.formula, conclusion1Step.formula)) return undefined
 
-      return NegationIntroductionRuleInterface(
+      return NegationIntroductionRuleInterface({
         deduction,
-        premiseStepIndex,
-        conclusion1StepIndex,
-        conclusion2StepIndex
-      )
+        step1Index: premiseStepIndex,
+        step2Index: conclusion1StepIndex,
+        step3Index: conclusion2StepIndex
+      })
     },
     [Rule.NegationElimination]: () => {
       if (steps.length !== 1) return undefined
@@ -132,7 +132,7 @@ export const RulesInterface = (deduction, ...steps) => {
 
       if (!isDoubleNegation(formula)) return undefined
 
-      return NegationEliminationRuleInterface(deduction, stepIndex)
+      return NegationEliminationRuleInterface({ deduction, stepIndex })
     },
     [Rule.Explosion]: () => {
       if (steps.length !== 2) return undefined
@@ -142,7 +142,11 @@ export const RulesInterface = (deduction, ...steps) => {
 
       if (!isNegationOf(step2.formula, step1.formula)) return undefined
 
-      return ExplosionRuleInterface(deduction, step1Index, step2Index)
+      return ExplosionRuleInterface({
+        deduction,
+        affirmativeStepIndex: step1Index,
+        negativeStepIndex: step2Index
+      })
     },
     [Rule.ConditionalElimination]: () => {
       if (steps.length !== 2) return undefined
@@ -152,18 +156,22 @@ export const RulesInterface = (deduction, ...steps) => {
 
       if (!isConditionalFrom(conditional, antecedent)) return undefined
 
-      return ConditionalEliminationRuleInterface(
+      return ConditionalEliminationRuleInterface({
         deduction,
         conditionalStepIndex,
         antecedentStepIndex
-      )
+      })
     },
     [Rule.ConjunctionIntroduction]: () => {
       if (steps.length !== 2) return undefined
 
       const [conjunct1StepIndex, conjunct2StepIndex] = steps
 
-      return ConjunctionIntroductionRuleInterface(deduction, conjunct1StepIndex, conjunct2StepIndex)
+      return ConjunctionIntroductionRuleInterface({
+        deduction,
+        premise1Index: conjunct1StepIndex,
+        premise2Index: conjunct2StepIndex
+      })
     },
     [Rule.ConjunctionElimination]: () => {
       if (steps.length !== 1) return undefined
@@ -173,14 +181,14 @@ export const RulesInterface = (deduction, ...steps) => {
 
       if (!conjunctionFormula.sym.equals(conjunction)) return undefined
 
-      return ConjunctionEliminationRuleInterface(deduction, conjunctionStepIndex)
+      return ConjunctionEliminationRuleInterface({ deduction, premiseIndex: conjunctionStepIndex })
     },
     [Rule.DisjunctionIntroduction]: () => {
       if (steps.length !== 1) return undefined
 
       const [premiseIndex] = steps
 
-      return DisjunctionIntroductionRuleInterface(deduction, premiseIndex)
+      return DisjunctionIntroductionRuleInterface({ deduction, premiseIndex })
     },
     [Rule.DisjunctionElimination]: () => {
       if (steps.length !== 3) return undefined
@@ -209,15 +217,17 @@ export const RulesInterface = (deduction, ...steps) => {
       if (!(
         isConditionalFrom(conditional1Step.formula, disjunct1) &&
         isConditionalFrom(conditional2Step.formula, disjunct2)
-      )) return undefined
+      )) {
+        return undefined
+      }
 
-      return DisjunctionEliminationRuleInterface(
+      return DisjunctionEliminationRuleInterface({
         deduction,
         disjunctionStepIndex,
         conditional1StepIndex,
         conditional2StepIndex,
         consequent
-      )
+      })
     },
     [Rule.BiconditionalIntroduction]: () => {
       if (steps.length !== 2) return undefined
@@ -233,7 +243,11 @@ export const RulesInterface = (deduction, ...steps) => {
       if (!isDeepEqual(antecedent1, consequent2)) return undefined
       if (!isDeepEqual(antecedent2, consequent1)) return undefined
 
-      return BiconditionalIntroductionRuleInterface(deduction, ...steps)
+      return BiconditionalIntroductionRuleInterface({
+        deduction,
+        premise1Index: steps[0],
+        premise2Index: steps[1]
+      })
     },
     [Rule.BiconditionalElimination]: () => {
       if (steps.length !== 1) return undefined
@@ -244,7 +258,7 @@ export const RulesInterface = (deduction, ...steps) => {
 
       if (!premise.sym.equals(biconditional)) return undefined
 
-      return BiconditionalEliminationRuleInterface(deduction, premiseIndex)
+      return BiconditionalEliminationRuleInterface({ deduction, premiseIndex })
     }
   }
 

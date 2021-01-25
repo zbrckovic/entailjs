@@ -3,27 +3,35 @@ import { Rule } from '../../deduction-structure'
 import { startDeduction } from '../deduction-interface'
 import { Expression } from '../../abstract-structures'
 import { negation } from '../../primitive-syms'
+import _ from 'lodash'
 
-export const NegationIntroductionRuleInterface = (
+export const NegationIntroductionRuleInterface = ({
   deduction,
   step1Index,
   step2Index,
   step3Index
-) => {
-  const apply = () => {
+}) => _.create(NegationIntroductionRuleInterface.prototype, {
+  _deduction: deduction,
+  _step1Index: step1Index,
+  _step2Index: step2Index,
+  _step3Index: step3Index,
+})
+
+_.assign(NegationIntroductionRuleInterface.prototype, {
+  constructor: NegationIntroductionRuleInterface,
+
+  apply () {
     const ruleApplicationSpec = RegularRuleApplicationSpec({
       rule: Rule.NegationIntroduction,
-      premises: [step1Index, step2Index, step3Index],
+      premises: [this._step1Index, this._step2Index, this._step3Index],
       conclusion: Expression({
         sym: negation,
-        children: [deduction.getStep(step1Index).formula]
+        children: [this._deduction.getStep(this._step1Index).formula]
       }),
-      assumptionToRemove: step1Index
+      assumptionToRemove: this._step1Index
     })
-    const newDeduction = deduction.applyRule(ruleApplicationSpec)
+    const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
 
     return startDeduction(newDeduction)
   }
-
-  return ({ apply })
-}
+})

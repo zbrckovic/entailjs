@@ -4,7 +4,7 @@ import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-appli
 import { biconditional } from '../../primitive-syms'
 import { startDeduction } from '../deduction-interface'
 
-export const BiconditionalIntroductionRuleInterface = (
+export const BiconditionalIntroductionRuleInterface = ({
   deduction,
   premise1Index,
   premise2Index

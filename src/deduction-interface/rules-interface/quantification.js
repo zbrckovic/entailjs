@@ -6,38 +6,43 @@ import { Expression } from '../../abstract-structures'
 import { determineNewTermInInstantiationResult } from '../../deduction-interface'
 import { determineSubstitutionInGeneralizationResult } from '../deduction-interface-util'
 import { existentialQuantifier, universalQuantifier } from '../../primitive-syms'
+import _ from 'lodash'
 
-export const ExistentialGeneralizationRuleInterface = (deduction, stepIndex) => {
-  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
+export const ExistentialGeneralizationRuleInterface = ({ deduction, stepIndex }) => {
+  const premise = QuantificationRuleInterface({ deduction, stepIndex }).getPremise()
 
-  return GeneralizationRuleInterface(deduction, stepIndex, (newTerm, oldTerm) => {
-    const child = oldTerm !== undefined
-      ? premise.replaceFreeOccurrences(oldTerm, newTerm)
-      : premise
+  return GeneralizationRuleInterface({
+    deduction,
+    stepIndex,
+    concreteApply (newTerm, oldTerm) {
+      const child = oldTerm !== undefined
+        ? premise.replaceFreeOccurrences(oldTerm, newTerm)
+        : premise
 
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.ExistentialGeneralization,
-      premises: [stepIndex],
-      conclusion: Expression({
-        sym: existentialQuantifier,
-        boundSym: newTerm,
-        children: [child]
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.ExistentialGeneralization,
+        premises: [stepIndex],
+        conclusion: Expression({
+          sym: existentialQuantifier,
+          boundSym: newTerm,
+          children: [child]
+        })
       })
-    })
 
-    const newDeduction = deduction.applyRule(ruleApplicationSpec)
+      const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
-    return startDeduction(newDeduction)
+      return startDeduction(newDeduction)
+    }
   })
 }
 
-export const ExistentialInstantiationRuleInterface = (deduction, stepIndex) => {
-  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
+export const ExistentialInstantiationRuleInterface = ({ deduction, stepIndex }) => {
+  const premise = QuantificationRuleInterface({ deduction, stepIndex }).getPremise()
 
-  return InstantiationRuleInterface(
+  return InstantiationRuleInterface({
     deduction,
     stepIndex,
-    newTerm => {
+    concreteApply (newTerm) {
       const [child] = premise.children
       const conclusion = newTerm !== undefined
         ? child.replaceFreeOccurrences(premise.boundSym, newTerm)
@@ -64,11 +69,11 @@ export const ExistentialInstantiationRuleInterface = (deduction, stepIndex) => {
 
       return startDeduction(newDeduction)
     }
-  )
+  })
 }
 
-export const InstantiationRuleInterface = (deduction, stepIndex, concreteApply) => {
-  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
+const InstantiationRuleInterface = ({ deduction, stepIndex, concreteApply }) => {
+  const premise = QuantificationRuleInterface({ deduction, stepIndex }).getPremise()
 
   // `newTerm` is an instance term which if provided will be the substituted. If instantiation is
   // vacuous `newTerm` doesn't need to be provided.
@@ -96,67 +101,75 @@ export const InstantiationRuleInterface = (deduction, stepIndex, concreteApply) 
   })
 }
 
-export const UniversalGeneralizationRuleInterface = (deduction, stepIndex) => {
-  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
+export const UniversalGeneralizationRuleInterface = ({ deduction, stepIndex }) => {
+  const premise = QuantificationRuleInterface({ deduction, stepIndex }).getPremise()
 
-  return GeneralizationRuleInterface(deduction, stepIndex, (newTerm, oldTerm) => {
-    const child = oldTerm !== undefined
-      ? premise.replaceFreeOccurrences(oldTerm, newTerm)
-      : premise
+  return GeneralizationRuleInterface({
+    deduction,
+    stepIndex,
+    concreteApply (newTerm, oldTerm) {
+      const child = oldTerm !== undefined
+        ? premise.replaceFreeOccurrences(oldTerm, newTerm)
+        : premise
 
-    let termDependencies
-    if (oldTerm !== undefined) {
-      const freeTerms = { ...premise.getFreeTerms() }
-      delete freeTerms[oldTerm.id]
+      let termDependencies
+      if (oldTerm !== undefined) {
+        const freeTerms = { ...premise.getFreeTerms() }
+        delete freeTerms[oldTerm.id]
 
-      const freeTermIds = Object.keys(freeTerms).map(id => parseInt(id, 10))
+        const freeTermIds = Object.keys(freeTerms).map(id => parseInt(id, 10))
 
-      termDependencies = { dependent: oldTerm.id, dependencies: new Set(freeTermIds) }
+        termDependencies = { dependent: oldTerm.id, dependencies: new Set(freeTermIds) }
+      }
+
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.UniversalGeneralization,
+        premises: [stepIndex],
+        conclusion: Expression({
+          sym: universalQuantifier,
+          boundSym: newTerm,
+          children: [child]
+        }),
+        termDependencies
+      })
+
+      const newDeduction = deduction.applyRule(ruleApplicationSpec)
+
+      return startDeduction(newDeduction)
     }
-
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.UniversalGeneralization,
-      premises: [stepIndex],
-      conclusion: Expression({
-        sym: universalQuantifier,
-        boundSym: newTerm,
-        children: [child]
-      }),
-      termDependencies
-    })
-
-    const newDeduction = deduction.applyRule(ruleApplicationSpec)
-
-    return startDeduction(newDeduction)
   })
 }
 
-export const UniversalInstantiationRuleInterface = (deduction, stepIndex) => {
-  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
+export const UniversalInstantiationRuleInterface = ({ deduction, stepIndex }) => {
+  const premise = QuantificationRuleInterface({ deduction, stepIndex }).getPremise()
 
-  return InstantiationRuleInterface(deduction, stepIndex, newTerm => {
-    const { boundSym, children } = premise
+  return InstantiationRuleInterface({
+    deduction,
+    stepIndex,
+    concreteApply (newTerm) {
+      const { boundSym, children } = premise
 
-    const [child] = children
+      const [child] = children
 
-    const conclusion = newTerm !== undefined
-      ? child.replaceFreeOccurrences(boundSym, newTerm)
-      : child
+      const conclusion = newTerm !== undefined
+        ? child.replaceFreeOccurrences(boundSym, newTerm)
+        : child
 
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.UniversalInstantiation,
-      premises: [stepIndex],
-      conclusion
-    })
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.UniversalInstantiation,
+        premises: [stepIndex],
+        conclusion
+      })
 
-    const newDeduction = deduction.applyRule(ruleApplicationSpec)
+      const newDeduction = deduction.applyRule(ruleApplicationSpec)
 
-    return startDeduction(newDeduction)
+      return startDeduction(newDeduction)
+    }
   })
 }
 
-export const GeneralizationRuleInterface = (deduction, stepIndex, concreteApply) => {
-  const premise = QuantificationRuleInterface(deduction, stepIndex).getPremise()
+const GeneralizationRuleInterface = ({ deduction, stepIndex, concreteApply }) => {
+  const premise = QuantificationRuleInterface({ deduction, stepIndex }).getPremise()
 
   // `newTerm` is the generalized term which will be the substitute and `oldTerm` is the instance
   // term which if provided will be substituted with `newTerm`. If `oldTerm` is not provided
@@ -186,6 +199,16 @@ export const GeneralizationRuleInterface = (deduction, stepIndex, concreteApply)
   }
 }
 
-export const QuantificationRuleInterface = (deduction, stepIndex) => ({
-  getPremise: () => deduction.getStep(stepIndex).formula
+const QuantificationRuleInterface = ({ deduction, stepIndex }) => _.create(
+  QuantificationRuleInterface.prototype,
+  {
+    _deduction: deduction,
+    _stepIndex: stepIndex
+  }
+)
+
+_.assign(QuantificationRuleInterface.prototype, {
+  constructor: QuantificationRuleInterface,
+
+  getPremise () { return this._deduction.getStep(this._stepIndex).formula }
 })

@@ -2,7 +2,7 @@ import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-appli
 import { Rule } from '../../deduction-structure'
 import { startDeduction } from '../deduction-interface'
 
-export const ConditionalEliminationRuleInterface = (
+export const ConditionalEliminationRuleInterface = ({
   deduction,
   conditionalStepIndex,
   antecedentStepIndex

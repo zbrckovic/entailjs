@@ -26,8 +26,9 @@ export const Sym = ({
   // expression must have.
   arity,
 
-  // When this symbol is the main symbol of an expression `binds` determines whether the expression
-  // also accepts a bound symbol. This will be true for quantifiers.
+  // When this symbol is the main symbol of an expression, `binds` determines whether the expression
+  // also accepts a bound symbol. This will be true for quantifiers and potentially some other
+  // symbols in the future.
   binds
 })
 

@@ -1,40 +1,38 @@
+import stampit from '@stamp/it'
+import { Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
 import { createError, ErrorName } from '../../error'
 import { isLogicalConsequence } from '../../propositional-logic/propositional-logic'
-import { Rule } from '../../deduction-structure'
+import { Base } from '../../utils'
 import { startDeduction } from '../deduction-interface'
-import _ from 'lodash'
 
-export const TautologicalImplicationRuleInterface = ({ deduction, stepIndexes = [] }) => _.create(
-  TautologicalImplicationRuleInterface.prototype,
-  {
-    _deduction: deduction,
-    _stepIndexes: stepIndexes
-  }
-)
+export const TautologicalImplicationRuleInterface = stampit({
+  name: 'TautologicalImplicationRuleInterface',
+  init ({ deduction, stepIndexes }) {
+    this.deduction = deduction
+    this.stepIndexes = stepIndexes
+  },
+  methods: {
+    apply (formula) {
+      const assumptions = this.stepIndexes.map(i => this.deduction.getStep(i).formula)
 
-_.assign(TautologicalImplicationRuleInterface.prototype, {
-  constructor: TautologicalImplicationRuleInterface,
+      if (!isLogicalConsequence(assumptions, formula)) {
+        throw createError(
+          ErrorName.INVALID_TAUTOLOGICAL_IMPLICATION,
+          undefined,
+          { assumptions, formula }
+        )
+      }
 
-  apply (formula) {
-    const assumptions = this._stepIndexes.map(i => this._deduction.getStep(i).formula)
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.TautologicalImplication,
+        premises: [...this.stepIndexes].sort(),
+        conclusion: formula
+      })
 
-    if (!isLogicalConsequence(assumptions, formula)) {
-      throw createError(
-        ErrorName.INVALID_TAUTOLOGICAL_IMPLICATION,
-        undefined,
-        { assumptions, formula }
-      )
+      const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
+
+      return startDeduction(newDeduction)
     }
-
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.TautologicalImplication,
-      premises: [...this._stepIndexes].sort(),
-      conclusion: formula
-    })
-
-    const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
-
-    return startDeduction(newDeduction)
   }
-})
+}).compose(Base)

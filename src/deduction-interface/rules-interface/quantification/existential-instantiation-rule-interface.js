@@ -1,44 +1,40 @@
-import { RegularRuleApplicationSpec } from '../../../deduction-structure/rule-application-spec'
+import stampit from '@stamp/it'
 import { Rule } from '../../../deduction-structure'
+import { RegularRuleApplicationSpec } from '../../../deduction-structure/rule-application-spec'
 import { startDeduction } from '../../deduction-interface'
-import _ from 'lodash'
 import { InstantiationRuleInterfaceMixin } from './instantiation-rule-interface-mixin'
 
-export const ExistentialInstantiationRuleInterface = ({ deduction, stepIndex }) => _.create(
-  ExistentialInstantiationRuleInterface.prototype,
-  { _deduction: deduction, _stepIndex: stepIndex }
-)
+export const ExistentialInstantiationRuleInterface = stampit({
+  name: 'ExistentialInstantiationRuleInterface',
+  methods: {
+    _concreteApply (newTerm) {
+      const premise = this._getPremise()
 
-_.assign(ExistentialInstantiationRuleInterface.prototype, {
-  ...InstantiationRuleInterfaceMixin,
+      const [child] = premise.children
+      const conclusion = newTerm !== undefined
+        ? child.replaceFreeOccurrences(premise.boundSym, newTerm)
+        : child
 
-  _concreteApply (newTerm) {
-    const premise = this._getPremise()
+      let termDependencies
+      if (newTerm !== undefined) {
+        const freeTerms = { ...conclusion.getFreeTerms() }
+        delete freeTerms[newTerm.id]
 
-    const [child] = premise.children
-    const conclusion = newTerm !== undefined
-      ? child.replaceFreeOccurrences(premise.boundSym, newTerm)
-      : child
+        const freeTermIds = Object.keys(freeTerms).map(id => parseInt(id, 10))
 
-    let termDependencies
-    if (newTerm !== undefined) {
-      const freeTerms = { ...conclusion.getFreeTerms() }
-      delete freeTerms[newTerm.id]
+        termDependencies = { dependent: newTerm.id, dependencies: new Set(freeTermIds) }
+      }
 
-      const freeTermIds = Object.keys(freeTerms).map(id => parseInt(id, 10))
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.ExistentialInstantiation,
+        premises: [this._stepIndex],
+        conclusion,
+        termDependencies
+      })
 
-      termDependencies = { dependent: newTerm.id, dependencies: new Set(freeTermIds) }
+      const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
+
+      return startDeduction(newDeduction)
     }
-
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.ExistentialInstantiation,
-      premises: [this._stepIndex],
-      conclusion,
-      termDependencies
-    })
-
-    const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
-
-    return startDeduction(newDeduction)
   }
-})
+}).compose(InstantiationRuleInterfaceMixin)

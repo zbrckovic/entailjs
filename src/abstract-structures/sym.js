@@ -1,110 +1,114 @@
-import _ from 'lodash'
+import stampit from '@stamp/it'
+import { Base } from '../utils'
 
 // `Sym` (short for symbol) is the main entity from which expressions are built. Word `symbol` has
 // been avoided because it's a built-in type in ES6.
-export const Sym = ({
-  id = 0,
-  kind = Kind.Formula,
-  argumentKind = Kind.Formula,
-  arity = 0,
-  binds = false
-} = {}) => _.create(Sym.prototype, {
-  // Non-negative integer which must be the same throughout all of this symbol's occurrences in some
-  // context (expression, deduction, etc...). Symbol identity is also established by comparing id.
-  id,
 
-  // When this symbol is the main symbol of an expression, `kind` determines which of the two
-  // possible 'roles' the expression has - it can be either a formula or a term. We will say that
-  // expression is of a kind K when its main symbol is of a kind K. So we'll talk about formulas or
-  // terms when referring to expressions.
-  kind,
-
-  // When this symbol is the main symbol of an expression, `argumentKind` determines what kind of
-  // expressions are accepted as children.
-  argumentKind,
-
-  // When this symbol is the main symbol of an expression, `arity` determines how many children the
-  // expression must have.
-  arity,
-
-  // When this symbol is the main symbol of an expression, `binds` determines whether the expression
-  // also accepts a bound symbol. This will be true for quantifiers and potentially some other
-  // symbols in the future.
-  binds
-})
-
-_.assign(Sym.prototype, {
-  constructor: Sym,
-
-  getCategory () {
-    switch (this.kind) {
-      case Kind.Formula:
-        switch (this.argumentKind) {
-          case Kind.Formula:
-            return Category.FF
-          case Kind.Term:
-            return Category.FT
-        }
-        break
-      case Kind.Term:
-        switch (this.argumentKind) {
-          case Kind.Formula:
-            return Category.TF
-          case Kind.Term:
-            return Category.TT
-        }
-        break
+export const Sym = stampit({
+  name: 'Sym',
+  statics: {
+    fromCategory (category, spec = {}) {
+      return Sym({ ...spec, ...Sym.getKindsFromCategory(category) })
+    },
+    ff (spec = {}) { return Sym.fromCategory(Category.FF, spec) },
+    ft (spec = {}) { return Sym.fromCategory(Category.FT, spec) },
+    tf (spec = {}) { return Sym.fromCategory(Category.TF, spec) },
+    tt (spec = {}) { return Sym.fromCategory(Category.TT, spec) },
+    getCategoriesWithKind (kind) {
+      switch (kind) {
+        case Kind.Formula:
+          return [Category.FF, Category.FT]
+        case Kind.Term:
+          return [Category.TF, Category.TT]
+      }
+    },
+    getKindsFromCategory (category) {
+      switch (category) {
+        case Category.FF:
+          return {
+            kind: Kind.Formula,
+            argumentKind: Kind.Formula
+          }
+        case Category.FT:
+          return {
+            kind: Kind.Formula,
+            argumentKind: Kind.Term
+          }
+        case Category.TF:
+          return {
+            kind: Kind.Term,
+            argumentKind: Kind.Formula
+          }
+        case Category.TT:
+          return {
+            kind: Kind.Term,
+            argumentKind: Kind.Term
+          }
+      }
     }
   },
+  init ({
+    // Non-negative integer which must be the same throughout all of this symbol's occurrences in
+    // some context (expression, deduction, etc...). Symbol identity is also established by
+    // comparing id.
+    id = 0,
 
-  // Bindable symbols are only nullary terms.
-  isBindable () {
-    return this.getCategory() === Category.TT && this.arity === 0
+    // When this symbol is the main symbol of an expression, `kind` determines which of the two
+    // possible 'roles' the expression has - it can be either a formula or a term. We will say that
+    // expression is of a kind K when its main symbol is of a kind K. So we'll talk about formulas
+    // or terms when referring to expressions.
+    kind = Kind.Formula,
+
+    // When this symbol is the main symbol of an expression, `argumentKind` determines what kind of
+    // expressions are accepted as children.
+    argumentKind = Kind.Formula,
+
+    // When this symbol is the main symbol of an expression, `arity` determines how many children
+    // the expression must have.
+    arity = 0,
+
+    // When this symbol is the main symbol of an expression, `binds` determines whether the
+    // expression also accepts a bound symbol. This will be true for quantifiers and potentially
+    // some other symbols in the future.
+    binds = false
+  }) {
+    this.id = id
+    this.kind = kind
+    this.argumentKind = argumentKind
+    this.arity = arity
+    this.binds = binds
   },
+  methods: {
+    getCategory () {
+      switch (this.kind) {
+        case Kind.Formula:
+          switch (this.argumentKind) {
+            case Kind.Formula:
+              return Category.FF
+            case Kind.Term:
+              return Category.FT
+          }
+          break
+        case Kind.Term:
+          switch (this.argumentKind) {
+            case Kind.Formula:
+              return Category.TF
+            case Kind.Term:
+              return Category.TT
+          }
+          break
+      }
+    },
 
-  equals (sym) { return this.id === sym.id },
-  order (sym) { return this.id - sym.id }
-})
+    // Bindable symbols are only nullary terms.
+    isBindable () {
+      return this.getCategory() === Category.TT && this.arity === 0
+    },
 
-Sym.fromCategory = (category, spec = {}) => Sym({ ...spec, ...Sym.getKindsFromCategory(category) })
-Sym.ff = (spec = {}) => Sym.fromCategory(Category.FF, spec)
-Sym.ft = (spec = {}) => Sym.fromCategory(Category.FT, spec)
-Sym.tf = (spec = {}) => Sym.fromCategory(Category.TF, spec)
-Sym.tt = (spec = {}) => Sym.fromCategory(Category.TT, spec)
-
-Sym.getCategoriesWithKind = kind => {
-  switch (kind) {
-    case Kind.Formula:
-      return [Category.FF, Category.FT]
-    case Kind.Term:
-      return [Category.TF, Category.TT]
+    equals (sym) { return this.id === sym.id },
+    order (sym) { return this.id - sym.id }
   }
-}
-
-Sym.getKindsFromCategory = category => {
-  switch (category) {
-    case Category.FF:
-      return {
-        kind: Kind.Formula,
-        argumentKind: Kind.Formula
-      }
-    case Category.FT:
-      return {
-        kind: Kind.Formula,
-        argumentKind: Kind.Term
-      }
-    case Category.TF:
-      return {
-        kind: Kind.Term,
-        argumentKind: Kind.Formula
-      }
-    case Category.TT:
-      return {
-        kind: Kind.Term,
-        argumentKind: Kind.Term
-      }
-  }
-}
+}).compose(Base)
 
 export const Kind = {
   Formula: 'Formula',

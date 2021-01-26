@@ -1,51 +1,45 @@
-import { RegularRuleApplicationSpec } from '../../../deduction-structure/rule-application-spec'
-import { Rule } from '../../../deduction-structure'
+import stampit from '@stamp/it'
 import { Expression } from '../../../abstract-structures'
+import { Rule } from '../../../deduction-structure'
+import { RegularRuleApplicationSpec } from '../../../deduction-structure/rule-application-spec'
 import { universalQuantifier } from '../../../primitive-syms'
 import { startDeduction } from '../../deduction-interface'
-import _ from 'lodash'
 import { GeneralizationRuleInterfaceMixin } from './generalization-rule-interface-mixin'
 
-export const UniversalGeneralizationRuleInterface = ({ deduction, stepIndex }) => _.create(
-  UniversalGeneralizationRuleInterface.prototype,
-  { _deduction: deduction, _stepIndex: stepIndex }
-)
+export const UniversalGeneralizationRuleInterface = stampit({
+  name: 'UniversalGeneralizationRuleInterface',
+  methods: {
+    _concreteApply (newTerm, oldTerm) {
+      const premise = this._getPremise()
 
-_.assign(UniversalGeneralizationRuleInterface.prototype, {
-  ...GeneralizationRuleInterfaceMixin,
+      const child = oldTerm !== undefined
+        ? premise.replaceFreeOccurrences(oldTerm, newTerm)
+        : premise
 
-  constructor: UniversalGeneralizationRuleInterface,
+      let termDependencies
+      if (oldTerm !== undefined) {
+        const freeTerms = { ...premise.getFreeTerms() }
+        delete freeTerms[oldTerm.id]
 
-  _concreteApply (newTerm, oldTerm) {
-    const premise = this._getPremise()
+        const freeTermIds = Object.keys(freeTerms).map(id => parseInt(id, 10))
 
-    const child = oldTerm !== undefined
-      ? premise.replaceFreeOccurrences(oldTerm, newTerm)
-      : premise
+        termDependencies = { dependent: oldTerm.id, dependencies: new Set(freeTermIds) }
+      }
 
-    let termDependencies
-    if (oldTerm !== undefined) {
-      const freeTerms = { ...premise.getFreeTerms() }
-      delete freeTerms[oldTerm.id]
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.UniversalGeneralization,
+        premises: [this._stepIndex],
+        conclusion: Expression({
+          sym: universalQuantifier,
+          boundSym: newTerm,
+          children: [child]
+        }),
+        termDependencies
+      })
 
-      const freeTermIds = Object.keys(freeTerms).map(id => parseInt(id, 10))
+      const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
 
-      termDependencies = { dependent: oldTerm.id, dependencies: new Set(freeTermIds) }
+      return startDeduction(newDeduction)
     }
-
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.UniversalGeneralization,
-      premises: [this._stepIndex],
-      conclusion: Expression({
-        sym: universalQuantifier,
-        boundSym: newTerm,
-        children: [child]
-      }),
-      termDependencies
-    })
-
-    const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
-
-    return startDeduction(newDeduction)
   }
-})
+}).compose(GeneralizationRuleInterfaceMixin)

@@ -1,23 +1,24 @@
-import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
-import { startDeduction } from '../deduction-interface'
+import stampit from '@stamp/it'
 import { Rule } from '../../deduction-structure'
-import _ from 'lodash'
+import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
+import { Base } from '../../utils'
+import { startDeduction } from '../deduction-interface'
 
-export const PremiseRuleInterface = ({ deduction }) => _.create(PremiseRuleInterface.prototype, {
-  _deduction: deduction
-})
+export const PremiseRuleInterface = stampit({
+  name: 'PremiseRuleInterface',
+  init ({ deduction }) {
+    this.deduction = deduction
+  },
+  methods: {
+    apply (formula) {
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.Premise,
+        conclusion: formula
+      })
 
-_.assign(PremiseRuleInterface.prototype, {
-  constructor: PremiseRuleInterface,
+      const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
 
-  apply (formula) {
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.Premise,
-      conclusion: formula
-    })
-
-    const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
-
-    return startDeduction(newDeduction)
+      return startDeduction(newDeduction)
+    }
   }
-})
+}).compose(Base)

@@ -1,4 +1,5 @@
 // Finds duplicates in `items` by using *same-value-zero* equality comparison.
+import stampit from '@stamp/it'
 import _ from 'lodash'
 
 export const findDuplicates = items => {
@@ -28,3 +29,11 @@ export const isDeepEqual = (received, other, equalsMethod) =>
     if (_.isFunction(first?.equals) && first.equals !== equalsMethod) return first.equals(second)
     return undefined
   })
+
+export const Base = stampit.composers(({ stamp }) => {
+  stamp.compose.methods = stamp.compose.methods ?? {}
+  stamp.compose.methods.getStamp = () => stamp
+  stamp.compose.methods.clone = function (spec = {}) {
+    return Object.assign(stamp(), this, spec)
+  }
+})

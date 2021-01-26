@@ -1,29 +1,29 @@
-import _ from 'lodash'
+import stampit from '@stamp/it'
 import { Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
+import { Base } from '../../utils'
 import { startDeduction } from '../deduction-interface'
 
-export const ConjunctionEliminationRuleInterface = ({ deduction, premiseIndex }) =>
-  _.create(ConjunctionEliminationRuleInterface.prototype, {
-    _deduction: deduction,
-    _premiseIndex: premiseIndex
-  })
+export const ConjunctionEliminationRuleInterface = stampit({
+  name: 'ConjunctionEliminationRuleInterface',
+  init ({ deduction, premiseIndex }) {
+    this.deduction = deduction
+    this.premiseIndex = premiseIndex
+  },
+  methods: {
+    // Expects 0 or 1.
+    apply (childIndex) {
+      const premise = this.deduction.getStep(this.premiseIndex).formula
+      const conclusion = premise.children[childIndex]
 
-_.assign(ConjunctionEliminationRuleInterface.prototype, {
-  constructor: ConjunctionEliminationRuleInterface,
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.ConjunctionElimination,
+        premises: [this.premiseIndex],
+        conclusion
+      })
+      const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
 
-  // Expects 0 or 1.
-  apply (childIndex) {
-    const premise = this._deduction.getStep(this._premiseIndex).formula
-    const conclusion = premise.children[childIndex]
-
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.ConjunctionElimination,
-      premises: [this._premiseIndex],
-      conclusion
-    })
-    const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
-
-    return startDeduction(newDeduction)
+      return startDeduction(newDeduction)
+    }
   }
-})
+}).compose(Base)

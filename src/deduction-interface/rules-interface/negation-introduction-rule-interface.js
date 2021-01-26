@@ -1,37 +1,38 @@
-import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
-import { Rule } from '../../deduction-structure'
-import { startDeduction } from '../deduction-interface'
+import stampit from '@stamp/it'
 import { Expression } from '../../abstract-structures'
+import { Rule } from '../../deduction-structure'
+import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
 import { negation } from '../../primitive-syms'
-import _ from 'lodash'
+import { Base } from '../../utils'
+import { startDeduction } from '../deduction-interface'
 
-export const NegationIntroductionRuleInterface = ({
-  deduction,
-  step1Index,
-  step2Index,
-  step3Index
-}) => _.create(NegationIntroductionRuleInterface.prototype, {
-  _deduction: deduction,
-  _step1Index: step1Index,
-  _step2Index: step2Index,
-  _step3Index: step3Index,
-})
+export const NegationIntroductionRuleInterface = stampit({
+  name: 'NegationIntroductionRuleInterface',
+  init ({
+    deduction,
+    step1Index,
+    step2Index,
+    step3Index
+  }) {
+    this.deduction = deduction
+    this.step1Index = step1Index
+    this.step2Index = step2Index
+    this.step3Index = step3Index
+  },
+  methods: {
+    apply () {
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.NegationIntroduction,
+        premises: [this.step1Index, this.step2Index, this.step3Index],
+        conclusion: Expression({
+          sym: negation,
+          children: [this.deduction.getStep(this.step1Index).formula]
+        }),
+        assumptionToRemove: this.step1Index
+      })
+      const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
 
-_.assign(NegationIntroductionRuleInterface.prototype, {
-  constructor: NegationIntroductionRuleInterface,
-
-  apply () {
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.NegationIntroduction,
-      premises: [this._step1Index, this._step2Index, this._step3Index],
-      conclusion: Expression({
-        sym: negation,
-        children: [this._deduction.getStep(this._step1Index).formula]
-      }),
-      assumptionToRemove: this._step1Index
-    })
-    const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
-
-    return startDeduction(newDeduction)
+      return startDeduction(newDeduction)
+    }
   }
-})
+}).compose(Base)

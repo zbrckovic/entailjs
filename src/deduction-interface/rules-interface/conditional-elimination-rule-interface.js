@@ -1,32 +1,33 @@
-import _ from 'lodash'
+import stampit from '@stamp/it'
 import { Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
+import { Base } from '../../utils'
 import { startDeduction } from '../deduction-interface'
 
-export const ConditionalEliminationRuleInterface = ({
-  deduction,
-  conditionalStepIndex,
-  antecedentStepIndex
-}) => _.create(ConditionalEliminationRuleInterface.prototype, {
-  _deduction: deduction,
-  _conditionalStepIndex: conditionalStepIndex,
-  _antecedentStepIndex: antecedentStepIndex
-})
+export const ConditionalEliminationRuleInterface = stampit({
+  name: 'ConditionalEliminationRuleInterface',
+  init ({
+    deduction,
+    conditionalStepIndex,
+    antecedentStepIndex
+  }) {
+    this.deduction = deduction
+    this.conditionalStepIndex = conditionalStepIndex
+    this.antecedentStepIndex = antecedentStepIndex
+  },
+  methods: {
+    apply () {
+      const conditional = this.deduction.getStep(this.conditionalStepIndex).formula
+      const [, consequent] = conditional.children
 
-_.assign(ConditionalEliminationRuleInterface.prototype, {
-  constructor: ConditionalEliminationRuleInterface,
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.ConditionalElimination,
+        premises: [this.conditionalStepIndex, this.antecedentStepIndex],
+        conclusion: consequent
+      })
+      const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
 
-  apply () {
-    const conditional = this._deduction.getStep(this._conditionalStepIndex).formula
-    const [, consequent] = conditional.children
-
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.ConditionalElimination,
-      premises: [this._conditionalStepIndex, this._antecedentStepIndex],
-      conclusion: consequent
-    })
-    const newDeduction = this._deduction.applyRule(ruleApplicationSpec)
-
-    return startDeduction(newDeduction)
+      return startDeduction(newDeduction)
+    }
   }
-})
+}).compose(Base)

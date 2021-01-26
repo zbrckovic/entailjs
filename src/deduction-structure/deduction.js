@@ -1,166 +1,161 @@
-import _ from 'lodash'
+import stampit from '@stamp/it'
+import { Base } from '../utils'
 import { Rule } from './rule'
 import { RegularRuleApplicationSummary, Step, TheoremRuleApplicationSummary } from './step'
 import { TermDependencyGraph } from './term-dependency-graph'
 
 // Structure containing all relevant information about some deduction (proof) carried out as a
 // sequence of steps.
-export const Deduction = ({
-  // Sequence of steps.
-  steps = [],
-  // Graph containing information about dependencies between terms.
-  termDependencyGraph = TermDependencyGraph()
-} = {}) => _.create(Deduction.prototype, {
-  steps,
-  termDependencyGraph
-})
-
-_.assign(Deduction.prototype, {
-  constructor: Deduction,
-
-  getSize () { return this.steps.length },
-
-  // Gets step by its ordinal number. From regular user's perspective steps are referenced by
-  // positive integers (ordinal numbers) starting from 1. Internally, zero-based indexes are used.
-  getStepByOrdinal (ordinal) { return this.getStep(ordinal - 1) },
-
-  // Gets step by index or throws if there's no such step.
-  getStep (stepIndex) {
-    const step = this.steps[stepIndex]
-    if (step === undefined) throw new Error(`no step at index ${stepIndex}`)
-    return step
-  },
-
-  // Gets all symbols appearing in deduction (free or not).
-  getSyms () {
-    const syms = {}
-    this.steps.forEach(step => { Object.assign(syms, step.formula.getSyms()) })
-    return syms
-  },
-
-  getLastStep () {
-    const step = this.steps[this.steps.length - 1]
-    if (step === undefined) throw new Error('no last step')
-    return step
-  },
-
-  // Derives new deduction by applying rule specified by `ruleApplicationSpec`.
-  applyRule (ruleApplicationSpec) {
-    return ruleApplicationSpec.rule === Rule.Theorem
-      ? this._applyTheoremRule(ruleApplicationSpec)
-      : this._applyRegularRule(ruleApplicationSpec)
-  },
-
-  _applyTheoremRule ({
-    theorem: formula,
-    theoremId
+export const Deduction = stampit({
+  name: 'Deduction',
+  init ({
+    // Sequence of steps.
+    steps = [],
+    // Graph containing information about dependencies between terms.
+    termDependencyGraph = TermDependencyGraph()
   }) {
-    const ruleApplicationSummary = TheoremRuleApplicationSummary({ theoremId })
-    const step = Step({
-      formula,
-      ruleApplicationSummary
-    })
-    return this._addStep(step)
+    this.steps = steps
+    this.termDependencyGraph = termDependencyGraph
   },
+  methods: {
+    getSize () { return this.steps.length },
 
-  _applyRegularRule ({
-    rule,
-    premises,
-    conclusion,
-    termDependencies,
-    assumptionToRemove
-  }) {
-    const assumptions = this._calculateAssumptions(premises, [assumptionToRemove])
+    // Gets step by its ordinal number. From regular user's perspective steps are referenced by
+    // positive integers (ordinal numbers) starting from 1. Internally, zero-based indexes are used.
+    getStepByOrdinal (ordinal) { return this.getStep(ordinal - 1) },
 
-    let graph = this.termDependencyGraph
-    let removedTermDependencies
-    if (termDependencies !== undefined) {
-      ([graph, removedTermDependencies] = this._updateGraph(termDependencies))
-    }
+    // Gets step by index or throws if there's no such step.
+    getStep (stepIndex) {
+      const step = this.steps[stepIndex]
+      if (step === undefined) throw new Error(`no step at index ${stepIndex}`)
+      return step
+    },
 
-    const ruleApplicationSummary = RegularRuleApplicationSummary({
+    // Gets all symbols appearing in deduction (free or not).
+    getSyms () {
+      const syms = {}
+      this.steps.forEach(step => { Object.assign(syms, step.formula.getSyms()) })
+      return syms
+    },
+
+    getLastStep () {
+      const step = this.steps[this.steps.length - 1]
+      if (step === undefined) throw new Error('no last step')
+      return step
+    },
+
+    // Derives new deduction by applying rule specified by `ruleApplicationSpec`.
+    applyRule (ruleApplicationSpec) {
+      return ruleApplicationSpec.rule === Rule.Theorem
+        ? this._applyTheoremRule(ruleApplicationSpec)
+        : this._applyRegularRule(ruleApplicationSpec)
+    },
+
+    _applyTheoremRule ({
+      theorem: formula,
+      theoremId
+    }) {
+      const ruleApplicationSummary = TheoremRuleApplicationSummary({ theoremId })
+      const step = Step({
+        formula,
+        ruleApplicationSummary
+      })
+      return this._addStep(step)
+    },
+
+    _applyRegularRule ({
       rule,
       premises,
-      addedTermDependencies: termDependencies,
-      removedTermDependencies
-    })
+      conclusion,
+      termDependencies,
+      assumptionToRemove
+    }) {
+      const assumptions = this._calculateAssumptions(premises, [assumptionToRemove])
 
-    const step = Step({
-      assumptions,
-      formula: conclusion,
-      ruleApplicationSummary
-    })
-
-    return this._addStep(step)._setGraph(graph)
-  },
-
-  // Calculates new graph according to changes required by the rule's term dependencies. Also
-  // creates a second graph which contains removed term dependencies. Returns both graphs as a
-  // result.
-  _updateGraph (termDependencies) {
-    const {
-      dependent,
-      dependencies
-    } = termDependencies
-
-    const removedTermDependencies = TermDependencyGraph()
-
-    const graph = this.termDependencyGraph.addDependencies(
-      dependent,
-      [...dependencies],
-      (dependentTerm, dependencyTerm) => {
-        let dependencyTerms = removedTermDependencies.getDirectDependencies(dependentTerm)
-        if (dependencyTerms === undefined) {
-          dependencyTerms = new Set()
-          removedTermDependencies.setDirectDependencies(dependentTerm, dependencyTerms)
-        }
-        dependencyTerms.add(dependencyTerm)
+      let graph = this.termDependencyGraph
+      let removedTermDependencies
+      if (termDependencies !== undefined) {
+        ([graph, removedTermDependencies] = this._updateGraph(termDependencies))
       }
-    )
 
-    return [graph, removedTermDependencies]
-  },
+      const ruleApplicationSummary = RegularRuleApplicationSummary({
+        rule,
+        premises,
+        addedTermDependencies: termDependencies,
+        removedTermDependencies
+      })
 
-  _setGraph (termDependencyGraph) {
-    return this.constructor({
-      ...this,
-      termDependencyGraph
-    })
-  },
-
-  _addStep (step) {
-    return this.constructor({
-      ...this,
-      steps: [...this.steps, step]
-    })
-  },
-
-  // Calculates which assumptions must be added to the next step according to the specified rule's
-  // premises. Assumptions are inherited from all premises of the rule. In addition to that if the
-  // premise was introduced by `Premise` or `Theorem` rule, its index is also added as an
-  // assumption.
-  _calculateAssumptions (premises, toRemove) {
-    const result = new Set()
-
-    premises.forEach(premise => {
-      const step = this.getStep(premise)
-
-      const {
+      const step = Step({
         assumptions,
-        ruleApplicationSummary: { rule }
-      } = step
+        formula: conclusion,
+        ruleApplicationSummary
+      })
 
-      if (rule === Rule.Premise || rule === Rule.Theorem) {
-        result.add(premise)
+      return this._addStep(step)._setGraph(graph)
+    },
+
+    // Calculates new graph according to changes required by the rule's term dependencies. Also
+    // creates a second graph which contains removed term dependencies. Returns both graphs as a
+    // result.
+    _updateGraph (termDependencies) {
+      const {
+        dependent,
+        dependencies
+      } = termDependencies
+
+      const removedTermDependencies = TermDependencyGraph()
+
+      const graph = this.termDependencyGraph.addDependencies(
+        dependent,
+        [...dependencies],
+        (dependentTerm, dependencyTerm) => {
+          let dependencyTerms = removedTermDependencies.getDirectDependencies(dependentTerm)
+          if (dependencyTerms === undefined) {
+            dependencyTerms = new Set()
+            removedTermDependencies.setDirectDependencies(dependentTerm, dependencyTerms)
+          }
+          dependencyTerms.add(dependencyTerm)
+        }
+      )
+
+      return [graph, removedTermDependencies]
+    },
+
+    _setGraph (termDependencyGraph) {
+      return this.clone({ termDependencyGraph })
+    },
+
+    _addStep (step) {
+      return this.clone({ steps: [...this.steps, step] })
+    },
+
+    // Calculates which assumptions must be added to the next step according to the specified rule's
+    // premises. Assumptions are inherited from all premises of the rule. In addition to that if the
+    // premise was introduced by `Premise` or `Theorem` rule, its index is also added as an
+    // assumption.
+    _calculateAssumptions (premises, toRemove) {
+      const result = new Set()
+
+      premises.forEach(premise => {
+        const step = this.getStep(premise)
+
+        const {
+          assumptions,
+          ruleApplicationSummary: { rule }
+        } = step
+
+        if (rule === Rule.Premise || rule === Rule.Theorem) {
+          result.add(premise)
+        }
+
+        assumptions.forEach(assumption => { result.add(assumption) })
+      })
+
+      if (toRemove !== undefined) {
+        toRemove.forEach(assumption => { result.delete(assumption) })
       }
 
-      assumptions.forEach(assumption => { result.add(assumption) })
-    })
-
-    if (toRemove !== undefined) {
-      toRemove.forEach(assumption => { result.delete(assumption) })
+      return result
     }
-
-    return result
   }
-})
+}).compose(Base)

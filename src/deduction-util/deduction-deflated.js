@@ -1,69 +1,69 @@
-import _ from 'lodash'
+import stampit from '@stamp/it'
+import { Base } from '../utils'
 
-export const DeductionDeflated = ({ steps }) => _.create(DeductionDeflated.prototype, {
-  steps
-})
+export const DeductionDeflated = stampit({
+  name: 'DeductionDeflated',
+  init ({ steps }) {
+    this.steps = steps
+  },
+  methods: {
+    normalize (syms) {
+      const normalizedSteps = []
+      let substitutions = syms
 
-_.assign(DeductionDeflated.prototype, {
-  constructor: DeductionDeflated,
+      this.steps.forEach(step => {
+        const [normalizedStep, updatedSubstitutions] = step.normalize(substitutions)
+        normalizedSteps.push(normalizedStep)
+        substitutions = updatedSubstitutions
+      })
 
-  normalize (syms) {
-    const normalizedSteps = []
-    let substitutions = syms
+      const normalizedDeductionDeflated = this.constructor({
+        ...this,
+        steps: normalizedSteps
+      })
 
-    this.steps.forEach(step => {
-      const [normalizedStep, updatedSubstitutions] = step.normalize(substitutions)
-      normalizedSteps.push(normalizedStep)
-      substitutions = updatedSubstitutions
-    })
-
-    const normalizedDeductionDeflated = this.constructor({
-      ...this,
-      steps: normalizedSteps
-    })
-
-    return [normalizedDeductionDeflated, syms]
-  }
-})
-
-export const StepDeflated = ({
-  steps,
-  formula,
-  rule,
-  oldTerm,
-  newTerm
-}) => _.create(StepDeflated.prototype, {
-  steps,
-  formula,
-  rule,
-  oldTerm,
-  newTerm
-})
-
-_.assign(StepDeflated.prototype, {
-  constructor: StepDeflated,
-
-  normalize (syms) {
-    let normalizedFormula
-    let normalizedOldTerm
-    let normalizedNewTerm
-    let substitutions = syms;
-
-    ([normalizedFormula, substitutions] = this.formula.normalize(substitutions))
-
-    if (this.oldTerm !== undefined) {
-      normalizedOldTerm = substitutions[this.oldTerm]
+      return [normalizedDeductionDeflated, syms]
     }
-
-    if (this.newTerm !== undefined) {
-      normalizedNewTerm = substitutions[this.newTerm]
-    }
-
-    return StepDeflated({
-      ...this,
-      formula: normalizedFormula,
-      oldTerm: normalizedOldTerm,
-      newTerm: normalizedNewTerm
-    })
   }
-})
+}).compose(Base)
+
+export const StepDeflated = stampit({
+  name: 'StepDeflated',
+  init ({
+    steps,
+    formula,
+    rule,
+    oldTerm,
+    newTerm
+  }) {
+    this.steps = steps
+    this.formula = formula
+    this.rule = rule
+    this.oldTerm = oldTerm
+    this.newTerm = newTerm
+  },
+  methods: {
+    normalize (syms) {
+      let normalizedFormula
+      let normalizedOldTerm
+      let normalizedNewTerm
+      let substitutions = syms;
+
+      ([normalizedFormula, substitutions] = this.formula.normalize(substitutions))
+
+      if (this.oldTerm !== undefined) {
+        normalizedOldTerm = substitutions[this.oldTerm]
+      }
+
+      if (this.newTerm !== undefined) {
+        normalizedNewTerm = substitutions[this.newTerm]
+      }
+
+      this.clone({
+        formula: normalizedFormula,
+        oldTerm: normalizedOldTerm,
+        newTerm: normalizedNewTerm
+      })
+    }
+  }
+}).compose(Base)

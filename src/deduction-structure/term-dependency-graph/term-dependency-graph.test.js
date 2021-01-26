@@ -1,7 +1,7 @@
 import { ErrorName } from '../../error'
 import { TermDependencyGraph } from './term-dependency-graph'
 
-describe('#addDirectDependency()', () => {
+describe('.addDirectDependency()', () => {
   test(`throws ${ErrorName.TERM_ALREADY_USED}`, () => {
     const graph = TermDependencyGraph({ 0: new Set() })
 
@@ -72,7 +72,7 @@ describe('#addDirectDependency()', () => {
   })
 })
 
-test('#hasDirectDependency()', () => {
+test('.hasDirectDependency()', () => {
   const graph = TermDependencyGraph({
     0: new Set([1, 2]),
     2: new Set([3])
@@ -84,7 +84,7 @@ test('#hasDirectDependency()', () => {
   expect(graph.hasDependency(0, 2)).toBe(true)
 })
 
-test('#hasDependency()', () => {
+test('.hasDependency()', () => {
   const graph = TermDependencyGraph({
     0: new Set([1, 2]),
     2: new Set([3])
@@ -95,7 +95,7 @@ test('#hasDependency()', () => {
   expect(graph.hasDependency(0, 3)).toBe(true)
 })
 
-test('#getDirectDependents()', () => {
+test('.getDirectDependents()', () => {
   const graph = TermDependencyGraph({
     0: new Set([2, 3]),
     1: new Set([2])
@@ -105,7 +105,7 @@ test('#getDirectDependents()', () => {
   expect(new Set(graph.getDirectDependents(0))).toDeepEqual(new Set())
 })
 
-test('#getDependents()', () => {
+test('.getDependents()', () => {
   const graph = TermDependencyGraph({
     0: new Set([1]),
     1: new Set([3]),
@@ -116,7 +116,7 @@ test('#getDependents()', () => {
   expect(new Set(graph.getDependents(3))).toDeepEqual(new Set([1, 2, 0]))
 })
 
-test('#getDependencies()', () => {
+test('.getDependencies()', () => {
   const graph = TermDependencyGraph({
     0: new Set([1, 2]),
     2: new Set([3])

@@ -1,5 +1,6 @@
+import stampit from '@stamp/it'
+import { Base } from '../../utils'
 import { Rule } from '../rule'
-import _ from 'lodash'
 
 // Contains all information necessary to apply a regular rule (not theorem rule) against a
 // deduction.
@@ -13,24 +14,23 @@ import _ from 'lodash'
 // All regular rules (excluding theorem) are reduced to this object. It contains all data
 // necessary to construct the next step of the target deduction. This object can be considered
 // as a sort of common denominator of all regular rules.
-export const RegularRuleApplicationSpec = ({
-  rule = Rule.Premise,
-  // Formulas which will serve as the premises of this rule.
-  premises = [],
-  // Resulting formula which will be introduced in the next target deduction's step.
-  conclusion,
-  // Term dependencies with which to extend target deduction's term dependency graph.
-  termDependencies,
-  // Assumptions to remove from the inherited set of assumptions.
-  assumptionToRemove
-}) => _.create(RegularRuleApplicationSpec.prototype, {
-  rule,
-  premises,
-  conclusion,
-  termDependencies,
-  assumptionToRemove
-})
-
-_.assign(RegularRuleApplicationSpec.prototype, {
-  constructor: RegularRuleApplicationSpec
-})
+export const RegularRuleApplicationSpec = stampit({
+  name: 'RegularRuleApplicationSpec',
+  init ({
+    rule = Rule.Premise,
+    // Formulas which will serve as the premises of this rule.
+    premises = [],
+    // Resulting formula which will be introduced in the next target deduction's step.
+    conclusion,
+    // Term dependencies with which to extend target deduction's term dependency graph.
+    termDependencies,
+    // Assumptions to remove from the inherited set of assumptions.
+    assumptionToRemove
+  }) {
+    this.rule = rule
+    this.premises = premises
+    this.conclusion = conclusion
+    this.termDependencies = termDependencies
+    this.assumptionToRemove = assumptionToRemove
+  }
+}).compose(Base)

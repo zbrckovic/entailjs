@@ -1,14 +1,17 @@
-import _ from 'lodash'
+import stampit from '@stamp/it'
 import { Rule } from '../rule'
 
 // Contains all information necessary to apply the theorem rule against a deduction.
 // TODO: needs more work when theorem handling is developed
-export const TheoremRuleApplicationSpec = ({
-  // Identifier of the theorem in a project.
-  theoremId,
-  theorem
-}) => _.create(TheoremRuleApplicationSpec.prototype, { rule: Rule.Theorem, theoremId, theorem })
-
-_.assign(TheoremRuleApplicationSpec.prototype, {
-  constructor: TheoremRuleApplicationSpec
+export const TheoremRuleApplicationSpec = stampit({
+  name: 'TheoremRuleApplicationSpec',
+  init ({
+    // Identifier of the theorem in a project.
+    theoremId,
+    theorem
+  }) {
+    this.rule = Rule.Theorem
+    this.theoremId = theoremId
+    this.theorem = theorem
+  }
 })

@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -503,10 +538,11 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./rule&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> { Base } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../utils&#x27;</span>
+<span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./rule&#x27;</span>
 <span class="hljs-keyword">import</span> { RegularRuleApplicationSummary, Step, TheoremRuleApplicationSummary } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./step&#x27;</span>
-<span class="hljs-keyword">import</span> { TermDependencyGraph } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./term-dependency-graph&#x27;</span>
-<span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../abstract-structures&#x27;</span></pre></div></div>
+<span class="hljs-keyword">import</span> { TermDependencyGraph } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./term-dependency-graph&#x27;</span></pre></div></div>
             
         </li>
         
@@ -522,7 +558,9 @@ sequence of steps.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Deduction = ({</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Deduction = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Deduction&#x27;</span>,
+  init ({</pre></div></div>
             
         </li>
         
@@ -537,7 +575,7 @@ sequence of steps.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  steps = [],</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    steps = [],</pre></div></div>
             
         </li>
         
@@ -552,10 +590,13 @@ sequence of steps.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  termDependencyGraph = TermDependencyGraph()
-} = {}) =&gt; ({ steps, termDependencyGraph })
-
-Deduction.getSize = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span> deduction.steps.length</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    termDependencyGraph = TermDependencyGraph()
+  }) {
+    <span class="hljs-built_in">this</span>.steps = steps
+    <span class="hljs-built_in">this</span>.termDependencyGraph = termDependencyGraph
+  },
+  <span class="hljs-attr">methods</span>: {
+    getSize () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.steps.length },</pre></div></div>
             
         </li>
         
@@ -567,11 +608,11 @@ Deduction.getSize = <span class="hljs-function"><span class="hljs-params">deduct
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Gets step by its ordinal number. From regular user’s perspective steps are referenced by
-positive integers starting from 1. Internally, zero-based indexes are used.</p>
+positive integers (ordinal numbers) starting from 1. Internally, zero-based indexes are used.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Deduction.getStepByOrdinal = <span class="hljs-function">(<span class="hljs-params">deduction, ordinal</span>) =&gt;</span> Deduction.getStep(deduction, ordinal - <span class="hljs-number">1</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    getStepByOrdinal (ordinal) { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.getStep(ordinal - <span class="hljs-number">1</span>) },</pre></div></div>
             
         </li>
         
@@ -586,11 +627,11 @@ positive integers starting from 1. Internally, zero-based indexes are used.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Deduction.getStep = <span class="hljs-function">(<span class="hljs-params">deduction, stepIndex</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> step = deduction.steps[stepIndex]
-  <span class="hljs-keyword">if</span> (step === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`no step at index <span class="hljs-subst">${stepIndex}</span>`</span>)
-  <span class="hljs-keyword">return</span> step
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    getStep (stepIndex) {
+      <span class="hljs-keyword">const</span> step = <span class="hljs-built_in">this</span>.steps[stepIndex]
+      <span class="hljs-keyword">if</span> (step === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`no step at index <span class="hljs-subst">${stepIndex}</span>`</span>)
+      <span class="hljs-keyword">return</span> step
+    },</pre></div></div>
             
         </li>
         
@@ -605,18 +646,17 @@ positive integers starting from 1. Internally, zero-based indexes are used.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Deduction.getSyms = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span> {
-  <span class="hljs-keyword">const</span> syms = {}
-  deduction.steps.forEach(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> { <span class="hljs-built_in">Object</span>.assign(syms, Expression.getSyms(step.formula)) })
+            <div class="content"><div class='highlight'><pre>    getSyms () {
+      <span class="hljs-keyword">const</span> syms = {}
+      <span class="hljs-built_in">this</span>.steps.forEach(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> { <span class="hljs-built_in">Object</span>.assign(syms, step.formula.getSyms()) })
+      <span class="hljs-keyword">return</span> syms
+    },
 
-  <span class="hljs-keyword">return</span> syms
-}
-
-Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span> {
-  <span class="hljs-keyword">const</span> step = deduction.steps[deduction.steps.length - <span class="hljs-number">1</span>]
-  <span class="hljs-keyword">if</span> (step === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;no last step&#x27;</span>)
-  <span class="hljs-keyword">return</span> step
-}</pre></div></div>
+    getLastStep () {
+      <span class="hljs-keyword">const</span> step = <span class="hljs-built_in">this</span>.steps[<span class="hljs-built_in">this</span>.steps.length - <span class="hljs-number">1</span>]
+      <span class="hljs-keyword">if</span> (step === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;no last step&#x27;</span>)
+      <span class="hljs-keyword">return</span> step
+    },</pre></div></div>
             
         </li>
         
@@ -631,51 +671,54 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Deduction.applyRule = <span class="hljs-function">(<span class="hljs-params">deduction, ruleApplicationSpec</span>) =&gt;</span> {
-  <span class="hljs-keyword">return</span> ruleApplicationSpec.rule === Rule.Theorem
-    ? applyTheoremRule(deduction, ruleApplicationSpec)
-    : applyRegularRule(deduction, ruleApplicationSpec)
-}
+            <div class="content"><div class='highlight'><pre>    applyRule (ruleApplicationSpec) {
+      <span class="hljs-keyword">return</span> ruleApplicationSpec.rule === Rule.Theorem
+        ? <span class="hljs-built_in">this</span>._applyTheoremRule(ruleApplicationSpec)
+        : <span class="hljs-built_in">this</span>._applyRegularRule(ruleApplicationSpec)
+    },
 
-<span class="hljs-keyword">const</span> applyTheoremRule = <span class="hljs-function">(<span class="hljs-params">deduction, { theorem: formula, theoremId }</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> ruleApplicationSummary = TheoremRuleApplicationSummary({ theoremId })
-  <span class="hljs-keyword">const</span> step = Step({ formula, ruleApplicationSummary })
-  <span class="hljs-keyword">return</span> addStep(deduction, step)
-}
+    _applyTheoremRule ({
+      <span class="hljs-attr">theorem</span>: formula,
+      theoremId
+    }) {
+      <span class="hljs-keyword">const</span> ruleApplicationSummary = TheoremRuleApplicationSummary({ theoremId })
+      <span class="hljs-keyword">const</span> step = Step({
+        formula,
+        ruleApplicationSummary
+      })
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>._addStep(step)
+    },
 
-<span class="hljs-keyword">const</span> applyRegularRule = <span class="hljs-function">(<span class="hljs-params">deduction, {
-  rule,
-  premises,
-  conclusion,
-  termDependencies,
-  assumptionToRemove
-}</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> assumptions = calculateAssumptions(deduction, premises, [assumptionToRemove])
+    _applyRegularRule ({
+      rule,
+      premises,
+      conclusion,
+      termDependencies,
+      assumptionToRemove
+    }) {
+      <span class="hljs-keyword">const</span> assumptions = <span class="hljs-built_in">this</span>._calculateAssumptions(premises, [assumptionToRemove])
 
-  <span class="hljs-keyword">let</span> graph = deduction.termDependencyGraph
-  <span class="hljs-keyword">let</span> removedTermDependencies
-  <span class="hljs-keyword">if</span> (termDependencies !== <span class="hljs-literal">undefined</span>) {
-    ([graph, removedTermDependencies] = updateGraph(deduction, termDependencies))
-  }
+      <span class="hljs-keyword">let</span> graph = <span class="hljs-built_in">this</span>.termDependencyGraph
+      <span class="hljs-keyword">let</span> removedTermDependencies
+      <span class="hljs-keyword">if</span> (termDependencies !== <span class="hljs-literal">undefined</span>) {
+        ([graph, removedTermDependencies] = <span class="hljs-built_in">this</span>._updateGraph(termDependencies))
+      }
 
-  <span class="hljs-keyword">const</span> ruleApplicationSummary = RegularRuleApplicationSummary({
-    rule,
-    premises,
-    <span class="hljs-attr">addedTermDependencies</span>: termDependencies,
-    removedTermDependencies
-  })
+      <span class="hljs-keyword">const</span> ruleApplicationSummary = RegularRuleApplicationSummary({
+        rule,
+        premises,
+        <span class="hljs-attr">addedTermDependencies</span>: termDependencies,
+        removedTermDependencies
+      })
 
-  <span class="hljs-keyword">const</span> step = Step({
-    assumptions,
-    <span class="hljs-attr">formula</span>: conclusion,
-    ruleApplicationSummary
-  })
+      <span class="hljs-keyword">const</span> step = Step({
+        assumptions,
+        <span class="hljs-attr">formula</span>: conclusion,
+        ruleApplicationSummary
+      })
 
-  <span class="hljs-keyword">let</span> result = addStep(deduction, step)
-  result = setGraph(result, graph)
-
-  <span class="hljs-keyword">return</span> result
-}</pre></div></div>
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>._addStep(step)._setGraph(graph)
+    },</pre></div></div>
             
         </li>
         
@@ -686,36 +729,43 @@ Deduction.getLastStep = <span class="hljs-function"><span class="hljs-params">de
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Calculates new graph according to changes required by the rule’s term dependencies. Also creates
-a second graph which contains removed term dependencies. Returns both graphs as a result.</p>
+              <p>Calculates new graph according to changes required by the rule’s term dependencies. Also
+creates a second graph which contains removed term dependencies. Returns both graphs as a
+result.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> updateGraph = <span class="hljs-function">(<span class="hljs-params">deduction, termDependencies</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> { dependent, dependencies } = termDependencies
+            <div class="content"><div class='highlight'><pre>    _updateGraph (termDependencies) {
+      <span class="hljs-keyword">const</span> {
+        dependent,
+        dependencies
+      } = termDependencies
 
-  <span class="hljs-keyword">const</span> removedTermDependencies = {}
+      <span class="hljs-keyword">const</span> removedTermDependencies = TermDependencyGraph()
 
-  <span class="hljs-keyword">const</span> graph = TermDependencyGraph.addDependencies(
-    deduction.termDependencyGraph,
-    dependent,
-    [...dependencies],
-    <span class="hljs-function">(<span class="hljs-params">dependentTerm, dependencyTerm</span>) =&gt;</span> {
-      <span class="hljs-keyword">let</span> dependencyTerms = removedTermDependencies[dependentTerm]
-      <span class="hljs-keyword">if</span> (dependencyTerms === <span class="hljs-literal">undefined</span>) {
-        dependencyTerms = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
-        removedTermDependencies[dependentTerm] = dependencyTerms
-      }
-      dependencyTerms.add(dependencyTerm)
-    }
-  )
+      <span class="hljs-keyword">const</span> graph = <span class="hljs-built_in">this</span>.termDependencyGraph.addDependencies(
+        dependent,
+        [...dependencies],
+        <span class="hljs-function">(<span class="hljs-params">dependentTerm, dependencyTerm</span>) =&gt;</span> {
+          <span class="hljs-keyword">let</span> dependencyTerms = removedTermDependencies.getDirectDependencies(dependentTerm)
+          <span class="hljs-keyword">if</span> (dependencyTerms === <span class="hljs-literal">undefined</span>) {
+            dependencyTerms = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
+            removedTermDependencies.setDirectDependencies(dependentTerm, dependencyTerms)
+          }
+          dependencyTerms.add(dependencyTerm)
+        }
+      )
 
-  <span class="hljs-keyword">return</span> [graph, removedTermDependencies]
-}
+      <span class="hljs-keyword">return</span> [graph, removedTermDependencies]
+    },
 
-<span class="hljs-keyword">const</span> setGraph = <span class="hljs-function">(<span class="hljs-params">deduction, termDependencyGraph</span>) =&gt;</span> ({ ...deduction, termDependencyGraph })
+    _setGraph (termDependencyGraph) {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.clone({ termDependencyGraph })
+    },
 
-<span class="hljs-keyword">const</span> addStep = <span class="hljs-function">(<span class="hljs-params">deduction, step</span>) =&gt;</span> ({ ...deduction, <span class="hljs-attr">steps</span>: [...deduction.steps, step] })</pre></div></div>
+    _addStep (step) {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.clone({ <span class="hljs-attr">steps</span>: [...this.steps, step] })
+    },</pre></div></div>
             
         </li>
         
@@ -728,31 +778,37 @@ a second graph which contains removed term dependencies. Returns both graphs as 
               </div>
               <p>Calculates which assumptions must be added to the next step according to the specified rule’s
 premises. Assumptions are inherited from all premises of the rule. In addition to that if the
-premise was introduced by <code>Premise</code> or <code>Theorem</code> rule, its index is also added as an assumption.</p>
+premise was introduced by <code>Premise</code> or <code>Theorem</code> rule, its index is also added as an
+assumption.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> calculateAssumptions = <span class="hljs-function">(<span class="hljs-params">deduction, premises, toRemove</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
+            <div class="content"><div class='highlight'><pre>    _calculateAssumptions (premises, toRemove) {
+      <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
 
-  premises.forEach(<span class="hljs-function"><span class="hljs-params">premise</span> =&gt;</span> {
-    <span class="hljs-keyword">const</span> step = Deduction.getStep(deduction, premise)
+      premises.forEach(<span class="hljs-function"><span class="hljs-params">premise</span> =&gt;</span> {
+        <span class="hljs-keyword">const</span> step = <span class="hljs-built_in">this</span>.getStep(premise)
 
-    <span class="hljs-keyword">const</span> { assumptions, <span class="hljs-attr">ruleApplicationSummary</span>: { rule } } = step
+        <span class="hljs-keyword">const</span> {
+          assumptions,
+          <span class="hljs-attr">ruleApplicationSummary</span>: { rule }
+        } = step
 
-    <span class="hljs-keyword">if</span> (rule === Rule.Premise || rule === Rule.Theorem) {
-      result.add(premise)
+        <span class="hljs-keyword">if</span> (rule === Rule.Premise || rule === Rule.Theorem) {
+          result.add(premise)
+        }
+
+        assumptions.forEach(<span class="hljs-function"><span class="hljs-params">assumption</span> =&gt;</span> { result.add(assumption) })
+      })
+
+      <span class="hljs-keyword">if</span> (toRemove !== <span class="hljs-literal">undefined</span>) {
+        toRemove.forEach(<span class="hljs-function"><span class="hljs-params">assumption</span> =&gt;</span> { result.delete(assumption) })
+      }
+
+      <span class="hljs-keyword">return</span> result
     }
-
-    assumptions.forEach(<span class="hljs-function"><span class="hljs-params">assumption</span> =&gt;</span> { result.add(assumption) })
-  })
-
-  <span class="hljs-keyword">if</span> (toRemove !== <span class="hljs-literal">undefined</span>) {
-    toRemove.forEach(<span class="hljs-function"><span class="hljs-params">assumption</span> =&gt;</span> { result.delete(assumption) })
   }
-
-  <span class="hljs-keyword">return</span> result
-}</pre></div></div>
+}).compose(Base)</pre></div></div>
             
         </li>
         

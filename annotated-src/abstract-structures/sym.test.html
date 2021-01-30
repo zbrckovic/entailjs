@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -511,8 +546,8 @@ test.each([
   [<span class="hljs-string">&#x27;tt&#x27;</span>, Kind.Term, Kind.Term, Sym.tt()],
   [<span class="hljs-string">&#x27;tf&#x27;</span>, Kind.Term, Kind.Formula, Sym.tf()]
 ])(<span class="hljs-string">&#x27;.%s() has kinds %s, %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">msg, kind, argumentKind, actual</span>) =&gt;</span> {
-  expect(actual.kind).toEqual(kind)
-  expect(actual.argumentKind).toEqual(argumentKind)
+  expect(actual.kind).toDeepEqual(kind)
+  expect(actual.argumentKind).toDeepEqual(argumentKind)
 })
 
 test.each([
@@ -522,8 +557,8 @@ test.each([
   [Category.TF, Kind.Term, Kind.Formula]
 ])(<span class="hljs-string">&#x27;.fromCategory(%s) has kinds %s, %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">category, kind, argumentKind</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> actual = Sym.fromCategory(category)
-  expect(actual.kind).toEqual(kind)
-  expect(actual.argumentKind).toEqual(argumentKind)
+  expect(actual.kind).toDeepEqual(kind)
+  expect(actual.argumentKind).toDeepEqual(argumentKind)
 })
 
 test.each([
@@ -531,16 +566,16 @@ test.each([
   [Kind.Formula, Kind.Term, Category.FT],
   [Kind.Term, Kind.Term, Category.TT],
   [Kind.Term, Kind.Formula, Category.TF]
-])(<span class="hljs-string">&#x27;#getCategory() for sym with kinds %s, %s is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">kind, argumentKind, category</span>) =&gt;</span> {
+])(<span class="hljs-string">&#x27;.getCategory() for sym with kinds %s, %s is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">kind, argumentKind, category</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> sym = Sym({ kind, argumentKind })
-  expect(Sym.getCategory(sym)).toEqual(category)
+  expect(sym.getCategory()).toDeepEqual(category)
 })
 
 test.each([
   [Kind.Formula, [Category.FF, Category.FT]],
   [Kind.Term, [Category.TF, Category.TT]]
 ])(<span class="hljs-string">&#x27;.getCategoriesWithKind()&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">kind, expected</span>) =&gt;</span> {
-  expect(Sym.getCategoriesWithKind(kind)).toEqual(expected)
+  expect(Sym.getCategoriesWithKind(kind)).toDeepEqual(expected)
 })
 
 test.each([
@@ -549,7 +584,7 @@ test.each([
   [Category.TT, { <span class="hljs-attr">kind</span>: Kind.Term, <span class="hljs-attr">argumentKind</span>: Kind.Term }],
   [Category.TF, { <span class="hljs-attr">kind</span>: Kind.Term, <span class="hljs-attr">argumentKind</span>: Kind.Formula }]
 ])(<span class="hljs-string">&#x27;.getKindsFromCategory(%s) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">kind, expected</span>) =&gt;</span> {
-  expect(Sym.getKindsFromCategory(kind)).toEqual(expected)
+  expect(Sym.getKindsFromCategory(kind)).toDeepEqual(expected)
 })
 
 test.each([
@@ -558,14 +593,14 @@ test.each([
   [Sym.ft(), <span class="hljs-literal">false</span>],
   [Sym.tt(), <span class="hljs-literal">true</span>]
 ])(<span class="hljs-string">&#x27;.isBindable() only for TT&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">sym, expected</span>) =&gt;</span> {
-  expect(Sym.isBindable(sym)).toEqual(expected)
+  expect(sym.isBindable()).toDeepEqual(expected)
 })
 
 test.each([
   [Sym.tt({ <span class="hljs-attr">arity</span>: <span class="hljs-number">1</span> }), <span class="hljs-literal">false</span>],
   [Sym.tt({ <span class="hljs-attr">arity</span>: <span class="hljs-number">0</span> }), <span class="hljs-literal">true</span>]
 ])(<span class="hljs-string">&#x27;.isBindable() only for nullary&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">sym, expected</span>) =&gt;</span> {
-  expect(Sym.isBindable(sym)).toEqual(expected)
+  expect(sym.isBindable()).toDeepEqual(expected)
 })</pre></div></div>
             
         </li>

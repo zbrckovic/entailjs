@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -506,12 +541,12 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
 <span class="hljs-keyword">import</span> { TermDependencyGraph } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./term-dependency-graph&#x27;</span>
 
-describe(<span class="hljs-string">&#x27;#addDirectDependency()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+describe(<span class="hljs-string">&#x27;.addDirectDependency()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   test(<span class="hljs-string">`throws <span class="hljs-subst">${ErrorName.TERM_ALREADY_USED}</span>`</span>, <span class="hljs-function">() =&gt;</span> {
     <span class="hljs-keyword">const</span> graph = TermDependencyGraph({ <span class="hljs-number">0</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>() })
 
     expect(<span class="hljs-function">() =&gt;</span> {
-      TermDependencyGraph.addDependencies(graph, <span class="hljs-number">0</span>, [<span class="hljs-number">1</span>])
+      graph.addDependencies(<span class="hljs-number">0</span>, [<span class="hljs-number">1</span>])
     }).toThrow(ErrorName.TERM_ALREADY_USED)
   })
 
@@ -522,25 +557,25 @@ describe(<span class="hljs-string">&#x27;#addDirectDependency()&#x27;</span>, <s
     })
 
     expect(<span class="hljs-function">() =&gt;</span> {
-      TermDependencyGraph.addDependencies(graph, <span class="hljs-number">1</span>, [<span class="hljs-number">0</span>])
+      graph.addDependencies(<span class="hljs-number">1</span>, [<span class="hljs-number">0</span>])
     }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
 
     expect(<span class="hljs-function">() =&gt;</span> {
-      TermDependencyGraph.addDependencies(graph, <span class="hljs-number">3</span>, [<span class="hljs-number">0</span>])
+      graph.addDependencies(<span class="hljs-number">3</span>, [<span class="hljs-number">0</span>])
     }).toThrow(ErrorName.CYCLIC_DEPENDENCIES)
   })
 
   test(<span class="hljs-string">&#x27;basic case&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
     <span class="hljs-keyword">let</span> actual = TermDependencyGraph()
-    actual = TermDependencyGraph.addDependencies(actual, <span class="hljs-number">0</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>])
-    actual = TermDependencyGraph.addDependencies(actual, <span class="hljs-number">2</span>, [<span class="hljs-number">3</span>])
+    actual = actual.addDependencies(<span class="hljs-number">0</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>])
+    actual = actual.addDependencies(<span class="hljs-number">2</span>, [<span class="hljs-number">3</span>])
 
     <span class="hljs-keyword">const</span> expected = TermDependencyGraph({
       <span class="hljs-number">0</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]),
       <span class="hljs-number">2</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">3</span>])
     })
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
   })
 
   test.each([
@@ -570,65 +605,65 @@ describe(<span class="hljs-string">&#x27;#addDirectDependency()&#x27;</span>, <s
     ]
   ])(<span class="hljs-string">&#x27;normalization&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">graph, expected, dependent, dependency, expectedRemovedDependency</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> onRemove = jest.fn()
-    <span class="hljs-keyword">const</span> actual = TermDependencyGraph.addDependencies(graph, dependent, [dependency], onRemove)
+    <span class="hljs-keyword">const</span> actual = graph.addDependencies(dependent, [dependency], onRemove)
 
-    expect(actual).toEqual(expected)
+    expect(actual).toDeepEqual(expected)
     expect(onRemove).toHaveBeenCalledWith(...expectedRemovedDependency)
   })
 })
 
-test(<span class="hljs-string">&#x27;#hasDirectDependency()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;.hasDirectDependency()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> graph = TermDependencyGraph({
     <span class="hljs-number">0</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]),
     <span class="hljs-number">2</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">3</span>])
   })
 
-  expect(TermDependencyGraph.hasDirectDependency(graph, <span class="hljs-number">0</span>, <span class="hljs-number">4</span>)).toBe(<span class="hljs-literal">false</span>)
-  expect(TermDependencyGraph.hasDirectDependency(graph, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>)).toBe(<span class="hljs-literal">false</span>)
-  expect(TermDependencyGraph.hasDependency(graph, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>)).toBe(<span class="hljs-literal">true</span>)
-  expect(TermDependencyGraph.hasDependency(graph, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>)).toBe(<span class="hljs-literal">true</span>)
+  expect(graph.hasDirectDependency(<span class="hljs-number">0</span>, <span class="hljs-number">4</span>)).toBe(<span class="hljs-literal">false</span>)
+  expect(graph.hasDirectDependency(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>)).toBe(<span class="hljs-literal">false</span>)
+  expect(graph.hasDependency(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)).toBe(<span class="hljs-literal">true</span>)
+  expect(graph.hasDependency(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>)).toBe(<span class="hljs-literal">true</span>)
 })
 
-test(<span class="hljs-string">&#x27;#hasDependency()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;.hasDependency()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> graph = TermDependencyGraph({
     <span class="hljs-number">0</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]),
     <span class="hljs-number">2</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">3</span>])
   })
 
-  expect(TermDependencyGraph.hasDependency(graph, <span class="hljs-number">0</span>, <span class="hljs-number">4</span>)).toBe(<span class="hljs-literal">false</span>)
-  expect(TermDependencyGraph.hasDependency(graph, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>)).toBe(<span class="hljs-literal">true</span>)
-  expect(TermDependencyGraph.hasDependency(graph, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>)).toBe(<span class="hljs-literal">true</span>)
+  expect(graph.hasDependency(<span class="hljs-number">0</span>, <span class="hljs-number">4</span>)).toBe(<span class="hljs-literal">false</span>)
+  expect(graph.hasDependency(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)).toBe(<span class="hljs-literal">true</span>)
+  expect(graph.hasDependency(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>)).toBe(<span class="hljs-literal">true</span>)
 })
 
-test(<span class="hljs-string">&#x27;#getDirectDependents()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;.getDirectDependents()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> graph = TermDependencyGraph({
     <span class="hljs-number">0</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">2</span>, <span class="hljs-number">3</span>]),
     <span class="hljs-number">1</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">2</span>])
   })
 
-  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(TermDependencyGraph.getDirectDependents(graph, <span class="hljs-number">2</span>))).toEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]))
-  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(TermDependencyGraph.getDirectDependents(graph, <span class="hljs-number">0</span>))).toEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>())
+  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(graph.getDirectDependents(<span class="hljs-number">2</span>))).toDeepEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]))
+  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(graph.getDirectDependents(<span class="hljs-number">0</span>))).toDeepEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>())
 })
 
-test(<span class="hljs-string">&#x27;#getDependents()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;.getDependents()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> graph = TermDependencyGraph({
     <span class="hljs-number">0</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>]),
     <span class="hljs-number">1</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">3</span>]),
     <span class="hljs-number">2</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">3</span>])
   })
 
-  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(TermDependencyGraph.getDependents(graph, <span class="hljs-number">1</span>))).toEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]))
-  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(TermDependencyGraph.getDependents(graph, <span class="hljs-number">3</span>))).toEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>]))
+  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(graph.getDependents(<span class="hljs-number">1</span>))).toDeepEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">0</span>]))
+  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(graph.getDependents(<span class="hljs-number">3</span>))).toDeepEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>]))
 })
 
-test(<span class="hljs-string">&#x27;#getDependencies()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;.getDependencies()&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> graph = TermDependencyGraph({
     <span class="hljs-number">0</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]),
     <span class="hljs-number">2</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">3</span>])
   })
 
-  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(TermDependencyGraph.getDependencies(graph, <span class="hljs-number">2</span>))).toEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">3</span>]))
-  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(TermDependencyGraph.getDependencies(graph, <span class="hljs-number">0</span>))).toEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]))
+  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(graph.getDependencies(<span class="hljs-number">2</span>))).toDeepEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">3</span>]))
+  expect(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(graph.getDependencies(<span class="hljs-number">0</span>))).toDeepEqual(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]))
 })</pre></div></div>
             
         </li>

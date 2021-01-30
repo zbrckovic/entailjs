@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -503,13 +538,12 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-interface&#x27;</span>
-<span class="hljs-keyword">import</span> { getRule, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/rule&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-interface&#x27;</span>
+<span class="hljs-keyword">import</span> { getRule, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
-<span class="hljs-keyword">import</span> { findDuplicates } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../utils&#x27;</span>
-<span class="hljs-keyword">import</span> { AstProcessor <span class="hljs-keyword">as</span> FormulaAstProcessor } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../formula-parser/ast-processor&#x27;</span>
-<span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
-<span class="hljs-keyword">import</span> { Deduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span></pre></div></div>
+<span class="hljs-keyword">import</span> { Base, findDuplicates, isDeepEqual } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../utils&#x27;</span>
+<span class="hljs-keyword">import</span> { AstProcessor <span class="hljs-keyword">as</span> FormulaAstProcessor } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../formula-parser/ast-processor&#x27;</span></pre></div></div>
             
         </li>
         
@@ -526,129 +560,127 @@ parsing formula on each step.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> AstProcessor = <span class="hljs-function">(<span class="hljs-params">{ syms, presentations }</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> formulaAstProcessor = FormulaAstProcessor({ syms, presentations })
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> AstProcessor = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;AstProcessor&#x27;</span>,
+  init ({ syms, presentations }) {
+    <span class="hljs-built_in">this</span>.formulaAstProcessor = FormulaAstProcessor({ syms, presentations })
+  },
+  <span class="hljs-attr">methods</span>: {
+    process (ast) {
+      <span class="hljs-keyword">const</span> { steps } = ast
 
-  <span class="hljs-keyword">const</span> { getSym, getSyms, getPresentations, getTextToSymMap, getMaxSymId } = formulaAstProcessor
+      <span class="hljs-keyword">let</span> deductionInterface = startDeduction()
 
-  <span class="hljs-keyword">const</span> process = <span class="hljs-function"><span class="hljs-params">ast</span> =&gt;</span> {
-    <span class="hljs-keyword">const</span> { steps } = ast
-
-    <span class="hljs-keyword">let</span> deductionInterface = startDeduction()
-
-    deductionInterface = steps.reduce(
-      <span class="hljs-function">(<span class="hljs-params">deductionInterface, step, i</span>) =&gt;</span> processStep(deductionInterface, step, i + <span class="hljs-number">1</span>),
-      deductionInterface
-    )
-
-    <span class="hljs-keyword">return</span> deductionInterface.deduction
-  }
-
-  <span class="hljs-keyword">const</span> processStep = <span class="hljs-function">(<span class="hljs-params">deductionInterface, astStep, stepOrdinal</span>) =&gt;</span> {
-    validateStepOrdinal(stepOrdinal, astStep.ordinal)
-
-    <span class="hljs-keyword">const</span> assumptionsOrdinals = astStep.assumptions
-
-    validateAssumptionsOrdinals(deductionInterface.deduction, assumptionsOrdinals)
-
-    <span class="hljs-keyword">const</span> rule = getRule(astStep.ruleApplicationSummary.rule)
-    <span class="hljs-keyword">const</span> premisesOrdinals = astStep.ruleApplicationSummary.premises
-    <span class="hljs-keyword">const</span> formula = formulaAstProcessor.process(astStep.formula)
-
-    <span class="hljs-keyword">const</span> ruleInterface = deductionInterface
-      .selectSteps(...premisesOrdinals)
-      .chooseRule(rule)
-
-    <span class="hljs-keyword">let</span> oldTerm
-    <span class="hljs-keyword">let</span> newTerm
-
-    <span class="hljs-keyword">switch</span> (rule) {
-      <span class="hljs-keyword">case</span> Rule.Premise: {
-        <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
-          <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
-        }
-        deductionInterface = ruleInterface.apply(formula)
-        <span class="hljs-keyword">break</span>
-      }
-      <span class="hljs-keyword">case</span> Rule.ConditionalIntroduction: {
-        <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
-          <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, rule)
-        }
-        deductionInterface = ruleInterface.apply()
-        <span class="hljs-keyword">break</span>
-      }
-      <span class="hljs-keyword">case</span> Rule.TautologicalImplication: {
-        <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
-          <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
-        }
-        deductionInterface = ruleInterface.apply(formula)
-        <span class="hljs-keyword">break</span>
-      }
-      <span class="hljs-keyword">case</span> Rule.UniversalInstantiation: {
-        <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
-          <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
-        }
-        <span class="hljs-keyword">const</span> newSym = ruleInterface.determineNewTermInPotentialResult(formula)
-        deductionInterface = ruleInterface.apply(newSym)
-        <span class="hljs-keyword">break</span>
-      }
-      <span class="hljs-keyword">case</span> Rule.UniversalGeneralization: {
-        <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
-          <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
-        }
-        ({ oldTerm, newTerm } = ruleInterface.determineSubstitutionInPotentialResult(formula))
-        deductionInterface = ruleInterface.apply(newTerm, oldTerm)
-        <span class="hljs-keyword">break</span>
-      }
-      <span class="hljs-keyword">case</span> Rule.ExistentialInstantiation: {
-        <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
-          <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
-        }
-        <span class="hljs-keyword">const</span> newSym = ruleInterface.determineNewTermInPotentialResult(formula)
-        deductionInterface = ruleInterface.apply(newSym)
-        <span class="hljs-keyword">break</span>
-      }
-      <span class="hljs-keyword">case</span> Rule.ExistentialGeneralization:
-        <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
-          <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
-        }
-        ({ oldTerm, newTerm } = ruleInterface.determineSubstitutionInPotentialResult(formula))
-        deductionInterface = ruleInterface.apply(newTerm, oldTerm)
-        <span class="hljs-keyword">break</span>
-      <span class="hljs-keyword">case</span> Rule.Theorem: {
-        <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
-          <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
-        }
-        deductionInterface = ruleInterface.apply()
-        <span class="hljs-keyword">break</span>
-      }
-    }
-
-    <span class="hljs-keyword">const</span> newStep = Deduction.getLastStep(deductionInterface.deduction)
-
-    <span class="hljs-keyword">const</span> assumptionIndexes = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(assumptionsOrdinals.map(<span class="hljs-function"><span class="hljs-params">ordinal</span> =&gt;</span> ordinal - <span class="hljs-number">1</span>))
-    <span class="hljs-keyword">if</span> (!_.isEqual(newStep.assumptions, assumptionIndexes)) {
-      <span class="hljs-keyword">throw</span> createError(
-        ErrorName.INVALID_ASSUMPTION_ORDINALS, <span class="hljs-literal">undefined</span>, { stepOrdinal, assumptionsOrdinals }
+      deductionInterface = steps.reduce(
+        <span class="hljs-function">(<span class="hljs-params">deductionInterface, step, i</span>) =&gt;</span> <span class="hljs-built_in">this</span>.processStep(deductionInterface, step, i + <span class="hljs-number">1</span>),
+        deductionInterface
       )
-    }
 
-    <span class="hljs-keyword">if</span> (!_.isEqual(newStep.formula, formula)) {
-      <span class="hljs-keyword">throw</span> createError(ErrorName.INVALID_FORMULA, <span class="hljs-literal">undefined</span>, formula)
-    }
+      <span class="hljs-keyword">return</span> deductionInterface.deduction
+    },
 
-    <span class="hljs-keyword">return</span> deductionInterface
+    processStep (deductionInterface, astStep, stepOrdinal) {
+      validateStepOrdinal(stepOrdinal, astStep.ordinal)
+
+      <span class="hljs-keyword">const</span> assumptionsOrdinals = astStep.assumptions
+
+      validateAssumptionsOrdinals(deductionInterface.deduction, assumptionsOrdinals)
+
+      <span class="hljs-keyword">const</span> rule = getRule(astStep.ruleApplicationSummary.rule)
+      <span class="hljs-keyword">const</span> premisesOrdinals = astStep.ruleApplicationSummary.premises
+      <span class="hljs-keyword">const</span> formula = <span class="hljs-built_in">this</span>.formulaAstProcessor.process(astStep.formula)
+
+      <span class="hljs-keyword">const</span> ruleInterface = deductionInterface
+        .selectSteps(...premisesOrdinals)
+        .chooseRule(rule)
+
+      <span class="hljs-keyword">let</span> oldTerm
+      <span class="hljs-keyword">let</span> newTerm
+
+      <span class="hljs-keyword">switch</span> (rule) {
+        <span class="hljs-keyword">case</span> Rule.Premise: {
+          <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
+            <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
+          }
+          deductionInterface = ruleInterface.apply(formula)
+          <span class="hljs-keyword">break</span>
+        }
+        <span class="hljs-keyword">case</span> Rule.ConditionalIntroduction: {
+          <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
+            <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, rule)
+          }
+          deductionInterface = ruleInterface.apply()
+          <span class="hljs-keyword">break</span>
+        }
+        <span class="hljs-keyword">case</span> Rule.TautologicalImplication: {
+          <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
+            <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
+          }
+          deductionInterface = ruleInterface.apply(formula)
+          <span class="hljs-keyword">break</span>
+        }
+        <span class="hljs-keyword">case</span> Rule.UniversalInstantiation: {
+          <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
+            <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
+          }
+          <span class="hljs-keyword">const</span> newSym = ruleInterface.determineNewTermInPotentialResult(formula)
+          deductionInterface = ruleInterface.apply(newSym)
+          <span class="hljs-keyword">break</span>
+        }
+        <span class="hljs-keyword">case</span> Rule.UniversalGeneralization: {
+          <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
+            <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
+          }
+          ({ oldTerm, newTerm } = ruleInterface.determineSubstitutionInPotentialResult(formula))
+          deductionInterface = ruleInterface.apply(newTerm, oldTerm)
+          <span class="hljs-keyword">break</span>
+        }
+        <span class="hljs-keyword">case</span> Rule.ExistentialInstantiation: {
+          <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
+            <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
+          }
+          <span class="hljs-keyword">const</span> newSym = ruleInterface.determineNewTermInPotentialResult(formula)
+          deductionInterface = ruleInterface.apply(newSym)
+          <span class="hljs-keyword">break</span>
+        }
+        <span class="hljs-keyword">case</span> Rule.ExistentialGeneralization:
+          <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
+            <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
+          }
+          ({ oldTerm, newTerm } = ruleInterface.determineSubstitutionInPotentialResult(formula))
+          deductionInterface = ruleInterface.apply(newTerm, oldTerm)
+          <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">case</span> Rule.Theorem: {
+          <span class="hljs-keyword">if</span> (ruleInterface === <span class="hljs-literal">undefined</span>) {
+            <span class="hljs-keyword">throw</span> createError(ErrorName.RULE_NOT_ALLOWED, <span class="hljs-literal">undefined</span>, { stepOrdinal, rule })
+          }
+          deductionInterface = ruleInterface.apply()
+          <span class="hljs-keyword">break</span>
+        }
+      }
+
+      <span class="hljs-keyword">const</span> newStep = deductionInterface.deduction.getLastStep()
+
+      <span class="hljs-keyword">const</span> assumptionIndexes = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(assumptionsOrdinals.map(<span class="hljs-function"><span class="hljs-params">ordinal</span> =&gt;</span> ordinal - <span class="hljs-number">1</span>))
+      <span class="hljs-keyword">if</span> (!isDeepEqual(newStep.assumptions, assumptionIndexes)) {
+        <span class="hljs-keyword">throw</span> createError(
+          ErrorName.INVALID_ASSUMPTION_ORDINALS, <span class="hljs-literal">undefined</span>, { stepOrdinal, assumptionsOrdinals }
+        )
+      }
+
+      <span class="hljs-keyword">if</span> (!isDeepEqual(newStep.formula, formula)) {
+        <span class="hljs-keyword">throw</span> createError(ErrorName.INVALID_FORMULA, <span class="hljs-literal">undefined</span>, formula)
+      }
+
+      <span class="hljs-keyword">return</span> deductionInterface
+    },
+    getSym (text) { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.formulaAstProcessor.getSym(text) },
+    getSyms () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.formulaAstProcessor.getSyms() },
+    getPresentations () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.formulaAstProcessor.getPresentations() },
+    getTextToSymMap () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.formulaAstProcessor.getTextToSymMap() },
+    getMaxSymId () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.formulaAstProcessor.getMaxSymId() }
   }
-
-  <span class="hljs-keyword">return</span> {
-    process,
-    getSym,
-    getSyms,
-    getPresentations,
-    getTextToSymMap,
-    getMaxSymId
-  }
-}
+}).compose(Base)
 
 <span class="hljs-keyword">const</span> validateStepOrdinal = <span class="hljs-function">(<span class="hljs-params">actualStepOrdinal, encounteredStepOrdinal</span>) =&gt;</span> {
   <span class="hljs-keyword">if</span> (encounteredStepOrdinal !== <span class="hljs-literal">undefined</span> &amp;&amp; encounteredStepOrdinal !== actualStepOrdinal) {
@@ -674,7 +706,7 @@ parsing formula on each step.</p>
     )
   }
 
-  <span class="hljs-keyword">const</span> maxStepOrdinal = Deduction.getSize(deduction)
+  <span class="hljs-keyword">const</span> maxStepOrdinal = deduction.getSize()
 
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> assumptionOrdinal <span class="hljs-keyword">of</span> assumptionsOrdinals) {
     <span class="hljs-keyword">if</span> (assumptionOrdinal &gt; maxStepOrdinal) {
@@ -685,8 +717,8 @@ parsing formula on each step.</p>
       )
     }
 
-    <span class="hljs-keyword">const</span> assumptionRule = Deduction
-      .getStepByOrdinal(deduction, assumptionOrdinal)
+    <span class="hljs-keyword">const</span> assumptionRule = deduction
+      .getStepByOrdinal(assumptionOrdinal)
       .ruleApplicationSummary
       .rule
 

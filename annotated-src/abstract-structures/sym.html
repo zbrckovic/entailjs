@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -500,12 +535,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p><code>Sym</code> (short for symbol) is the main entity from which <a href="./expression"><code>Expression</code></a>s are built.
-Word <code>symbol</code> has been avoided because it’s a built-in type in ES6.</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Sym = ({</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> { Base } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../utils&#x27;</span></pre></div></div>
             
         </li>
         
@@ -516,12 +550,56 @@ Word <code>symbol</code> has been avoided because it’s a built-in type in ES6.
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Non-negative integer which must be the same throughout all of this symbol’s occurrences in some
-context (expression, deduction, etc…). Symbol identity is also established by comparing id.</p>
+              <p><code>Sym</code> (short for symbol) is the main entity from which expressions are built. Word <code>symbol</code> has
+been avoided because it’s a built-in type in ES6.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  id = <span class="hljs-number">0</span>,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Sym = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Sym&#x27;</span>,
+  <span class="hljs-attr">statics</span>: {
+    fromCategory (category, spec = {}) {
+      <span class="hljs-keyword">return</span> Sym({ ...spec, ...Sym.getKindsFromCategory(category) })
+    },
+    ff (spec = {}) { <span class="hljs-keyword">return</span> Sym.fromCategory(Category.FF, spec) },
+    ft (spec = {}) { <span class="hljs-keyword">return</span> Sym.fromCategory(Category.FT, spec) },
+    tf (spec = {}) { <span class="hljs-keyword">return</span> Sym.fromCategory(Category.TF, spec) },
+    tt (spec = {}) { <span class="hljs-keyword">return</span> Sym.fromCategory(Category.TT, spec) },
+    getCategoriesWithKind (kind) {
+      <span class="hljs-keyword">switch</span> (kind) {
+        <span class="hljs-keyword">case</span> Kind.Formula:
+          <span class="hljs-keyword">return</span> [Category.FF, Category.FT]
+        <span class="hljs-keyword">case</span> Kind.Term:
+          <span class="hljs-keyword">return</span> [Category.TF, Category.TT]
+      }
+    },
+    getKindsFromCategory (category) {
+      <span class="hljs-keyword">switch</span> (category) {
+        <span class="hljs-keyword">case</span> Category.FF:
+          <span class="hljs-keyword">return</span> {
+            <span class="hljs-attr">kind</span>: Kind.Formula,
+            <span class="hljs-attr">argumentKind</span>: Kind.Formula
+          }
+        <span class="hljs-keyword">case</span> Category.FT:
+          <span class="hljs-keyword">return</span> {
+            <span class="hljs-attr">kind</span>: Kind.Formula,
+            <span class="hljs-attr">argumentKind</span>: Kind.Term
+          }
+        <span class="hljs-keyword">case</span> Category.TF:
+          <span class="hljs-keyword">return</span> {
+            <span class="hljs-attr">kind</span>: Kind.Term,
+            <span class="hljs-attr">argumentKind</span>: Kind.Formula
+          }
+        <span class="hljs-keyword">case</span> Category.TT:
+          <span class="hljs-keyword">return</span> {
+            <span class="hljs-attr">kind</span>: Kind.Term,
+            <span class="hljs-attr">argumentKind</span>: Kind.Term
+          }
+      }
+    }
+  },
+  init ({</pre></div></div>
             
         </li>
         
@@ -532,13 +610,13 @@ context (expression, deduction, etc…). Symbol identity is also established by 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>When this symbol is the main symbol of an expression <code>kind</code> determines which of two possible
-‘roles’ this expression has - it can be either a formula or a term. We will say that expression
-is of a kind K when it’s main symbol is of a kind K.</p>
+              <p>Non-negative integer which must be the same throughout all of this symbol’s occurrences in
+some context (expression, deduction, etc…). Symbol identity is also established by
+comparing id.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  kind = Kind.Formula,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    id = <span class="hljs-number">0</span>,</pre></div></div>
             
         </li>
         
@@ -549,12 +627,14 @@ is of a kind K when it’s main symbol is of a kind K.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>When this symbol is the main symbol of an expression <code>argumentKind</code> determines what kind of
-expressions are accepted as children.</p>
+              <p>When this symbol is the main symbol of an expression, <code>kind</code> determines which of the two
+possible ‘roles’ the expression has - it can be either a formula or a term. We will say that
+expression is of a kind K when its main symbol is of a kind K. So we’ll talk about formulas
+or terms when referring to expressions.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  argumentKind = Kind.Formula,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    kind = Kind.Formula,</pre></div></div>
             
         </li>
         
@@ -565,12 +645,12 @@ expressions are accepted as children.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>When this symbol is the main symbol of an expression <code>arity</code> determines how many children this
-expression must have.</p>
+              <p>When this symbol is the main symbol of an expression, <code>argumentKind</code> determines what kind of
+expressions are accepted as children.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  arity = <span class="hljs-number">0</span>,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    argumentKind = Kind.Formula,</pre></div></div>
             
         </li>
         
@@ -581,85 +661,12 @@ expression must have.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>When this symbol is the main symbol of an expression <code>binds</code> determines whether expression also
-accepts a bound symbol. This will be true for quantifiers.</p>
+              <p>When this symbol is the main symbol of an expression, <code>arity</code> determines how many children
+the expression must have.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  binds = <span class="hljs-literal">false</span>
-} = {}) =&gt; ({ id, kind, argumentKind, arity, binds })
-
-Sym.fromCategory = <span class="hljs-function">(<span class="hljs-params">category, props = {}</span>) =&gt;</span>
-  Sym({ ...props, ...Sym.getKindsFromCategory(category) })
-
-Sym.ff = <span class="hljs-function">(<span class="hljs-params">props = {}</span>) =&gt;</span> Sym.fromCategory(Category.FF, props)
-Sym.ft = <span class="hljs-function">(<span class="hljs-params">props = {}</span>) =&gt;</span> Sym.fromCategory(Category.FT, props)
-Sym.tf = <span class="hljs-function">(<span class="hljs-params">props = {}</span>) =&gt;</span> Sym.fromCategory(Category.TF, props)
-Sym.tt = <span class="hljs-function">(<span class="hljs-params">props = {}</span>) =&gt;</span> Sym.fromCategory(Category.TT, props)
-
-Sym.getCategory = <span class="hljs-function"><span class="hljs-params">sym</span> =&gt;</span> {
-  <span class="hljs-keyword">switch</span> (sym.kind) {
-    <span class="hljs-keyword">case</span> Kind.Formula:
-      <span class="hljs-keyword">switch</span> (sym.argumentKind) {
-        <span class="hljs-keyword">case</span> Kind.Formula:
-          <span class="hljs-keyword">return</span> Category.FF
-        <span class="hljs-keyword">case</span> Kind.Term:
-          <span class="hljs-keyword">return</span> Category.FT
-      }
-      <span class="hljs-keyword">break</span>
-    <span class="hljs-keyword">case</span> Kind.Term:
-      <span class="hljs-keyword">switch</span> (sym.argumentKind) {
-        <span class="hljs-keyword">case</span> Kind.Formula:
-          <span class="hljs-keyword">return</span> Category.TF
-        <span class="hljs-keyword">case</span> Kind.Term:
-          <span class="hljs-keyword">return</span> Category.TT
-      }
-      <span class="hljs-keyword">break</span>
-  }
-}
-
-Sym.getCategoriesWithKind = <span class="hljs-function"><span class="hljs-params">kind</span> =&gt;</span> {
-  <span class="hljs-keyword">switch</span> (kind) {
-    <span class="hljs-keyword">case</span> Kind.Formula:
-      <span class="hljs-keyword">return</span> [Category.FF, Category.FT]
-    <span class="hljs-keyword">case</span> Kind.Term:
-      <span class="hljs-keyword">return</span> [Category.TF, Category.TT]
-  }
-}
-
-Sym.getKindsFromCategory = <span class="hljs-function"><span class="hljs-params">category</span> =&gt;</span> {
-  <span class="hljs-keyword">switch</span> (category) {
-    <span class="hljs-keyword">case</span> Category.FF:
-      <span class="hljs-keyword">return</span> {
-        <span class="hljs-attr">kind</span>: Kind.Formula,
-        <span class="hljs-attr">argumentKind</span>: Kind.Formula
-      }
-    <span class="hljs-keyword">case</span> Category.FT:
-      <span class="hljs-keyword">return</span> {
-        <span class="hljs-attr">kind</span>: Kind.Formula,
-        <span class="hljs-attr">argumentKind</span>: Kind.Term
-      }
-    <span class="hljs-keyword">case</span> Category.TF:
-      <span class="hljs-keyword">return</span> {
-        <span class="hljs-attr">kind</span>: Kind.Term,
-        <span class="hljs-attr">argumentKind</span>: Kind.Formula
-      }
-    <span class="hljs-keyword">case</span> Category.TT:
-      <span class="hljs-keyword">return</span> {
-        <span class="hljs-attr">kind</span>: Kind.Term,
-        <span class="hljs-attr">argumentKind</span>: Kind.Term
-      }
-  }
-}
-
-Sym.order = <span class="hljs-function">(<span class="hljs-params">sym1, sym2</span>) =&gt;</span> sym1.id - sym2.id
-
-Sym.equals = <span class="hljs-function">(<span class="hljs-params">sym1, sym2</span>) =&gt;</span> sym1.id === sym2.id
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Kind = {
-  <span class="hljs-attr">Formula</span>: <span class="hljs-string">&#x27;Formula&#x27;</span>,
-  <span class="hljs-attr">Term</span>: <span class="hljs-string">&#x27;Term&#x27;</span>
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    arity = <span class="hljs-number">0</span>,</pre></div></div>
             
         </li>
         
@@ -670,14 +677,41 @@ Sym.equals = <span class="hljs-function">(<span class="hljs-params">sym1, sym2</
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Given that <code>kind</code> and <code>argumentKind</code> of symbol can have two values each, there are 4
-possibilities. We classify symbols in four <strong>categories</strong> where <code>F</code> is for ‘formula’ and <code>T</code>
-is for ‘term’). Here are the correlations between <code>category</code> values and traditional
-symbolic logic terminology:`</p>
+              <p>When this symbol is the main symbol of an expression, <code>binds</code> determines whether the
+expression also accepts a bound symbol. This will be true for quantifiers and potentially
+some other symbols in the future.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Category = {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    binds = <span class="hljs-literal">false</span>
+  }) {
+    <span class="hljs-built_in">this</span>.id = id
+    <span class="hljs-built_in">this</span>.kind = kind
+    <span class="hljs-built_in">this</span>.argumentKind = argumentKind
+    <span class="hljs-built_in">this</span>.arity = arity
+    <span class="hljs-built_in">this</span>.binds = binds
+  },
+  <span class="hljs-attr">methods</span>: {
+    getCategory () {
+      <span class="hljs-keyword">switch</span> (<span class="hljs-built_in">this</span>.kind) {
+        <span class="hljs-keyword">case</span> Kind.Formula:
+          <span class="hljs-keyword">switch</span> (<span class="hljs-built_in">this</span>.argumentKind) {
+            <span class="hljs-keyword">case</span> Kind.Formula:
+              <span class="hljs-keyword">return</span> Category.FF
+            <span class="hljs-keyword">case</span> Kind.Term:
+              <span class="hljs-keyword">return</span> Category.FT
+          }
+          <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">case</span> Kind.Term:
+          <span class="hljs-keyword">switch</span> (<span class="hljs-built_in">this</span>.argumentKind) {
+            <span class="hljs-keyword">case</span> Kind.Formula:
+              <span class="hljs-keyword">return</span> Category.TF
+            <span class="hljs-keyword">case</span> Kind.Term:
+              <span class="hljs-keyword">return</span> Category.TT
+          }
+          <span class="hljs-keyword">break</span>
+      }
+    },</pre></div></div>
             
         </li>
         
@@ -687,6 +721,51 @@ symbolic logic terminology:`</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Bindable symbols are only nullary terms.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isBindable () {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.getCategory() === Category.TT &amp;&amp; <span class="hljs-built_in">this</span>.arity === <span class="hljs-number">0</span>
+    },
+
+    equals (sym) { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.id === sym.id },
+    order (sym) { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.id - sym.id }
+  }
+}).compose(Base)
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Kind = {
+  <span class="hljs-attr">Formula</span>: <span class="hljs-string">&#x27;Formula&#x27;</span>,
+  <span class="hljs-attr">Term</span>: <span class="hljs-string">&#x27;Term&#x27;</span>
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Given that <code>kind</code> and <code>argumentKind</code> of a symbol can have two values each, there are 4
+possible combinations. We classify symbols in four <strong>categories</strong>: <code>FF</code>, <code>FT</code>, <code>TF</code>, <code>TT</code> where
+<code>F</code> is for ‘formula’ and <code>T</code> is for ‘term’. Here are the correlations between <code>category</code> values
+and traditional symbolic logic terminology:</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Category = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Corresponds to propositional variables/constants when arity is zero and to propositional
 connectives when arity is positive.</p>
@@ -698,11 +777,11 @@ connectives when arity is positive.</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Corresponds to predicate variables/constants.</p>
 
@@ -713,11 +792,11 @@ connectives when arity is positive.</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Corresponds to terms which could be either individual variables/constants when arity is zero or
 function variables/constants when arity is positive.</p>
@@ -729,11 +808,11 @@ function variables/constants when arity is positive.</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>This is meant for constructs which behave as terms because they denote a thing, but accept
 a proposition as an argument. One such example is definitive description: “x such that …”.</p>
@@ -746,16 +825,16 @@ a proposition as an argument. One such example is definitive description: “x s
         </li>
         
         
-        <li id="section-12">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>We didn’t mention the cases of nullary <code>FT</code> and <code>TF</code> symbols. Nullary <code>FT</code> symbols would
 correspond to nullary predicates. From the standpoint of symbolic logic system it seems that
-there’s no need to allow for nullary predicates when we already
-have propositional variables i.e. nullary <code>FF</code> symbols. The same goes for nullary <code>TF</code> symbols.</p>
+there’s no need to allow for nullary predicates when we already have propositional variables i.e.
+nullary <code>FF</code> symbols. The same goes for nullary <code>TF</code> symbols.</p>
 <p>On the other hand, if we look at the way this code is organized, when symbol is nullary
 <code>argumentKind</code> doesn’t have significance since expression with such a symbol will never have
 children. However, <code>argumentKind</code> will always be defined because we’d like to associate
@@ -764,18 +843,6 @@ following rule: nullary symbol’s <code>kind</code> and <code>argumentKind</cod
 words: nullary symbol’s category can either be <code>FF</code> or <code>TT</code>, never <code>FT</code> nor <code>TF</code>.</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>
-<span class="hljs-keyword">const</span> precedence = {
-  [Category.FF]: <span class="hljs-number">0</span>,
-  [Category.FT]: <span class="hljs-number">1</span>,
-  [Category.TT]: <span class="hljs-number">2</span>,
-  [Category.TF]: <span class="hljs-number">3</span>
-}
-
-Sym.isBindable = <span class="hljs-function"><span class="hljs-params">sym</span> =&gt;</span> Sym.getCategory(sym) === Category.TT &amp;&amp; sym.arity === <span class="hljs-number">0</span>
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> order = <span class="hljs-function">(<span class="hljs-params">category1, category2</span>) =&gt;</span> precedence[category1] - precedence[category2]</pre></div></div>
             
         </li>
         

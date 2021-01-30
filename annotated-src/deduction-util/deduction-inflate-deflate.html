@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -508,7 +543,8 @@
   determineNewTermInInstantiationResult,
   determineSubstitutionInGeneralizationResult,
   startDeduction
-} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span></pre></div></div>
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
+<span class="hljs-keyword">import</span> { DeductionDeflated, StepDeflated } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-deflated&#x27;</span></pre></div></div>
             
         </li>
         
@@ -523,23 +559,23 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> deflateDeduction = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span>
-  deduction.steps.map(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> {
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> deflateDeduction = <span class="hljs-function"><span class="hljs-params">deduction</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> deflatedSteps = deduction.steps.map(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> {
     <span class="hljs-keyword">const</span> { formula, <span class="hljs-attr">ruleApplicationSummary</span>: { rule, premises } } = step
 
-    <span class="hljs-keyword">const</span> result = { <span class="hljs-attr">steps</span>: premises.map(<span class="hljs-function"><span class="hljs-params">premise</span> =&gt;</span> premise + <span class="hljs-number">1</span>), rule }
+    <span class="hljs-keyword">const</span> stepDeflated = StepDeflated({ <span class="hljs-attr">steps</span>: premises.map(<span class="hljs-function"><span class="hljs-params">premise</span> =&gt;</span> premise + <span class="hljs-number">1</span>), rule })
 
     <span class="hljs-keyword">switch</span> (rule) {
       <span class="hljs-keyword">case</span> Rule.Premise: {
-        result.formula = formula
+        stepDeflated.formula = formula
         <span class="hljs-keyword">break</span>
       }
       <span class="hljs-keyword">case</span> Rule.Theorem: {
-        result.formula = formula
+        stepDeflated.formula = formula
         <span class="hljs-keyword">break</span>
       }
       <span class="hljs-keyword">case</span> Rule.TautologicalImplication: {
-        result.formula = formula
+        stepDeflated.formula = formula
         <span class="hljs-keyword">break</span>
       }
       <span class="hljs-keyword">case</span> Rule.ConditionalIntroduction: {
@@ -551,9 +587,9 @@
           deduction.steps[premises[<span class="hljs-number">0</span>]].formula
         )
 
-        result.newTerm = formula.boundSym
-        result.oldTerm = oldTerm
-        result.newTerm = newTerm
+        stepDeflated.newTerm = formula.boundSym
+        stepDeflated.oldTerm = oldTerm
+        stepDeflated.newTerm = newTerm
         <span class="hljs-keyword">break</span>
       }
       <span class="hljs-keyword">case</span> Rule.ExistentialGeneralization: {
@@ -562,20 +598,20 @@
           deduction.steps[premises[<span class="hljs-number">0</span>]].formula
         )
 
-        result.oldTerm = oldTerm
-        result.newTerm = newTerm
+        stepDeflated.oldTerm = oldTerm
+        stepDeflated.newTerm = newTerm
 
         <span class="hljs-keyword">break</span>
       }
       <span class="hljs-keyword">case</span> Rule.UniversalInstantiation: {
-        result.newTerm = determineNewTermInInstantiationResult(
+        stepDeflated.newTerm = determineNewTermInInstantiationResult(
           formula,
           deduction.steps[premises[<span class="hljs-number">0</span>]].formula
         )
         <span class="hljs-keyword">break</span>
       }
       <span class="hljs-keyword">case</span> Rule.ExistentialInstantiation: {
-        result.newTerm = determineNewTermInInstantiationResult(
+        stepDeflated.newTerm = determineNewTermInInstantiationResult(
           formula,
           deduction.steps[premises[<span class="hljs-number">0</span>]].formula
         )
@@ -583,10 +619,13 @@
       }
     }
 
-    <span class="hljs-keyword">return</span> result
+    <span class="hljs-keyword">return</span> stepDeflated
   })
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> inflateDeduction = <span class="hljs-function"><span class="hljs-params">steps</span> =&gt;</span> {
+  <span class="hljs-keyword">return</span> DeductionDeflated({ <span class="hljs-attr">steps</span>: deflatedSteps })
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> inflateDeduction = <span class="hljs-function">(<span class="hljs-params">{ steps }</span>) =&gt;</span> {
   <span class="hljs-keyword">let</span> deductionInterface = startDeduction()
 
   steps.forEach(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> {

@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -505,7 +540,7 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
 <span class="hljs-keyword">import</span> { ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../error&#x27;</span>
-<span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../parsers/formula-parser&#x27;</span>
+<span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../parsers&#x27;</span>
 <span class="hljs-keyword">import</span> { primitivePresentations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../presentation/sym-presentation&#x27;</span>
 <span class="hljs-keyword">import</span> { primitiveSyms } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
 <span class="hljs-keyword">import</span> { ExpressionPointer } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./expression-pointer&#x27;</span>
@@ -518,20 +553,19 @@ beforeEach(<span class="hljs-function">() =&gt;</span> {
   })
 })
 
-test(<span class="hljs-string">`#getParentPointer() throws <span class="hljs-subst">${ErrorName.CANT_GET_PARENT_OF_ROOT}</span> for root.`</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">`.getParent() throws <span class="hljs-subst">${ErrorName.CANT_GET_PARENT_OF_ROOT}</span> for root.`</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> expression = parser.parse(<span class="hljs-string">&#x27;p&#x27;</span>)
   <span class="hljs-keyword">const</span> pointer = ExpressionPointer({ expression })
 
-  expect(<span class="hljs-function">() =&gt;</span> { ExpressionPointer.getParent(pointer) }).toThrow(ErrorName.CANT_GET_PARENT_OF_ROOT)
+  expect(<span class="hljs-function">() =&gt;</span> { pointer.getParent() }).toThrow(ErrorName.CANT_GET_PARENT_OF_ROOT)
 })
 
-test(<span class="hljs-string">&#x27;#getParentPointer({ p -&gt; q, [1] }) for is { p -&gt; q, [] }&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+test(<span class="hljs-string">&#x27;{ p -&gt; q, [1] } .getParent() is { p -&gt; q, [] }&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> expression = parser.parse(<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>)
   <span class="hljs-keyword">const</span> pointer = ExpressionPointer({ expression, <span class="hljs-attr">position</span>: [<span class="hljs-number">1</span>] })
-  <span class="hljs-keyword">const</span> expectedParentPointer = ExpressionPointer({ expression })
-  <span class="hljs-keyword">const</span> parentPointer = ExpressionPointer.getParent(pointer)
+  <span class="hljs-keyword">const</span> expectedParent = ExpressionPointer({ expression })
 
-  expect(parentPointer).toEqual(expectedParentPointer)
+  expect(pointer.getParent()).toDeepEqual(expectedParent)
 })
 
 test.each([
@@ -543,28 +577,28 @@ test.each([
   [<span class="hljs-string">&#x27;Ax Fxy&#x27;</span>, [<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-literal">undefined</span>],
   [<span class="hljs-string">&#x27;Ax (p -&gt; Ex Fx)&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-string">&#x27;x&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]
 ])(
-  <span class="hljs-string">&#x27;#findDefinition({ %s, %j }, %s) is %j&#x27;</span>,
+  <span class="hljs-string">&#x27;{ %s, %j } .findDefinition(%s) is %j&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">formulaStr, position, symbolText, expectedDefinitionPosition</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> expression = parser.parse(formulaStr)
     <span class="hljs-keyword">const</span> pointer = ExpressionPointer({ expression, position })
     <span class="hljs-keyword">const</span> sym = parser.getSym(symbolText)
-    <span class="hljs-keyword">const</span> actualDefinitionPosition = ExpressionPointer.findBindingOccurrence(pointer, sym)
+    <span class="hljs-keyword">const</span> actualDefinitionPosition = pointer.findBindingOccurrence(sym)
 
-    expect(actualDefinitionPosition).toEqual(expectedDefinitionPosition)
+    expect(actualDefinitionPosition).toDeepEqual(expectedDefinitionPosition)
   }
 )
 
 test.each([
   [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, [], <span class="hljs-string">&#x27;q&#x27;</span>, [[<span class="hljs-number">1</span>]]]
 ])(
-  <span class="hljs-string">&#x27;#findFreeOccurrences({ %s %j }, %s) is %j&#x27;</span>,
+  <span class="hljs-string">&#x27;{ %s %j } .findFreeOccurrences(%s) is %j&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">formulaStr, position, symbolText, expectedFreeOccurrences</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> expression = parser.parse(formulaStr)
     <span class="hljs-keyword">const</span> pointer = ExpressionPointer({ expression, position })
     <span class="hljs-keyword">const</span> sym = parser.getSym(symbolText)
-    <span class="hljs-keyword">const</span> freeOccurrences = ExpressionPointer.findFreeOccurrences(pointer, sym)
+    <span class="hljs-keyword">const</span> freeOccurrences = pointer.findFreeOccurrences(sym)
 
-    expect(freeOccurrences).toEqual(expectedFreeOccurrences)
+    expect(freeOccurrences).toDeepEqual(expectedFreeOccurrences)
   }
 )
 
@@ -572,13 +606,13 @@ test.each([
   [<span class="hljs-string">&#x27;p -&gt; Ax Fyx&#x27;</span>, [<span class="hljs-number">1</span>], [[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]],
   [<span class="hljs-string">&#x27;p -&gt; Ax Fyy&#x27;</span>, [<span class="hljs-number">1</span>], []]
 ])(
-  <span class="hljs-string">&#x27;#findBoundOccurrences({ %s %j }) is %j&#x27;</span>,
+  <span class="hljs-string">&#x27;{ %s %j } .findBoundOccurrences() is %j&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">formulaStr, position, expectedBoundOccurrences</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> expression = parser.parse(formulaStr)
     <span class="hljs-keyword">const</span> pointer = ExpressionPointer({ expression, position })
-    <span class="hljs-keyword">const</span> boundOccurrences = ExpressionPointer.findBoundOccurrences(pointer)
+    <span class="hljs-keyword">const</span> boundOccurrences = pointer.findBoundOccurrences()
 
-    expect(boundOccurrences).toEqual(expectedBoundOccurrences)
+    expect(boundOccurrences).toDeepEqual(expectedBoundOccurrences)
   }
 )
 
@@ -595,21 +629,18 @@ test.each([
   [<span class="hljs-string">&#x27;Ey Fy -&gt; Ax Fy&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;y&#x27;</span>]],
   [<span class="hljs-string">&#x27;Ey (Fy -&gt; Ax Fy)&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]]
 ])(
-  <span class="hljs-string">&#x27;#getBoundSyms({ %s %j }) is %j&#x27;</span>,
+  <span class="hljs-string">&#x27;{ %s %j } .getBoundSyms() is %j&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">formulaStr, position, expectedContextStr</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> expression = parser.parse(formulaStr)
-    <span class="hljs-keyword">const</span> pointer = <span class="hljs-keyword">new</span> ExpressionPointer({
-      expression,
-      position
-    })
+    <span class="hljs-keyword">const</span> pointer = ExpressionPointer({ expression, position })
     <span class="hljs-keyword">const</span> expectedContext = _.fromPairs(
       expectedContextStr
         .map(<span class="hljs-function"><span class="hljs-params">symStr</span> =&gt;</span> parser.getSym(symStr))
         .map(<span class="hljs-function"><span class="hljs-params">sym</span> =&gt;</span> ([sym.id, sym]))
     )
-    <span class="hljs-keyword">const</span> context = ExpressionPointer.getBoundSyms(pointer)
+    <span class="hljs-keyword">const</span> context = pointer.getBoundSyms()
 
-    expect(context).toEqual(expectedContext)
+    expect(context).toDeepEqual(expectedContext)
   }
 )</pre></div></div>
             

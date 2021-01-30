@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -504,7 +539,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../error&#x27;</span>
-<span class="hljs-keyword">import</span> { DeductionParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../parsers/deduction-parser&#x27;</span>
+<span class="hljs-keyword">import</span> { DeductionParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../parsers&#x27;</span>
 <span class="hljs-keyword">import</span> { primitivePresentations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../presentation/sym-presentation&#x27;</span>
 <span class="hljs-keyword">import</span> { primitiveSyms } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./deduction-interface&#x27;</span>
@@ -560,7 +595,7 @@ test(<span class="hljs-string">&#x27;#deleteLastStep() case 1&#x27;</span>, <spa
 
   <span class="hljs-keyword">const</span> actualDeduction = startDeduction(deductionWithAddedStep).deleteLastStep().deduction
 
-  expect(expectedDeduction).toEqual(actualDeduction)
+  expect(expectedDeduction).toDeepEqual(actualDeduction)
 })
 
 test(<span class="hljs-string">&#x27;#deleteLastStep() case 2&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
@@ -579,7 +614,7 @@ test(<span class="hljs-string">&#x27;#deleteLastStep() case 2&#x27;</span>, <spa
 
   <span class="hljs-keyword">const</span> actualDeduction = startDeduction(deductionWithAddedStep).deleteLastStep().deduction
 
-  expect(expectedDeduction).toEqual(actualDeduction)
+  expect(expectedDeduction).toDeepEqual(actualDeduction)
 })</pre></div></div>
             
         </li>

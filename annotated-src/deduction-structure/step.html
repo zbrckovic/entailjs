@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -503,7 +538,9 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./rule&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> { Base } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../utils&#x27;</span>
+<span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./rule&#x27;</span>
 <span class="hljs-keyword">import</span> { TermDependencyGraph } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./term-dependency-graph&#x27;</span></pre></div></div>
             
         </li>
@@ -519,7 +556,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Step = ({</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Step = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Step&#x27;</span>,
+  init ({</pre></div></div>
             
         </li>
         
@@ -534,7 +573,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  assumptions = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    assumptions = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(),</pre></div></div>
             
         </li>
         
@@ -549,7 +588,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  formula,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    formula,</pre></div></div>
             
         </li>
         
@@ -569,12 +608,19 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  ruleApplicationSummary = RegularRuleApplicationSummary()
-} = {}) =&gt; ({ assumptions, formula, ruleApplicationSummary })
+            <div class="content"><div class='highlight'><pre>    ruleApplicationSummary = RegularRuleApplicationSummary()
+  }) {
+    <span class="hljs-built_in">this</span>.assumptions = assumptions
+    <span class="hljs-built_in">this</span>.formula = formula
+    <span class="hljs-built_in">this</span>.ruleApplicationSummary = ruleApplicationSummary
+  }
+}).compose(Base)
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RegularRuleApplicationSummary = ({
-  rule = Rule.Premise,
-  premises = [],</pre></div></div>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RegularRuleApplicationSummary = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;RegularRuleApplicationSummary&#x27;</span>,
+  init ({
+    rule = Rule.Premise,
+    premises = [],</pre></div></div>
             
         </li>
         
@@ -589,7 +635,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  addedTermDependencies,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    addedTermDependencies,</pre></div></div>
             
         </li>
         
@@ -604,10 +650,22 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  removedTermDependencies = TermDependencyGraph()
-} = {}) =&gt; ({ rule, premises, addedTermDependencies, removedTermDependencies })
+            <div class="content"><div class='highlight'><pre>    removedTermDependencies = TermDependencyGraph()
+  }) {
+    <span class="hljs-built_in">this</span>.rule = rule
+    <span class="hljs-built_in">this</span>.premises = premises
+    <span class="hljs-built_in">this</span>.addedTermDependencies = addedTermDependencies
+    <span class="hljs-built_in">this</span>.removedTermDependencies = removedTermDependencies
+  }
+})
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TheoremRuleApplicationSummary = <span class="hljs-function">(<span class="hljs-params">{ theoremId }</span>) =&gt;</span> ({ <span class="hljs-attr">rule</span>: Rule.Theorem, theoremId })</pre></div></div>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TheoremRuleApplicationSummary = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;TheoremRuleApplicationSummary&#x27;</span>,
+  init ({ theoremId }) {
+    <span class="hljs-built_in">this</span>.rule = Rule.Theorem
+    <span class="hljs-built_in">this</span>.theoremId = theoremId
+  }
+}).compose(Base)</pre></div></div>
             
         </li>
         

@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -503,7 +538,9 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
+<span class="hljs-keyword">import</span> { Base } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../utils&#x27;</span></pre></div></div>
             
         </li>
         
@@ -514,14 +551,30 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p><code>TermDependencyGraph</code> is a mapping between symbol’s id (<strong>dependent</strong>) and a set of symbol ids on
+              <p><code>TermDependencyGraph</code> is a mapping between term’s id (<strong>dependent</strong>) and a set of term ids on
 which it depends on (<strong>dependencies</strong>). It’s important to note that <code>TermDependencyGraph</code>
-contains only ids, not the actual symbol objects. Whenever we mention a symbol in this context
-it’s the symbol’s id - not the actual symbol object - we are talking about.</p>
+contains only ids, not the actual <code>Sym</code> objects. Whenever we mention a term in this context
+it’s the term’s id - not the actual <code>Sym</code> object - we are talking about.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TermDependencyGraph = <span class="hljs-function">(<span class="hljs-params">{ ...props } = {}</span>) =&gt;</span> ({ ...props })</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TermDependencyGraph = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;TermDependencyGraph&#x27;</span>,
+  init ({ ...props }) {
+    <span class="hljs-built_in">this</span>.map = { ...props }
+  },
+  <span class="hljs-attr">methods</span>: {
+    getDirectDependencies (dependentTerm) {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.map[dependentTerm]
+    },
+
+    setDirectDependencies (dependentTerm, dependencyTerms) {
+      <span class="hljs-built_in">this</span>.map[dependentTerm] = dependencyTerms
+    },
+
+    deleteDirectDependencies (dependentTerm) {
+      <span class="hljs-keyword">delete</span> <span class="hljs-built_in">this</span>.map[dependentTerm]
+    },</pre></div></div>
             
         </li>
         
@@ -532,36 +585,36 @@ it’s the symbol’s id - not the actual symbol object - we are talking about.<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Adds direct dependency between <code>dependentTerm</code> and <code>dependencyTerms</code> and normalizes the graph.
-Calls <code>onRemove</code> whenever dependencies are removed on normalization.</p>
+              <p>Adds direct dependency between <code>dependentTerm</code> and <code>dependencyTerms</code> and normalizes the
+graph. Calls <code>onRemove</code> whenever dependencies are removed on normalization.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>TermDependencyGraph.addDependencies = <span class="hljs-function">(<span class="hljs-params">graph, dependentTerm, dependencyTerms = [], onRemove</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (graph[dependentTerm] !== <span class="hljs-literal">undefined</span>) {
-    <span class="hljs-keyword">throw</span> createError(ErrorName.TERM_ALREADY_USED, <span class="hljs-literal">undefined</span>, dependentTerm)
-  }
+            <div class="content"><div class='highlight'><pre>    addDependencies (dependentTerm, dependencyTerms = [], onRemove) {
+      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.getDirectDependencies(dependentTerm) !== <span class="hljs-literal">undefined</span>) {
+        <span class="hljs-keyword">throw</span> createError(ErrorName.TERM_ALREADY_USED, <span class="hljs-literal">undefined</span>, dependentTerm)
+      }
 
-  <span class="hljs-keyword">const</span> cycleInducingDependency = dependencyTerms.find(
-    <span class="hljs-function"><span class="hljs-params">dependencyTerm</span> =&gt;</span> TermDependencyGraph.hasDependency(graph, dependencyTerm, dependentTerm)
-  )
-  <span class="hljs-keyword">if</span> (cycleInducingDependency !== <span class="hljs-literal">undefined</span>) {
-    <span class="hljs-keyword">throw</span> createError(ErrorName.CYCLIC_DEPENDENCIES, <span class="hljs-literal">undefined</span>, cycleInducingDependency)
-  }
+      <span class="hljs-keyword">const</span> cycleInducingDependency = dependencyTerms.find(
+        <span class="hljs-function"><span class="hljs-params">dependencyTerm</span> =&gt;</span> <span class="hljs-built_in">this</span>.hasDependency(dependencyTerm, dependentTerm)
+      )
+      <span class="hljs-keyword">if</span> (cycleInducingDependency !== <span class="hljs-literal">undefined</span>) {
+        <span class="hljs-keyword">throw</span> createError(ErrorName.CYCLIC_DEPENDENCIES, <span class="hljs-literal">undefined</span>, cycleInducingDependency)
+      }
 
-  <span class="hljs-keyword">let</span> result = { ...graph, [dependentTerm]: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>() }
-  dependencyTerms.forEach(<span class="hljs-function"><span class="hljs-params">dependencyTerm</span> =&gt;</span> {
-    result = normalize(result, dependentTerm, dependencyTerm, onRemove)
+      <span class="hljs-keyword">let</span> result = <span class="hljs-built_in">this</span>.clone({ <span class="hljs-attr">map</span>: { ...this.map, [dependentTerm]: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>() } })
+      dependencyTerms.forEach(<span class="hljs-function"><span class="hljs-params">dependencyTerm</span> =&gt;</span> {
+        result = result._normalize(dependentTerm, dependencyTerm, onRemove)
 
-    <span class="hljs-keyword">if</span> (result[dependentTerm] === <span class="hljs-literal">undefined</span>) {
-      result[dependentTerm] = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
-    }
+        <span class="hljs-keyword">if</span> (result.getDirectDependencies(dependentTerm) === <span class="hljs-literal">undefined</span>) {
+          result.setDirectDependencies(dependentTerm, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>())
+        }
 
-    result[dependentTerm].add(dependencyTerm)
-  })
+        result.getDirectDependencies(dependentTerm).add(dependencyTerm)
+      })
 
-  <span class="hljs-keyword">return</span> result
-}</pre></div></div>
+      <span class="hljs-keyword">return</span> result
+    },</pre></div></div>
             
         </li>
         
@@ -577,24 +630,26 @@ Calls <code>onRemove</code> whenever dependencies are removed on normalization.<
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>TermDependencyGraph.hasDependency = (
-  graph,
-  dependentTerm,
-  dependencyTerm,
-  traversed = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
-) =&gt; {
-  <span class="hljs-keyword">if</span> (traversed.has(dependentTerm)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;Infinite recursion error.&#x27;</span>)
-  traversed.add(dependentTerm)
+            <div class="content"><div class='highlight'><pre>    hasDependency (
+      dependentTerm,
+      dependencyTerm,
+      traversed = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
+    ) {
+      <span class="hljs-keyword">if</span> (traversed.has(dependentTerm)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;Infinite recursion error.&#x27;</span>)
+      traversed.add(dependentTerm)
 
-  <span class="hljs-keyword">const</span> directDependencyTerms = graph[dependentTerm]
-  <span class="hljs-keyword">if</span> (directDependencyTerms === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
-  <span class="hljs-keyword">if</span> (directDependencyTerms.has(dependencyTerm)) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+      <span class="hljs-keyword">const</span> directDependencyTerms = <span class="hljs-built_in">this</span>.getDirectDependencies(dependentTerm)
+      <span class="hljs-keyword">if</span> (directDependencyTerms === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+      <span class="hljs-keyword">if</span> (directDependencyTerms.has(dependencyTerm)) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
 
-  <span class="hljs-keyword">return</span> [...directDependencyTerms].some(
-    <span class="hljs-function"><span class="hljs-params">directDependencyTerm</span> =&gt;</span>
-      TermDependencyGraph.hasDependency(graph, directDependencyTerm, dependencyTerm, traversed)
-  )
-}</pre></div></div>
+      <span class="hljs-keyword">return</span> [...directDependencyTerms].some(
+        <span class="hljs-function"><span class="hljs-params">directDependencyTerm</span> =&gt;</span> <span class="hljs-built_in">this</span>.hasDependency(directDependencyTerm, dependencyTerm, traversed)
+      )
+    },
+
+    getEntries () {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.entries(<span class="hljs-built_in">this</span>.map)
+    },</pre></div></div>
             
         </li>
         
@@ -609,11 +664,12 @@ Calls <code>onRemove</code> whenever dependencies are removed on normalization.<
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>TermDependencyGraph.getDirectDependents = <span class="hljs-function">(<span class="hljs-params">graph, dependencyTerm</span>) =&gt;</span>
-  <span class="hljs-built_in">Object</span>
-    .entries(graph)
-    .filter(<span class="hljs-function">(<span class="hljs-params">[, dependencyTerms]</span>) =&gt;</span> dependencyTerms.has(dependencyTerm))
-    .map(<span class="hljs-function">(<span class="hljs-params">[dependentTerm]</span>) =&gt;</span> <span class="hljs-built_in">parseInt</span>(dependentTerm, <span class="hljs-number">10</span>))</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    getDirectDependents (dependencyTerm) {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>
+        .getEntries()
+        .filter(<span class="hljs-function">(<span class="hljs-params">[, dependencyTerms]</span>) =&gt;</span> dependencyTerms.has(dependencyTerm))
+        .map(<span class="hljs-function">(<span class="hljs-params">[dependentTerm]</span>) =&gt;</span> <span class="hljs-built_in">parseInt</span>(dependentTerm, <span class="hljs-number">10</span>))
+    },</pre></div></div>
             
         </li>
         
@@ -624,48 +680,45 @@ Calls <code>onRemove</code> whenever dependencies are removed on normalization.<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Finds all direct or transitive dependency terms of <code>dependentTerm</code> and return them as an array.</p>
+              <p>Finds all direct or transitive dependency terms of <code>dependentTerm</code> and return them as an
+array.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>TermDependencyGraph.getDependencies = <span class="hljs-function">(<span class="hljs-params">graph, dependentTerm, traversed = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (traversed.has(dependentTerm)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;Infinite recursion error&#x27;</span>)
-  traversed.add(dependentTerm)
+            <div class="content"><div class='highlight'><pre>    getDependencies (dependentTerm, traversed = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()) {
+      <span class="hljs-keyword">if</span> (traversed.has(dependentTerm)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;Infinite recursion error&#x27;</span>)
+      traversed.add(dependentTerm)
 
-  <span class="hljs-keyword">const</span> directDependencyTerms = graph[dependentTerm]
-  <span class="hljs-keyword">if</span> (directDependencyTerms === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> []
+      <span class="hljs-keyword">const</span> directDependencyTerms = <span class="hljs-built_in">this</span>.getDirectDependencies(dependentTerm)
+      <span class="hljs-keyword">if</span> (directDependencyTerms === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> []
 
-  <span class="hljs-keyword">const</span> transitiveDependencyTerms = []
-  directDependencyTerms.forEach(<span class="hljs-function"><span class="hljs-params">directDependency</span> =&gt;</span> {
-    transitiveDependencyTerms.push(
-      ...TermDependencyGraph.getDependencies(graph, directDependency, traversed)
-    )
-  })
+      <span class="hljs-keyword">const</span> transitiveDependencyTerms = []
+      directDependencyTerms.forEach(<span class="hljs-function"><span class="hljs-params">directDependency</span> =&gt;</span> {
+        transitiveDependencyTerms.push(...this.getDependencies(directDependency, traversed))
+      })
 
-  <span class="hljs-keyword">return</span> [...directDependencyTerms, ...transitiveDependencyTerms]
-}
+      <span class="hljs-keyword">return</span> [...directDependencyTerms, ...transitiveDependencyTerms]
+    },
 
-TermDependencyGraph.hasDirectDependency = <span class="hljs-function">(<span class="hljs-params">graph, dependentTerm, dependencyTerm</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> directDependencyTerms = graph[dependentTerm]
-  <span class="hljs-keyword">if</span> (directDependencyTerms === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
-  <span class="hljs-keyword">return</span> directDependencyTerms.has(dependencyTerm)
-}
+    hasDirectDependency (dependentTerm, dependencyTerm) {
+      <span class="hljs-keyword">const</span> directDependencyTerms = <span class="hljs-built_in">this</span>.getDirectDependencies(dependentTerm)
+      <span class="hljs-keyword">if</span> (directDependencyTerms === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+      <span class="hljs-keyword">return</span> directDependencyTerms.has(dependencyTerm)
+    },
 
-TermDependencyGraph.getDependents = <span class="hljs-function">(<span class="hljs-params">graph, dependencyTerm, traversed = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (traversed.has(dependencyTerm)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;Infinite recursion error.&#x27;</span>)
-  traversed.add(dependencyTerm)
+    getDependents (dependencyTerm, traversed = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()) {
+      <span class="hljs-keyword">if</span> (traversed.has(dependencyTerm)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;Infinite recursion error.&#x27;</span>)
+      traversed.add(dependencyTerm)
 
-  <span class="hljs-keyword">const</span> directDependencyTerms = TermDependencyGraph.getDirectDependents(graph, dependencyTerm)
+      <span class="hljs-keyword">const</span> directDependencyTerms = <span class="hljs-built_in">this</span>.getDirectDependents(dependencyTerm)
 
-  <span class="hljs-keyword">const</span> transitiveDependentTerms = []
-  directDependencyTerms.forEach(<span class="hljs-function"><span class="hljs-params">dependentTerm</span> =&gt;</span> {
-    transitiveDependentTerms.push(
-      ...TermDependencyGraph.getDependents(graph, dependentTerm, traversed)
-    )
-  })
+      <span class="hljs-keyword">const</span> transitiveDependentTerms = []
+      directDependencyTerms.forEach(<span class="hljs-function"><span class="hljs-params">dependentTerm</span> =&gt;</span> {
+        transitiveDependentTerms.push(...this.getDependents(dependentTerm, traversed))
+      })
 
-  <span class="hljs-keyword">return</span> [...directDependencyTerms, ...transitiveDependentTerms]
-}</pre></div></div>
+      <span class="hljs-keyword">return</span> [...directDependencyTerms, ...transitiveDependentTerms]
+    },</pre></div></div>
             
         </li>
         
@@ -681,24 +734,22 @@ TermDependencyGraph.getDependents = <span class="hljs-function">(<span class="hl
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> normalize = <span class="hljs-function">(<span class="hljs-params">graph, dependentTerm, dependencyTerm, onRemove</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> normalizedDownwards = normalizeDownwards(
-    graph,
-    dependentTerm,
-    dependencyTerm,
-    onRemove,
-    <span class="hljs-literal">true</span>
-  )
+            <div class="content"><div class='highlight'><pre>    _normalize (dependentTerm, dependencyTerm, onRemove) {
+      <span class="hljs-keyword">const</span> normalizedDownwards = <span class="hljs-built_in">this</span>._normalizeDownwards(
+        dependentTerm,
+        dependencyTerm,
+        onRemove,
+        <span class="hljs-literal">true</span>
+      )
 
-  <span class="hljs-keyword">const</span> furtherDependentTerms =
-    TermDependencyGraph.getDirectDependents(normalizedDownwards, dependentTerm)
+      <span class="hljs-keyword">const</span> furtherDependentTerms = normalizedDownwards.getDirectDependents(dependentTerm)
 
-  <span class="hljs-keyword">return</span> furtherDependentTerms.reduce(
-    <span class="hljs-function">(<span class="hljs-params">intermediateGraph, furtherDependentTerm</span>) =&gt;</span>
-      normalizeDownwards(intermediateGraph, furtherDependentTerm, dependencyTerm, onRemove),
-    normalizedDownwards
-  )
-}</pre></div></div>
+      <span class="hljs-keyword">return</span> furtherDependentTerms.reduce(
+        <span class="hljs-function">(<span class="hljs-params">intermediateGraph, furtherDependentTerm</span>) =&gt;</span>
+          intermediateGraph._normalizeDownwards(furtherDependentTerm, dependencyTerm, onRemove),
+        normalizedDownwards
+      )
+    },</pre></div></div>
             
         </li>
         
@@ -711,27 +762,32 @@ TermDependencyGraph.getDependents = <span class="hljs-function">(<span class="hl
               </div>
               <p>Removes direct dependencies which would become redundant if direct dependency between
 <code>dependentTerm</code> and <code>dependencyTerm</code> was introduced. It looks only downstream from
-<code>dependentTerm</code> i.e. only its descendants are considered. Calls <code>onRemove</code> whenever dependency
-is removed.</p>
+<code>dependentTerm</code> i.e. only its descendants are considered. Calls <code>onRemove</code> whenever
+dependency is removed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> normalizeDownwards = <span class="hljs-function">(<span class="hljs-params">graph, dependentTerm, dependencyTerm, onRemove, isRoot = <span class="hljs-literal">false</span></span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (!isRoot &amp;&amp; TermDependencyGraph.hasDirectDependency(graph, dependentTerm, dependencyTerm)) {
-    onRemove?.(dependentTerm, dependencyTerm)
-    <span class="hljs-keyword">return</span> removeDirectDependency(graph, dependentTerm, dependencyTerm)
-  }
+            <div class="content"><div class='highlight'><pre>    _normalizeDownwards (dependentTerm, dependencyTerm, onRemove, isRoot = <span class="hljs-literal">false</span>) {
+      <span class="hljs-keyword">if</span> (!isRoot &amp;&amp; <span class="hljs-built_in">this</span>.hasDirectDependency(dependentTerm, dependencyTerm)) {
+        onRemove?.(dependentTerm, dependencyTerm)
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>._removeDirectDependency(dependentTerm, dependencyTerm)
+      }
 
-  <span class="hljs-keyword">const</span> transitiveDependencyTerms = graph[dependencyTerm]
+      <span class="hljs-keyword">const</span> transitiveDependencyTerms = <span class="hljs-built_in">this</span>.getDirectDependencies(dependencyTerm)
+      <span class="hljs-keyword">if</span> (transitiveDependencyTerms === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>
 
-  <span class="hljs-keyword">if</span> (transitiveDependencyTerms === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> graph
-
-  <span class="hljs-keyword">return</span> [...transitiveDependencyTerms].reduce(
-    <span class="hljs-function">(<span class="hljs-params">intermediateGraph, transitiveDependencyTerm</span>) =&gt;</span>
-      normalizeDownwards(intermediateGraph, dependentTerm, transitiveDependencyTerm, onRemove),
-    graph
-  )
-}</pre></div></div>
+      <span class="hljs-keyword">return</span> TermDependencyGraph(
+        [...transitiveDependencyTerms].reduce(
+          <span class="hljs-function">(<span class="hljs-params">intermediateGraph, transitiveDependencyTerm</span>) =&gt;</span>
+            intermediateGraph._normalizeDownwards(
+              dependentTerm,
+              transitiveDependencyTerm,
+              onRemove
+            ),
+          <span class="hljs-built_in">this</span>
+        ).map
+      )
+    },</pre></div></div>
             
         </li>
         
@@ -746,23 +802,25 @@ is removed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> removeDirectDependency = <span class="hljs-function">(<span class="hljs-params">graph, dependentTerm, dependencyTerm</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> dependencyTerms = graph[dependentTerm]
-  <span class="hljs-keyword">if</span> (dependencyTerms === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> graph
+            <div class="content"><div class='highlight'><pre>    _removeDirectDependency (dependentTerm, dependencyTerm) {
+      <span class="hljs-keyword">const</span> dependencyTerms = <span class="hljs-built_in">this</span>.getDirectDependencies(dependentTerm)
+      <span class="hljs-keyword">if</span> (dependencyTerms === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>
 
-  <span class="hljs-keyword">const</span> newDependencyTerms = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(dependencyTerms)
-  newDependencyTerms.delete(dependencyTerm)
+      <span class="hljs-keyword">const</span> newDependencyTerms = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(dependencyTerms)
+      newDependencyTerms.delete(dependencyTerm)
 
-  <span class="hljs-keyword">const</span> result = { ...graph }
+      <span class="hljs-keyword">const</span> result = <span class="hljs-built_in">this</span>.clone({ <span class="hljs-attr">map</span>: { ...this.map } })
 
-  <span class="hljs-keyword">if</span> (newDependencyTerms.size === <span class="hljs-number">0</span>) {
-    <span class="hljs-keyword">delete</span> result[dependentTerm]
-  } <span class="hljs-keyword">else</span> {
-    result[dependentTerm] = newDependencyTerms
+      <span class="hljs-keyword">if</span> (newDependencyTerms.size === <span class="hljs-number">0</span>) {
+        result.deleteDirectDependencies(dependentTerm)
+      } <span class="hljs-keyword">else</span> {
+        result.setDirectDependencies(dependentTerm, newDependencyTerms)
+      }
+
+      <span class="hljs-keyword">return</span> result
+    }
   }
-
-  <span class="hljs-keyword">return</span> result
-}</pre></div></div>
+}).compose(Base)</pre></div></div>
             
         </li>
         

@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -503,7 +538,9 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
+<span class="hljs-keyword">import</span> { Base } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../utils&#x27;</span></pre></div></div>
             
         </li>
         
@@ -519,28 +556,45 @@ text environments, while unicode is primarily intended for GUI and generated doc
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> SymPresentation = <span class="hljs-function">(<span class="hljs-params">{ ascii, unicode }</span>) =&gt;</span> ({ ascii, unicode })
-
-SymPresentation.getDefaultSyntacticInfo =
-  <span class="hljs-function"><span class="hljs-params">presentation</span> =&gt;</span> presentation.unicode ?? presentation.ascii
-
-SymPresentation.createDescription =
-  <span class="hljs-function">(<span class="hljs-params">presentation, arity = <span class="hljs-number">1</span></span>) =&gt;</span> SyntacticInfo.createDescription(presentation.ascii, arity)
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> SyntacticInfo = <span class="hljs-function">(<span class="hljs-params">{ text, placement = Placement.Prefix }</span>) =&gt;</span> ({ text, placement })
-
-SyntacticInfo.prefix = <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> SyntacticInfo({ text, <span class="hljs-attr">placement</span>: Placement.Prefix })
-
-SyntacticInfo.infix = <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> SyntacticInfo({ text, <span class="hljs-attr">placement</span>: Placement.Infix })
-
-SyntacticInfo.createDescription = <span class="hljs-function">(<span class="hljs-params">info, arity = <span class="hljs-number">1</span></span>) =&gt;</span> {
-  <span class="hljs-keyword">switch</span> (info.placement) {
-    <span class="hljs-keyword">case</span> Placement.Prefix:
-      <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${info.text}</span><span class="hljs-subst">${_.repeat(<span class="hljs-string">&#x27; _&#x27;</span>, arity).join(<span class="hljs-string">&#x27;&#x27;</span>)}</span>`</span>
-    <span class="hljs-keyword">case</span> Placement.Infix:
-      <span class="hljs-keyword">return</span> <span class="hljs-string">`_ <span class="hljs-subst">${info.text}</span> _`</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> SymPresentation = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;SymPresentation&#x27;</span>,
+  init ({ ascii, unicode }) {
+    <span class="hljs-built_in">this</span>.ascii = ascii
+    <span class="hljs-built_in">this</span>.unicode = unicode
+  },
+  <span class="hljs-attr">properties</span>: {
+    get defaultSyntacticInfo () {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.unicode ?? <span class="hljs-built_in">this</span>.ascii
+    }
+  },
+  <span class="hljs-attr">methods</span>: {
+    createDescription (arity = <span class="hljs-number">1</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.ascii.createDescription(arity)
+    }
   }
-}</pre></div></div>
+}).compose(Base)
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> SyntacticInfo = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;SyntacticInfo&#x27;</span>,
+  <span class="hljs-attr">statics</span>: {
+    prefix (text) { <span class="hljs-keyword">return</span> SyntacticInfo({ text, <span class="hljs-attr">placement</span>: Placement.Prefix }) },
+    infix (text) { <span class="hljs-keyword">return</span> SyntacticInfo({ text, <span class="hljs-attr">placement</span>: Placement.Infix }) }
+  },
+  init ({ text, placement = Placement.Prefix }) {
+    <span class="hljs-built_in">this</span>.text = text
+    <span class="hljs-built_in">this</span>.placement = placement
+  },
+  <span class="hljs-attr">methods</span>: {
+    createDescription (arity = <span class="hljs-number">1</span>) {
+      <span class="hljs-keyword">switch</span> (<span class="hljs-built_in">this</span>.placement) {
+        <span class="hljs-keyword">case</span> Placement.Prefix:
+          <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.text}</span><span class="hljs-subst">${_.repeat(<span class="hljs-string">&#x27; _&#x27;</span>, arity).join(<span class="hljs-string">&#x27;&#x27;</span>)}</span>`</span>
+        <span class="hljs-keyword">case</span> Placement.Infix:
+          <span class="hljs-keyword">return</span> <span class="hljs-string">`_ <span class="hljs-subst">${<span class="hljs-built_in">this</span>.text}</span> _`</span>
+      }
+    }
+  }
+}).compose(Base)</pre></div></div>
             
         </li>
         

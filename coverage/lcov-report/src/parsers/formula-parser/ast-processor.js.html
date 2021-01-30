@@ -200,7 +200,13 @@
 <a name='L141'></a><a href='#L141'>141</a>
 <a name='L142'></a><a href='#L142'>142</a>
 <a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -214,7 +220,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">27x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -226,8 +234,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">207x</span>
+<span class="cline-any cline-yes">207x</span>
+<span class="cline-any cline-yes">207x</span>
+<span class="cline-any cline-yes">207x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">202x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1359x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1357x</span>
@@ -294,7 +310,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">202x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">448x</span>
 <span class="cline-any cline-yes">448x</span>
 <span class="cline-any cline-yes">448x</span>
@@ -303,7 +319,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">202x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">445x</span>
 <span class="cline-any cline-yes">445x</span>
 <span class="cline-any cline-yes">445x</span>
@@ -312,10 +328,6 @@
 <span class="cline-any cline-yes">445x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">445x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">202x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -327,7 +339,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">27x</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-yes">445x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">289x</span>
@@ -343,7 +355,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">289x</span>
 <span class="cline-any cline-yes">356x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Category, Expression, Kind, Sym } from '../../abstract-structures'
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import stampit from '@stamp/it'
+import { Category, Expression, Kind, Sym } from '../../abstract-structures'
 import { createError, ErrorName } from '../../error'
 import {
   createTextToSymMap,
@@ -352,123 +365,128 @@ import {
   SymPresentation,
   SyntacticInfo
 } from '../../presentation/sym-presentation'
+import { Base } from '../../utils'
 import { isBracketed } from '../peg/ast-formula'
 &nbsp;
 // `AstProcessor` can process formula AST (the result of parsing formula) and create an
 // `Expression`. As a side-effect of this processing it updates its internal state. Internal state
 // tracks information about processed symbols.
-export const AstProcessor = ({
-  // All symbols by their ids.
-  syms,
-  // Presentations by symbol ids.
-  presentations,
-  // Symbols by their ascii representation texts (used for optimization).
-  textToSymMap = createTextToSymMap(presentations, syms),
-  // Used when new symbol must be introduced to decide about its id (used for optimization).
-  maxSymId = getMaxSymId(textToSymMap)
-}) =&gt; {
-  // Processes formula AST (returned from peg parser) and tries to construct an expression (more
-  // precisely it tries to construct a formula because parser accepts only formula expressions). If
-  // it can't, throws an error.
-  const process = (ast, kind = Kind.Formula) =&gt; {
-    if (isBracketed(ast)) return process(ast.expression, kind)
+export const AstProcessor = stampit({
+  name: 'AstProcessor',
+  init ({
+    // All symbols by their ids.
+    syms,
+    // Presentations by symbol ids.
+    presentations,
+    // Symbols by their ascii representation texts (used for optimization).
+    textToSymMap = createTextToSymMap(presentations, syms),
+    // Used when new symbol must be introduced to decide about its id (used for optimization).
+    maxSymId = getMaxSymId(textToSymMap)
+  }) {
+    this.syms = syms
+    this.presentations = presentations
+    this.textToSymMap = textToSymMap
+    this.maxSymId = maxSymId
+  },
+  methods: {
+    // Processes formula AST (returned from peg parser) and tries to construct an expression (more
+    // precisely it tries to construct a formula because parser accepts only formula expressions).
+    // If it can't, throws an error.
+    process (ast, kind = Kind.Formula) {
+      if (isBracketed(ast)) return this.process(ast.expression, kind)
 &nbsp;
-    const childrenAsts = ast.children
-    const arity = childrenAsts.length
+      const childrenAsts = ast.children
+      const arity = childrenAsts.length
 &nbsp;
-    const mainSym = textToSymMap[ast.sym] ??
-      createSym(kind, arity, ast.boundSym !== undefined, ast.sym, ast.symPlacement)
+      const mainSym = this.textToSymMap[ast.sym] ??
+        this.createSym(kind, arity, ast.boundSym !== undefined, ast.sym, ast.symPlacement)
 &nbsp;
-    const mainSymPresentation = presentations[mainSym.id]
+      const mainSymPresentation = this.presentations[mainSym.id]
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (mainSymPresentation.ascii.placement !== ast.symPlacement) {
-<span class="cstat-no" title="statement not covered" >      throw createError(</span>
-        ErrorName.INVALID_SYMBOL_PLACEMENT,
-        undefined,
-        { sym: mainSym, presentation: mainSymPresentation, placement: ast.symPlacement }
-      )
-    }
-&nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (mainSym.arity !== arity) {
-<span class="cstat-no" title="statement not covered" >      throw createError(</span>
-        ErrorName.INVALID_ARITY,
-        undefined,
-        { sym: mainSym, presentation: mainSymPresentation, arity }
-      )
-    }
-    if (mainSym.kind !== kind) {
-      throw createError(
-        ErrorName.INVALID_SYMBOL_KIND,
-        undefined,
-        { sym: mainSym, presentation: mainSymPresentation, kind }
-      )
-    }
-&nbsp;
-    let boundSym
-    if (ast.boundSym !== undefined) {
-      boundSym = textToSymMap[ast.boundSym]
-&nbsp;
-      if (boundSym !== undefined) {
-        if (Sym.getCategory(boundSym) !== Category.TT) {
-          throw createError(
-            ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
-            undefined,
-            { sym: boundSym, presentation: presentations[boundSym.id] }
-          )
-        }
-&nbsp;
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (boundSym.arity !== 0) {
-<span class="cstat-no" title="statement not covered" >          throw createError(</span>
-            ErrorName.INVALID_BOUND_SYMBOL_ARITY,
-            undefined,
-            { sym: boundSym, presentation: presentations[boundSym.id] }
-          )
-        }
-      } else {
-        boundSym = createSym(Kind.Term, 0, false, ast.boundSym, Placement.Prefix)
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (mainSymPresentation.ascii.placement !== ast.symPlacement) {
+<span class="cstat-no" title="statement not covered" >        throw createError(</span>
+          ErrorName.INVALID_SYMBOL_PLACEMENT,
+          undefined,
+          { sym: mainSym, presentation: mainSymPresentation, placement: ast.symPlacement }
+        )
       }
-    }
 &nbsp;
-    return Expression({
-      sym: mainSym,
-      boundSym: boundSym,
-      children: childrenAsts.map(childAst =&gt; process(childAst, mainSym.argumentKind))
-    })
-  }
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (mainSym.arity !== arity) {
+<span class="cstat-no" title="statement not covered" >        throw createError(</span>
+          ErrorName.INVALID_ARITY,
+          undefined,
+          { sym: mainSym, presentation: mainSymPresentation, arity }
+        )
+      }
+      if (mainSym.kind !== kind) {
+        throw createError(
+          ErrorName.INVALID_SYMBOL_KIND,
+          undefined,
+          { sym: mainSym, presentation: mainSymPresentation, kind }
+        )
+      }
 &nbsp;
-  // Updates internal state by adding new association between symbol and its presentation.
-  const addPresentation = (sym, presentation) =&gt; {
-    syms = { ...syms, [sym.id]: sym }
-    presentations = { ...presentations, [sym.id]: presentation }
-    textToSymMap = { ...textToSymMap, [presentation.ascii.text]: sym }
-    maxSymId = Math.max(maxSymId, sym.id)
-  }
+      let boundSym
+      if (ast.boundSym !== undefined) {
+        boundSym = this.textToSymMap[ast.boundSym]
 &nbsp;
-  // Creates new symbol, generates new id for it, updates internal state according to the new symbol
-  // addition and returns newly created symbol.
-  const createSym = (kind, arity, binds, text, placement) =&gt; {
-    const argumentKind = determineArgumentKind(kind, text)
-    const id = maxSymId + 1
-    const sym = Sym({ id, kind, argumentKind, arity, binds })
-    const presentation = SymPresentation({ ascii: SyntacticInfo({ text, placement }) })
+        if (boundSym !== undefined) {
+          if (boundSym.getCategory() !== Category.TT) {
+            throw createError(
+              ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
+              undefined,
+              { sym: boundSym, presentation: this.presentations[boundSym.id] }
+            )
+          }
 &nbsp;
-    addPresentation(sym, presentation)
+          <span class="missing-if-branch" title="if path not taken" >I</span>if (boundSym.arity !== 0) {
+<span class="cstat-no" title="statement not covered" >            throw createError(</span>
+              ErrorName.INVALID_BOUND_SYMBOL_ARITY,
+              undefined,
+              { sym: boundSym, presentation: this.presentations[boundSym.id] }
+            )
+          }
+        } else {
+          boundSym = this.createSym(Kind.Term, 0, false, ast.boundSym, Placement.Prefix)
+        }
+      }
 &nbsp;
-    return sym
-  }
+      return Expression({
+        sym: mainSym,
+        boundSym: boundSym,
+        children: childrenAsts.map(childAst =&gt; this.process(childAst, mainSym.argumentKind))
+      })
+    },
 &nbsp;
-  return {
-    process,
-    createSym,
-    addPresentation,
+    // Updates internal state by adding new association between symbol and its presentation.
+    addPresentation (sym, presentation) {
+      this.syms = { ...this.syms, [sym.id]: sym }
+      this.presentations = { ...this.presentations, [sym.id]: presentation }
+      this.textToSymMap = { ...this.textToSymMap, [presentation.ascii.text]: sym }
+      this.maxSymId = Math.max(this.maxSymId, sym.id)
+    },
+&nbsp;
+    // Creates new symbol, generates new id for it, updates internal state according to the new
+    // symbol addition and returns newly created symbol.
+    createSym (kind, arity, binds, text, placement) {
+      const argumentKind = determineArgumentKind(kind, text)
+      const id = this.maxSymId + 1
+      const sym = Sym({ id, kind, argumentKind, arity, binds })
+      const presentation = SymPresentation({ ascii: SyntacticInfo({ text, placement }) })
+&nbsp;
+      this.addPresentation(sym, presentation)
+&nbsp;
+      return sym
+    },
+&nbsp;
     // Gets symbol associated with `text`.
-    getSym: text =&gt; textToSymMap[text],
-    getSyms: () =&gt; syms,
-    getPresentations: () =&gt; presentations,
-    getTextToSymMap: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >textToSymMap,</span>
-    getMaxSymId: () =&gt; maxSymId
+    getSym (text) { return this.textToSymMap[text] },
+    getSyms () { return this.syms },
+    getPresentations () { return this.presentations },
+<span class="fstat-no" title="function not covered" >    ge</span>tTextToSymMap () { <span class="cstat-no" title="statement not covered" >return this.textToSymMap </span>},
+    getMaxSymId () { return this.maxSymId }
   }
-}
+}).compose(Base)
 &nbsp;
 const determineArgumentKind = (kind, text) =&gt; {
   switch (kind) {
@@ -493,7 +511,7 @@ const isLowerWord = text =&gt; /^[a-z]\w*/.test(text)
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Nov 14 2020 13:04:11 GMT+0000 (Coordinated Universal Time)
+                at Sat Jan 30 2021 15:19:10 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

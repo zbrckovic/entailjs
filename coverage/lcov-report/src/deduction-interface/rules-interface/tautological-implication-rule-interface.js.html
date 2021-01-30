@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/3</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
@@ -88,14 +88,29 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -117,39 +132,45 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import stampit from '@stamp/it'
+import { Rule } from '../../deduction-structure'
+import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
 import { createError, ErrorName } from '../../error'
 import { isLogicalConsequence } from '../../propositional-logic/propositional-logic'
-import { Deduction, Rule } from '../../deduction-structure'
+import { Base } from '../../utils'
 import { startDeduction } from '../deduction-interface'
 &nbsp;
-export const TautologicalImplicationRuleInterface = (deduction, stepIndexes = <span class="branch-0 cbranch-no" title="branch not covered" >[])</span> =&gt; {
-  const apply = formula =&gt; {
-    const assumptions = stepIndexes.map(i =&gt; Deduction.getStep(deduction, i).formula)
+export const TautologicalImplicationRuleInterface = stampit({
+  name: 'TautologicalImplicationRuleInterface',
+  init ({ deduction, stepIndexes }) {
+    this.deduction = deduction
+    this.stepIndexes = stepIndexes
+  },
+  methods: {
+    apply (formula) {
+      const assumptions = this.stepIndexes.map(i =&gt; this.deduction.getStep(i).formula)
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!isLogicalConsequence(assumptions, formula)) {
-<span class="cstat-no" title="statement not covered" >      throw createError(</span>
-        ErrorName.INVALID_TAUTOLOGICAL_IMPLICATION,
-        undefined,
-        { assumptions, formula }
-      )
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (!isLogicalConsequence(assumptions, formula)) {
+<span class="cstat-no" title="statement not covered" >        throw createError(</span>
+          ErrorName.INVALID_TAUTOLOGICAL_IMPLICATION,
+          undefined,
+          { assumptions, formula }
+        )
+      }
+&nbsp;
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.TautologicalImplication,
+        premises: [...this.stepIndexes].sort(),
+        conclusion: formula
+      })
+&nbsp;
+      const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
+&nbsp;
+      return startDeduction(newDeduction)
     }
-&nbsp;
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.TautologicalImplication,
-      premises: [...stepIndexes].sort(),
-      conclusion: formula
-    })
-&nbsp;
-    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
-&nbsp;
-    return startDeduction(newDeduction)
   }
-&nbsp;
-  return ({ apply })
-}
+}).compose(Base)
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -157,7 +178,7 @@ export const TautologicalImplicationRuleInterface = (deduction, stepIndexes = <s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Nov 14 2020 13:04:11 GMT+0000 (Coordinated Universal Time)
+                at Sat Jan 30 2021 15:19:10 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

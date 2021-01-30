@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -503,16 +538,16 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Category, Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../abstract-structures&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Category } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../abstract-structures&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../error&#x27;</span>
+<span class="hljs-keyword">import</span> { isDeepEqual } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../utils&#x27;</span>
 <span class="hljs-keyword">import</span> { generateValuesPermutations, primitiveTruthFunctions } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./primitive-truth-functions&#x27;</span>
 <span class="hljs-keyword">import</span> { conditional, conjunction, disjunction, negation } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
-<span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> evaluate = <span class="hljs-function">(<span class="hljs-params">formula, interpretation = {}</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> { sym, children } = formula
 
-  <span class="hljs-keyword">if</span> (Sym.getCategory(sym) !== Category.FF) <span class="hljs-keyword">throw</span> createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
+  <span class="hljs-keyword">if</span> (sym.getCategory() !== Category.FF) <span class="hljs-keyword">throw</span> createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
 
   <span class="hljs-keyword">if</span> (sym.arity === <span class="hljs-number">0</span>) {
     <span class="hljs-keyword">const</span> value = interpretation[sym.id]
@@ -562,7 +597,7 @@
 </span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> { sym, children } = formula
 
-  <span class="hljs-keyword">if</span> (Sym.getCategory(sym) !== Category.FF || sym.binds) {
+  <span class="hljs-keyword">if</span> (sym.getCategory() !== Category.FF || sym.binds) {
     <span class="hljs-keyword">throw</span> createError(ErrorName.NOT_TRUTH_FUNCTIONAL)
   }
 
@@ -631,9 +666,9 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isNegationOf = <span class="hljs-function">(<span class="hljs-params">first, second</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (!Sym.equals(first.sym, negation)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">if</span> (!first.sym.equals(negation)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
   <span class="hljs-keyword">const</span> [firstChild] = first.children
-  <span class="hljs-keyword">return</span> _.isEqual(firstChild, second)
+  <span class="hljs-keyword">return</span> isDeepEqual(firstChild, second)
 }</pre></div></div>
             
         </li>
@@ -668,7 +703,7 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isCanonicalContradiction = <span class="hljs-function"><span class="hljs-params">formula</span> =&gt;</span> {
   <span class="hljs-keyword">const</span> { sym, children } = formula
-  <span class="hljs-keyword">if</span> (!Sym.equals(sym, conjunction)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">if</span> (!sym.equals(conjunction)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
 
   <span class="hljs-keyword">const</span> [child1, child2] = children
 
@@ -678,11 +713,11 @@
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isDoubleNegation = <span class="hljs-function"><span class="hljs-params">formula</span> =&gt;</span> {
   <span class="hljs-keyword">const</span> { sym, children } = formula
 
-  <span class="hljs-keyword">if</span> (!Sym.equals(sym, negation)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">if</span> (!sym.equals(negation)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
 
   <span class="hljs-keyword">const</span> [child] = children
 
-  <span class="hljs-keyword">return</span> Sym.equals(child.sym, negation)
+  <span class="hljs-keyword">return</span> child.sym.equals(negation)
 }</pre></div></div>
             
         </li>
@@ -699,9 +734,9 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isConjunctionOf = <span class="hljs-function">(<span class="hljs-params">formula1, formula2</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (!Sym.equals(formula1.sym, conjunction)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">if</span> (!formula1.sym.equals(conjunction)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
   <span class="hljs-keyword">const</span> [conjunct1, conjunct2] = formula1.children
-  <span class="hljs-keyword">return</span> _.isEqual(conjunct1, formula2) || _.isEqual(conjunct2, formula2)
+  <span class="hljs-keyword">return</span> isDeepEqual(conjunct1, formula2) || isDeepEqual(conjunct2, formula2)
 }</pre></div></div>
             
         </li>
@@ -718,9 +753,9 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isDisjunctionOf = <span class="hljs-function">(<span class="hljs-params">formula1, formula2</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (!Sym.equals(formula1.sym, disjunction)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">if</span> (!formula1.sym.equals(disjunction)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
   <span class="hljs-keyword">const</span> [disjunct1, disjunct2] = formula1.children
-  <span class="hljs-keyword">return</span> _.isEqual(disjunct1, formula2) || _.isEqual(disjunct2, formula2)
+  <span class="hljs-keyword">return</span> isDeepEqual(disjunct1, formula2) || isDeepEqual(disjunct2, formula2)
 }</pre></div></div>
             
         </li>
@@ -737,9 +772,9 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isConditionalFrom = <span class="hljs-function">(<span class="hljs-params">formula1, formula2</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (!Sym.equals(formula1.sym, conditional)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">if</span> (!formula1.sym.equals(conditional)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
   <span class="hljs-keyword">const</span> [antecedent] = formula1.children
-  <span class="hljs-keyword">return</span> _.isEqual(antecedent, formula2)
+  <span class="hljs-keyword">return</span> isDeepEqual(antecedent, formula2)
 }</pre></div></div>
             
         </li>
@@ -756,9 +791,9 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isConditionalTo = <span class="hljs-function">(<span class="hljs-params">formula1, formula2</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (!Sym.equals(formula1.sym, conditional)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">if</span> (!formula1.sym.equals(conditional)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
   <span class="hljs-keyword">const</span> [, consequent] = formula1.children
-  <span class="hljs-keyword">return</span> _.isEqual(consequent, formula2)
+  <span class="hljs-keyword">return</span> isDeepEqual(consequent, formula2)
 }</pre></div></div>
             
         </li>

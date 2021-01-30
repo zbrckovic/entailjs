@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -503,38 +538,28 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { parseDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../peg&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> { Base } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../utils&#x27;</span>
+<span class="hljs-keyword">import</span> { parseDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../peg&#x27;</span>
 <span class="hljs-keyword">import</span> { AstProcessor } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./ast-processor&#x27;</span>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> DeductionParser = <span class="hljs-function">(<span class="hljs-params">{ syms, presentations }</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> astProcessor = AstProcessor({ syms, presentations })
-
-  <span class="hljs-keyword">const</span> parse = <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> {
-    <span class="hljs-keyword">const</span> ast = parseDeduction(text)
-    <span class="hljs-keyword">return</span> astProcessor.process(ast)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> DeductionParser = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;DeductionParser&#x27;</span>,
+  init ({ syms, presentations }) {
+    <span class="hljs-built_in">this</span>.astProcessor = AstProcessor({ syms, presentations })
+  },
+  <span class="hljs-attr">methods</span>: {
+    parse (text) {
+      <span class="hljs-keyword">const</span> ast = parseDeduction(text)
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.astProcessor.process(ast)
+    },
+    getSym (text) { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.astProcessor.getSym(text) },
+    getSyms () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.astProcessor.getSyms() },
+    getPresentations () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.astProcessor.getPresentations() },
+    getTextToSymMap () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.astProcessor.getTextToSymMap() },
+    getMaxSymId () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.astProcessor.getMaxSymId() }
   }
-
-  <span class="hljs-keyword">const</span> {
-    createSym,
-    addPresentation,
-    getSym,
-    getSyms,
-    getPresentations,
-    getTextToSymMap,
-    getMaxSymId
-  } = astProcessor
-
-  <span class="hljs-keyword">return</span> ({
-    parse,
-    createSym,
-    addPresentation,
-    getSym,
-    getSyms,
-    getPresentations,
-    getTextToSymMap,
-    getMaxSymId
-  })
-}</pre></div></div>
+}).compose(Base)</pre></div></div>
             
         </li>
         

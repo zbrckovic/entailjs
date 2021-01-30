@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -504,7 +539,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> findDuplicates = <span class="hljs-function"><span class="hljs-params">items</span> =&gt;</span> {
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> findDuplicates = <span class="hljs-function"><span class="hljs-params">items</span> =&gt;</span> {
   <span class="hljs-keyword">let</span> traversed = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
   <span class="hljs-keyword">let</span> duplicates = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()
 
@@ -518,6 +556,41 @@
 
   <span class="hljs-keyword">return</span> duplicates
 }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Check whether <code>received</code> deep equals <code>other</code> using the following custom rules:</p>
+<ul>
+<li>methods are ignored except the on named <code>constructor</code></li>
+<li>if object has an <code>equals</code> property it will be used for comparison.
+When <code>isDeepEqual</code> is used in <code>equals</code> method implementation infinite recursion will happen.
+This can be avoided by passing the <code>equals</code> method reference as <code>equalsMethod</code> parameter.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> isDeepEqual = <span class="hljs-function">(<span class="hljs-params">received, other, equalsMethod</span>) =&gt;</span>
+  _.isEqualWith(received, other, <span class="hljs-function">(<span class="hljs-params">first, second, key</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (key === <span class="hljs-string">&#x27;constructor&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
+    <span class="hljs-keyword">if</span> (_.isFunction(first)) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+    <span class="hljs-keyword">if</span> (_.isFunction(first?.equals) &amp;&amp; first.equals !== equalsMethod) <span class="hljs-keyword">return</span> first.equals(second)
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
+  })
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Base = stampit.composers(<span class="hljs-function">(<span class="hljs-params">{ stamp }</span>) =&gt;</span> {
+  stamp.compose.methods = stamp.compose.methods ?? {}
+  stamp.compose.methods.getStamp = <span class="hljs-function">() =&gt;</span> stamp
+  stamp.compose.methods.clone = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">spec = {}</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign(stamp(), <span class="hljs-built_in">this</span>, spec)
+  }
+})</pre></div></div>
             
         </li>
         

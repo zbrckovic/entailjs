@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -503,7 +538,8 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Category, Expression, Kind, Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> { Category, Expression, Kind, Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../error&#x27;</span>
 <span class="hljs-keyword">import</span> {
   createTextToSymMap,
@@ -512,6 +548,7 @@
   SymPresentation,
   SyntacticInfo
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../presentation/sym-presentation&#x27;</span>
+<span class="hljs-keyword">import</span> { Base } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../utils&#x27;</span>
 <span class="hljs-keyword">import</span> { isBracketed } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../peg/ast-formula&#x27;</span></pre></div></div>
             
         </li>
@@ -529,7 +566,9 @@ tracks information about processed symbols.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> AstProcessor = ({</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> AstProcessor = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;AstProcessor&#x27;</span>,
+  init ({</pre></div></div>
             
         </li>
         
@@ -544,7 +583,7 @@ tracks information about processed symbols.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  syms,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    syms,</pre></div></div>
             
         </li>
         
@@ -559,7 +598,7 @@ tracks information about processed symbols.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  presentations,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    presentations,</pre></div></div>
             
         </li>
         
@@ -574,7 +613,7 @@ tracks information about processed symbols.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  textToSymMap = createTextToSymMap(presentations, syms),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    textToSymMap = createTextToSymMap(presentations, syms),</pre></div></div>
             
         </li>
         
@@ -589,8 +628,14 @@ tracks information about processed symbols.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  maxSymId = getMaxSymId(textToSymMap)
-}) =&gt; {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    maxSymId = getMaxSymId(textToSymMap)
+  }) {
+    <span class="hljs-built_in">this</span>.syms = syms
+    <span class="hljs-built_in">this</span>.presentations = presentations
+    <span class="hljs-built_in">this</span>.textToSymMap = textToSymMap
+    <span class="hljs-built_in">this</span>.maxSymId = maxSymId
+  },
+  <span class="hljs-attr">methods</span>: {</pre></div></div>
             
         </li>
         
@@ -602,76 +647,76 @@ tracks information about processed symbols.</p>
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Processes formula AST (returned from peg parser) and tries to construct an expression (more
-precisely it tries to construct a formula because parser accepts only formula expressions). If
-it can’t, throws an error.</p>
+precisely it tries to construct a formula because parser accepts only formula expressions).
+If it can’t, throws an error.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> process = <span class="hljs-function">(<span class="hljs-params">ast, kind = Kind.Formula</span>) =&gt;</span> {
-    <span class="hljs-keyword">if</span> (isBracketed(ast)) <span class="hljs-keyword">return</span> process(ast.expression, kind)
+            <div class="content"><div class='highlight'><pre>    process (ast, kind = Kind.Formula) {
+      <span class="hljs-keyword">if</span> (isBracketed(ast)) <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.process(ast.expression, kind)
 
-    <span class="hljs-keyword">const</span> childrenAsts = ast.children
-    <span class="hljs-keyword">const</span> arity = childrenAsts.length
+      <span class="hljs-keyword">const</span> childrenAsts = ast.children
+      <span class="hljs-keyword">const</span> arity = childrenAsts.length
 
-    <span class="hljs-keyword">const</span> mainSym = textToSymMap[ast.sym] ??
-      createSym(kind, arity, ast.boundSym !== <span class="hljs-literal">undefined</span>, ast.sym, ast.symPlacement)
+      <span class="hljs-keyword">const</span> mainSym = <span class="hljs-built_in">this</span>.textToSymMap[ast.sym] ??
+        <span class="hljs-built_in">this</span>.createSym(kind, arity, ast.boundSym !== <span class="hljs-literal">undefined</span>, ast.sym, ast.symPlacement)
 
-    <span class="hljs-keyword">const</span> mainSymPresentation = presentations[mainSym.id]
+      <span class="hljs-keyword">const</span> mainSymPresentation = <span class="hljs-built_in">this</span>.presentations[mainSym.id]
 
-    <span class="hljs-keyword">if</span> (mainSymPresentation.ascii.placement !== ast.symPlacement) {
-      <span class="hljs-keyword">throw</span> createError(
-        ErrorName.INVALID_SYMBOL_PLACEMENT,
-        <span class="hljs-literal">undefined</span>,
-        { <span class="hljs-attr">sym</span>: mainSym, <span class="hljs-attr">presentation</span>: mainSymPresentation, <span class="hljs-attr">placement</span>: ast.symPlacement }
-      )
-    }
-
-    <span class="hljs-keyword">if</span> (mainSym.arity !== arity) {
-      <span class="hljs-keyword">throw</span> createError(
-        ErrorName.INVALID_ARITY,
-        <span class="hljs-literal">undefined</span>,
-        { <span class="hljs-attr">sym</span>: mainSym, <span class="hljs-attr">presentation</span>: mainSymPresentation, arity }
-      )
-    }
-    <span class="hljs-keyword">if</span> (mainSym.kind !== kind) {
-      <span class="hljs-keyword">throw</span> createError(
-        ErrorName.INVALID_SYMBOL_KIND,
-        <span class="hljs-literal">undefined</span>,
-        { <span class="hljs-attr">sym</span>: mainSym, <span class="hljs-attr">presentation</span>: mainSymPresentation, kind }
-      )
-    }
-
-    <span class="hljs-keyword">let</span> boundSym
-    <span class="hljs-keyword">if</span> (ast.boundSym !== <span class="hljs-literal">undefined</span>) {
-      boundSym = textToSymMap[ast.boundSym]
-
-      <span class="hljs-keyword">if</span> (boundSym !== <span class="hljs-literal">undefined</span>) {
-        <span class="hljs-keyword">if</span> (Sym.getCategory(boundSym) !== Category.TT) {
-          <span class="hljs-keyword">throw</span> createError(
-            ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
-            <span class="hljs-literal">undefined</span>,
-            { <span class="hljs-attr">sym</span>: boundSym, <span class="hljs-attr">presentation</span>: presentations[boundSym.id] }
-          )
-        }
-
-        <span class="hljs-keyword">if</span> (boundSym.arity !== <span class="hljs-number">0</span>) {
-          <span class="hljs-keyword">throw</span> createError(
-            ErrorName.INVALID_BOUND_SYMBOL_ARITY,
-            <span class="hljs-literal">undefined</span>,
-            { <span class="hljs-attr">sym</span>: boundSym, <span class="hljs-attr">presentation</span>: presentations[boundSym.id] }
-          )
-        }
-      } <span class="hljs-keyword">else</span> {
-        boundSym = createSym(Kind.Term, <span class="hljs-number">0</span>, <span class="hljs-literal">false</span>, ast.boundSym, Placement.Prefix)
+      <span class="hljs-keyword">if</span> (mainSymPresentation.ascii.placement !== ast.symPlacement) {
+        <span class="hljs-keyword">throw</span> createError(
+          ErrorName.INVALID_SYMBOL_PLACEMENT,
+          <span class="hljs-literal">undefined</span>,
+          { <span class="hljs-attr">sym</span>: mainSym, <span class="hljs-attr">presentation</span>: mainSymPresentation, <span class="hljs-attr">placement</span>: ast.symPlacement }
+        )
       }
-    }
 
-    <span class="hljs-keyword">return</span> Expression({
-      <span class="hljs-attr">sym</span>: mainSym,
-      <span class="hljs-attr">boundSym</span>: boundSym,
-      <span class="hljs-attr">children</span>: childrenAsts.map(<span class="hljs-function"><span class="hljs-params">childAst</span> =&gt;</span> process(childAst, mainSym.argumentKind))
-    })
-  }</pre></div></div>
+      <span class="hljs-keyword">if</span> (mainSym.arity !== arity) {
+        <span class="hljs-keyword">throw</span> createError(
+          ErrorName.INVALID_ARITY,
+          <span class="hljs-literal">undefined</span>,
+          { <span class="hljs-attr">sym</span>: mainSym, <span class="hljs-attr">presentation</span>: mainSymPresentation, arity }
+        )
+      }
+      <span class="hljs-keyword">if</span> (mainSym.kind !== kind) {
+        <span class="hljs-keyword">throw</span> createError(
+          ErrorName.INVALID_SYMBOL_KIND,
+          <span class="hljs-literal">undefined</span>,
+          { <span class="hljs-attr">sym</span>: mainSym, <span class="hljs-attr">presentation</span>: mainSymPresentation, kind }
+        )
+      }
+
+      <span class="hljs-keyword">let</span> boundSym
+      <span class="hljs-keyword">if</span> (ast.boundSym !== <span class="hljs-literal">undefined</span>) {
+        boundSym = <span class="hljs-built_in">this</span>.textToSymMap[ast.boundSym]
+
+        <span class="hljs-keyword">if</span> (boundSym !== <span class="hljs-literal">undefined</span>) {
+          <span class="hljs-keyword">if</span> (boundSym.getCategory() !== Category.TT) {
+            <span class="hljs-keyword">throw</span> createError(
+              ErrorName.INVALID_BOUND_SYMBOL_CATEGORY,
+              <span class="hljs-literal">undefined</span>,
+              { <span class="hljs-attr">sym</span>: boundSym, <span class="hljs-attr">presentation</span>: <span class="hljs-built_in">this</span>.presentations[boundSym.id] }
+            )
+          }
+
+          <span class="hljs-keyword">if</span> (boundSym.arity !== <span class="hljs-number">0</span>) {
+            <span class="hljs-keyword">throw</span> createError(
+              ErrorName.INVALID_BOUND_SYMBOL_ARITY,
+              <span class="hljs-literal">undefined</span>,
+              { <span class="hljs-attr">sym</span>: boundSym, <span class="hljs-attr">presentation</span>: <span class="hljs-built_in">this</span>.presentations[boundSym.id] }
+            )
+          }
+        } <span class="hljs-keyword">else</span> {
+          boundSym = <span class="hljs-built_in">this</span>.createSym(Kind.Term, <span class="hljs-number">0</span>, <span class="hljs-literal">false</span>, ast.boundSym, Placement.Prefix)
+        }
+      }
+
+      <span class="hljs-keyword">return</span> Expression({
+        <span class="hljs-attr">sym</span>: mainSym,
+        <span class="hljs-attr">boundSym</span>: boundSym,
+        <span class="hljs-attr">children</span>: childrenAsts.map(<span class="hljs-function"><span class="hljs-params">childAst</span> =&gt;</span> <span class="hljs-built_in">this</span>.process(childAst, mainSym.argumentKind))
+      })
+    },</pre></div></div>
             
         </li>
         
@@ -686,12 +731,12 @@ it can’t, throws an error.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> addPresentation = <span class="hljs-function">(<span class="hljs-params">sym, presentation</span>) =&gt;</span> {
-    syms = { ...syms, [sym.id]: sym }
-    presentations = { ...presentations, [sym.id]: presentation }
-    textToSymMap = { ...textToSymMap, [presentation.ascii.text]: sym }
-    maxSymId = <span class="hljs-built_in">Math</span>.max(maxSymId, sym.id)
-  }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    addPresentation (sym, presentation) {
+      <span class="hljs-built_in">this</span>.syms = { ...this.syms, [sym.id]: sym }
+      <span class="hljs-built_in">this</span>.presentations = { ...this.presentations, [sym.id]: presentation }
+      <span class="hljs-built_in">this</span>.textToSymMap = { ...this.textToSymMap, [presentation.ascii.text]: sym }
+      <span class="hljs-built_in">this</span>.maxSymId = <span class="hljs-built_in">Math</span>.max(<span class="hljs-built_in">this</span>.maxSymId, sym.id)
+    },</pre></div></div>
             
         </li>
         
@@ -702,26 +747,21 @@ it can’t, throws an error.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Creates new symbol, generates new id for it, updates internal state according to the new symbol
-addition and returns newly created symbol.</p>
+              <p>Creates new symbol, generates new id for it, updates internal state according to the new
+symbol addition and returns newly created symbol.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> createSym = <span class="hljs-function">(<span class="hljs-params">kind, arity, binds, text, placement</span>) =&gt;</span> {
-    <span class="hljs-keyword">const</span> argumentKind = determineArgumentKind(kind, text)
-    <span class="hljs-keyword">const</span> id = maxSymId + <span class="hljs-number">1</span>
-    <span class="hljs-keyword">const</span> sym = Sym({ id, kind, argumentKind, arity, binds })
-    <span class="hljs-keyword">const</span> presentation = SymPresentation({ <span class="hljs-attr">ascii</span>: SyntacticInfo({ text, placement }) })
+            <div class="content"><div class='highlight'><pre>    createSym (kind, arity, binds, text, placement) {
+      <span class="hljs-keyword">const</span> argumentKind = determineArgumentKind(kind, text)
+      <span class="hljs-keyword">const</span> id = <span class="hljs-built_in">this</span>.maxSymId + <span class="hljs-number">1</span>
+      <span class="hljs-keyword">const</span> sym = Sym({ id, kind, argumentKind, arity, binds })
+      <span class="hljs-keyword">const</span> presentation = SymPresentation({ <span class="hljs-attr">ascii</span>: SyntacticInfo({ text, placement }) })
 
-    addPresentation(sym, presentation)
+      <span class="hljs-built_in">this</span>.addPresentation(sym, presentation)
 
-    <span class="hljs-keyword">return</span> sym
-  }
-
-  <span class="hljs-keyword">return</span> {
-    process,
-    createSym,
-    addPresentation,</pre></div></div>
+      <span class="hljs-keyword">return</span> sym
+    },</pre></div></div>
             
         </li>
         
@@ -736,13 +776,13 @@ addition and returns newly created symbol.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    getSym: <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> textToSymMap[text],
-    <span class="hljs-attr">getSyms</span>: <span class="hljs-function">() =&gt;</span> syms,
-    <span class="hljs-attr">getPresentations</span>: <span class="hljs-function">() =&gt;</span> presentations,
-    <span class="hljs-attr">getTextToSymMap</span>: <span class="hljs-function">() =&gt;</span> textToSymMap,
-    <span class="hljs-attr">getMaxSymId</span>: <span class="hljs-function">() =&gt;</span> maxSymId
+            <div class="content"><div class='highlight'><pre>    getSym (text) { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.textToSymMap[text] },
+    getSyms () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.syms },
+    getPresentations () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.presentations },
+    getTextToSymMap () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.textToSymMap },
+    getMaxSymId () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.maxSymId }
   }
-}
+}).compose(Base)
 
 <span class="hljs-keyword">const</span> determineArgumentKind = <span class="hljs-function">(<span class="hljs-params">kind, text</span>) =&gt;</span> {
   <span class="hljs-keyword">switch</span> (kind) {

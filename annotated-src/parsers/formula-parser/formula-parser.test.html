@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -535,8 +570,8 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;p\&#x27;)&#x27;</span>, <span 
 
   <span class="hljs-keyword">const</span> addedSyms = _.pickBy(parser.getSyms(), <span class="hljs-function">(<span class="hljs-params">sym, id</span>) =&gt;</span> primitiveSyms[id] === <span class="hljs-literal">undefined</span>)
 
-  expect(formula).toEqual(expectedFormula)
-  expect(addedSyms).toEqual(expectedAddedSyms)
+  expect(formula).toDeepEqual(expectedFormula)
+  expect(addedSyms).toDeepEqual(expectedAddedSyms)
 })
 
 test(<span class="hljs-string">&#x27;parse(\&#x27;p -&gt; q\&#x27;)&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
@@ -559,8 +594,8 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;p -&gt; q\&#x27;)&#x27;</span>
 
   <span class="hljs-keyword">const</span> addedSyms = _.pickBy(parser.getSyms(), <span class="hljs-function">(<span class="hljs-params">sym, id</span>) =&gt;</span> primitiveSyms[id] === <span class="hljs-literal">undefined</span>)
 
-  expect(formula).toEqual(expectedFormula)
-  expect(addedSyms).toEqual(expectedAddedSyms)
+  expect(formula).toDeepEqual(expectedFormula)
+  expect(addedSyms).toDeepEqual(expectedAddedSyms)
 })
 
 test(<span class="hljs-string">&#x27;parse(\&#x27;Fxy\&#x27;)&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
@@ -584,8 +619,8 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;Fxy\&#x27;)&#x27;</span>, <spa
   <span class="hljs-keyword">const</span> formula = parser.parse(<span class="hljs-string">&#x27;Fxy&#x27;</span>)
   <span class="hljs-keyword">const</span> addedSyms = _.pickBy(parser.getSyms(), <span class="hljs-function">(<span class="hljs-params">sym, id</span>) =&gt;</span> primitiveSyms[id] === <span class="hljs-literal">undefined</span>)
 
-  expect(formula).toEqual(expectedFormula)
-  expect(addedSyms).toEqual(expectedAddedSyms)
+  expect(formula).toDeepEqual(expectedFormula)
+  expect(addedSyms).toDeepEqual(expectedAddedSyms)
 })
 
 test(<span class="hljs-string">&#x27;parse(\&#x27;Ax Fx\&#x27;)&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
@@ -613,8 +648,8 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;Ax Fx\&#x27;)&#x27;</span>, <s
   <span class="hljs-keyword">const</span> formula = parser.parse(<span class="hljs-string">&#x27;Ax Fx&#x27;</span>)
   <span class="hljs-keyword">const</span> addedSyms = _.pickBy(parser.getSyms(), <span class="hljs-function">(<span class="hljs-params">sym, id</span>) =&gt;</span> primitiveSyms[id] === <span class="hljs-literal">undefined</span>)
 
-  expect(formula).toEqual(expectedFormula)
-  expect(addedSyms).toEqual(expectedAddedSyms)
+  expect(formula).toDeepEqual(expectedFormula)
+  expect(addedSyms).toDeepEqual(expectedAddedSyms)
 })
 
 test(<span class="hljs-string">&#x27;parse(\&#x27;Ax Ey (Fxy -&gt; ~Gyx)\&#x27;&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
@@ -672,8 +707,8 @@ test(<span class="hljs-string">&#x27;parse(\&#x27;Ax Ey (Fxy -&gt; ~Gyx)\&#x27;&
   <span class="hljs-keyword">const</span> formula = parser.parse(<span class="hljs-string">&#x27;Ax Ey (Fxy -&gt; ~Gyx)&#x27;</span>)
   <span class="hljs-keyword">const</span> addedSyms = _.pickBy(parser.getSyms(), <span class="hljs-function">(<span class="hljs-params">sym, id</span>) =&gt;</span> primitiveSyms[id] === <span class="hljs-literal">undefined</span>)
 
-  expect(formula).toEqual(expectedFormula)
-  expect(addedSyms).toEqual(expectedAddedSyms)
+  expect(formula).toDeepEqual(expectedFormula)
+  expect(addedSyms).toDeepEqual(expectedAddedSyms)
 })
 
 test(<span class="hljs-string">`parse(&#x27;~x&#x27;) throws <span class="hljs-subst">${ErrorName.INVALID_SYMBOL_KIND}</span>`</span>, <span class="hljs-function">() =&gt;</span> {

@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -504,7 +539,8 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../error&#x27;</span>
-<span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./expression&#x27;</span></pre></div></div>
+<span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> { Base } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../utils&#x27;</span></pre></div></div>
             
         </li>
         
@@ -521,12 +557,18 @@ subexpression is called a <strong>target</strong>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ExpressionPointer = <span class="hljs-function">(<span class="hljs-params">{ expression, position = [] }</span>) =&gt;</span> ({ expression, position })
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ExpressionPointer = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;ExpressionPointer&#x27;</span>,
+  init ({ expression, position = [] }) {
+    <span class="hljs-built_in">this</span>.expression = expression
+    <span class="hljs-built_in">this</span>.position = position
+  },
+  <span class="hljs-attr">methods</span>: {
+    isRoot () { <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.position.length === <span class="hljs-number">0</span> },
 
-ExpressionPointer.isRoot = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> pointer.position.length === <span class="hljs-number">0</span>
-
-ExpressionPointer.getTarget = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span>
-  Expression.getSubexpression(pointer.expression, pointer.position)</pre></div></div>
+    getTarget () {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.expression.getSubexpression(<span class="hljs-built_in">this</span>.position)
+    },</pre></div></div>
             
         </li>
         
@@ -537,14 +579,14 @@ ExpressionPointer.getTarget = <span class="hljs-function"><span class="hljs-para
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Returns parent of the target or throws if there’s no parent.</p>
+              <p>Returns parent of the target or throws if there’s no parent. Result is <code>ExpressionPointer</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>ExpressionPointer.getParent = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> {
-  <span class="hljs-keyword">if</span> (ExpressionPointer.isRoot(pointer)) <span class="hljs-keyword">throw</span> createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
-  <span class="hljs-keyword">return</span> { ...pointer, <span class="hljs-attr">position</span>: pointer.position.slice(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>) }
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    getParent () {
+      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.isRoot()) <span class="hljs-keyword">throw</span> createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.clone({ <span class="hljs-attr">position</span>: <span class="hljs-built_in">this</span>.position.slice(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>) })
+    },</pre></div></div>
             
         </li>
         
@@ -555,24 +597,22 @@ ExpressionPointer.getTarget = <span class="hljs-function"><span class="hljs-para
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Returns a path to the ancestor subexpression which binds <code>sym</code> at the target position. In other
-words, find the closest target’s ancestor which has <code>sym</code> as its <code>boundSym</code>. If <code>sym</code> is not
-specified, target’s <code>mainSym</code> is assumed.</p>
+              <p>Returns a path to the ancestor subexpression which binds <code>sym</code> at the target position. In
+other words, finds the closest target’s ancestor which has <code>sym</code> as its <code>boundSym</code>. If <code>sym</code>
+is not specified, target’s <code>mainSym</code> is assumed. Results are positions.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>ExpressionPointer.findBindingOccurrence = <span class="hljs-function">(<span class="hljs-params">pointer, sym</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (ExpressionPointer.isRoot(pointer)) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
+            <div class="content"><div class='highlight'><pre>    findBindingOccurrence (sym) {
+      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.isRoot()) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
 
-  sym = sym ?? ExpressionPointer.getTarget(pointer).sym
+      sym = sym ?? <span class="hljs-built_in">this</span>.getTarget().sym
 
-  <span class="hljs-keyword">const</span> parentPointer = ExpressionPointer.getParent(pointer)
-  <span class="hljs-keyword">const</span> { boundSym } = ExpressionPointer.getTarget(parentPointer)
+      <span class="hljs-keyword">const</span> parent = <span class="hljs-built_in">this</span>.getParent()
+      <span class="hljs-keyword">const</span> { boundSym } = parent.getTarget()
 
-  <span class="hljs-keyword">return</span> boundSym?.id === sym.id
-    ? parentPointer.position
-    : ExpressionPointer.findBindingOccurrence(parentPointer, sym)
-}</pre></div></div>
+      <span class="hljs-keyword">return</span> boundSym?.equals(sym) ? parent.position : parent.findBindingOccurrence(sym)
+    },</pre></div></div>
             
         </li>
         
@@ -583,17 +623,15 @@ specified, target’s <code>mainSym</code> is assumed.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Returns free occurrences of <code>sym</code> at target.</p>
+              <p>Returns free occurrences of <code>sym</code> at target. Results are positions.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>ExpressionPointer.findFreeOccurrences = <span class="hljs-function">(<span class="hljs-params">pointer, sym</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> target = ExpressionPointer.getTarget(pointer)
-
-  <span class="hljs-keyword">return</span> Expression
-    .findFreeOccurrences(target, sym)
-    .map(<span class="hljs-function"><span class="hljs-params">position</span> =&gt;</span> pointer.position.concat(position))
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    findFreeOccurrences (sym) {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.getTarget()
+        .findFreeOccurrences(sym)
+        .map(<span class="hljs-function"><span class="hljs-params">position</span> =&gt;</span> <span class="hljs-built_in">this</span>.position.concat(position))
+    },</pre></div></div>
             
         </li>
         
@@ -604,17 +642,15 @@ specified, target’s <code>mainSym</code> is assumed.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Returns bound occurrences of target’s <code>boundSym</code> at target.</p>
+              <p>Returns bound occurrences of target’s <code>boundSym</code> at target. Results are positions.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>ExpressionPointer.findBoundOccurrences = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> {
-  <span class="hljs-keyword">const</span> target = ExpressionPointer.getTarget(pointer)
-
-  <span class="hljs-keyword">return</span> Expression
-    .findBoundOccurrences(target)
-    .map(<span class="hljs-function"><span class="hljs-params">position</span> =&gt;</span> pointer.position.concat(position))
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    findBoundOccurrences () {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.getTarget()
+        .findBoundOccurrences()
+        .map(<span class="hljs-function"><span class="hljs-params">position</span> =&gt;</span> <span class="hljs-built_in">this</span>.position.concat(position))
+    },</pre></div></div>
             
         </li>
         
@@ -625,47 +661,30 @@ specified, target’s <code>mainSym</code> is assumed.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Returns subexpression occurring on the path to <code>target</code>.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>ExpressionPointer.getSubexpressionsOnPath = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> {
-  <span class="hljs-keyword">const</span> target = ExpressionPointer.getTarget(pointer)
-
-  <span class="hljs-keyword">return</span> Expression.getSubexpressionsOnPath(target.expression, pointer.position)
-}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
               <p>Finds all symbols which are bound by target’s ancestors. It doesn’t necessarily search for
-symbols which actually appear in the target. It searches for all symbols S which would be
-bound by some ancestor if we replaced the target with some formula containing S as free symbol.
-In other words, it also returns vacuously bound symbols.</p>
+symbols which actually appear in the target. It searches for each symbol S which would be
+bound by some ancestor if we replaced the target with some formula containing S as free
+symbol. In other words, it also returns vacuously bound symbols.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>ExpressionPointer.getBoundSyms = <span class="hljs-function"><span class="hljs-params">pointer</span> =&gt;</span> {
-  <span class="hljs-keyword">if</span> (ExpressionPointer.isRoot(pointer)) <span class="hljs-keyword">return</span> {}
-  <span class="hljs-keyword">const</span> parent = ExpressionPointer.getParent(pointer)
-  <span class="hljs-keyword">const</span> boundSym = ExpressionPointer.getTarget(parent).boundSym
+            <div class="content"><div class='highlight'><pre>    getBoundSyms () {
+      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.isRoot()) <span class="hljs-keyword">return</span> {}
+      <span class="hljs-keyword">const</span> parent = <span class="hljs-built_in">this</span>.getParent()
+      <span class="hljs-keyword">const</span> boundSym = parent.getTarget().boundSym
 
-  <span class="hljs-keyword">const</span> result = {}
+      <span class="hljs-keyword">const</span> result = {}
 
-  <span class="hljs-keyword">if</span> (boundSym !== <span class="hljs-literal">undefined</span>) {
-    result[boundSym.id] = boundSym
+      <span class="hljs-keyword">if</span> (boundSym !== <span class="hljs-literal">undefined</span>) {
+        result[boundSym.id] = boundSym
+      }
+
+      <span class="hljs-built_in">Object</span>.assign(result, parent.getBoundSyms())
+
+      <span class="hljs-keyword">return</span> result
+    }
   }
-
-  <span class="hljs-built_in">Object</span>.assign(result, ExpressionPointer.getBoundSyms(parent))
-
-  <span class="hljs-keyword">return</span> result
-}</pre></div></div>
+}).compose(Base)</pre></div></div>
             
         </li>
         

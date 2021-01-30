@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -503,7 +538,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Deduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-structure&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Deduction, TermDependencyGraph } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-structure&#x27;</span>
 <span class="hljs-keyword">import</span> { createError, ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../error&#x27;</span>
 <span class="hljs-keyword">import</span> { RulesInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./rules-interface&#x27;</span>
 <span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span></pre></div></div>
@@ -526,14 +561,14 @@ if deduction provided at the start (if any) was valid.</p>
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> startDeduction = <span class="hljs-function">(<span class="hljs-params">deduction = Deduction()</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> createIndexes = <span class="hljs-function">(<span class="hljs-params">...ordinals</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> stepOrdinalOutOfRange = ordinals.find(<span class="hljs-function"><span class="hljs-params">ordinal</span> =&gt;</span> !(
-      <span class="hljs-built_in">Number</span>.isInteger(ordinal) &amp;&amp; ordinal &gt;= <span class="hljs-number">1</span> &amp;&amp; ordinal &lt;= Deduction.getSize(deduction)
+      <span class="hljs-built_in">Number</span>.isInteger(ordinal) &amp;&amp; ordinal &gt;= <span class="hljs-number">1</span> &amp;&amp; ordinal &lt;= deduction.getSize()
     ))
 
     <span class="hljs-keyword">if</span> (stepOrdinalOutOfRange !== <span class="hljs-literal">undefined</span>) {
       <span class="hljs-keyword">throw</span> createError(
         ErrorName.STEP_ORDINAL_OUT_OF_RANGE,
         <span class="hljs-literal">undefined</span>,
-        { stepOrdinalOutOfRange, <span class="hljs-attr">size</span>: Deduction.getSize(deduction) }
+        { stepOrdinalOutOfRange, <span class="hljs-attr">size</span>: deduction.getSize() }
       )
     }
 
@@ -570,7 +605,7 @@ if deduction provided at the start (if any) was valid.</p>
       }
     } = _.last(steps)
 
-    <span class="hljs-keyword">const</span> newTermDependencyGraph = { ...termDependencyGraph }</pre></div></div>
+    <span class="hljs-keyword">const</span> newTermDependencyGraph = TermDependencyGraph({ ...termDependencyGraph.map })</pre></div></div>
             
         </li>
         
@@ -585,11 +620,12 @@ if deduction provided at the start (if any) was valid.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-built_in">Object</span>
-      .entries(removedTermDependencies)
+            <div class="content"><div class='highlight'><pre>    removedTermDependencies
+      .getEntries()
       .forEach(<span class="hljs-function">(<span class="hljs-params">[dependentTerm, removedDependencyTerms]</span>) =&gt;</span> {
-        <span class="hljs-keyword">const</span> newDependencyTerms = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(newTermDependencyGraph[dependentTerm])
-        newTermDependencyGraph[dependentTerm] = newDependencyTerms
+        <span class="hljs-keyword">const</span> newDependencyTerms =
+          <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(newTermDependencyGraph.getDirectDependencies(dependentTerm))
+        newTermDependencyGraph.setDirectDependencies(dependentTerm, newDependencyTerms)
         removedDependencyTerms.forEach(<span class="hljs-function"><span class="hljs-params">removedDependencyTerm</span> =&gt;</span> {
           newDependencyTerms.add(removedDependencyTerm)
         })
@@ -609,15 +645,20 @@ if deduction provided at the start (if any) was valid.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (addedTermDependencies !== <span class="hljs-literal">undefined</span>) {
-      <span class="hljs-keyword">const</span> newDependencyTerms = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(newTermDependencyGraph[addedTermDependencies.dependent])
+      <span class="hljs-keyword">const</span> newDependencyTerms = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(
+        newTermDependencyGraph.getDirectDependencies(addedTermDependencies.dependent)
+      )
       addedTermDependencies.dependencies.forEach(<span class="hljs-function"><span class="hljs-params">dependencyTerm</span> =&gt;</span> {
         newDependencyTerms.delete(dependencyTerm)
       })
 
       <span class="hljs-keyword">if</span> (newDependencyTerms.size &gt; <span class="hljs-number">0</span>) {
-        newTermDependencyGraph[addedTermDependencies.dependent] = newDependencyTerms
+        newTermDependencyGraph.setDirectDependencies(
+          addedTermDependencies.dependent,
+          newDependencyTerms
+        )
       } <span class="hljs-keyword">else</span> {
-        <span class="hljs-keyword">delete</span> newTermDependencyGraph[addedTermDependencies.dependent]
+        newTermDependencyGraph.deleteDirectDependencies(addedTermDependencies.dependent)
       }
     }
 

@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>expression-util.test.js</title>
+  <title>deduction-deflated.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="../docco.css" />
@@ -20,47 +20,37 @@
             <div id="jump_page">
               
                 
-                <a class="source" href="expression-pointer.html">
+                <a class="source" href="../abstract-structures/expression-pointer.html">
                   abstract-structures/expression-pointer.js
                 </a>
               
                 
-                <a class="source" href="expression-pointer.test.html">
+                <a class="source" href="../abstract-structures/expression-pointer.test.html">
                   abstract-structures/expression-pointer.test.js
                 </a>
               
                 
-                <a class="source" href="expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
-                <a class="source" href="expression.html">
+                <a class="source" href="../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
               
                 
-                <a class="source" href="expression.test.html">
+                <a class="source" href="../abstract-structures/expression.test.html">
                   abstract-structures/expression.test.js
                 </a>
               
                 
-                <a class="source" href="index.html">
+                <a class="source" href="../abstract-structures/index.html">
                   abstract-structures/index.js
                 </a>
               
                 
-                <a class="source" href="sym.html">
+                <a class="source" href="../abstract-structures/sym.html">
                   abstract-structures/sym.js
                 </a>
               
                 
-                <a class="source" href="sym.test.html">
+                <a class="source" href="../abstract-structures/sym.test.html">
                   abstract-structures/sym.test.js
                 </a>
               
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,17 +330,22 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
+                <a class="source" href="deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
+                <a class="source" href="deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
               
                 
-                <a class="source" href="../deduction-util/deduction-inflate-deflate.test.html">
+                <a class="source" href="deduction-inflate-deflate.test.html">
                   deduction-util/deduction-inflate-deflate.test.js
                 </a>
               
                 
-                <a class="source" href="../deduction-util/index.html">
+                <a class="source" href="index.html">
                   deduction-util/index.js
                 </a>
               
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -488,7 +523,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>expression-util.test.js</h1>
+                  <h1>deduction-deflated.js</h1>
               </div>
           </li>
         
@@ -503,42 +538,75 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../error&#x27;</span>
-<span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../parsers/formula-parser&#x27;</span>
-<span class="hljs-keyword">import</span> { primitivePresentations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../presentation/sym-presentation&#x27;</span>
-<span class="hljs-keyword">import</span> { conjunction, primitiveSyms } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
-<span class="hljs-keyword">import</span> { connectWithBinarySym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./expression-util&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> { Base } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../utils&#x27;</span>
 
-<span class="hljs-keyword">let</span> parser
-beforeEach(<span class="hljs-function">() =&gt;</span> {
-  parser = FormulaParser({ <span class="hljs-attr">syms</span>: primitiveSyms, <span class="hljs-attr">presentations</span>: primitivePresentations })
-})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> DeductionDeflated = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;DeductionDeflated&#x27;</span>,
+  init ({ steps }) {
+    <span class="hljs-built_in">this</span>.steps = steps
+  },
+  <span class="hljs-attr">methods</span>: {
+    normalize (syms) {
+      <span class="hljs-keyword">const</span> normalizedSteps = []
+      <span class="hljs-keyword">let</span> substitutions = syms
 
-test.each([
-  [[<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>], conjunction, <span class="hljs-string">&#x27;p &amp; q&#x27;</span>],
-  [[<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;r&#x27;</span>], conjunction, <span class="hljs-string">&#x27;(p &amp; q) &amp; r&#x27;</span>]
-])(<span class="hljs-string">&#x27;connectWithBinarySym(%s) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">expressionTexts, sym, expectedExpressionText</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> expressions = expressionTexts.map(<span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> parser.parse(text))
-  <span class="hljs-keyword">const</span> expected = expectedExpressionText === <span class="hljs-literal">undefined</span>
-    ? <span class="hljs-literal">undefined</span>
-    : parser.parse(expectedExpressionText)
+      <span class="hljs-built_in">this</span>.steps.forEach(<span class="hljs-function"><span class="hljs-params">step</span> =&gt;</span> {
+        <span class="hljs-keyword">const</span> [normalizedStep, updatedSubstitutions] = step.normalize(substitutions)
+        normalizedSteps.push(normalizedStep)
+        substitutions = updatedSubstitutions
+      })
 
-  <span class="hljs-keyword">const</span> actual = connectWithBinarySym(expressions, sym)
+      <span class="hljs-keyword">const</span> normalizedDeductionDeflated = <span class="hljs-built_in">this</span>.constructor({
+        ...this,
+        <span class="hljs-attr">steps</span>: normalizedSteps
+      })
 
-  expect(actual).toEqual(expected)
-})
+      <span class="hljs-keyword">return</span> [normalizedDeductionDeflated, syms]
+    }
+  }
+}).compose(Base)
 
-test(<span class="hljs-string">`connectWithBinarySym() throws <span class="hljs-subst">${ErrorName.NOT_ENOUGH_EXPRESSIONS}</span> for empty list`</span>, <span class="hljs-function">() =&gt;</span> {
-  expect(<span class="hljs-function">() =&gt;</span> { connectWithBinarySym([], conjunction) })
-    .toThrow(ErrorName.NOT_ENOUGH_EXPRESSIONS)
-})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> StepDeflated = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;StepDeflated&#x27;</span>,
+  init ({
+    steps,
+    formula,
+    rule,
+    oldTerm,
+    newTerm
+  }) {
+    <span class="hljs-built_in">this</span>.steps = steps
+    <span class="hljs-built_in">this</span>.formula = formula
+    <span class="hljs-built_in">this</span>.rule = rule
+    <span class="hljs-built_in">this</span>.oldTerm = oldTerm
+    <span class="hljs-built_in">this</span>.newTerm = newTerm
+  },
+  <span class="hljs-attr">methods</span>: {
+    normalize (syms) {
+      <span class="hljs-keyword">let</span> normalizedFormula
+      <span class="hljs-keyword">let</span> normalizedOldTerm
+      <span class="hljs-keyword">let</span> normalizedNewTerm
+      <span class="hljs-keyword">let</span> substitutions = syms;
 
-test(<span class="hljs-string">`connectWithBinarySym() throws <span class="hljs-subst">${ErrorName.NOT_ENOUGH_EXPRESSIONS}</span> for singleton list`</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> expression = parser.parse(<span class="hljs-string">&#x27;p&#x27;</span>)
+      ([normalizedFormula, substitutions] = <span class="hljs-built_in">this</span>.formula.normalize(substitutions))
 
-  expect(<span class="hljs-function">() =&gt;</span> { connectWithBinarySym([expression], conjunction) })
-    .toThrow(ErrorName.NOT_ENOUGH_EXPRESSIONS)
-})</pre></div></div>
+      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.oldTerm !== <span class="hljs-literal">undefined</span>) {
+        normalizedOldTerm = substitutions[<span class="hljs-built_in">this</span>.oldTerm]
+      }
+
+      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.newTerm !== <span class="hljs-literal">undefined</span>) {
+        normalizedNewTerm = substitutions[<span class="hljs-built_in">this</span>.newTerm]
+      }
+
+      <span class="hljs-built_in">this</span>.clone({
+        <span class="hljs-attr">formula</span>: normalizedFormula,
+        <span class="hljs-attr">oldTerm</span>: normalizedOldTerm,
+        <span class="hljs-attr">newTerm</span>: normalizedNewTerm
+      })
+    }
+  }
+}).compose(Base)</pre></div></div>
             
         </li>
         

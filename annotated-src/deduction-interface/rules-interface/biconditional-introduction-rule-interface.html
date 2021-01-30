@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="../../abstract-structures/expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="../../abstract-structures/expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="../../abstract-structures/expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -503,33 +538,41 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
-<span class="hljs-keyword">import</span> { Deduction, Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> stampit <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@stamp/it&#x27;</span>
+<span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../abstract-structures&#x27;</span>
+<span class="hljs-keyword">import</span> { Rule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure&#x27;</span>
 <span class="hljs-keyword">import</span> { RegularRuleApplicationSpec } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../deduction-structure/rule-application-spec&#x27;</span>
 <span class="hljs-keyword">import</span> { biconditional } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../primitive-syms&#x27;</span>
+<span class="hljs-keyword">import</span> { Base } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../utils&#x27;</span>
 <span class="hljs-keyword">import</span> { startDeduction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../deduction-interface&#x27;</span>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> BiconditionalIntroductionRuleInterface = <span class="hljs-function">(<span class="hljs-params">
-  deduction,
-  premise1Index,
-  premise2Index
-</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> apply = <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">const</span> ruleApplicationSpec = RegularRuleApplicationSpec({
-      <span class="hljs-attr">rule</span>: Rule.BiconditionalIntroduction,
-      <span class="hljs-attr">premises</span>: [premise1Index, premise2Index],
-      <span class="hljs-attr">conclusion</span>: Expression({
-        <span class="hljs-attr">sym</span>: biconditional,
-        <span class="hljs-attr">children</span>: Deduction.getStep(deduction, premise1Index).formula.children
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> BiconditionalIntroductionRuleInterface = stampit({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;BiconditionalIntroductionRuleInterface&#x27;</span>,
+  init ({
+    deduction,
+    premise1Index,
+    premise2Index
+  }) {
+    <span class="hljs-built_in">this</span>.deduction = deduction
+    <span class="hljs-built_in">this</span>.premise1Index = premise1Index
+    <span class="hljs-built_in">this</span>.premise2Index = premise2Index
+  },
+  <span class="hljs-attr">methods</span>: {
+    apply () {
+      <span class="hljs-keyword">const</span> ruleApplicationSpec = RegularRuleApplicationSpec({
+        <span class="hljs-attr">rule</span>: Rule.BiconditionalIntroduction,
+        <span class="hljs-attr">premises</span>: [<span class="hljs-built_in">this</span>.premise1Index, <span class="hljs-built_in">this</span>.premise2Index],
+        <span class="hljs-attr">conclusion</span>: Expression({
+          <span class="hljs-attr">sym</span>: biconditional,
+          <span class="hljs-attr">children</span>: <span class="hljs-built_in">this</span>.deduction.getStep(<span class="hljs-built_in">this</span>.premise1Index).formula.children
+        })
       })
-    })
-    <span class="hljs-keyword">const</span> newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+      <span class="hljs-keyword">const</span> newDeduction = <span class="hljs-built_in">this</span>.deduction.applyRule(ruleApplicationSpec)
 
-    <span class="hljs-keyword">return</span> startDeduction(newDeduction)
+      <span class="hljs-keyword">return</span> startDeduction(newDeduction)
+    }
   }
-
-  <span class="hljs-keyword">return</span> { apply }
-}</pre></div></div>
+}).compose(Base)</pre></div></div>
             
         </li>
         

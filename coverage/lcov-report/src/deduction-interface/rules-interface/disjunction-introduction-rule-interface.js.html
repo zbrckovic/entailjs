@@ -86,64 +86,85 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">20x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Expression } from '../../abstract-structures'
-import { Deduction, Rule } from '../../deduction-structure'
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import stampit from '@stamp/it'
+import { Expression } from '../../abstract-structures'
+import { Rule } from '../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../deduction-structure/rule-application-spec'
 import { disjunction } from '../../primitive-syms'
+import { Base } from '../../utils'
 import { startDeduction } from '../deduction-interface'
 &nbsp;
-export const DisjunctionIntroductionRuleInterface = (deduction, premiseIndex) =&gt; {
-  const apply = (disjunct, addingLeft = <span class="branch-0 cbranch-no" title="branch not covered" >true)</span> =&gt; {
-    const premise = Deduction.getStep(deduction, premiseIndex).formula
+export const DisjunctionIntroductionRuleInterface = stampit({
+  name: 'DisjunctionIntroductionRuleInterface',
+  init ({ deduction, premiseIndex }) {
+    this.deduction = deduction
+    this.premiseIndex = premiseIndex
+  },
+  methods: {
+    apply (disjunct, addingLeft = <span class="branch-0 cbranch-no" title="branch not covered" >true)</span> {
+      const premise = this.deduction.getStep(this.premiseIndex).formula
 &nbsp;
-    const children = addingLeft ? [disjunct, premise] : [premise, disjunct]
+      const children = addingLeft ? [disjunct, premise] : [premise, disjunct]
 &nbsp;
-    const conclusion = Expression({
-      sym: disjunction,
-      children
-    })
+      const conclusion = Expression({
+        sym: disjunction,
+        children
+      })
 &nbsp;
-    const ruleApplicationSpec = RegularRuleApplicationSpec({
-      rule: Rule.DisjunctionIntroduction,
-      premises: [premiseIndex],
-      conclusion
-    })
-    const newDeduction = Deduction.applyRule(deduction, ruleApplicationSpec)
+      const ruleApplicationSpec = RegularRuleApplicationSpec({
+        rule: Rule.DisjunctionIntroduction,
+        premises: [this.premiseIndex],
+        conclusion
+      })
+      const newDeduction = this.deduction.applyRule(ruleApplicationSpec)
 &nbsp;
-    return startDeduction(newDeduction)
+      return startDeduction(newDeduction)
+    }
   }
-&nbsp;
-  return { apply }
-}
+}).compose(Base)
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -151,7 +172,7 @@ export const DisjunctionIntroductionRuleInterface = (deduction, premiseIndex) =&
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Nov 14 2020 13:04:11 GMT+0000 (Coordinated Universal Time)
+                at Sat Jan 30 2021 15:19:10 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

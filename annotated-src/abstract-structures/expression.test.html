@@ -30,16 +30,6 @@
                 </a>
               
                 
-                <a class="source" href="expression-util.html">
-                  abstract-structures/expression-util.js
-                </a>
-              
-                
-                <a class="source" href="expression-util.test.html">
-                  abstract-structures/expression-util.test.js
-                </a>
-              
-                
                 <a class="source" href="expression.html">
                   abstract-structures/expression.js
                 </a>
@@ -150,8 +140,43 @@
                 </a>
               
                 
-                <a class="source" href="../deduction-interface/rules-interface/quantification.html">
-                  deduction-interface/rules-interface/quantification.js
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/existential-instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/index.html">
+                  deduction-interface/rules-interface/quantification/index.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/instantiation-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/quantification-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/quantification-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-generalization-rule-interface.js
+                </a>
+              
+                
+                <a class="source" href="../deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.html">
+                  deduction-interface/rules-interface/quantification/universal-instantiation-rule-interface.js
                 </a>
               
                 
@@ -305,6 +330,11 @@
                 </a>
               
                 
+                <a class="source" href="../deduction-util/deduction-deflated.html">
+                  deduction-util/deduction-deflated.js
+                </a>
+              
+                
                 <a class="source" href="../deduction-util/deduction-inflate-deflate.html">
                   deduction-util/deduction-inflate-deflate.js
                 </a>
@@ -337,6 +367,11 @@
                 
                 <a class="source" href="../index.html">
                   index.js
+                </a>
+              
+                
+                <a class="source" href="../jest.setup.html">
+                  jest.setup.js
                 </a>
               
                 
@@ -505,10 +540,11 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
 <span class="hljs-keyword">import</span> { ErrorName } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../error&#x27;</span>
-<span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../parsers/formula-parser&#x27;</span>
+<span class="hljs-keyword">import</span> { FormulaParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../parsers&#x27;</span>
 <span class="hljs-keyword">import</span> { primitivePresentations } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../presentation/sym-presentation&#x27;</span>
-<span class="hljs-keyword">import</span> { primitiveSyms } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
+<span class="hljs-keyword">import</span> { conditional, conjunction, primitiveSyms, universalQuantifier } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../primitive-syms&#x27;</span>
 <span class="hljs-keyword">import</span> { Expression } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./expression&#x27;</span>
+<span class="hljs-keyword">import</span> { Sym } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./sym&#x27;</span>
 
 <span class="hljs-keyword">let</span> parser
 beforeEach(<span class="hljs-function">() =&gt;</span> {
@@ -523,12 +559,12 @@ test.each([
   [<span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;p&#x27;</span>],
   [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, [<span class="hljs-number">1</span>], <span class="hljs-string">&#x27;q&#x27;</span>],
   [<span class="hljs-string">&#x27;Ax Ex (Fxy -&gt; Fyx)&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-string">&#x27;Fyx&#x27;</span>]
-])(<span class="hljs-string">&#x27;#getSubexpression(%s, %j) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, position, expectedSubformulaText</span>) =&gt;</span> {
+])(<span class="hljs-string">&#x27;%s .getSubexpression(%j) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, position, expectedSubformulaText</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
   <span class="hljs-keyword">const</span> expectedSubformula = parser.parse(expectedSubformulaText)
-  <span class="hljs-keyword">const</span> subformula = Expression.getSubexpression(formula, position)
+  <span class="hljs-keyword">const</span> subformula = formula.getSubexpression(position)
 
-  expect(subformula).toEqual(expectedSubformula)
+  expect(subformula).toDeepEqual(expectedSubformula)
 })
 
 test.each([
@@ -539,48 +575,47 @@ test.each([
   [<span class="hljs-string">&#x27;Ax Fy&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]]],
   [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, []],
   [<span class="hljs-string">&#x27;Ax Fxy -&gt; Ey Fyx&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, [[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]]
-])(<span class="hljs-string">&#x27;#findFreeOccurrences(%s, %s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text, symbol, expectedPositions</span>) =&gt;</span> {
+])(<span class="hljs-string">&#x27;%s .findFreeOccurrences(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text, symbol, expectedPositions</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(text)
   <span class="hljs-keyword">const</span> sym = parser.getSym(symbol)
-  <span class="hljs-keyword">const</span> positions = Expression.findFreeOccurrences(formula, sym)
+  <span class="hljs-keyword">const</span> positions = formula.findFreeOccurrences(sym)
 
-  expect(positions).toEqual(expectedPositions)
+  expect(positions).toDeepEqual(expectedPositions)
 })
 
 test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>],
   [<span class="hljs-string">&#x27;Fx&#x27;</span>]
-])(<span class="hljs-string">`#findBoundOccurrences(%s) throws <span class="hljs-subst">${ErrorName.EXPRESSION_DOESNT_BIND}</span>`</span>, <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> {
+])(<span class="hljs-string">`%s .findBoundOccurrences() throws <span class="hljs-subst">${ErrorName.EXPRESSION_DOESNT_BIND}</span>`</span>, <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(text)
 
-  expect(<span class="hljs-function">() =&gt;</span> { Expression.findBoundOccurrences(formula) })
-    .toThrow(ErrorName.EXPRESSION_DOESNT_BIND)
+  expect(<span class="hljs-function">() =&gt;</span> { formula.findBoundOccurrences() }).toThrow(ErrorName.EXPRESSION_DOESNT_BIND)
 })
 
 test.each([
   [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]]],
   [<span class="hljs-string">&#x27;Ax Ex Fx&#x27;</span>, []],
   [<span class="hljs-string">&#x27;Ax (Ex Fyx -&gt; Fyx)&#x27;</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>]]]
-])(<span class="hljs-string">&#x27;#findBoundOccurrences(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text, expectedPositions</span>) =&gt;</span> {
+])(<span class="hljs-string">&#x27;%s .findBoundOccurrences() is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text, expectedPositions</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(text)
-  <span class="hljs-keyword">const</span> positions = Expression.findBoundOccurrences(formula)
+  <span class="hljs-keyword">const</span> positions = formula.findBoundOccurrences()
 
-  expect(positions).toEqual(expectedPositions)
+  expect(positions).toDeepEqual(expectedPositions)
 })
 
 test.each([
   [<span class="hljs-string">&#x27;p&#x27;</span>, [], [<span class="hljs-string">&#x27;p&#x27;</span>]],
   [<span class="hljs-string">&#x27;~p&#x27;</span>, [<span class="hljs-number">0</span>], [<span class="hljs-string">&#x27;~p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]],
   [<span class="hljs-string">&#x27;Ax (Fx -&gt; Gx)&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">&#x27;Ax (Fx -&gt; Gx)&#x27;</span>, <span class="hljs-string">&#x27;Fx -&gt; Gx&#x27;</span>, <span class="hljs-string">&#x27;Gx&#x27;</span>]]
-])(<span class="hljs-string">&#x27;#getSubexpressionsOnPath(%s, %j) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text, path, expectedFormulasTexts</span>) =&gt;</span> {
+])(<span class="hljs-string">&#x27;%s .getSubexpressionsOnPath(%j) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text, path, expectedFormulasTexts</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(text)
   <span class="hljs-keyword">const</span> expectedFormulas = expectedFormulasTexts.map(
     <span class="hljs-function"><span class="hljs-params">expectedFormulaText</span> =&gt;</span> parser.parse(expectedFormulaText)
   )
 
-  <span class="hljs-keyword">const</span> formulas = Expression.getSubexpressionsOnPath(formula, path)
+  <span class="hljs-keyword">const</span> formulas = formula.getSubexpressionsOnPath(path)
 
-  expect(formulas).toEqual(expectedFormulas)
+  expect(formulas).toDeepEqual(expectedFormulas)
 })
 
 test.each([
@@ -597,7 +632,7 @@ test.each([
   [<span class="hljs-string">&#x27;p -&gt; q&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;Ax p&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-literal">undefined</span>],
   [<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;Ax q&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;q&#x27;</span>]
 ])(
-  <span class="hljs-string">&#x27;#replaceFreeOccurrences(%s, %s, %s) is %s&#x27;</span>,
+  <span class="hljs-string">&#x27;%s .replaceFreeOccurrences(%s, %s) is %s&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">
     oldFormulaText,
     oldSymText,
@@ -612,11 +647,9 @@ test.each([
     <span class="hljs-keyword">const</span> newSym = parser.getSym(newSymText)
     <span class="hljs-keyword">const</span> getBoundSym = <span class="hljs-function">() =&gt;</span> parser.getSym(getBoundSymText())
     <span class="hljs-keyword">const</span> getChild = <span class="hljs-function">() =&gt;</span> parser.parse(getChildText())
-    <span class="hljs-keyword">const</span> newFormula = Expression.replaceFreeOccurrences(
-      oldFormula, oldSym, newSym, getBoundSym, getChild
-    )
+    <span class="hljs-keyword">const</span> newFormula = oldFormula.replaceFreeOccurrences(oldSym, newSym, getBoundSym, getChild)
 
-    expect(newFormula).toEqual(expectedNewFormula)
+    expect(newFormula).toDeepEqual(expectedNewFormula)
   }
 )
 
@@ -624,14 +657,14 @@ test.each([
   [<span class="hljs-string">&#x27;Ax Fx&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;Ay Fy&#x27;</span>],
   [<span class="hljs-string">&#x27;Ax (Ex Fx -&gt; Fx)&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;Ay (Ex Fx -&gt; Fy)&#x27;</span>]
 ])(
-  <span class="hljs-string">&#x27;#replaceBoundOccurrences(%s, %s) is %s&#x27;</span>,
+  <span class="hljs-string">&#x27;%s .replaceBoundOccurrences(%s) is %s&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">oldFormulaText, symText, expectedNewFormulaText</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> oldFormula = parser.parse(oldFormulaText)
     <span class="hljs-keyword">const</span> expectedNewFormula = parser.parse(expectedNewFormulaText)
     <span class="hljs-keyword">const</span> sym = parser.getSym(symText)
-    <span class="hljs-keyword">const</span> newFormula = Expression.replaceBoundOccurrences(oldFormula, sym)
+    <span class="hljs-keyword">const</span> newFormula = oldFormula.replaceBoundOccurrences(sym)
 
-    expect(newFormula).toEqual(expectedNewFormula)
+    expect(newFormula).toDeepEqual(expectedNewFormula)
   }
 )
 
@@ -639,14 +672,14 @@ test.each([
   [<span class="hljs-string">&#x27;p -&gt; Ax Fx&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [<span class="hljs-number">1</span>], <span class="hljs-string">&#x27;p -&gt; Ay Fy&#x27;</span>],
   [<span class="hljs-string">&#x27;Ax (Ex Fx -&gt; Fx)&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-string">&#x27;Ax (Ey Fy -&gt; Fx)&#x27;</span>]
 ])(
-  <span class="hljs-string">&#x27;#replaceBoundOccurrencesAt(%s, %s, %j) is %s&#x27;</span>,
+  <span class="hljs-string">&#x27;%s .replaceBoundOccurrencesAt(%s, %j) is %s&#x27;</span>,
   <span class="hljs-function">(<span class="hljs-params">oldFormulaText, symbolText, position, expectedNewFormulaText</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> oldFormula = parser.parse(oldFormulaText)
     <span class="hljs-keyword">const</span> expectedNewFormula = parser.parse(expectedNewFormulaText)
     <span class="hljs-keyword">const</span> sym = parser.getSym(symbolText)
-    <span class="hljs-keyword">const</span> newFormula = Expression.replaceBoundOccurrencesAt(oldFormula, position, sym)
+    <span class="hljs-keyword">const</span> newFormula = oldFormula.replaceBoundOccurrencesAt(position, sym)
 
-    expect(newFormula).toEqual(expectedNewFormula)
+    expect(newFormula).toDeepEqual(expectedNewFormula)
   }
 )
 
@@ -656,16 +689,16 @@ test.each([
   [<span class="hljs-string">&#x27;~~p&#x27;</span>, [<span class="hljs-string">&#x27;~&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]],
   [<span class="hljs-string">&#x27;Ax p&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;p&#x27;</span>]],
   [<span class="hljs-string">&#x27;Ax Fxy -&gt; Ey Fyx&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;E&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]]
-])(<span class="hljs-string">&#x27;#getSyms(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, symsTexts</span>) =&gt;</span> {
+])(<span class="hljs-string">&#x27;%s .getSyms() is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, symsTexts</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
   <span class="hljs-keyword">const</span> expectedSyms = _.fromPairs(
     symsTexts
       .map(<span class="hljs-function"><span class="hljs-params">symText</span> =&gt;</span> parser.getSym(symText))
       .map(<span class="hljs-function"><span class="hljs-params">sym</span> =&gt;</span> ([sym.id, sym]))
   )
-  <span class="hljs-keyword">const</span> syms = Expression.getSyms(formula)
+  <span class="hljs-keyword">const</span> syms = formula.getSyms()
 
-  expect(syms).toEqual(expectedSyms)
+  expect(syms).toDeepEqual(expectedSyms)
 })
 
 test.each([
@@ -674,16 +707,16 @@ test.each([
   [<span class="hljs-string">&#x27;Ax Fxy&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]],
   [<span class="hljs-string">&#x27;Ax Ey Fxy&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;E&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>]],
   [<span class="hljs-string">&#x27;Ax Fx -&gt; Ey Gyx&#x27;</span>, [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;E&#x27;</span>, <span class="hljs-string">&#x27;F&#x27;</span>, <span class="hljs-string">&#x27;G&#x27;</span>, <span class="hljs-string">&#x27;-&gt;&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>]]
-])(<span class="hljs-string">&#x27;#getFreeSyms(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, symsTexts</span>) =&gt;</span> {
+])(<span class="hljs-string">&#x27;%s .getFreeSyms() is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, symsTexts</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
   <span class="hljs-keyword">const</span> expectedSyms = _.fromPairs(
     symsTexts
       .map(<span class="hljs-function"><span class="hljs-params">symText</span> =&gt;</span> parser.getSym(symText))
       .map(<span class="hljs-function"><span class="hljs-params">sym</span> =&gt;</span> ([sym.id, sym]))
   )
-  <span class="hljs-keyword">const</span> syms = Expression.getFreeSyms(formula)
+  <span class="hljs-keyword">const</span> syms = formula.getFreeSyms()
 
-  expect(syms).toEqual(expectedSyms)
+  expect(syms).toDeepEqual(expectedSyms)
 })
 
 test.each([
@@ -691,7 +724,7 @@ test.each([
   [<span class="hljs-string">&#x27;Ax Fxy&#x27;</span>, <span class="hljs-string">&#x27;x&#x27;</span>, []],
   [<span class="hljs-string">&#x27;Ax Fxy&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, [<span class="hljs-string">&#x27;x&#x27;</span>]],
   [<span class="hljs-string">&#x27;Ax Fzx &amp; Ey Fzy&#x27;</span>, <span class="hljs-string">&#x27;z&#x27;</span>, [<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>]]
-])(<span class="hljs-string">&#x27;#findBoundSymsAtFreeOccurrencesOfSym(%s) is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, symText, symsTexts</span>) =&gt;</span> {
+])(<span class="hljs-string">&#x27;%s .findBoundSymsAtFreeOccurrencesOfSym() is %j&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formulaText, symText, symsTexts</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> formula = parser.parse(formulaText)
   <span class="hljs-keyword">const</span> sym = parser.getSym(symText)
   <span class="hljs-keyword">const</span> expectedSyms = _.fromPairs(
@@ -699,10 +732,209 @@ test.each([
       .map(<span class="hljs-function"><span class="hljs-params">symText</span> =&gt;</span> parser.getSym(symText))
       .map(<span class="hljs-function"><span class="hljs-params">sym</span> =&gt;</span> [sym.id, sym])
   )
-  <span class="hljs-keyword">const</span> syms = Expression.findBoundSymsAtFreeOccurrencesOfSym(formula, sym)
+  <span class="hljs-keyword">const</span> syms = formula.findBoundSymsAtFreeOccurrencesOfSym(sym)
 
-  expect(syms).toEqual(expectedSyms)
-})</pre></div></div>
+  expect(syms).toDeepEqual(expectedSyms)
+})
+
+<span class="hljs-keyword">const</span> maxPrimitiveId = <span class="hljs-built_in">Math</span>.max(..._.values(primitiveSyms).map(<span class="hljs-function">(<span class="hljs-params">{ id }</span>) =&gt;</span> id))
+
+test.each([
+  [</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>p</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Expression({ <span class="hljs-attr">sym</span>: Sym.ff({ <span class="hljs-attr">id</span>: <span class="hljs-number">2</span> }) }),
+    {},
+    Expression({ <span class="hljs-attr">sym</span>: Sym.ff({ <span class="hljs-attr">id</span>: <span class="hljs-number">0</span> }) }),
+    { <span class="hljs-number">2</span>: Sym.ff({ <span class="hljs-attr">id</span>: <span class="hljs-number">0</span> }) }
+  ],
+  [
+    Expression({ <span class="hljs-attr">sym</span>: Sym.ff({ <span class="hljs-attr">id</span>: <span class="hljs-number">2</span> }) }),
+    { <span class="hljs-number">2</span>: Sym.ff({ <span class="hljs-attr">id</span>: <span class="hljs-number">3</span> }) },
+    Expression({ <span class="hljs-attr">sym</span>: Sym.ff({ <span class="hljs-attr">id</span>: <span class="hljs-number">3</span> }) }),
+    { <span class="hljs-number">2</span>: Sym.ff({ <span class="hljs-attr">id</span>: <span class="hljs-number">3</span> }) }
+  ],
+  [</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>p -&gt; p</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Expression.connectWithBinarySym([
+      Expression({ <span class="hljs-attr">sym</span>: Sym.ff({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">2</span> }) }),
+      Expression({ <span class="hljs-attr">sym</span>: Sym.ff({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">2</span> }) })
+    ], conditional),
+    primitiveSyms,
+    Expression.connectWithBinarySym([
+      Expression({ <span class="hljs-attr">sym</span>: Sym.ff({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">1</span> }) }),
+      Expression({ <span class="hljs-attr">sym</span>: Sym.ff({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">1</span> }) })
+    ], conditional),
+    {
+      ...primitiveSyms,
+      [maxPrimitiveId + <span class="hljs-number">2</span>]: Sym.ff({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">1</span> })
+    }
+  ],
+  [</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Ax Fx</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Expression({
+      <span class="hljs-attr">sym</span>: universalQuantifier,
+      <span class="hljs-attr">boundSym</span>: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">3</span> }),
+      <span class="hljs-attr">children</span>: [
+        Expression({
+          <span class="hljs-attr">sym</span>: Sym.ft({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">2</span> }),
+          <span class="hljs-attr">children</span>: [
+            Expression({
+              <span class="hljs-attr">sym</span>: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">3</span> })
+            })
+          ]
+        })
+      ]
+    }),
+    primitiveSyms,
+    Expression({
+      <span class="hljs-attr">sym</span>: universalQuantifier,
+      <span class="hljs-attr">boundSym</span>: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">1</span> }),
+      <span class="hljs-attr">children</span>: [
+        Expression({
+          <span class="hljs-attr">sym</span>: Sym.ft({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">2</span> }),
+          <span class="hljs-attr">children</span>: [
+            Expression({
+              <span class="hljs-attr">sym</span>: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">1</span> })
+            })
+          ]
+        })
+      ]
+    }),
+    {
+      ...primitiveSyms,
+      [maxPrimitiveId + <span class="hljs-number">2</span>]: Sym.ft({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">2</span> })
+    }
+  ],
+  [</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Ax Fxy</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Expression({
+      <span class="hljs-attr">sym</span>: universalQuantifier,
+      <span class="hljs-attr">boundSym</span>: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">2</span> }),
+      <span class="hljs-attr">children</span>: [
+        Expression({
+          <span class="hljs-attr">sym</span>: Sym.ft({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">3</span> }),
+          <span class="hljs-attr">children</span>: [
+            Expression({
+              <span class="hljs-attr">sym</span>: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">2</span> })
+            }),
+            Expression({
+              <span class="hljs-attr">sym</span>: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">1</span> })
+            })
+          ]
+        })
+      ]
+    }),
+    primitiveSyms,
+    Expression({
+      <span class="hljs-attr">sym</span>: universalQuantifier,
+      <span class="hljs-attr">boundSym</span>: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">1</span> }),
+      <span class="hljs-attr">children</span>: [
+        Expression({
+          <span class="hljs-attr">sym</span>: Sym.ft({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">2</span> }),
+          <span class="hljs-attr">children</span>: [
+            Expression({
+              <span class="hljs-attr">sym</span>: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">1</span> })
+            }),
+            Expression({
+              <span class="hljs-attr">sym</span>: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">3</span> })
+            })
+          ]
+        })
+      ]
+    }),
+    {
+      ...primitiveSyms,
+      [maxPrimitiveId + <span class="hljs-number">3</span>]: Sym.ft({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">2</span> }),
+      [maxPrimitiveId + <span class="hljs-number">1</span>]: Sym.tt({ <span class="hljs-attr">id</span>: maxPrimitiveId + <span class="hljs-number">3</span> })
+    }
+  ]
+])(<span class="hljs-string">&#x27;.normalize()&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">formula, syms, expectedFormula, expectedSyms</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> [actualFormula, actualSyms] = formula.normalize(syms)
+
+  expect(actualFormula).toDeepEqual(expectedFormula)
+  expect(actualSyms).toDeepEqual(expectedSyms)
+})
+
+test.each([
+  [[<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>], conjunction, <span class="hljs-string">&#x27;p &amp; q&#x27;</span>],
+  [[<span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;r&#x27;</span>], conjunction, <span class="hljs-string">&#x27;(p &amp; q) &amp; r&#x27;</span>]
+])(<span class="hljs-string">&#x27;.connectWithBinarySym(%s) is %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">expressionTexts, sym, expectedExpressionText</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> expressions = expressionTexts.map(<span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> parser.parse(text))
+  <span class="hljs-keyword">const</span> expected = expectedExpressionText === <span class="hljs-literal">undefined</span>
+    ? <span class="hljs-literal">undefined</span>
+    : parser.parse(expectedExpressionText)
+
+  <span class="hljs-keyword">const</span> actual = Expression.connectWithBinarySym(expressions, sym)
+
+  expect(actual).toDeepEqual(expected)
+})
+
+test(<span class="hljs-string">`.connectWithBinarySym() throws <span class="hljs-subst">${ErrorName.NOT_ENOUGH_EXPRESSIONS}</span> for empty list`</span>, <span class="hljs-function">() =&gt;</span> {
+  expect(<span class="hljs-function">() =&gt;</span> { Expression.connectWithBinarySym([], conjunction) })
+    .toThrow(ErrorName.NOT_ENOUGH_EXPRESSIONS)
+})
+
+test(
+  <span class="hljs-string">`.connectWithBinarySym() throws <span class="hljs-subst">${ErrorName.NOT_ENOUGH_EXPRESSIONS}</span> for singleton list`</span>,
+  <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> expression = parser.parse(<span class="hljs-string">&#x27;p&#x27;</span>)
+
+    expect(<span class="hljs-function">() =&gt;</span> { Expression.connectWithBinarySym([expression], conjunction) })
+      .toThrow(ErrorName.NOT_ENOUGH_EXPRESSIONS)
+  }
+)</pre></div></div>
             
         </li>
         

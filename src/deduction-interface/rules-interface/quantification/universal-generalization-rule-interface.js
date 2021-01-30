@@ -4,7 +4,7 @@ import { Rule } from '../../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../../deduction-structure/rule-application-spec'
 import { universalQuantifier } from '../../../primitive-syms'
 import { startDeduction } from '../../deduction-interface'
-import { GeneralizationRuleInterfaceMixin } from './generalization-rule-interface-mixin'
+import { GeneralizationRuleInterface } from './generalization-rule-interface'
 
 export const UniversalGeneralizationRuleInterface = stampit({
   name: 'UniversalGeneralizationRuleInterface',
@@ -42,4 +42,4 @@ export const UniversalGeneralizationRuleInterface = stampit({
       return startDeduction(newDeduction)
     }
   }
-}).compose(GeneralizationRuleInterfaceMixin)
+}).compose(GeneralizationRuleInterface)

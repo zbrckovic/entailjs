@@ -1,9 +1,10 @@
 import stampit from '@stamp/it'
 import { createError, ErrorName } from '../../../error'
 import { determineSubstitutionInGeneralizationResult } from '../../deduction-interface-util'
-import { QuantificationRuleInterfaceMixin } from './quantification-rule-interface-mixin'
+import { QuantificationRuleInterface } from './quantification-rule-interface'
+import { required } from '@stamp/required'
 
-export const GeneralizationRuleInterfaceMixin = stampit({
+export const GeneralizationRuleInterface = stampit({
   methods: {
     // `newTerm` is the generalized term which will be the substitute and `oldTerm` is the instance
     // term which if provided will be substituted with `newTerm`. If `oldTerm` is not provided
@@ -33,4 +34,7 @@ export const GeneralizationRuleInterfaceMixin = stampit({
       return determineSubstitutionInGeneralizationResult(formula, premise)
     }
   }
-}).compose(QuantificationRuleInterfaceMixin)
+}).compose(
+  QuantificationRuleInterface,
+  required({ methods: { _concreteApply: required } })
+)

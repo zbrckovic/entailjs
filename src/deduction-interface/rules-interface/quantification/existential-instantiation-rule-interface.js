@@ -2,7 +2,7 @@ import stampit from '@stamp/it'
 import { Rule } from '../../../deduction-structure'
 import { RegularRuleApplicationSpec } from '../../../deduction-structure/rule-application-spec'
 import { startDeduction } from '../../deduction-interface'
-import { InstantiationRuleInterfaceMixin } from './instantiation-rule-interface-mixin'
+import { InstantiationRuleInterface } from './instantiation-rule-interface'
 
 export const ExistentialInstantiationRuleInterface = stampit({
   name: 'ExistentialInstantiationRuleInterface',
@@ -37,4 +37,4 @@ export const ExistentialInstantiationRuleInterface = stampit({
       return startDeduction(newDeduction)
     }
   }
-}).compose(InstantiationRuleInterfaceMixin)
+}).compose(InstantiationRuleInterface)

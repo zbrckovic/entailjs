@@ -1,9 +1,10 @@
 import stampit from '@stamp/it'
 import { createError, ErrorName } from '../../../error'
 import { determineNewTermInInstantiationResult } from '../../deduction-interface-util'
-import { QuantificationRuleInterfaceMixin } from './quantification-rule-interface-mixin'
+import { QuantificationRuleInterface } from './quantification-rule-interface'
+import { required } from '@stamp/required'
 
-export const InstantiationRuleInterfaceMixin = stampit({
+export const InstantiationRuleInterface = stampit({
   name: 'InstantiationRuleInterfaceMixin',
   methods: {
     // `newTerm` is an instance term which if provided will be the substituted. If instantiation is
@@ -32,4 +33,7 @@ export const InstantiationRuleInterfaceMixin = stampit({
       return determineNewTermInInstantiationResult(formula, premise)
     }
   }
-}).compose(QuantificationRuleInterfaceMixin)
+}).compose(
+  QuantificationRuleInterface,
+  required({ methods: { _concreteApply: required } })
+)

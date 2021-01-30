@@ -1,7 +1,7 @@
 import stampit from '@stamp/it'
 import { Base } from '../../../utils'
 
-export const QuantificationRuleInterfaceMixin = stampit({
+export const QuantificationRuleInterface = stampit({
   name: 'QuantificationRuleInterfaceMixin',
   init ({ deduction, stepIndex }) {
     this._deduction = deduction

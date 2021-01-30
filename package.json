@@ -63,7 +63,6 @@
   "dependencies": {
     "@babel/polyfill": "^7.10.4",
     "@stamp/it": "^1.1.0",
-    "@stamp/privatize": "^1.0.3",
     "@stamp/required": "^1.0.1",
     "lodash": "^4.17.20"
   }

@@ -664,7 +664,7 @@ if deduction provided at the start (if any) was valid.</p>
 
     <span class="hljs-keyword">const</span> newDeduction = Deduction({
       ...deduction,
-      <span class="hljs-attr">steps</span>: steps.slice(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>),
+      <span class="hljs-attr">steps</span>: steps.slice(<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>),
       <span class="hljs-attr">termDependencyGraph</span>: newTermDependencyGraph
     })
 

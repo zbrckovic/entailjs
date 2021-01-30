@@ -585,7 +585,7 @@ subexpression is called a <strong>target</strong>.</p>
             
             <div class="content"><div class='highlight'><pre>    getParent () {
       <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.isRoot()) <span class="hljs-keyword">throw</span> createError(ErrorName.CANT_GET_PARENT_OF_ROOT)
-      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.clone({ <span class="hljs-attr">position</span>: <span class="hljs-built_in">this</span>.position.slice(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>) })
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.clone({ <span class="hljs-attr">position</span>: <span class="hljs-built_in">this</span>.position.slice(<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>) })
     },</pre></div></div>
             
         </li>

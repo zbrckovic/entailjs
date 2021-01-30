@@ -660,7 +660,7 @@ peg$SyntaxError.buildMessage = <span class="hljs-function"><span class="hljs-key
         <span class="hljs-keyword">return</span> descriptions[<span class="hljs-number">0</span>] + <span class="hljs-string">&quot; or &quot;</span> + descriptions[<span class="hljs-number">1</span>];
 
       <span class="hljs-keyword">default</span>:
-        <span class="hljs-keyword">return</span> descriptions.slice(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>).join(<span class="hljs-string">&quot;, &quot;</span>)
+        <span class="hljs-keyword">return</span> descriptions.slice(<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>).join(<span class="hljs-string">&quot;, &quot;</span>)
           + <span class="hljs-string">&quot;, or &quot;</span>
           + descriptions[descriptions.length - <span class="hljs-number">1</span>];
     }

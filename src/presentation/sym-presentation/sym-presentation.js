@@ -10,12 +10,10 @@ export const SymPresentation = stampit({
     this.ascii = ascii
     this.unicode = unicode
   },
-  properties: {
-    get defaultSyntacticInfo () {
-      return this.unicode ?? this.ascii
-    }
-  },
   methods: {
+    getDefaultSyntacticInfo () {
+      return this.unicode ?? this.ascii
+    },
     createDescription (arity = 1) {
       return this.ascii.createDescription(arity)
     }

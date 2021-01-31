@@ -562,12 +562,10 @@ text environments, while unicode is primarily intended for GUI and generated doc
     <span class="hljs-built_in">this</span>.ascii = ascii
     <span class="hljs-built_in">this</span>.unicode = unicode
   },
-  <span class="hljs-attr">properties</span>: {
-    get defaultSyntacticInfo () {
-      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.unicode ?? <span class="hljs-built_in">this</span>.ascii
-    }
-  },
   <span class="hljs-attr">methods</span>: {
+    getDefaultSyntacticInfo () {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.unicode ?? <span class="hljs-built_in">this</span>.ascii
+    },
     createDescription (arity = <span class="hljs-number">1</span>) {
       <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.ascii.createDescription(arity)
     }
